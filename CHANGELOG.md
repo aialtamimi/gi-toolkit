@@ -2,6 +2,10 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.2.2 (2026-11-26)
+
+- FibroScan (B3.20): at 25 kPa or more the Baveno VII line now reads "CSPH ruled in (Baveno VII)". Alcohol-related cutoff reference completed: JHEP Reports 2020;2(3):100101, doi:10.1016/j.jhepr.2020.100101, linked to PMC7267467. Stage colours confirmed (F0–F1 green, F2 amber, F3–F4 red). SPEC.md B3.20, B8.3 and B9 updated.
+
 ## 0.2.1 (2026-11-26)
 
 - FibroScan (B3.20) simplified, per the clinical owner:

@@ -585,12 +585,12 @@ The result appears as soon as disease and kPa are entered; it does not wait for 
 | MASLD | 8.2 | 9.7 | 13.6 | Eddowes, Gastroenterology 2019 |
 | Hepatitis C | 7.1 | 9.5 | 12.5 | Castera, Gastroenterology 2005 |
 | Hepatitis B | 7.9 | 8.8 | 11.7 | Chon, PLoS One 2012 meta-analysis |
-| Alcohol-related | 9.0 | 12.9 | 18.6 | JHEP Reports 2020 review table |
+| Alcohol-related | 9.0 | 12.9 | 18.6 | [JHEP Reports 2020;2(3):100101, doi:10.1016/j.jhepr.2020.100101 (review table)](https://pmc.ncbi.nlm.nih.gov/articles/PMC7267467/) |
 | Other/mixed | No F stage; show Baveno VII only (below) | | | Baveno VII 2022 |
 
 Alcohol-related note: "Higher AST or bilirubin raises stiffness; repeat after abstinence."
 
-**Baveno VII.** For Other/mixed this is the result: <10 kPa cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more CSPH. For all diseases, show one small Baveno VII line under the result.
+**Baveno VII.** For Other/mixed this is the result: <10 kPa cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more: "CSPH ruled in (Baveno VII)". For all diseases, show one small Baveno VII line under the result.
 
 **Steatosis grade from CAP (all diseases).** Source: Karlas, J Hepatol 2017.
 
@@ -1320,6 +1320,7 @@ FibroScan (B3.20) test vectors:
 | Hepatitis B, 10.0 kPa | F3 |
 | Alcohol-related, 16 kPa | F3 |
 | Other, 12 kPa | cACLD suggestive |
+| Other, 27 kPa | cACLD highly suggestive; CSPH ruled in (Baveno VII) |
 | CAP 250 | S1 |
 | CAP 270 | S2 |
 | MASLD, 9.0 kPa, IQR/median 35% | F2 shown, plus unreliable-exam warning |
@@ -1389,7 +1390,7 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | HRS-AKI | [Nadim MK et al. ICA-ADQI consensus. J Hepatol 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11193657) |
 | ACLF | Moreau R et al. CANONIC. Gastroenterology 2013 |
 | Alcohol-associated hepatitis | Louvet A et al. Hepatology 2007 (Lille); Dominguez M et al. Am J Gastroenterol 2008 (ABIC); Forrest EH et al. Gut 2005 (GAHS); Thursz MR et al. NEJM 2015 (STOPAH) |
-| Fibrosis scores | Angulo P et al. Hepatology 2007 (NFS); AASLD MASLD guidance 2023; Eddowes PJ et al. Gastroenterology 2019 (FibroScan in MASLD); Castera L et al. Gastroenterology 2005 (FibroScan in hepatitis C); Chon YE et al. PLoS One 2012 (FibroScan in hepatitis B); JHEP Reports 2020 review table (FibroScan in alcohol-related liver disease); Karlas T et al. J Hepatol 2017 (CAP) |
+| Fibrosis scores | Angulo P et al. Hepatology 2007 (NFS); AASLD MASLD guidance 2023; Eddowes PJ et al. Gastroenterology 2019 (FibroScan in MASLD); Castera L et al. Gastroenterology 2005 (FibroScan in hepatitis C); Chon YE et al. PLoS One 2012 (FibroScan in hepatitis B); [JHEP Reports 2020;2(3):100101, doi:10.1016/j.jhepr.2020.100101](https://pmc.ncbi.nlm.nih.gov/articles/PMC7267467/) (FibroScan in alcohol-related liver disease); Karlas T et al. J Hepatol 2017 (CAP) |
 | AIH | [Hennes EM et al. Hepatology 2008](https://pmc.ncbi.nlm.nih.gov/articles/PMC7366136/table/T1) |
 | Wilson disease | [Ferenci P et al. Liver Int 2003; EASL 2012](https://pmc.ncbi.nlm.nih.gov/articles/PMC8584493/table/jcm-10-05097-t001) |
 | Acute pancreatitis | [Tenner S et al. ACG guideline 2024](https://guidelinecentral.com/guideline/12896); Banks PA et al. Revised Atlanta, Gut 2013; de-Madaria E et al. WATERFALL, NEJM 2022 |
