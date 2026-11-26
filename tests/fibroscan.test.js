@@ -90,11 +90,24 @@ test("FibroScan: steatosis and Baveno VII boundaries", () => {
   assert.equal(baveno(10).text, "cACLD suggestive");
   assert.equal(baveno(15).text, "cACLD suggestive");
   assert.equal(baveno(15.1).text, "cACLD highly suggestive");
-  assert.equal(baveno(25).text, "cACLD highly suggestive; CSPH");
+  assert.equal(baveno(24.9).text, "cACLD highly suggestive");
+  assert.equal(baveno(25).text, "cACLD highly suggestive; CSPH ruled in (Baveno VII)");
 });
 
 test("FibroScan: a Baveno VII line is shown under the result for every disease", () => {
   for (const disease of ["masld", "alcohol", "hbv", "hcv"]) {
     assert.equal(calc(fs, { disease, lsm: 12 }).interp.text, "Baveno VII: cACLD suggestive.", disease);
   }
+});
+
+test("FibroScan: other/mixed 27 kPa → CSPH ruled in (Baveno VII)", () => {
+  const { result, interp } = calc(fs, { disease: "other", lsm: 27 });
+  assert.deepEqual(result.display, ["Baveno VII: cACLD highly suggestive; CSPH ruled in (Baveno VII)"]);
+  assert.equal(interp.level, "high");
+});
+
+test("FibroScan: the alcohol-related reference links to JHEP Reports 2020;2(3):100101", () => {
+  const r = fs.references.find(r => r.citation.includes("100101"));
+  assert.equal(r.url, "https://pmc.ncbi.nlm.nih.gov/articles/PMC7267467/");
+  assert.match(r.citation, /doi:10\.1016\/j\.jhepr\.2020\.100101/);
 });

@@ -44,13 +44,13 @@ export function steatosisGrade(cap) {
   return "S3";
 }
 
-// Baveno VII: <10 cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more CSPH.
+// Baveno VII: <10 cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more: CSPH ruled in (Baveno VII).
 export function baveno(lsm) {
   let text, level;
   if (lsm < 10) { text = "cACLD unlikely"; level = "low"; }
   else if (lsm <= 15) { text = "cACLD suggestive"; level = "intermediate"; }
   else { text = "cACLD highly suggestive"; level = "high"; }
-  if (lsm >= 25) text += "; CSPH";
+  if (lsm >= 25) text += "; CSPH ruled in (Baveno VII)";
   return { text, level };
 }
 
@@ -119,7 +119,7 @@ export default {
     const qualCopy = r.unreliable ? "; exam unreliable" : "";
     if (!r.stage) {
       return { band: `Baveno VII: ${r.baveno.text}`, level: r.baveno.level,
-        text: "Baveno VII: <10 kPa cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more CSPH.",
+        text: "Baveno VII: <10 kPa cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more: CSPH ruled in (Baveno VII).",
         sections, notes,
         copy: `FibroScan ${diseaseLabel} ${fmt(r.score, 1)} kPa: ${r.baveno.text}${capCopy}${qualCopy}` };
     }
@@ -133,7 +133,7 @@ export default {
     ref("Eddowes PJ et al. Accuracy of FibroScan controlled attenuation parameter and liver stiffness measurement in assessing steatosis and fibrosis in patients with nonalcoholic fatty liver disease. Gastroenterology 2019"),
     ref("Castera L et al. Prospective comparison of transient elastography, Fibrotest, APRI, and liver biopsy in chronic hepatitis C. Gastroenterology 2005"),
     ref("Chon YE et al. Performance of transient elastography for the staging of liver fibrosis in patients with chronic hepatitis B: a meta-analysis. PLoS One 2012"),
-    ref("Alcohol-related liver disease liver stiffness cutoffs: review table, JHEP Reports 2020"),
+    ref("JHEP Reports 2020;2(3):100101. doi:10.1016/j.jhepr.2020.100101 (review table: liver stiffness cutoffs in alcohol-related liver disease)", "https://pmc.ncbi.nlm.nih.gov/articles/PMC7267467/"),
     ref("Karlas T et al. Individual patient data meta-analysis of controlled attenuation parameter (CAP). J Hepatol 2017"),
     ref("de Franchis R et al. Baveno VII. J Hepatol 2022")
   ]
