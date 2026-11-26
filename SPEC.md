@@ -56,7 +56,7 @@ The build takes 10 steps and four Claude Code sessions (one per phase). Splittin
 
 **Prompt 4 (Phase 4):**
 
-> Read CLAUDE.md and SPEC.md. Build Phase 4 as defined in B1.9: Arabic interface toggle with right-to-left layout (clinical terms, drug names and formulas stay in English), dark mode, app icons, and an accessibility check. Then re-check every calculator against its B8 test vectors and list the results in the pull request.
+> Read CLAUDE.md and SPEC.md. Build Phase 4 as defined in B1.9: dark mode, app icons, and an accessibility check (English only; no language option). Then re-check every calculator against its B8 test vectors and list the results in the pull request.
 
 **Prompt for any later fix (edit the brackets):**
 
@@ -70,9 +70,8 @@ The app is only as safe as its formulas, so check every calculator before you us
 | --- | --- |
 | Check each calculator | Enter the B8 test case and confirm the result matches. Then enter 2–3 of your own cases and compare with MDCalc or a hand calculation |
 | Second reviewer | Ask one colleague to check each category independently before you share widely |
-| Keep a record | Ask Claude Code to add a "Last clinically reviewed" date and reviewer name to the About page |
+| Keep a record | Note each clinical review (date and reviewer) in CHANGELOG.md; the app itself does not display a review date or reviewer |
 | Patient privacy | The app stores nothing except favorites and unit choice on the phone, and sends no data anywhere. Never add patient name or MRN fields |
-| Disclaimer | Shown on first launch and in About: a decision-support reference for clinicians, not a substitute for judgment or local protocols |
 | Updating | When a guideline changes, use the "later fix" prompt in A2, then merge. The app updates on every phone the next time it opens online |
 | Sharing | Send the link by WhatsApp. On iPhone: Safari, Share, Add to Home Screen. On Android: Chrome menu, Install app or Add to Home screen |
 | Regulation | Personal and departmental use as a reference is straightforward. If you ever sell it or market it to patients, check the SFDA digital health guidance (MDS-G027) on whether it counts as medical device software |
@@ -87,20 +86,21 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 
 - 43 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 18 emergency pages (B7).
 - Everything works offline after the first load.
-- English interface first; Arabic toggle in Phase 4.
+- English interface only; no language option.
 
 ### B1.2 Build Rules (copy word for word into CLAUDE.md)
 
 1. Clinical content comes only from SPEC.md. Never invent, round, simplify or "improve" a formula, point value, cutoff, dose, timing or interpretation. If something is ambiguous or looks wrong, do not guess: implement nothing for that item and list it in the pull request.
-2. Every calculator screen shows: inputs with units, the result, the interpretation band, the suggested action exactly as written in the spec, a points breakdown, the reference with a link, and the footer "Decision support only. Verify with clinical judgment and local protocols."
+2. Every calculator screen shows: inputs with units, the result, the interpretation band, the suggested action exactly as written in the spec, a points breakdown, and the reference with a link.
 3. Every calculator has unit tests built from section B8. All tests must pass before opening a pull request.
-4. No patient data is stored or sent anywhere. No analytics, no trackers, no external fonts or scripts, no network calls at runtime. Only favorites, recent items, unit choices, theme and language are stored in localStorage.
+4. No patient data is stored or sent anywhere. No analytics, no trackers, no external fonts or scripts, no network calls at runtime. Only favorites, recent items, unit choices and theme are stored in localStorage.
 5. Plain HTML, CSS and JavaScript ES modules. No framework, no npm dependencies, no build step. Tests run with Node's built-in test runner (`node --test`).
 6. Use relative paths everywhere (the site lives under `/gi-toolkit/`). Add an empty `.nojekyll` file at the root.
 7. Write drug names in full, never abbreviated (for example terlipressin, not TP).
 8. Mobile first: works from 320 px wide, touch targets at least 44 px, readable in sunlight, usable one-handed.
-9. Show the app version and "Last clinical review" date in the footer and About page. Record every change in CHANGELOG.md.
+9. Show the app version and "Designed by Dr. Abdulaziz Altamimi" in the footer and About page. Do not show a clinical review date or reviewer. Record every change in CHANGELOG.md.
 10. Keep SPEC.md as the single source of truth. When clinical content changes, update SPEC.md and its test in the same pull request.
+11. English only, with no language option. Do not add: a first-launch disclaimer, a Disclaimer section, the footer "Decision support only. Verify with clinical judgment and local protocols." on any screen, the footer "Check local protocol, renal function and allergies before prescribing." on emergency pages, or a "Last clinical review" date or reviewer anywhere (the clinical owner removed these).
 
 ### B1.3 File structure
 
@@ -170,9 +170,8 @@ Cutoffs written in both units: where a criterion or band gives a cutoff in both 
 | Calculator | Inputs; sticky result card that updates live; band label plus color (green low, amber intermediate, red high; text label always shown, never color alone); interpretation; action; points breakdown; references; "Copy result" (one line, e.g. "GBS 7, not low risk", no identifiers) |
 | Classification card | Title, table, one-line clinical use, reference |
 | Emergency page | Sections: Recognize, Do now, Within hours, Then, Avoid, Doses table; buttons to related calculators; reference list |
-| About | Disclaimer, version, last clinical review date, reviewer, reference policy |
-| Settings | Default units (SI or conventional), theme, language |
-| First launch | Disclaimer that must be accepted once |
+| About | Version; "Designed by Dr. Abdulaziz Altamimi"; the line "All formulas, cutoffs and recommendations are based on published guidelines and original papers. Each calculator lists its sources."; privacy |
+| Settings | Default units (SI or conventional), theme |
 
 ### B1.7 PWA and iPhone details
 
@@ -191,7 +190,7 @@ Clean clinical look, system font, high contrast, no decoration. Drug classes are
 | 1 | App shell, PWA, units, all of B2 (bleeding) and B3 (liver) | Installs on iPhone, works offline, B8 tests pass |
 | 2 | B4 (pancreatobiliary) and B5 (IBD) | B8 tests pass |
 | 3 | B6 reference cards and B7 emergency pages with links to calculators | All pages reachable from search |
-| 4 | Arabic toggle (right-to-left), dark mode, icons, accessibility, full re-check | Every B8 test listed as passing in the pull request |
+| 4 | Dark mode, icons, accessibility, full re-check (English only) | Every B8 test listed as passing in the pull request |
 
 ## Part B2: GI bleeding scores
 
@@ -1007,7 +1006,7 @@ Adjunctive evidence: reflux episodes >80 per day supports GERD; mean nocturnal b
 
 ## Part B7: GI emergency pages
 
-Eighteen emergency pages. Each page uses the same template so it can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Drug doses are adult doses; show the footer "Check local protocol, renal function and allergies before prescribing."
+Eighteen emergency pages. Each page uses the same template so it can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Drug doses are adult doses.
 
 ### B7.1 Non-variceal upper GI bleeding (id: em\_ugib)
 

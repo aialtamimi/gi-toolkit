@@ -1,32 +1,20 @@
 // Router, home, search, favorites, settings (SPEC.md B1.3, B1.6).
 import { CATEGORIES, CALCULATORS, CARDS, EMERGENCIES, EMERGENCY_INDEX, findItem, hrefFor, itemsInCategory, search } from "./registry.js";
 import { renderCard, renderEmergency } from "./pages.js";
-import { renderCalculator, h, FOOTER_TEXT, L, footerNote } from "./engine.js";
-import { t, lang, isArabic } from "./i18n.js";
+import { renderCalculator, h } from "./engine.js";
 import { store } from "./storage.js";
-import { APP_VERSION, LAST_CLINICAL_REVIEW, CLINICAL_REVIEWER, DESIGNER } from "./version.js";
+import { APP_VERSION, DESIGNER } from "./version.js";
+
+export const REFERENCE_LINE = "All formulas, cutoffs and recommendations are based on published guidelines and original papers. Each calculator lists its sources.";
 
 const main = document.getElementById("main");
 const titleEl = document.getElementById("page-title");
 const backBtn = document.getElementById("back-btn");
 
-const DISCLAIMER = "GI Toolkit is a decision-support reference for clinicians, not a substitute for clinical judgment or local protocols. Verify every result before clinical use.";
+// ---------- theme ----------
 
-// ---------- language and theme (Phase 4) ----------
-
-// Arabic switches the interface to right-to-left. Calculator, card and emergency pages are marked
-// English and left-to-right, so clinical text, numbers, units and tables keep their original order.
-function applyPrefs() {
-  const root = document.documentElement;
-  const ar = isArabic();
-  root.lang = ar ? "ar" : "en";
-  root.dir = ar ? "rtl" : "ltr";
-  root.dataset.theme = store.theme();
-  backBtn.textContent = t("‹ Back");
-  backBtn.setAttribute("aria-label", t("Back"));
-  const homeBtn = document.querySelector(".home-btn");
-  homeBtn.textContent = t("Home");
-  homeBtn.setAttribute("aria-label", t("Home"));
+function applyTheme() {
+  document.documentElement.dataset.theme = store.theme();
 }
 
 function setTitle(t, showBack) {
@@ -37,19 +25,19 @@ function setTitle(t, showBack) {
 
 function appFooter() {
   return h("footer", { class: "app-footer" },
-    h("p", {}, t("GI Toolkit v{version} · Last clinical review: {review}", { version: APP_VERSION, review: t(LAST_CLINICAL_REVIEW) })),
+    h("p", {}, `GI Toolkit v${APP_VERSION}`),
     h("p", { class: "designer" }, DESIGNER),
-    h("p", {}, h("a", { href: "#/about" }, t("About")), " · ", h("a", { href: "#/settings" }, t("Settings"))));
+    h("p", {}, h("a", { href: "#/about" }, "About"), " · ", h("a", { href: "#/settings" }, "Settings")));
 }
 
 function itemLink(item) {
   const isEm = item.id.startsWith("em_");
   const fav = store.isFavorite(item.id);
   return h("li", {}, h("a", { class: "item-link", href: hrefFor(item.id) },
-    isEm ? h("span", { class: "em-label" }, t("Emergency")) : null,
-    h("span", { class: "item-name", lang: "en", dir: "ltr" }, item.name),
-    item.short && item.short !== item.name ? h("span", { class: "item-short", lang: "en", dir: "ltr" }, item.short) : null,
-    fav ? h("span", { class: "star", role: "img", "aria-label": t("Favorite") }, "★") : null));
+    isEm ? h("span", { class: "em-label" }, "Emergency") : null,
+    h("span", { class: "item-name" }, item.name),
+    item.short && item.short !== item.name ? h("span", { class: "item-short" }, item.short) : null,
+    fav ? h("span", { class: "star", role: "img", "aria-label": "Favorite" }, "★") : null));
 }
 
 function itemList(items) {
@@ -61,8 +49,8 @@ function itemList(items) {
 function home() {
   setTitle("GI Toolkit", false);
   const results = h("div", { class: "search-results", "aria-live": "polite" });
-  const input = h("input", { type: "search", id: "search", class: "search", placeholder: t("Search calculators, aliases…"),
-    "aria-label": t("Search"), autocomplete: "off", autocapitalize: "off", spellcheck: "false",
+  const input = h("input", { type: "search", id: "search", class: "search", placeholder: "Search calculators, aliases…",
+    "aria-label": "Search", autocomplete: "off", autocapitalize: "off", spellcheck: "false",
     oninput: () => showResults() });
   function showResults() {
     const q = input.value.trim();
@@ -70,7 +58,7 @@ function home() {
     sections.hidden = !!q;
     if (!q) return;
     const found = search(q);
-    results.append(found.length ? itemList(found) : h("p", { class: "muted" }, t("No match.")));
+    results.append(found.length ? itemList(found) : h("p", { class: "muted" }, "No match."));
   }
 
   const favs = store.favorites().map(findItem).filter(Boolean);
@@ -78,31 +66,31 @@ function home() {
   const tiles = h("div", { class: "tiles" }, CATEGORIES.map(c => {
     const n = c.id === "emergencies" ? EMERGENCIES.length : itemsInCategory(c.id).length;
     return h("a", { class: "tile" + (c.emergency ? " tile-emergency" : ""), href: `#/category/${c.id}` },
-      h("span", { class: "tile-name" }, t(c.name)),
-      h("span", { class: "tile-count" }, n ? t("Items: {n}", { n }) : t("Coming in a later update")));
+      h("span", { class: "tile-name" }, c.name),
+      h("span", { class: "tile-count" }, n ? `${n} item${n === 1 ? "" : "s"}` : "Coming in a later update"));
   }));
   const sections = h("div", {},
-    h("h2", {}, t("Categories")), tiles,
-    favs.length ? [h("h2", {}, t("Favorites")), itemList(favs)] : null,
-    recent.length ? [h("h2", {}, t("Recent")), itemList(recent)] : null);
+    h("h2", {}, "Categories"), tiles,
+    favs.length ? [h("h2", {}, "Favorites"), itemList(favs)] : null,
+    recent.length ? [h("h2", {}, "Recent"), itemList(recent)] : null);
   main.replaceChildren(h("div", { class: "home" }, h("div", { class: "search-wrap" }, input), results, sections), appFooter());
 }
 
 function category(id) {
   const cat = CATEGORIES.find(c => c.id === id);
   if (!cat) return notFound();
-  setTitle(t(cat.name), true);
+  setTitle(cat.name, true);
   let body;
   if (id === "emergencies") {
     body = h("ol", { class: "item-list emergency-index" }, EMERGENCY_INDEX.map(e => {
       const page = EMERGENCIES.find(p => p.id === e.id);
       return h("li", {}, page
-        ? h("a", { class: "item-link", href: `#/emergency/${e.id}` }, h("span", { class: "em-label" }, t("Emergency")), h("span", { class: "item-name", lang: "en", dir: "ltr" }, e.name))
-        : h("span", { class: "item-link disabled" }, h("span", { class: "em-label" }, t("Emergency")), h("span", { class: "item-name", lang: "en", dir: "ltr" }, e.name), h("span", { class: "item-short" }, t("Coming in a later update"))));
+        ? h("a", { class: "item-link", href: `#/emergency/${e.id}` }, h("span", { class: "em-label" }, "Emergency"), h("span", { class: "item-name" }, e.name))
+        : h("span", { class: "item-link disabled" }, h("span", { class: "em-label" }, "Emergency"), h("span", { class: "item-name" }, e.name), h("span", { class: "item-short" }, "Coming in a later update")));
     }));
   } else {
     const items = itemsInCategory(id);
-    body = items.length ? itemList(items) : h("p", { class: "muted" }, t("Coming in a later update"));
+    body = items.length ? itemList(items) : h("p", { class: "muted" }, "Coming in a later update");
   }
   main.replaceChildren(h("div", { class: "page" }, body), appFooter());
 }
@@ -116,15 +104,14 @@ function itemPage(def, render) {
   const favBtn = h("button", { type: "button", class: "fav-btn", "aria-pressed": String(store.isFavorite(id)), onclick: () => {
       const on = store.toggleFavorite(id);
       favBtn.setAttribute("aria-pressed", String(on));
-      favBtn.replaceChildren(L(on ? "★ Favorite" : "☆ Favorite"));
-    } }, L(store.isFavorite(id) ? "★ Favorite" : "☆ Favorite"));
+      favBtn.replaceChildren((on ? "★ Favorite" : "☆ Favorite"));
+    } }, store.isFavorite(id) ? "★ Favorite" : "☆ Favorite");
   const isEm = id.startsWith("em_");
   const root = h("div", { class: isEm ? "emergency" : "calc" });
   const header = h("div", { class: "calc-header" },
-    h("div", {}, isEm ? h("span", { class: "em-label" }, L("Emergency")) : null, h("h2", {}, def.name),
+    h("div", {}, isEm ? h("span", { class: "em-label" }, "Emergency") : null, h("h2", {}, def.name),
       def.use && !(def.kind === "card" && !def.inputs) ? h("p", { class: "use" }, def.use) : null), favBtn);  // table cards show their clinical use below the table
-  // Clinical pages stay English and left-to-right in every interface language.
-  main.replaceChildren(h("div", { class: "page item-page", lang: "en", dir: "ltr" }, header, root), appFooter());
+  main.replaceChildren(h("div", { class: "page item-page" }, header, root), appFooter());
   render(root);
 }
 
@@ -147,23 +134,14 @@ function emergency(id) {
 }
 
 function about() {
-  setTitle(t("About"), true);
+  setTitle("About", true);
   main.replaceChildren(h("div", { class: "page prose" },
-    h("h2", {}, t("Disclaimer")),
-    h("p", {}, t(DISCLAIMER)),
-    footerNote(FOOTER_TEXT),
-    h("h2", {}, t("Version and review")),
-    h("dl", { class: "details" },
-      h("dt", {}, t("Version")), h("dd", {}, APP_VERSION),
-      h("dt", {}, t("Last clinical review")), h("dd", {}, t(LAST_CLINICAL_REVIEW)),
-      h("dt", {}, t("Reviewer")), h("dd", {}, t(CLINICAL_REVIEWER))),
+    h("h2", {}, "Version"),
+    h("p", {}, `GI Toolkit v${APP_VERSION}`),
     h("p", { class: "designer" }, DESIGNER),
-    h("h2", {}, t("Reference policy")),
-    h("p", {}, t("Every formula, point value, cutoff and interpretation comes only from the project specification (SPEC.md), which was written from guidelines and original papers. Each calculator shows its sources. Where the specification gives no link for a source, the app links to a PubMed search for that citation.")),
-    h("p", {}, t("Rounding is never silent: each result states the rounding rule used.")),
-    isArabic() ? h("p", {}, t("Clinical content (calculator names, results, interpretations, drug names, doses, scores and formulas) stays in English.")) : null,
-    h("h2", {}, t("Privacy")),
-    h("p", {}, t("No patient data is stored or sent anywhere. The app makes no network calls while you use it and has no analytics or trackers. Only favorites, recent items, unit choices, theme, language and your disclaimer acceptance are kept on this device."))
+    h("p", {}, REFERENCE_LINE),
+    h("h2", {}, "Privacy"),
+    h("p", {}, "No patient data is stored or sent anywhere. The app makes no network calls while you use it and has no analytics or trackers. Only favorites, recent items, unit choices and theme are kept on this device.")
   ), appFooter());
 }
 
@@ -175,31 +153,26 @@ function radioGroup(name, options, current, onchange) {
 }
 
 function settings() {
-  setTitle(t("Settings"), true);
+  setTitle("Settings", true);
   const msg = h("p", { class: "muted", "aria-live": "polite" });
   const unitGroup = radioGroup("units",
-    [["si", t("SI (µmol/L, g/L, mmol/L)")], ["conv", t("Conventional (mg/dL, g/dL)")]], store.defaultUnits(),
-    v => { store.setDefaultUnits(v); store.clearFieldUnits(); msg.textContent = t("Saved. Per-field unit choices were reset to this default."); });
+    [["si", "SI (µmol/L, g/L, mmol/L)"], ["conv", "Conventional (mg/dL, g/dL)"]], store.defaultUnits(),
+    v => { store.setDefaultUnits(v); store.clearFieldUnits(); msg.textContent = "Saved. Per-field unit choices were reset to this default."; });
   const themeGroup = radioGroup("theme",
-    [["light", t("Light")], ["dark", t("Dark")], ["system", t("Same as device")]], store.theme(),
-    v => { store.setTheme(v); applyPrefs(); });
-  const langGroup = radioGroup("language",
-    [["en", "English", { lang: "en", dir: "ltr" }], ["ar", "العربية", { lang: "ar", dir: "rtl" }]], lang(),
-    v => { store.setLanguage(v); applyPrefs(); settings(); });
+    [["light", "Light"], ["dark", "Dark"], ["system", "Same as device"]], store.theme(),
+    v => { store.setTheme(v); applyTheme(); });
   main.replaceChildren(h("div", { class: "page prose" },
-    h("h2", { id: "language-h" }, t("Language")),
-    langGroup,
-    h("h2", { id: "theme-h" }, t("Theme")),
+    h("h2", { id: "theme-h" }, "Theme"),
     themeGroup,
-    h("h2", { id: "units-h" }, t("Default units")),
-    h("p", {}, t("Saudi laboratories report SI units, so SI is the default. Each lab field also has its own toggle, which is remembered.")),
+    h("h2", { id: "units-h" }, "Default units"),
+    h("p", {}, "Saudi laboratories report SI units, so SI is the default. Each lab field also has its own toggle, which is remembered."),
     unitGroup, msg
   ), appFooter());
 }
 
 function notFound() {
-  setTitle(t("Not found"), true);
-  main.replaceChildren(h("div", { class: "page" }, h("p", {}, t("This page does not exist.")), h("a", { href: "#/" }, t("Go home"))), appFooter());
+  setTitle("Not found", true);
+  main.replaceChildren(h("div", { class: "page" }, h("p", {}, "This page does not exist."), h("a", { href: "#/" }, "Go home")), appFooter());
 }
 
 // ---------- router ----------
@@ -222,20 +195,6 @@ backBtn.addEventListener("click", () => {
 });
 window.addEventListener("hashchange", route);
 
-// ---------- first launch disclaimer ----------
-
-function disclaimerGate() {
-  if (store.disclaimerAccepted()) return;
-  const dlg = h("div", { class: "modal", role: "dialog", "aria-modal": "true", "aria-labelledby": "disc-title" },
-    h("div", { class: "modal-box" },
-      h("h2", { id: "disc-title" }, t("Before you start")),
-      h("p", {}, t(DISCLAIMER)),
-      footerNote(FOOTER_TEXT),
-      h("button", { type: "button", class: "btn btn-primary", onclick: () => { store.acceptDisclaimer(); dlg.remove(); } }, t("I understand and accept"))));
-  document.body.append(dlg);
-  dlg.querySelector("button").focus();
-}
-
 // ---------- service worker and update prompt ----------
 
 let updateRequested = false;
@@ -246,7 +205,7 @@ function showUpdate(reg) {
     updateRequested = true;
     if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
     else location.reload();
-  } }, t("Update available, tap to refresh"));
+  } }, "Update available, tap to refresh");
   document.body.append(b);
 }
 
@@ -270,6 +229,5 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
   }).catch(() => {});
 }
 
-applyPrefs();
+applyTheme();
 route();
-disclaimerGate();

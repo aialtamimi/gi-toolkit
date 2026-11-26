@@ -3,22 +3,12 @@
 // `base` ("si" or "conv"), i.e. the unit the original formula uses.
 import { ANALYTES, convert, unitLabel } from "./units.js";
 import { store } from "./storage.js";
-import { t, isArabic } from "./i18n.js";
 import { EMERGENCY_INDEX, findItem, hrefFor } from "./registry.js";
 
-export const FOOTER_TEXT = "Decision support only. Verify with clinical judgment and local protocols.";
-
-// Interface text placed inside English clinical content: in Arabic it is an isolated right-to-left
-// span so it does not disturb the English text around it.
-export function L(key, vars) {
-  const text = t(key, vars);
-  return isArabic() ? h("span", { lang: "ar", dir: "rtl" }, text) : text;
-}
-
-// A mandatory English footer (Build Rule 2, SPEC B7); in Arabic an Arabic translation follows it.
-export function footerNote(text) {
-  return h("div", { class: "footer-note" }, h("p", { lang: "en", dir: "ltr" }, text),
-    isArabic() ? h("p", { lang: "ar", dir: "rtl", class: "footer-translation" }, t(text)) : null);
+// Append children, skipping null, undefined and false (Element.append would print them as text).
+export function appendAll(el, ...children) {
+  el.append(...children.flat().filter(c => c !== null && c !== undefined && c !== false));
+  return el;
 }
 
 // ---------- pure logic (testable in Node) ----------
@@ -49,8 +39,8 @@ export function collectValues(def, raw, units = {}) {
     const s = raw[inp.id];
     if (s === undefined || s === null || String(s).trim() === "") continue;
     const n = typeof s === "number" ? s : Number(String(s).trim().replace(",", "."));
-    if (!Number.isFinite(n)) { errors.push({ id: inp.id, message: t("Enter a number") }); continue; }
-    if (inp.integer && !Number.isInteger(n)) { errors.push({ id: inp.id, message: t("Enter a whole number") }); continue; }
+    if (!Number.isFinite(n)) { errors.push({ id: inp.id, message: "Enter a number" }); continue; }
+    if (inp.integer && !Number.isInteger(n)) { errors.push({ id: inp.id, message: "Enter a whole number" }); continue; }
     let base = n;
     if (inp.analyte) base = convert(inp.analyte, n, units[inp.id] || inp.base, inp.base);
     if (inp.analyte) entered[inp.id] = { value: n, system: units[inp.id] || inp.base };
@@ -59,7 +49,7 @@ export function collectValues(def, raw, units = {}) {
       const lo = inp.analyte ? convert(inp.analyte, inp.min, inp.base, sys) : inp.min;
       const hi = inp.analyte ? convert(inp.analyte, inp.max, inp.base, sys) : inp.max;
       const u = inp.analyte ? unitLabel(inp.analyte, sys) : (inp.unit || "");
-      errors.push({ id: inp.id, message: t("Outside accepted input range {lo} to {hi} {unit}", { lo: tidy(lo), hi: tidy(hi), unit: u }).trim() });
+      errors.push({ id: inp.id, message: `Outside accepted input range ${tidy(lo)} to ${tidy(hi)} ${u}`.trim() });
       continue;
     }
     values[inp.id] = base;
@@ -117,7 +107,7 @@ const LEVEL_CLASS = { low: "lvl-low", intermediate: "lvl-int", high: "lvl-high",
 export function linkTo(target, label) {
   if (findItem(target)) return h("a", { class: "btn btn-link", href: hrefFor(target) }, label);
   const planned = EMERGENCY_INDEX.find(e => e.id === target);
-  return h("span", { class: "btn btn-link disabled", "aria-disabled": "true" }, label, " ", L(planned ? "(coming in a later update)" : "(not available)"));
+  return h("span", { class: "btn btn-link disabled", "aria-disabled": "true" }, label, " ", (planned ? "(coming in a later update)" : "(not available)"));
 }
 
 export function renderCalculator(root, def, opts = {}) {
@@ -142,7 +132,7 @@ export function renderCalculator(root, def, opts = {}) {
     if (inp.id) fieldEls[inp.id] = el;
     (inp.group ? groupEls[inp.group].querySelector("form") : form).append(el);
   });
-  const resetBtn = h("button", { type: "button", class: "btn btn-secondary", onclick: () => opts.onReset && opts.onReset() }, L("Clear inputs"));
+  const resetBtn = h("button", { type: "button", class: "btn btn-secondary", onclick: () => opts.onReset && opts.onReset() }, "Clear inputs");
   form.append(h("div", { class: "form-actions" }, resetBtn));
 
   const card = h("div", { class: "result-card", id: "result", "aria-live": "polite" });
@@ -152,10 +142,10 @@ export function renderCalculator(root, def, opts = {}) {
 
   const info = h("div", { class: "calc-info" },
     def.notes ? h("p", { class: "note" }, def.notes) : null,
-    h("h3", {}, L("References")),
+    h("h3", {}, "References"),
     h("ul", { class: "refs" }, def.references.map(r => h("li", {},
       h("a", { href: r.url, target: "_blank", rel: "noopener noreferrer" }, r.citation),
-      r.searchLink ? h("span", { class: "muted" }, L(" (PubMed search)")) : null)))
+      r.searchLink ? h("span", { class: "muted" }, " (PubMed search)") : null)))
   );
 
   root.append(
@@ -191,16 +181,16 @@ export function renderCalculator(root, def, opts = {}) {
     card.replaceChildren();
     bar.replaceChildren();
     if (c.errors.length || c.missing.length) {
-      const msg = c.errors.length ? L("Check highlighted inputs.") : L("To calculate, enter: {list}.", { list: c.missing.join(", ") });
-      card.append(h("p", { class: "result-pending" }, msg), footerNote(FOOTER_TEXT));
-      bar.append(h("span", { class: "bar-pending" }, c.errors.length ? L("Check inputs") : L("Inputs to go: {n}", { n: c.missing.length })));
+      const msg = c.errors.length ? "Check highlighted inputs." : `To calculate, enter: ${c.missing.join(", ")}.`;
+      card.append(h("p", { class: "result-pending" }, msg));
+      bar.append(h("span", { class: "bar-pending" }, c.errors.length ? "Check inputs" : `${c.missing.length} input${c.missing.length === 1 ? "" : "s"} to go`));
       if (tableBlock) highlightRow(tableBlock, null);
       return;
     }
     let out;
     try { out = run(def, c.values, c.entered); }
     catch (e) {
-      card.append(h("p", { class: "result-pending" }, L("Unable to calculate with these values.")));
+      card.append(h("p", { class: "result-pending" }, "Unable to calculate with these values."));
       console.error(e);
       return;
     }
@@ -223,7 +213,7 @@ function highlightRow(block, idx) {
 
 function renderTable(t) {
   return h("div", { class: "ref-table-wrap" },
-    h("h3", {}, L("Full table")),
+    h("h3", {}, "Full table"),
     h("div", { class: "table-scroll" },
       h("table", { class: "ref-table" },
         h("thead", {}, h("tr", {}, t.columns.map(c => h("th", { scope: "col" }, c)))),
@@ -245,7 +235,7 @@ function renderInput(def, inp, idx, raw, units, update) {
     let unitEl;
     if (inp.analyte) {
       const a = ANALYTES[inp.analyte];
-      const seg = h("div", { class: "unit-toggle", role: "group", "aria-label": t("{label} unit", { label: inp.label }) });
+      const seg = h("div", { class: "unit-toggle", role: "group", "aria-label": `${inp.label} unit` });
       const mk = sys => h("button", { type: "button", class: "unit-btn", "aria-pressed": String(units[inp.id] === sys),
         onclick: () => {
           if (units[inp.id] === sys) return;
@@ -269,7 +259,7 @@ function renderInput(def, inp, idx, raw, units, update) {
       unitEl = h("span", { class: "unit" }, inp.unit);
     }
     return h("div", { class: "field field-number" + (inp.optional ? " optional" : "") },
-      h("label", { for: id }, inp.label, inp.optional ? h("span", { class: "muted" }, L(" (optional)")) : null),
+      h("label", { for: id }, inp.label, inp.optional ? h("span", { class: "muted" }, " (optional)") : null),
       h("div", { class: "number-row" }, input, unitEl),
       help, err);
   }
@@ -293,7 +283,7 @@ function renderInput(def, inp, idx, raw, units, update) {
         o.points !== undefined && inp.style !== "rows" && !/\([+−-]?\d+\)$/.test(o.label) ? h("span", { class: "pts" }, `${o.points > 0 ? "+" : ""}${o.points}`) : null));
     });
     return h("div", { class: "field field-radio" + (inp.optional ? " optional" : "") },
-      h("div", { class: "field-label", id: id + "-l" }, inp.label, inp.optional ? h("span", { class: "muted" }, L(" (optional)")) : null),
+      h("div", { class: "field-label", id: id + "-l" }, inp.label, inp.optional ? h("span", { class: "muted" }, " (optional)") : null),
       group, help, err);
   }
   throw new Error(`Unknown input type ${inp.type}`);
@@ -307,16 +297,16 @@ export function renderResult(card, def, r, it) {
       Array.isArray(r.display)
         ? h("div", { class: "result-values" }, r.display.map(d => h("div", { class: "result-value" }, d)))
         : h("div", { class: "result-value" }, r.display)),
-    h("div", { class: `band ${lvl}` }, h("span", { class: "band-tag" }, L("Band")), h("span", { class: "band-text" }, it.band))
+    h("div", { class: `band ${lvl}` }, h("span", { class: "band-tag" }, "Band"), h("span", { class: "band-text" }, it.band))
   );
   if (r.details && r.details.length) {
     card.append(h("dl", { class: "details" }, r.details.flatMap(d => [h("dt", {}, d.label), h("dd", {}, d.value)])));
   }
   if (it.text) card.append(h("p", { class: "interp" }, it.text));
-  if (it.action) card.append(h("div", { class: "action" }, h("div", { class: "action-tag" }, L("Suggested action")), h("p", {}, it.action)));
+  if (it.action) card.append(h("div", { class: "action" }, h("div", { class: "action-tag" }, "Suggested action"), h("p", {}, it.action)));
   for (const s of it.sections || []) {
     card.append(h("div", { class: `section ${s.level ? LEVEL_CLASS[s.level] : ""} ${s.box ? "boxed" : ""} ${s.muted ? "muted-section" : ""}` },
-      h("h3", { class: "section-title" }, s.title, s.muted ? h("span", { class: "muted" }, L(" (greyed out: exam unreliable)")) : null),
+      h("h3", { class: "section-title" }, s.title, s.muted ? h("span", { class: "muted" }, " (greyed out: exam unreliable)") : null),
       h("ul", {}, s.lines.map(l => h("li", {}, l)))));
   }
   if (it.links && it.links.length) card.append(h("div", { class: "links" }, it.links.map(l => linkTo(l.target, l.label))));
@@ -324,19 +314,18 @@ export function renderResult(card, def, r, it) {
   if (r.breakdown && r.breakdown.length) {
     const hasPts = r.breakdown.some(b => b.points !== undefined);
     card.append(h("details", { class: "breakdown", open: true },
-      h("summary", {}, L(hasPts ? "Points breakdown" : "Breakdown")),
+      h("summary", {}, (hasPts ? "Points breakdown" : "Breakdown")),
       h("table", {}, h("tbody", {}, r.breakdown.map(b => h("tr", {},
         h("td", {}, b.item),
         h("td", { class: "num" }, b.points !== undefined ? String(b.points).replace("-", "−") : b.value)))))));
   }
-  if (r.rounding) card.append(h("p", { class: "rounding" }, L("Rounding: "), r.rounding));
+  if (r.rounding) card.append(h("p", { class: "rounding" }, "Rounding: " + r.rounding));
   const copyBtn = h("button", { type: "button", class: "btn btn-primary copy-btn", onclick: async () => {
     const ok = await copyText(it.copy);
-    copyBtn.replaceChildren(L(ok ? "Copied" : "Copy failed"));
-    setTimeout(() => { copyBtn.replaceChildren(L("Copy result")); }, 1500);
-  } }, L("Copy result"));
+    copyBtn.replaceChildren((ok ? "Copied" : "Copy failed"));
+    setTimeout(() => { copyBtn.replaceChildren("Copy result"); }, 1500);
+  } }, "Copy result");
   card.append(h("div", { class: "copy-row" }, copyBtn, h("span", { class: "copy-preview" }, it.copy)));
-  card.append(footerNote(FOOTER_TEXT));
 }
 
 export async function copyText(text) {

@@ -6,9 +6,7 @@ A GI calculator and emergency reference web app for gastroenterology clinicians,
 - Build rules for every change: [CLAUDE.md](CLAUDE.md)
 - Change history: [CHANGELOG.md](CHANGELOG.md)
 
-English or Arabic interface (clinical content always stays in English), light, dark or device theme, and SI or conventional units, all in Settings.
-
-Decision support only. Verify with clinical judgment and local protocols.
+Light, dark or device theme, and SI or conventional units, in Settings.
 
 ## Run tests
 
