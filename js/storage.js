@@ -1,5 +1,5 @@
-// localStorage wrapper. Only favorites, recent items, unit choices, theme and language are
-// stored (Build Rule 4), plus the one-time disclaimer acceptance flag. No patient data.
+// localStorage wrapper. Only favorites, recent items, unit choices and theme are stored
+// (Build Rule 4). No patient data.
 const P = "gi-toolkit.";
 
 function read(key, fallback) {
@@ -34,9 +34,5 @@ export const store = {
     try { Object.keys(localStorage).filter(k => k.startsWith(P + "units.") && k !== P + "units.default").forEach(k => localStorage.removeItem(k)); } catch { /* ignore */ }
   },
   theme: () => read("theme", "system"),          // "light" | "dark" | "system"
-  setTheme: t => write("theme", t),
-  language: () => read("language", "en"),        // "en" | "ar"
-  setLanguage: l => write("language", l),
-  disclaimerAccepted: () => read("disclaimer.accepted", false),
-  acceptDisclaimer: () => write("disclaimer.accepted", true)
+  setTheme: t => write("theme", t)
 };

@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EMERGENCIES, EMERGENCY_INDEX, findItem, search, hrefFor } from "../js/registry.js";
-import { SPEC_REFS, PRESCRIBING_FOOTER, tokenize } from "../js/pages.js";
+import { SPEC_REFS, tokenize } from "../js/pages.js";
 
 const SPEC = readFileSync(new URL("../SPEC.md", import.meta.url), "utf8");
 
@@ -90,9 +90,6 @@ test("inline markdown links in page text are parsed as links", () => {
     { type: "ref", spec: "B2.1", target: "gbs" }]);
 });
 
-test("prescribing footer is the SPEC B7 text", () => {
-  assert.ok(SPEC.includes(`show the footer "${PRESCRIBING_FOOTER}"`));
-});
 
 test("every emergency page has a route and is reachable from search", () => {
   for (const p of EMERGENCIES) {

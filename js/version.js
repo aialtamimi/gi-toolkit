@@ -1,5 +1,3 @@
-// App version and clinical review record (Build Rule 9).
-export const APP_VERSION = "0.4.0";
-export const LAST_CLINICAL_REVIEW = "Not yet clinically reviewed";
-export const CLINICAL_REVIEWER = "Pending";
+// App version and designer credit (Build Rule 9).
+export const APP_VERSION = "0.5.0";
 export const DESIGNER = "Designed by Dr. Abdulaziz Altamimi";

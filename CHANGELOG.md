@@ -2,6 +2,18 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.5.0 (2026-11-26)
+
+Clinical owner changes:
+- Removed the footer "Check local protocol, renal function and allergies before prescribing." from all emergency pages.
+- Removed the footer "Decision support only. Verify with clinical judgment and local protocols." from every screen.
+- Removed "Last clinical review" and the reviewer from the footer and About page. The footer shows the version and "Designed by Dr. Abdulaziz Altamimi".
+- Removed the Disclaimer section from About and the first-launch disclaimer screen.
+- About: the Reference policy section is replaced by one line: "All formulas, cutoffs and recommendations are based on published guidelines and original papers. Each calculator lists its sources."
+- Removed the Arabic language option (English only). The translation module, language setting and right-to-left styles are gone; dark mode, icons and the accessibility fixes from 0.4.0 stay.
+- Bug fix: the word "null" appeared on pages with an empty section (emergency pages without related calculators: Anticoagulants, Toxic megacolon, Foreign body, Ogilvie syndrome, Volvulus, Perforation; and cards without links: Paris, NICE, Bristol). Cards and emergency pages now skip empty parts when building the page.
+- SPEC.md and CLAUDE.md Build Rules updated (Rules 2, 4 and 9 changed; new Rule 11 lists the removed items) so they are not added back. Tests guard against each removed item returning.
+
 ## 0.4.0 (2026-11-26) - Phase 4
 
 - Arabic interface (Settings, Language): the interface switches to Arabic and right-to-left. Clinical content stays in English: calculator, card and emergency pages are marked English and left-to-right, so names, inputs, results, interpretations, drug names, doses, scores, formulas and tables keep their original wording and order. Interface labels inside those pages appear as Arabic right-to-left islands. The two mandatory footers stay in English with an Arabic translation underneath. Category names are translated; clinical abbreviations (IBD) and units stay in English.
