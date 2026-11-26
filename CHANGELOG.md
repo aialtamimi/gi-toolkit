@@ -2,6 +2,15 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.2.0 (2026-11-26) - Phase 2
+
+- B4 Pancreatobiliary: BISAP, Ranson (non-gallstone and gallstone, with "48-hour items pending"), Glasgow-Imrie, SIRS, Modified Marshall (with FiO2 helper), Revised Atlanta (diagnosis, severity, collection name), modified CT severity index, Tokyo Guidelines 2018 for acute cholangitis (diagnosis and severity), ASGE 2019 choledocholithiasis risk. Every pancreatitis score shows "Scores support but do not replace close monitoring in the first 24–48 hours."
+- B5 IBD: Truelove and Witts, day-3 response in acute severe UC (Oxford and Lindgren), Mayo and partial Mayo (with Mayo endoscopic score), UCEIS, Harvey-Bradshaw Index, CDAI (7-day sums or 7-day diary), SES-CD (segments can be marked not reached), Rutgeerts (selectable card), Montreal classification (selectable card).
+- Engine: count inputs (stools, diary ratings, GCS) accept whole numbers only, and use the numeric keypad.
+- Footer and About page: "Designed by Dr. Abdulaziz Altamimi".
+- Tests: B8.4 and B8.5 vectors as `node --test` unit tests, plus boundary checks from the B4 and B5 text for tools that have no B8 vector.
+- No clinical content in SPEC.md changed. Last clinical review: not yet reviewed.
+
 ## 0.1.1 (2026-11-26)
 
 - Rockall (B2.3): added interpretation bands decided by the clinical owner. Pre-endoscopy 0 = low risk, ≥1 = not low risk. Complete 0–2 = low risk of rebleeding and death, 3–7 = intermediate risk, ≥8 = high risk. SPEC.md B2.3 and the B8.2 vector updated.

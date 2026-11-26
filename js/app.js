@@ -2,7 +2,7 @@
 import { CATEGORIES, CALCULATORS, EMERGENCIES, EMERGENCY_INDEX, findItem, itemsInCategory, search } from "./registry.js";
 import { renderCalculator, h, FOOTER_TEXT } from "./engine.js";
 import { store } from "./storage.js";
-import { APP_VERSION, LAST_CLINICAL_REVIEW, CLINICAL_REVIEWER } from "./version.js";
+import { APP_VERSION, LAST_CLINICAL_REVIEW, CLINICAL_REVIEWER, DESIGNER } from "./version.js";
 
 const main = document.getElementById("main");
 const titleEl = document.getElementById("page-title");
@@ -19,6 +19,7 @@ function setTitle(t, showBack) {
 function appFooter() {
   return h("footer", { class: "app-footer" },
     h("p", {}, `GI Toolkit v${APP_VERSION} · Last clinical review: ${LAST_CLINICAL_REVIEW}`),
+    h("p", { class: "designer" }, DESIGNER),
     h("p", {}, h("a", { href: "#/about" }, "About"), " · ", h("a", { href: "#/settings" }, "Settings")));
 }
 
@@ -115,6 +116,7 @@ function about() {
       h("dt", {}, "Version"), h("dd", {}, APP_VERSION),
       h("dt", {}, "Last clinical review"), h("dd", {}, LAST_CLINICAL_REVIEW),
       h("dt", {}, "Reviewer"), h("dd", {}, CLINICAL_REVIEWER)),
+    h("p", { class: "designer" }, DESIGNER),
     h("h2", {}, "Reference policy"),
     h("p", {}, "Every formula, point value, cutoff and interpretation comes only from the project specification (SPEC.md), which was written from guidelines and original papers. Each calculator shows its sources. Where the specification gives no link for a source, the app links to a PubMed search for that citation."),
     h("p", {}, "Rounding is never silent: each result states the rounding rule used."),

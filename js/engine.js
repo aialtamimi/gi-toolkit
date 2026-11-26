@@ -33,6 +33,7 @@ export function collectValues(def, raw, units = {}) {
     if (s === undefined || s === null || String(s).trim() === "") continue;
     const n = typeof s === "number" ? s : Number(String(s).trim().replace(",", "."));
     if (!Number.isFinite(n)) { errors.push({ id: inp.id, message: "Enter a number" }); continue; }
+    if (inp.integer && !Number.isInteger(n)) { errors.push({ id: inp.id, message: "Enter a whole number" }); continue; }
     let base = n;
     if (inp.analyte) base = convert(inp.analyte, n, units[inp.id] || inp.base, inp.base);
     if ((inp.min !== undefined && base < inp.min) || (inp.max !== undefined && base > inp.max)) {
@@ -214,7 +215,7 @@ function renderInput(def, inp, idx, raw, units, update) {
   const help = inp.help ? h("div", { class: "field-help" }, inp.help) : null;
 
   if (inp.type === "number") {
-    const input = h("input", { id, type: "text", inputmode: "decimal", enterkeyhint: "next", autocomplete: "off",
+    const input = h("input", { id, type: "text", inputmode: inp.integer ? "numeric" : "decimal", enterkeyhint: "next", autocomplete: "off",
       oninput: e => { raw[inp.id] = e.target.value; update(); } });
     let unitEl;
     if (inp.analyte) {

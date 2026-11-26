@@ -24,6 +24,24 @@ import aclf from "./calculators/liver/aclf.js";
 import kings from "./calculators/liver/kings.js";
 import baveno7 from "./calculators/liver/baveno7.js";
 import fibroscan from "./calculators/liver/fibroscan.js";
+import bisap from "./calculators/pancreas/bisap.js";
+import ranson from "./calculators/pancreas/ranson.js";
+import glasgow_imrie from "./calculators/pancreas/glasgow_imrie.js";
+import sirs from "./calculators/pancreas/sirs.js";
+import marshall from "./calculators/pancreas/marshall.js";
+import atlanta from "./calculators/pancreas/atlanta.js";
+import mctsi from "./calculators/pancreas/mctsi.js";
+import tg18_cholangitis from "./calculators/pancreas/tg18_cholangitis.js";
+import asge_cbd from "./calculators/pancreas/asge_cbd.js";
+import truelove_witts from "./calculators/ibd/truelove_witts.js";
+import asuc_day3 from "./calculators/ibd/asuc_day3.js";
+import mayo_uc from "./calculators/ibd/mayo_uc.js";
+import uceis from "./calculators/ibd/uceis.js";
+import hbi from "./calculators/ibd/hbi.js";
+import cdai from "./calculators/ibd/cdai.js";
+import ses_cd from "./calculators/ibd/ses_cd.js";
+import rutgeerts from "./calculators/ibd/rutgeerts.js";
+import montreal from "./calculators/ibd/montreal.js";
 
 export const CATEGORIES = [
   { id: "bleeding", name: "GI bleeding" },
@@ -34,11 +52,13 @@ export const CATEGORIES = [
   { id: "emergencies", name: "Emergencies", emergency: true }
 ];
 
-// Phase 1: B2 (bleeding) and B3 (liver).
+// Phase 1: B2 (bleeding) and B3 (liver). Phase 2: B4 (pancreatobiliary) and B5 (IBD).
 export const CALCULATORS = [
   gbs, aims65, rockall, oakland, forrest,
   child_pugh, meld_na, meld3, maddrey, lille, gahs, abic, fib4, apri, nfs, albi,
-  ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, kings, baveno7, fibroscan
+  ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, kings, baveno7, fibroscan,
+  bisap, ranson, glasgow_imrie, sirs, marshall, atlanta, mctsi, tg18_cholangitis, asge_cbd,
+  truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal
 ];
 
 // B6 cards and B7 emergency pages are added in Phase 3.
