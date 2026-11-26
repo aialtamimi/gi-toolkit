@@ -1,5 +1,5 @@
 // Router, home, search, favorites, settings (SPEC.md B1.3, B1.6).
-import { CATEGORIES, CALCULATORS, CARDS, EMERGENCIES, EMERGENCY_INDEX, findItem, hrefFor, itemsInCategory, search } from "./registry.js";
+import { CATEGORIES, CALCULATORS, CARDS, EMERGENCIES, EMERGENCY_INDEX, REDIRECTS, findItem, hrefFor, itemsInCategory, search } from "./registry.js";
 import { renderCard, renderEmergency } from "./pages.js";
 import { renderCalculator, h } from "./engine.js";
 import { store } from "./storage.js";
@@ -64,7 +64,7 @@ function home() {
   const favs = store.favorites().map(findItem).filter(Boolean);
   const recent = store.recent().map(findItem).filter(Boolean);
   const tiles = h("div", { class: "tiles" }, CATEGORIES.map(c => {
-    const n = c.id === "emergencies" ? EMERGENCIES.length : itemsInCategory(c.id).length;
+    const n = c.id === "emergencies" ? EMERGENCY_INDEX.filter(e => findItem(e.id)).length : itemsInCategory(c.id).length;
     return h("a", { class: "tile" + (c.emergency ? " tile-emergency" : ""), href: `#/category/${c.id}` },
       h("span", { class: "tile-name" }, c.name),
       h("span", { class: "tile-count" }, n ? `${n} item${n === 1 ? "" : "s"}` : "Coming in a later update"));
@@ -83,9 +83,9 @@ function category(id) {
   let body;
   if (id === "emergencies") {
     body = h("ol", { class: "item-list emergency-index" }, EMERGENCY_INDEX.map(e => {
-      const page = EMERGENCIES.find(p => p.id === e.id);
+      const page = findItem(e.id);
       return h("li", {}, page
-        ? h("a", { class: "item-link", href: `#/emergency/${e.id}` }, h("span", { class: "em-label" }, "Emergency"), h("span", { class: "item-name" }, e.name))
+        ? h("a", { class: "item-link", href: hrefFor(e.id) }, h("span", { class: "em-label" }, "Emergency"), h("span", { class: "item-name" }, e.name))
         : h("span", { class: "item-link disabled" }, h("span", { class: "em-label" }, "Emergency"), h("span", { class: "item-name" }, e.name), h("span", { class: "item-short" }, "Coming in a later update")));
     }));
   } else {
@@ -127,10 +127,14 @@ function card(id) {
   itemPage(def, root => renderCard(root, def, { onReset: () => card(id) }));
 }
 
-function emergency(id) {
+// `entry` opens an algorithm page with answers already chosen (for example em_ugib/variceal).
+function emergency(id, entry) {
+  const redirect = REDIRECTS.find(r => r.id === id);
+  if (redirect) { location.replace(hrefFor(id)); return; }
   const page = EMERGENCIES.find(c => c.id === id);
   if (!page) return notFound();
-  itemPage(page, root => renderEmergency(root, page));
+  if (entry && !(page.entries && page.entries[entry])) return notFound();
+  itemPage(page, root => renderEmergency(root, page, { entry }));
 }
 
 function about() {
@@ -186,7 +190,7 @@ function route() {
   if (parts[0] === "about") return about();
   if (parts[0] === "settings") return settings();
   if (parts[0] === "card" && parts[1]) return card(parts[1]);
-  if (parts[0] === "emergency" && parts[1]) return emergency(parts[1]);
+  if (parts[0] === "emergency" && parts[1]) return emergency(parts[1], parts[2]);
   return notFound();
 }
 

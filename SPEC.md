@@ -84,7 +84,7 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 
 ### B1.1 Scope
 
-- 43 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 18 emergency pages (B7).
+- 43 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 17 emergency pages (B7) listed as 18 emergency index entries; five emergency pages are interactive bedside algorithms (B7.0).
 - Everything works offline after the first load.
 - English interface only; no language option.
 
@@ -170,6 +170,7 @@ Cutoffs written in both units: where a criterion or band gives a cutoff in both 
 | Calculator | Inputs; sticky result card that updates live; band label plus color (green low, amber intermediate, red high; text label always shown, never color alone); interpretation; action; points breakdown; references; "Copy result" (one line, e.g. "GBS 7, not low risk", no identifiers) |
 | Classification card | Title, table, one-line clinical use, reference |
 | Emergency page | Sections: Recognize, Do now, Within hours, Then, Avoid, Doses table; buttons to related calculators; reference list |
+| Bedside algorithm page (B7.0) | Red flags box; weight field (kg, never stored); Recognize; step cards with timeline chips, decision buttons, built-in calculators, weight-based doses and why lines; Show full algorithm toggle; Avoid; tables; Doses; buttons to related calculators; reference list |
 | About | Version; "Designed by Dr. Abdulaziz Altamimi"; the line "All formulas, cutoffs and recommendations are based on published guidelines and original papers. Each calculator lists its sources."; privacy |
 | Settings | Default units (SI or conventional), theme |
 
@@ -1006,41 +1007,143 @@ Adjunctive evidence: reflux episodes >80 per day supports GERD; mean nocturnal b
 
 ## Part B7: GI emergency pages
 
-Eighteen emergency pages. Each page uses the same template so it can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Drug doses are adult doses.
+Eighteen entries in the emergency index (B7.19), on seventeen pages: variceal bleeding (B7.2) is now part of the upper GI bleeding page (B7.1). Twelve pages use the classic template so they can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Five pages (B7.1, B7.5, B7.9, B7.12 and B7.13) are interactive bedside algorithms (B7.0). Drug doses are adult doses.
 
-### B7.1 Non-variceal upper GI bleeding (id: em\_ugib)
+### B7.0 Bedside algorithm pages
 
-- **Recognize:** hematemesis, coffee-ground vomit, melena; shock index (HR/SBP) >1 = high risk.
-- **Do now:** two large-bore cannulas; crystalloid resuscitation; GBS (B2.1). Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease. Hold antithrombotics per B7.4.
-- **Within hours:** upper endoscopy within 24 hours of presentation after resuscitation (ACG 2021, ESGE 2021). IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation).
-- **At endoscopy:** treat Forrest Ia, Ib, IIa (B2.5) with thermal contact therapy, clips, or sclerosant injection; epinephrine injection only in combination. Hemostatic powder as temporary therapy for active bleeding. Over-the-scope clip for recurrent ulcer bleeding.
-- **Then:** high-dose proton pump inhibitor (PPI) for 3 days after endoscopic hemostasis, then twice daily to complete 2 weeks, then once daily. Test for H. pylori and treat. Rebleeding: repeat endoscopy; if it fails, transcatheter arterial embolization, then surgery.
-- **Avoid:** tranexamic acid (no benefit and more venous thrombosis in HALT-IT, Lancet 2020); urgent endoscopy within 6 hours does not improve mortality (Lau, NEJM 2020).
+Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-variceal and variceal), B7.5 acute severe ulcerative colitis, B7.9 spontaneous bacterial peritonitis, B7.12 acute pancreatitis and B7.13 acute cholangitis. They keep every line, dose and source of the earlier pages, reorganized into this layout, top to bottom:
+
+| Part | What it shows |
+| --- | --- |
+| Red flags | Red-bordered box at the top: when to call ICU or surgery. It can hold a built-in calculator |
+| Weight | Weight (kg) field, on pages with weight-based doses. Weight-based doses calculate automatically. The weight is kept in memory for that page only and is never stored (Build Rule 4). Accepted entry 20–350 kg (input check only) |
+| Recognize | The Recognize line |
+| Algorithm | Step cards in time order, each with a timeline chip (for example 0 h, Day 3). Decision steps have answer buttons (Yes and No, or named answers); choosing one shows and highlights the steps of that path and hides the steps of the other answers. Steps without "shown when" are always shown; a step whose decision is hidden is hidden too. "Show full algorithm" shows every step and marks the steps that are off the chosen path. Answers are kept in memory for that page only |
+| Built-in calculators | Inside the step, collapsed, rendered by the calculator engine (inputs with units, result, band, action, breakdown, reference); the collapsed bar shows the current result and band |
+| Weight-based lines | Inside the step: the calculated dose for the entered weight (table below) |
+| Why | One short line in small italic under key steps, naming the trial or guideline |
+| After the algorithm | Avoid, other tables, Doses (adult doses; weight-based rows show the calculated dose under the written dose), Related calculators, Sources |
+
+Format of the algorithm in B7.1, B7.5, B7.9, B7.12 and B7.13: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (the why line) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps.
+
+Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of 20% albumin is calculated from the unrounded grams (1 g = 5 mL). B7.13 has no weight-based dose, so it has no weight field. Test vectors: B8.7.
+
+| Name | Page and doses row | Calculation | Shown as |
+| --- | --- | --- | --- |
+| terlipressin | B7.1, Terlipressin | Dose by weight: <50 kg 1 mg; 50–70 kg 1.5 mg; >70 kg 2 mg | Terlipressin by weight: [dose] IV every 4 hours for 48 hours, then 1 mg every 4 hours |
+| infliximab 5 mg/kg | B7.5, Infliximab (rescue) | 5 × W mg | Infliximab 5 mg/kg: [5 × W] mg IV |
+| infliximab 10 mg/kg | B7.5, Infliximab (rescue) | 10 × W mg | Infliximab 10 mg/kg: [10 × W] mg IV |
+| ciclosporin | B7.5, Ciclosporin (rescue) | 2 × W mg/day | Ciclosporin 2 mg/kg/day: [2 × W] mg/day continuous IV infusion |
+| albumin day 1 | B7.9, Albumin 20–25% | 1.5 × W g; mL = g × 5 | Albumin day 1, 1.5 g/kg: [1.5 × W] g = [7.5 × W] mL of 20% albumin |
+| albumin day 3 | B7.9, Albumin 20–25% | 1 × W g; mL = g × 5 | Albumin day 3, 1 g/kg: [W] g = [5 × W] mL of 20% albumin |
+| lactated Ringer's infusion | B7.12, Lactated Ringer's | 1.5 × W mL/h | Lactated Ringer's 1.5 mL/kg/h: [1.5 × W] mL/h |
+| lactated Ringer's bolus | B7.12, Lactated Ringer's | 10 × W mL | Lactated Ringer's bolus if hypovolemic, 10 mL/kg: [10 × W] mL |
+| urine output target | B7.12, none (step P2) | 0.5 × W mL/h | Urine output target >0.5 mL/kg/h: >[0.5 × W] mL/h |
+
+### B7.1 Upper GI bleeding: non-variceal and variceal (id: em\_ugib)
+
+Bedside algorithm (B7.0). Weight field: yes.
+
+Entry point variceal: D1 = Yes (opened by the index entry and search result "Variceal bleeding", B7.2).
+
+- **Red flags:** shock (systolic BP <90 mmHg or shock index >1), ongoing hematemesis, altered consciousness, Hb drop >2 g/dL: ICU or HDU, protect the airway.
+- **Recognize:** hematemesis, coffee-ground vomit, melena; shock index (HR/SBP) >1 = high risk. Variceal bleeding: upper GI bleeding in known or suspected cirrhosis or portal hypertension.
+
+Algorithm:
+
+- **U1 · 0–1 h · First hour, all patients**
+  - Two large-bore cannulas; crystalloid resuscitation; bloods: CBC, INR, urea, creatinine, liver tests, crossmatch.
+  - GBS (B2.1) and AIMS65 (B2.2). GBS 0–1 with no other concern: outpatient management can be considered.
+  - Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.
+  - Hold antithrombotics per B7.4.
+  - IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation).
+  - Calculators: GBS, AIMS65.
+  - Why: Restrictive transfusion lowered mortality (Villanueva, NEJM 2013).
+- **D1 · 0–1 h · Known or suspected cirrhosis or portal hypertension?**
+  - Clues: stigmata of chronic liver disease, ascites, known varices, low platelets, splenomegaly.
+  - If uncertain, start the variceal pathway until endoscopy shows otherwise.
+  - Answer Yes: variceal pathway.
+  - Answer No: non-variceal pathway.
+- **V1 · Before endoscopy · Variceal: before endoscopy** (shown when D1 = Yes)
+  - Vasoactive drug as soon as variceal bleeding is suspected, before endoscopy, continued 2–5 days.
+  - Antibiotic prophylaxis: ceftriaxone 1 g IV every 24 hours for up to 7 days.
+  - Restrictive transfusion: Hb threshold 7 g/dL, target 7–9 g/dL ([ESGE 2022](https://pubmed.ncbi.nlm.nih.gov/36174643)).
+  - Protect the airway if massive hematemesis or HE grade 3–4.
+  - Do not give fresh frozen plasma or platelets to correct INR alone.
+  - Erythromycin before endoscopy.
+  - Weight-based: terlipressin.
+  - Why: Antibiotic prophylaxis reduces infection, rebleeding and death. Over-transfusion raises portal pressure.
+- **V2 · Within 12 h · Variceal: endoscopy** (shown when D1 = Yes)
+  - Endoscopy within 12 hours.
+  - Esophageal varices: band ligation.
+  - Gastric varices GOV2 or IGV1: cyanoacrylate injection.
+- **D2 · After endoscopy · Pre-emptive TIPS criteria met?** (shown when D1 = Yes)
+  - Child-Pugh C 10–13, or Child-Pugh B >7 with active bleeding at endoscopy, or HVPG >20 mmHg.
+  - Calculators: Child-Pugh.
+  - Answer Yes: pre-emptive TIPS.
+  - Answer No: continue vasoactive drug.
+- **V3 · Within 72 h · Pre-emptive TIPS** (shown when D2 = Yes)
+  - Pre-emptive TIPS within 72 hours (ideally 24).
+  - Why: Pre-emptive TIPS improved survival in high-risk patients (Garcia-Pagan, NEJM 2010).
+- **V4 · Days 2–5 · Continue vasoactive drug** (shown when D2 = No)
+  - Continue the vasoactive drug for 2–5 days.
+- **V5 · If failure · Persistent bleeding or early rebleeding** (shown when D1 = Yes)
+  - Refractory bleeding (persistent bleeding or early rebleeding): balloon tamponade or esophageal stent as bridge to rescue TIPS.
+  - Salvage TIPS is not recommended if Child-Pugh >13.
+- **V6 · Before discharge · Variceal: before discharge** (shown when D1 = Yes)
+  - Start non-selective beta-blocker (carvedilol or propranolol) when vasoactive drug stops.
+  - Repeat band ligation every 1–4 weeks until eradication.
+  - Lactulose to prevent hepatic encephalopathy.
+  - Stop the proton pump inhibitor after endoscopy unless there is another indication.
+- **N1 · Before endoscopy · Non-variceal: before endoscopy** (shown when D1 = No)
+  - High-dose IV proton pump inhibitor may be started.
+  - Upper endoscopy within 24 hours of presentation after resuscitation (ACG 2021, ESGE 2021).
+  - Why: Endoscopy within 6 h did not lower mortality, even with GBS 12 or more (Lau, NEJM 2020).
+- **N2 · Within 24 h · Non-variceal: endoscopic therapy by Forrest class** (shown when D1 = No)
+  - Forrest Ia, Ib, IIa (B2.5): thermal contact therapy, clips, or sclerosant injection; epinephrine injection only in combination.
+  - Forrest IIb: consider clot removal and treat the underlying stigma.
+  - Forrest IIc and III: no endoscopic therapy.
+  - Hemostatic powder as temporary therapy for active bleeding.
+  - Calculators: Forrest.
+- **D3 · After endoscopy · High-risk or low-risk stigmata?** (shown when D1 = No)
+  - Answer High-risk stigmata: high-dose IV proton pump inhibitor.
+  - Answer Low-risk stigmata: oral proton pump inhibitor.
+- **N3 · 72 h, then to day 14 · High-risk stigmata** (shown when D3 = High-risk stigmata)
+  - Pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h for 72 hours (or 40 mg IV twice daily), then twice daily orally to day 14, then once daily.
+- **N4 · After endoscopy · Low-risk stigmata** (shown when D3 = Low-risk stigmata)
+  - Oral proton pump inhibitor once daily, early feeding, consider discharge.
+- **N5 · If rebleeding · Non-variceal: rebleeding** (shown when D1 = No)
+  - Repeat endoscopy (over-the-scope clip for recurrent ulcer bleeding); if it fails, transcatheter arterial embolization, then surgery.
+- **N6 · Discharge · Non-variceal: discharge** (shown when D1 = No)
+  - Test for H. pylori and treat; repeat the test later if negative during the bleed.
+  - Avoid non-steroidal anti-inflammatory drugs (NSAIDs).
+  - Restart aspirin for secondary prevention as soon as hemostasis is secured (B7.4).
+- **Avoid:** all patients: tranexamic acid. Non-variceal: urgent endoscopy within 6 hours does not improve mortality (Lau, NEJM 2020). Variceal: fresh frozen plasma or platelets to "correct" INR alone; over-transfusion (raises portal pressure); proton pump inhibitor continued long term without indication.
+  - Why: Tranexamic acid gave no benefit and more venous thrombosis (HALT-IT, Lancet 2020).
+
+**Key differences**
+
+| Feature | Variceal | Non-variceal |
+| --- | --- | --- |
+| Endoscopy timing | Within 12 hours | Within 24 hours |
+| First drugs | Vasoactive drug + ceftriaxone | Proton pump inhibitor |
+| Endoscopic therapy | Band ligation or cyanoacrylate | Forrest-based therapy |
+| Follow-up | Beta-blocker, ligation, TIPS | H. pylori, aspirin restart |
 
 | Drug | Dose |
 | --- | --- |
 | Erythromycin | 250 mg IV over 5–30 minutes, given 30–120 minutes before endoscopy |
 | Pantoprazole or esomeprazole, high dose | 80 mg IV bolus, then 8 mg/h infusion for 72 hours; or 40 mg IV twice daily as intermittent high dose |
-
-Related: GBS, AIMS65, Rockall, Forrest.
-
-### B7.2 Acute variceal bleeding (id: em\_variceal)
-
-- **Recognize:** upper GI bleeding in known or suspected cirrhosis or portal hypertension.
-- **Do now:** vasoactive drug as soon as variceal bleeding is suspected, before endoscopy, continued 2–5 days. Antibiotic prophylaxis: ceftriaxone 1 g every 24 hours for up to 7 days. Restrictive transfusion: Hb threshold 7 g/dL, target 7–9 g/dL ([ESGE 2022](https://pubmed.ncbi.nlm.nih.gov/36174643)). Protect the airway if massive hematemesis or HE grade 3–4. Erythromycin before endoscopy.
-- **Within hours:** endoscopy within 12 hours. Esophageal varices: band ligation. Gastric varices GOV2 or IGV1: cyanoacrylate injection.
-- **Then:** pre-emptive TIPS within 72 hours (ideally 24) if Child-Pugh C 10–13, or Child-Pugh B >7 with active bleeding at endoscopy, or HVPG >20 mmHg. Refractory bleeding: balloon tamponade or esophageal stent as bridge to rescue TIPS. Start non-selective beta-blocker (carvedilol or propranolol) when vasoactive drug stops; repeat band ligation every 1–4 weeks until eradication. Lactulose to prevent HE.
-- **Avoid:** fresh frozen plasma or platelets to "correct" INR alone; over-transfusion (raises portal pressure); proton pump inhibitor continued long term without indication.
-
-| Drug | Dose |
-| --- | --- |
-| Terlipressin | 2 mg IV every 4 hours for the first 48 hours, then 1 mg every 4 hours (adjust by weight and local protocol) |
+| Terlipressin | 2 mg IV every 4 hours for the first 48 hours, then 1 mg every 4 hours (adjust by weight and local protocol). By weight, every 4 hours for 48 hours: <50 kg 1 mg; 50–70 kg 1.5 mg; >70 kg 2 mg; then 1 mg every 4 hours |
 | Octreotide | 50 µg IV bolus, then 50 µg/h infusion for 2–5 days; bolus can be repeated in the first hour |
 | Somatostatin | 250 µg IV bolus, then 250–500 µg/h infusion |
 | Ceftriaxone | 1 g IV every 24 hours, maximum 7 days |
-| Erythromycin | 250 mg IV 30–120 minutes before endoscopy |
 
-Related: Child-Pugh, MELD 3.0, West Haven.
+Related: GBS, AIMS65, Rockall, Forrest, Child-Pugh, MELD 3.0, West Haven.
+
+### B7.2 Acute variceal bleeding (id: em\_variceal)
+
+Merged into B7.1. The index entry and the search result "Variceal bleeding" open the upper GI bleeding page (B7.1) at the variceal pathway, with D1 answered Yes. Every line, dose and source of the earlier variceal page is kept on B7.1.
 
 ### B7.3 Acute lower GI bleeding (id: em\_lgib)
 
@@ -1069,10 +1172,41 @@ Show: "Restart anticoagulation once hemostasis is secure, individualized with ca
 
 ### B7.5 Acute severe ulcerative colitis (id: em\_asuc)
 
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** colonic dilatation >6 cm (B7.6), perforation, massive bleeding, peritonism: urgent surgical review.
 - **Recognize:** Truelove and Witts severe (B5.1): ≥6 bloody stools/day plus systemic toxicity.
-- **Do now:** admit; IV corticosteroids; venous thromboembolism prophylaxis with low-molecular-weight heparin; stool culture and C. difficile toxin; flexible sigmoidoscopy with biopsies (CMV); plain abdominal X-ray; correct potassium and magnesium; involve colorectal surgeon early.
-- **Day 3:** Oxford criteria (B5.2). If positive: rescue therapy with infliximab or ciclosporin.
-- **Then:** no response to rescue within 5–7 days, or deterioration, toxic megacolon, perforation or massive bleeding: colectomy.
+
+Algorithm:
+
+- **A1 · Day 0 · Admit, investigate, start IV corticosteroids**
+  - Admit.
+  - Bloods: CBC, CRP, albumin, potassium, magnesium; correct potassium and magnesium.
+  - Stool culture and C. difficile toxin.
+  - Flexible sigmoidoscopy with biopsies for CMV.
+  - Plain abdominal X-ray.
+  - Venous thromboembolism prophylaxis with low-molecular-weight heparin.
+  - IV corticosteroids: methylprednisolone 60 mg every 24 hours or hydrocortisone 100 mg every 6 hours.
+  - Screen now for TB (IGRA, chest X-ray), hepatitis B, hepatitis C and HIV in case rescue therapy is needed.
+  - Inform the colorectal surgeon; involve the surgeon early.
+  - Calculators: Truelove and Witts.
+  - Why: Venous thromboembolism risk is markedly higher during IBD flares.
+- **D1 · Day 3 · Day-3 criteria positive (Oxford or Lindgren)?**
+  - Oxford criteria (B5.2) on day 3 of IV corticosteroids.
+  - Calculators: Day-3 Oxford.
+  - Answer Yes: rescue therapy.
+  - Answer No: continue IV corticosteroids.
+- **A2 · Day 3 · Rescue therapy** (shown when D1 = Yes)
+  - Rescue therapy with infliximab or ciclosporin.
+  - Infliximab 5 mg/kg IV (consider 10 mg/kg or accelerated dosing with low albumin or high CRP).
+  - Or ciclosporin 2 mg/kg/day continuous IV infusion (avoid with low magnesium, low cholesterol or renal impairment).
+  - Weight-based: infliximab 5 mg/kg, infliximab 10 mg/kg, ciclosporin.
+  - Why: Infliximab and ciclosporin have similar efficacy as rescue (CYSIF, Lancet 2012; CONSTRUCT, Lancet Gastroenterol Hepatol 2016).
+- **A3 · Day 3 onward · Continue IV corticosteroids** (shown when D1 = No)
+  - Continue IV corticosteroids; switch to oral prednisolone 40 mg once improving.
+- **A4 · Day 5–7 · Colectomy if no response**
+  - No response to rescue within 5–7 days, or deterioration, toxic megacolon, perforation or massive bleeding: colectomy.
+  - Why: Delayed colectomy increases complications and mortality.
 - **Avoid:** non-steroidal anti-inflammatory drugs (NSAIDs), opioids, anticholinergics and antidiarrheals; delaying surgery in non-responders.
 
 | Drug | Dose |
@@ -1117,10 +1251,38 @@ Related: Maddrey, MELD, GAHS, ABIC, Lille.
 
 ### B7.9 Spontaneous bacterial peritonitis (id: em\_sbp)
 
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** shock, AKI, hepatic encephalopathy: ICU or HDU.
 - **Recognize:** ascitic PMN ≥250/mm³ (B3.12). Do a diagnostic paracentesis in every patient with cirrhosis and ascites admitted to hospital, and with any GI bleeding, infection signs, HE or AKI.
-- **Do now:** empirical antibiotics; IV albumin; blood and ascitic cultures (inoculate blood culture bottles at the bedside).
-- **Within 48 hours:** repeat paracentesis if no clinical improvement; PMN fall <25% = treatment failure, broaden antibiotics and look for secondary peritonitis.
-- **Then:** long-term secondary prophylaxis after the first episode.
+
+Algorithm:
+
+- **S1 · 0 h · Diagnostic paracentesis before antibiotics**
+  - Diagnostic paracentesis before antibiotics in every patient with cirrhosis and ascites who is admitted, has GI bleeding, or deteriorates (fever, abdominal pain, encephalopathy, AKI). Do not delay.
+  - Blood and ascitic cultures: inoculate blood culture bottles at the bedside.
+- **D1 · 0–6 h · Ascitic fluid result?**
+  - Ascitic fluid analysis (B3.12): PMN count, culture and Runyon criteria.
+  - Calculators: Ascitic fluid analysis.
+  - Answer PMN 250/mm³ or more: treat as SBP.
+  - Answer PMN <250/mm³, positive culture, symptomatic: treat.
+  - Answer PMN <250/mm³, positive culture, asymptomatic: repeat paracentesis.
+  - Answer Runyon criteria or polymicrobial culture: suspect secondary peritonitis.
+- **S2 · 0–6 h · Repeat paracentesis** (shown when D1 = PMN <250/mm³, positive culture, asymptomatic)
+  - PMN <250/mm³ with positive culture and no symptoms: repeat paracentesis.
+- **S3 · Now · Suspected secondary peritonitis** (shown when D1 = Runyon criteria or polymicrobial culture)
+  - Runyon criteria or polymicrobial culture: suspect secondary peritonitis, urgent CT and surgical review.
+- **S4 · Within 6 h · Treat: antibiotics and albumin** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
+  - Empirical antibiotics: community-acquired, cefotaxime 2 g IV every 8 hours (or ceftriaxone) for 5–7 days; nosocomial, recent antibiotics or sepsis, piperacillin-tazobactam or a carbapenem per local resistance.
+  - IV albumin 1.5 g/kg within 6 hours of diagnosis (day 1) and 1 g/kg on day 3.
+  - Stop diuretics and nephrotoxins; review non-selective beta-blockers if systolic BP <90 mmHg, sodium <130 mmol/L or AKI.
+  - Weight-based: albumin day 1, albumin day 3.
+  - Why: Albumin reduced renal failure and in-hospital death (Sort, NEJM 1999).
+- **S5 · 48 h · Check response** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
+  - Repeat paracentesis if no clinical improvement; PMN fall <25% = treatment failure, broaden antibiotics and look for secondary peritonitis.
+- **S6 · Before discharge · Prevent recurrence** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
+  - Long-term secondary prophylaxis after the first episode: norfloxacin 400 mg daily, ciprofloxacin 500 mg daily, or trimethoprim-sulfamethoxazole.
+  - Refer for liver transplant assessment.
 - **Avoid:** large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI.
 
 | Drug | Dose |
@@ -1170,10 +1332,47 @@ Related: West Haven, MELD, Child-Pugh.
 
 Source: ACG 2024 (Tenner, Am J Gastroenterol 2024).
 
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** persistent SIRS >48 hours, organ failure (modified Marshall score 2 or more), cholangitis: HDU or ICU; cholangitis needs ERCP within 24 hours.
+  - Calculators: Marshall.
 - **Recognize:** 2 of 3: typical pain, lipase or amylase >3 × ULN, imaging (B4.6). Ultrasound for gallstones in every patient; check triglycerides and calcium.
-- **Do now:** moderately aggressive fluids with lactated Ringer's; monitor urine output, heart rate, BUN and hematocrit closely for the first 24–48 hours; analgesia; BISAP and SIRS.
-- **Within hours:** urgent ERCP (within 24 hours) only if concomitant cholangitis.
-- **Then:** early oral feeding within 24–48 hours as tolerated (low-fat solid diet in mild pancreatitis); enteral rather than parenteral feeding in severe pancreatitis. Mild biliary pancreatitis: cholecystectomy during the same admission. Infected necrosis: step-up approach, delaying drainage until walled-off (about 4 weeks) where possible.
+
+Algorithm:
+
+- **P1 · 0–6 h · Diagnose, grade and start fluids**
+  - Revised Atlanta diagnosis (B4.6): 2 of 3.
+  - Ultrasound for gallstones.
+  - Bloods: triglycerides, calcium, liver tests, BUN, hematocrit.
+  - BISAP and SIRS.
+  - Analgesia.
+  - Moderately aggressive fluids with lactated Ringer's: 1.5 mL/kg/h, plus a 10 mL/kg bolus if hypovolemic.
+  - Calculators: Revised Atlanta, BISAP, SIRS.
+  - Weight-based: lactated Ringer's infusion, lactated Ringer's bolus.
+  - Why: Aggressive fluids caused more fluid overload without benefit (WATERFALL, NEJM 2022).
+- **P2 · 6–48 h · Reassess often and feed early**
+  - Reassess often: heart rate, urine output >0.5 mL/kg/h, BUN, hematocrit; monitor closely for the first 24–48 hours; reduce fluids if fluid overload.
+  - No prophylactic antibiotics.
+  - Early oral feeding within 24–48 hours as tolerated (low-fat solid diet in mild pancreatitis); enteral rather than parenteral feeding in severe pancreatitis.
+  - Weight-based: urine output target.
+- **D1 · Within 24 h · Cholangitis?**
+  - Urgent ERCP (within 24 hours) only if concomitant cholangitis.
+  - Answer Yes: ERCP within 24 hours.
+  - Answer No: no early ERCP.
+- **P3 · Within 24 h · ERCP for cholangitis** (shown when D1 = Yes)
+  - Cholangitis: ERCP within 24 hours (B7.13).
+- **P4 · No early ERCP · Gallstone pancreatitis without cholangitis** (shown when D1 = No)
+  - Gallstone pancreatitis without cholangitis: no early ERCP.
+  - Why: Urgent ERCP without cholangitis gave no benefit (APEC, Lancet 2020).
+- **P5 · Same admission · Treat the cause**
+  - Mild gallstone pancreatitis: cholecystectomy during the same admission.
+  - Alcohol: brief intervention and referral.
+  - Why: Fewer recurrent gallstone complications (PONCHO, Lancet 2015).
+- **P6 · After 72 h · If deteriorating**
+  - Contrast CT (modified CTSI).
+  - Suspected infected necrosis (fever, gas on CT): antibiotics; step-up approach, endoscopic first, delaying drainage until walled-off (about 4 weeks) where possible.
+  - Calculators: modified CTSI.
+  - Why: Postponed drainage was not worse and needed fewer interventions (POINTER, NEJM 2021).
 - **Avoid:** aggressive fluids (more fluid overload without benefit; WATERFALL, NEJM 2022); prophylactic antibiotics; early ERCP in biliary pancreatitis without cholangitis; CT in the first 72 hours unless the diagnosis is unclear.
 
 | Item | Dose |
@@ -1185,11 +1384,52 @@ Related: BISAP, Ranson, Glasgow-Imrie, SIRS, Marshall, Revised Atlanta, modified
 
 ### B7.13 Acute cholangitis (id: em\_cholangitis)
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** septic shock, altered consciousness, organ dysfunction (TG18 grade III): ICU.
 - **Recognize:** TG18 criteria (B4.8).
-- **Do now:** blood cultures, then IV antibiotics (within 1 hour in septic shock) covering gram-negative organisms and anaerobes per local resistance; fluids; correct coagulopathy if needed for sphincterotomy.
-- **Within hours:** biliary drainage by ERCP rather than percutaneous drainage, within 48 hours ([ASGE 2021](https://guidelinecentral.com/guideline/1285200)); as soon as possible after resuscitation (ideally within 12 hours) in septic shock or TG18 grade III (ESGE 2019). If stable, combine drainage with sphincterotomy and stone removal; if unstable, stent alone.
-- **Then:** antibiotics 4–7 days after source control (TG18); cholecystectomy for gallstone disease.
+
+Algorithm:
+
+- **C1 · 0–1 h · Diagnose, grade, culture and treat**
+  - TG18 diagnosis and severity (B4.8).
+  - Blood cultures, then IV antibiotics (within 1 hour in septic shock) covering gram-negative organisms and anaerobes per local resistance; see Antibiotic examples below.
+  - Fluids.
+  - Check INR and platelets; correct coagulopathy if needed for sphincterotomy.
+  - Calculators: TG18 cholangitis.
+- **D1 · 0–1 h · TG18 severity grade?**
+  - Biliary drainage by ERCP rather than percutaneous drainage, within 48 hours ([ASGE 2021](https://guidelinecentral.com/guideline/1285200)).
+  - Answer Grade III: organ support, then urgent drainage.
+  - Answer Grade II: ERCP within 48 hours.
+  - Answer Grade I: antibiotics, ERCP within 48 hours.
+  - Why: ERCP within 48 h is associated with better outcomes (ASGE 2021).
+- **C2 · Within 12 h · Grade III (severe)** (shown when D1 = Grade III)
+  - Organ support, then urgent biliary drainage as soon as possible after resuscitation (ideally within 12 hours) in septic shock or TG18 grade III (ESGE 2019).
+- **C3 · Within 48 h · Grade II (moderate)** (shown when D1 = Grade II)
+  - ERCP within 48 hours.
+- **C4 · Within 48 h · Grade I (mild)** (shown when D1 = Grade I)
+  - Antibiotics; ERCP within 48 hours, sooner if no response within 24 hours.
+- **D2 · At ERCP · Stable at ERCP?**
+  - Answer Stable: sphincterotomy and stone extraction.
+  - Answer Unstable or coagulopathic: stent only.
+- **C5 · At ERCP · Stable** (shown when D2 = Stable)
+  - If stable, combine drainage with sphincterotomy and stone removal.
+- **C6 · At ERCP · Unstable or coagulopathic** (shown when D2 = Unstable or coagulopathic)
+  - If unstable or coagulopathic, stent decompression alone; definitive treatment later.
+- **C7 · If ERCP fails · Other drainage**
+  - ERCP fails or is not possible: percutaneous or EUS-guided drainage.
+- **C8 · After source control · Antibiotic duration**
+  - Antibiotics 4–7 days after source control (TG18); at least 2 weeks if Enterococcus or Streptococcus bacteremia (TG18).
+- **C9 · Same admission · Cholecystectomy**
+  - Cholecystectomy for gallstone disease, during the same admission when possible.
 - **Avoid:** delaying drainage in grade II–III; full stone clearance in an unstable patient.
+
+**Antibiotic examples (follow local resistance)**
+
+| Situation | Antibiotics |
+| --- | --- |
+| Grade I–II, community-acquired | Ceftriaxone plus metronidazole, or piperacillin-tazobactam |
+| Grade III or healthcare-associated | Piperacillin-tazobactam or meropenem; add vancomycin if indicated |
 
 Related: TG18 cholangitis, ASGE choledocholithiasis risk.
 
@@ -1257,6 +1497,8 @@ Source: [Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic pe
 ### B7.19 Index of emergency pages
 
 The home screen lists all 18 pages under "Emergencies" with a red label, in this order: Upper GI bleeding, Variceal bleeding, Lower GI bleeding, Anticoagulants in GI bleeding, Acute severe UC, Toxic megacolon, Acute liver failure, Alcohol-associated hepatitis, SBP, HRS-AKI, Hepatic encephalopathy, Acute pancreatitis, Cholangitis, Foreign body, Caustic ingestion, Ogilvie syndrome, Volvulus, Perforation.
+
+Variceal bleeding has no page of its own: its index entry and search result open the upper GI bleeding page (B7.1) at the variceal pathway (B7.2). The index lists 18 entries.
 
 ## Part B8: Test vectors
 
@@ -1378,6 +1620,72 @@ Unit rule (B1.5) test vectors for B2 and B3:
 | BBPS | Right 3, transverse 3, left 1 | 7, inadequate (a segment <2) |
 | Prague | C 2 cm, M 5 cm | "C2M5"; surveillance every 3 years (ACG and ESGE) |
 
+### B8.7 Weight-based doses (B7.0)
+
+Weight entries outside 20–350 kg, or blank, show no calculated dose.
+
+| Name | Weight (kg) | Shown |
+| --- | --- | --- |
+| terlipressin | 49.9 | Terlipressin by weight: 1 mg IV every 4 hours for 48 hours, then 1 mg every 4 hours |
+| terlipressin | 50 | Terlipressin by weight: 1.5 mg IV every 4 hours for 48 hours, then 1 mg every 4 hours |
+| terlipressin | 70 | Terlipressin by weight: 1.5 mg IV every 4 hours for 48 hours, then 1 mg every 4 hours |
+| terlipressin | 70.1 | Terlipressin by weight: 2 mg IV every 4 hours for 48 hours, then 1 mg every 4 hours |
+| infliximab 5 mg/kg | 72.5 | Infliximab 5 mg/kg: 362.5 mg IV |
+| infliximab 5 mg/kg | 80 | Infliximab 5 mg/kg: 400 mg IV |
+| infliximab 10 mg/kg | 72.5 | Infliximab 10 mg/kg: 725 mg IV |
+| ciclosporin | 72.5 | Ciclosporin 2 mg/kg/day: 145 mg/day continuous IV infusion |
+| albumin day 1 | 72.5 | Albumin day 1, 1.5 g/kg: 108.8 g = 543.8 mL of 20% albumin |
+| albumin day 1 | 60 | Albumin day 1, 1.5 g/kg: 90 g = 450 mL of 20% albumin |
+| albumin day 3 | 72.5 | Albumin day 3, 1 g/kg: 72.5 g = 362.5 mL of 20% albumin |
+| lactated Ringer's infusion | 72.5 | Lactated Ringer's 1.5 mL/kg/h: 108.8 mL/h |
+| lactated Ringer's bolus | 72.5 | Lactated Ringer's bolus if hypovolemic, 10 mL/kg: 725 mL |
+| urine output target | 72.5 | Urine output target >0.5 mL/kg/h: >36.3 mL/h |
+| infliximab 5 mg/kg | 19.9 | not calculated |
+| infliximab 5 mg/kg | 350.1 | not calculated |
+| albumin day 1 | 20 | Albumin day 1, 1.5 g/kg: 30 g = 150 mL of 20% albumin |
+| albumin day 3 | 350 | Albumin day 3, 1 g/kg: 350 g = 1750 mL of 20% albumin |
+
+### B8.8 Bedside algorithm paths (B7.0)
+
+Steps shown in the normal view for each set of answers (several answers separated by semicolons). In "Show full algorithm" every step is shown; the last rows give the marks.
+
+| Page | Answers | Steps shown |
+| --- | --- | --- |
+| em\_ugib | none | U1, D1 |
+| em\_ugib | D1 = Yes | U1, D1, V1, V2, D2, V5, V6 |
+| em\_ugib | D1 = Yes; D2 = Yes | U1, D1, V1, V2, D2, V3, V5, V6 |
+| em\_ugib | D1 = Yes; D2 = No | U1, D1, V1, V2, D2, V4, V5, V6 |
+| em\_ugib | D1 = No | U1, D1, N1, N2, D3, N5, N6 |
+| em\_ugib | D1 = No; D3 = High-risk stigmata | U1, D1, N1, N2, D3, N3, N5, N6 |
+| em\_ugib | D1 = No; D3 = Low-risk stigmata | U1, D1, N1, N2, D3, N4, N5, N6 |
+| em\_ugib | D1 = No; D2 = Yes | U1, D1, N1, N2, D3, N5, N6 |
+| em\_ugib | entry point variceal | U1, D1, V1, V2, D2, V5, V6 |
+| em\_asuc | none | A1, D1, A4 |
+| em\_asuc | D1 = Yes | A1, D1, A2, A4 |
+| em\_asuc | D1 = No | A1, D1, A3, A4 |
+| em\_sbp | none | S1, D1 |
+| em\_sbp | D1 = PMN 250/mm³ or more | S1, D1, S4, S5, S6 |
+| em\_sbp | D1 = PMN <250/mm³, positive culture, symptomatic | S1, D1, S4, S5, S6 |
+| em\_sbp | D1 = PMN <250/mm³, positive culture, asymptomatic | S1, D1, S2 |
+| em\_sbp | D1 = Runyon criteria or polymicrobial culture | S1, D1, S3 |
+| em\_pancreatitis | none | P1, P2, D1, P5, P6 |
+| em\_pancreatitis | D1 = Yes | P1, P2, D1, P3, P5, P6 |
+| em\_pancreatitis | D1 = No | P1, P2, D1, P4, P5, P6 |
+| em\_cholangitis | none | C1, D1, D2, C7, C8, C9 |
+| em\_cholangitis | D1 = Grade III | C1, D1, C2, D2, C7, C8, C9 |
+| em\_cholangitis | D1 = Grade II | C1, D1, C3, D2, C7, C8, C9 |
+| em\_cholangitis | D1 = Grade I | C1, D1, C4, D2, C7, C8, C9 |
+| em\_cholangitis | D1 = Grade III; D2 = Unstable or coagulopathic | C1, D1, C2, D2, C6, C7, C8, C9 |
+| em\_cholangitis | D2 = Stable | C1, D1, D2, C5, C7, C8, C9 |
+
+"Show full algorithm" marks: on path (answer chosen), off path (another answer chosen, or its decision is off path), or not yet decided.
+
+| Page | Answers | On path | Off path | Not yet decided |
+| --- | --- | --- | --- | --- |
+| em\_ugib | D1 = Yes | V1, V2, D2, V5, V6 | N1, N2, D3, N3, N4, N5, N6 | V3, V4 |
+| em\_ugib | none | none | none | V1, V2, D2, V3, V4, V5, V6, N1, N2, D3, N3, N4, N5, N6 |
+| em\_sbp | D1 = Runyon criteria or polymicrobial culture | S3 | S2, S4, S5, S6 | none |
+
 ## Part B9: References
 
 Primary guidelines and papers behind Part B. Claude Code shows the relevant one on each screen; links below are the pages used to check this spec.
@@ -1416,5 +1724,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Hepatic encephalopathy (HELP trial) | Rahimi RS et al. Lactulose vs polyethylene glycol 3350-electrolyte solution for treatment of overt hepatic encephalopathy: the HELP randomized clinical trial. JAMA Intern Med 2014;174(11):1727-33. doi:10.1001/jamainternmed.2014.4746 (PMID 25243839) |
 | Los Angeles classification | Lundell LR et al. Endoscopic assessment of oesophagitis: clinical and functional correlates and further validation of the Los Angeles classification. Gut 1999;45(2):172-80. doi:10.1136/gut.45.2.172 (PMID 10403727) |
 | Prague C and M criteria | Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006;131(5):1392-9. doi:10.1053/j.gastro.2006.08.032 (PMID 17101315) |
+| Bedside algorithm trials (B7.0) | Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013; Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010; Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012; Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016; Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020; da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015; Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021 |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

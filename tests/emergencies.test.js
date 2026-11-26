@@ -1,84 +1,159 @@
 // SPEC.md B7 emergency pages: every block checked verbatim against SPEC.md, plus order, links and search.
+// Classic pages use the B7 template; bedside algorithm pages use the B7.0 format (tests/spec_b7.js parses both).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { EMERGENCIES, EMERGENCY_INDEX, findItem, search, hrefFor } from "../js/registry.js";
+import { EMERGENCIES, EMERGENCY_INDEX, REDIRECTS, findItem, search, hrefFor } from "../js/registry.js";
 import { SPEC_REFS, tokenize } from "../js/pages.js";
+import { DOSES } from "../js/doses.js";
+import { SPEC, CALC_NAMES, isAlgorithm, parseClassic, parseAlgorithm } from "./spec_b7.js";
 
-const SPEC = readFileSync(new URL("../SPEC.md", import.meta.url), "utf8");
+const NUMS = Array.from({ length: 18 }, (_, i) => `B7.${i + 1}`).filter(n => n !== "B7.2");
+const ALGORITHM_NUMS = NUMS.filter(isAlgorithm);
+const CLASSIC = NUMS.filter(n => !isAlgorithm(n)).map(parseClassic);
+const ALGORITHMS = ALGORITHM_NUMS.map(parseAlgorithm);
+const ALL = [...CLASSIC, ...ALGORITHMS];
 
-// Independent parser of a SPEC B7 page into the same block model as content/emergencies/<id>.js.
-function parsePage(num) {
-  const start = SPEC.indexOf(`### ${num} `);
-  const rest = SPEC.slice(start);
-  const heading = rest.slice(0, rest.indexOf("\n"));
-  const body = rest.slice(heading.length + 1, rest.slice(4).search(/\n#{2,3} /) + 4);
-  const blocks = [];
-  let related = [];
-  let table = null;
-  for (const line of body.split("\n")) {
-    if (!line.startsWith("|")) table = null;
-    let m;
-    if (!line.trim()) continue;
-    if ((m = line.match(/^- \*\*(.+?):\*\* (.*)$/))) blocks.push({ type: "section", title: m[1], text: m[2] });
-    else if (line.startsWith("|")) {
-      const cells = line.trim().replace(/^\||\|$/g, "").split("|").map(c => c.trim());
-      if (cells.every(c => /^-+$/.test(c))) continue;
-      if (!table) { table = { type: "table", columns: cells, rows: [] }; blocks.push(table); } else table.rows.push(cells);
-    }
-    else if ((m = line.match(/^Show: "(.*)"$/))) blocks.push({ type: "note", text: m[1] });
-    else if ((m = line.match(/^Sources?: (.*)$/))) blocks.push({ type: "source", text: m[1] });
-    else if ((m = line.match(/^Related: (.*)\.$/))) related = m[1].split(",").map(s => s.trim());
-    else assert.fail(`unparsed SPEC line in ${num}: ${line}`);
-  }
-  const hm = heading.match(/^### (B7\.\d+) (.+?) \(id: (.+)\)$/);
-  return { num: hm[1], name: hm[2], id: hm[3].replace(/\\_/g, "_"), blocks, related };
-}
-
-const PAGES = Array.from({ length: 18 }, (_, i) => parsePage(`B7.${i + 1}`));
-
-test("18 emergency pages, in the B7.19 index order with the B7.19 names", () => {
-  const order = SPEC.match(/in this order: (.*)\.\n/)[1].split(",").map(s => s.trim());
-  assert.equal(EMERGENCIES.length, 18);
-  assert.deepEqual(EMERGENCIES.map(p => p.short), order);
-  assert.deepEqual(EMERGENCIES.map(p => p.id), EMERGENCY_INDEX.map(e => e.id));
-  assert.deepEqual(EMERGENCIES.map(p => p.id), PAGES.map(p => p.id));
+test("five bedside algorithm pages: B7.1, B7.5, B7.9, B7.12, B7.13", () => {
+  assert.deepEqual(ALGORITHM_NUMS, ["B7.1", "B7.5", "B7.9", "B7.12", "B7.13"]);
+  assert.deepEqual(EMERGENCIES.filter(p => p.kind === "algorithm").map(p => p.spec), ALGORITHM_NUMS);
 });
 
-for (const spec of PAGES) {
+test("18 index entries in the B7.19 order with the B7.19 names, on 17 pages plus the variceal entry", () => {
+  const order = SPEC.match(/in this order: (.*)\.\n/)[1].split(",").map(s => s.trim());
+  assert.equal(EMERGENCY_INDEX.length, 18);
+  assert.deepEqual(EMERGENCY_INDEX.map(e => e.name), order);
+  assert.deepEqual(EMERGENCY_INDEX.map(e => findItem(e.id).short), order);
+  assert.equal(EMERGENCIES.length, 17);
+  assert.deepEqual(EMERGENCIES.map(p => p.id), EMERGENCY_INDEX.map(e => e.id).filter(id => id !== "em_variceal"));
+  assert.deepEqual([...EMERGENCIES.map(p => p.id)].sort(), ALL.map(p => p.id).sort());
+});
+
+for (const spec of CLASSIC) {
   test(`${spec.id} (${spec.num}): every section, table, note and source line is verbatim SPEC text`, () => {
     const page = EMERGENCIES.find(p => p.id === spec.id);
     assert.equal(page.spec, spec.num);
     assert.equal(page.name, spec.name);
+    assert.equal(page.kind, undefined);
     assert.deepEqual(page.blocks, spec.blocks);
-  });
-
-  test(`${spec.id}: related calculators match the SPEC "Related:" line and exist`, () => {
-    const page = EMERGENCIES.find(p => p.id === spec.id);
-    assert.equal(page.related.length, spec.related.length);
-    for (const id of page.related) assert.ok(findItem(id), `${id} not found`);
   });
 }
 
-test("related calculator buttons map each SPEC name to the right calculator", () => {
-  const pairs = EMERGENCIES.flatMap(p => p.related.map((id, i) => [PAGES.find(s => s.id === p.id).related[i], id]));
-  const expected = {
-    GBS: "gbs", AIMS65: "aims65", Rockall: "rockall", Forrest: "forrest", "Child-Pugh": "child_pugh", "MELD 3.0": "meld3",
-    "West Haven": "west_haven", Oakland: "oakland", "Truelove and Witts": "truelove_witts", "Day-3 Oxford": "asuc_day3",
-    UCEIS: "uceis", Mayo: "mayo_uc", "King's College criteria": "kings", MELD: "meld_na", Maddrey: "maddrey", GAHS: "gahs",
-    ABIC: "abic", Lille: "lille", "Ascitic fluid analysis": "ascites", "ACLF grade": "aclf", BISAP: "bisap", Ranson: "ranson",
-    "Glasgow-Imrie": "glasgow_imrie", SIRS: "sirs", Marshall: "marshall", "Revised Atlanta": "atlanta", "modified CTSI": "mctsi",
-    "TG18 cholangitis": "tg18_cholangitis", "ASGE choledocholithiasis risk": "asge_cbd", Zargar: "zargar"
-  };
-  for (const [name, id] of pairs) assert.equal(id, expected[name], name);
+// The page file stores calculator ids and dose ids; SPEC names them.
+function withNames(page) {
+  const calcName = id => Object.keys(CALC_NAMES).find(k => CALC_NAMES[k] === id);
+  const doseName = id => DOSES.find(d => d.id === id).name;
+  return page.blocks.map(b => {
+    if (b.type === "step" || b.type === "decision") {
+      const { calcs, doses, ...rest } = b;
+      return { ...rest, calcNames: calcs.map(calcName), doseNames: doses.map(doseName) };
+    }
+    if (b.type === "redflags" && b.calcs) { const { calcs, ...rest } = b; return { ...rest, calcNames: calcs.map(calcName) }; }
+    return b;
+  });
+}
+const sortKeys = o => Array.isArray(o) ? o.map(sortKeys) : o && typeof o === "object"
+  ? Object.fromEntries(Object.keys(o).sort().map(k => [k, sortKeys(o[k])])) : o;
+
+for (const spec of ALGORITHMS) {
+  test(`${spec.id} (${spec.num}): every red flag, step, decision, answer, why line, table and source is verbatim SPEC text`, () => {
+    const page = EMERGENCIES.find(p => p.id === spec.id);
+    assert.equal(page.spec, spec.num);
+    assert.equal(page.name, spec.name);
+    assert.equal(page.kind, "algorithm");
+    assert.equal(page.weight, spec.weight);
+    assert.deepEqual(page.entries, spec.entries);
+    assert.deepEqual(sortKeys(withNames(page)), sortKeys(spec.blocks));
+  });
+
+  test(`${spec.id}: layout follows B7.0 (red flags first, then Recognize, steps, Avoid, tables)`, () => {
+    const page = EMERGENCIES.find(p => p.id === spec.id);
+    const types = page.blocks.filter(b => b.type !== "source").map(b => b.type === "decision" ? "step" : b.type === "section" ? b.title : b.type);
+    assert.equal(types[0], "redflags");
+    assert.equal(types[1], "Recognize");
+    const firstStep = types.indexOf("step"), lastStep = types.lastIndexOf("step");
+    assert.equal(firstStep, 2);
+    assert.ok(types.slice(firstStep, lastStep + 1).every(t => t === "step"), "steps are contiguous");
+    assert.equal(types[lastStep + 1], "Avoid");
+    assert.ok(types.slice(lastStep + 2).every(t => t === "table"));
+  });
+
+  test(`${spec.id}: decisions, answers and "shown when" references are consistent`, () => {
+    const page = EMERGENCIES.find(p => p.id === spec.id);
+    const seen = new Map();
+    for (const b of page.blocks.filter(b => b.type === "step" || b.type === "decision")) {
+      assert.ok(!seen.has(b.id), `duplicate step id ${b.id}`);
+      for (const [d, v] of b.when) {
+        assert.ok(seen.has(d), `${b.id} depends on ${d}, which is not an earlier step`);
+        assert.equal(seen.get(d).type, "decision", `${d} is not a decision`);
+        assert.ok(seen.get(d).options.some(o => o.value === v), `${b.id}: ${d} has no answer "${v}"`);
+      }
+      if (b.type === "decision") {
+        assert.ok(b.options.length >= 2, `${b.id} needs at least 2 answers`);
+        assert.equal(new Set(b.options.map(o => o.value)).size, b.options.length);
+      }
+      seen.set(b.id, b);
+    }
+    // Every answer leads somewhere (a step shown for it).
+    for (const d of [...seen.values()].filter(b => b.type === "decision")) {
+      for (const o of d.options) {
+        assert.ok([...seen.values()].some(s => s.when.some(([x, v]) => x === d.id && v === o.value)), `${d.id} answer "${o.value}" shows no step`);
+      }
+    }
+    for (const [entry, ans] of Object.entries(page.entries)) {
+      for (const [d, v] of Object.entries(ans)) assert.ok(seen.get(d).options.some(o => o.value === v), `entry ${entry}`);
+    }
+  });
+
+  test(`${spec.id}: built-in calculators exist and appear once on the page`, () => {
+    const page = EMERGENCIES.find(p => p.id === spec.id);
+    const ids = page.blocks.flatMap(b => b.calcs || []);
+    assert.ok(ids.length > 0);
+    assert.equal(new Set(ids).size, ids.length, "a calculator is embedded twice (duplicate input ids)");
+    for (const id of ids) assert.ok(findItem(id) && findItem(id).inputs, `${id} is not a calculator`);
+  });
+
+  test(`${spec.id}: weight field only when the page has weight-based doses, and every dose is placed`, () => {
+    const page = EMERGENCIES.find(p => p.id === spec.id);
+    const stepDoses = page.blocks.flatMap(b => b.doses || []);
+    const pageDoses = DOSES.filter(d => d.page === page.id);
+    assert.equal(page.weight, pageDoses.length > 0);
+    assert.deepEqual([...new Set(stepDoses)].sort(), pageDoses.map(d => d.id).sort(), "each dose appears in a step");
+    const dosesTable = page.blocks.find(b => b.type === "table" && b.columns[1] === "Dose");
+    for (const d of pageDoses.filter(d => d.row)) assert.ok(dosesTable.rows.some(r => r[0] === d.row), `${d.id}: no "${d.row}" row`);
+  });
+}
+
+test("variceal bleeding (B7.2) opens the upper GI bleeding page at the variceal pathway", () => {
+  assert.match(SPEC, /### B7\.2 Acute variceal bleeding \(id: em\\_variceal\)\n\nMerged into B7\.1\./);
+  const v = findItem("em_variceal");
+  assert.deepEqual(REDIRECTS, [v]);
+  assert.deepEqual(v.redirect, { page: "em_ugib", entry: "variceal" });
+  assert.equal(v.short, "Variceal bleeding");
+  assert.equal(hrefFor("em_variceal"), "#/emergency/em_ugib/variceal");
+  assert.deepEqual(findItem("em_ugib").entries.variceal, { D1: "Yes" });
+  for (const q of ["Variceal bleeding", "variceal bleeding", "Acute variceal bleeding", "varices"]) {
+    assert.equal(search(q)[0].id, "em_variceal", q);
+    assert.equal(hrefFor(search(q)[0].id), "#/emergency/em_ugib/variceal", q);
+  }
 });
+
+test("related calculators match the SPEC \"Related:\" line, in order, and exist", () => {
+  for (const spec of ALL) {
+    const page = EMERGENCIES.find(p => p.id === spec.id);
+    assert.deepEqual(page.related, spec.related.map(n => CALC_NAMES[n]), spec.id);
+    for (const id of page.related) assert.ok(findItem(id), `${id} not found`);
+  }
+});
+
+function blockTexts(b) {
+  if (b.type === "table") return [...b.columns, ...b.rows.flat()];
+  if (b.type === "step" || b.type === "decision") return [b.title, ...b.items, ...(b.options || []).map(o => o.text), b.why || ""];
+  return [b.text, b.why || ""];
+}
 
 test("every SPEC cross-reference in page text links to an existing item", () => {
   const refs = new Set();
-  for (const p of EMERGENCIES) for (const b of p.blocks) {
-    const texts = b.type === "table" ? [...b.columns, ...b.rows.flat()] : [b.text];
-    for (const t of texts) for (const tok of tokenize(t)) if (tok.type === "ref") refs.add(tok.spec);
-  }
+  for (const p of EMERGENCIES) for (const b of p.blocks) for (const t of blockTexts(b)) for (const tok of tokenize(t)) if (tok.type === "ref") refs.add(tok.spec);
   assert.ok(refs.size > 0);
   for (const r of refs) assert.ok(SPEC_REFS[r] && findItem(SPEC_REFS[r]), `${r} has no link target`);
 });
@@ -89,7 +164,6 @@ test("inline markdown links in page text are parsed as links", () => {
     { type: "url", label: "ESGE 2022", url: "https://pubmed.ncbi.nlm.nih.gov/36174643" },
     { type: "ref", spec: "B2.1", target: "gbs" }]);
 });
-
 
 test("every emergency page has a route and is reachable from search", () => {
   for (const p of EMERGENCIES) {

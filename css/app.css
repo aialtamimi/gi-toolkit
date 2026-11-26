@@ -311,3 +311,60 @@ main { padding: 12px 14px calc(84px + var(--safe-bottom)); max-width: 1100px; ma
   main { padding-bottom: calc(24px + var(--safe-bottom)); }
   .tiles { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* Bedside algorithm pages (SPEC.md B7.0) */
+.red-flags { margin: 12px 0; padding: 10px 12px; border: 3px solid var(--emergency); border-radius: var(--radius); background: var(--high-bg); color: var(--high-fg); }
+.red-flags h3 { margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.9rem; }
+.red-flags p { margin: 0; font-weight: 700; }
+.red-flags a { color: inherit; }
+.red-flags .embed-calc { color: var(--text); }
+.weight-panel { margin: 12px 0; padding: 10px 12px; border: 2px solid var(--primary); border-radius: var(--radius); background: var(--surface); }
+.weight-panel .number-row input { max-width: 10em; }
+.dose-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.dose-line { padding: 6px 8px; border-inline-start: 4px solid var(--primary); background: var(--selected-bg); border-radius: 6px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dose-line.dose-pending { font-weight: 500; color: var(--muted); background: var(--bg); border-inline-start-color: var(--border); }
+.table-doses .dose-line { font-size: 0.85rem; }
+.algo-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 16px; }
+.algo-toolbar h3 { margin: 0; }
+.algo-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.algo-steps { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 10px; }
+.algo-step {
+  position: relative; padding: 10px 12px; border: 2px solid var(--border); border-inline-start-width: 6px; border-radius: var(--radius);
+  background: var(--bg); scroll-margin-top: calc(64px + var(--safe-top));
+}
+.algo-step.decision { background: var(--surface); border-color: var(--neu-bd); }
+.algo-step.on-path { border-color: var(--primary); }
+.algo-step.off-path { border-style: dashed; }
+.algo-step.pending-path { border-style: dotted; }
+.step-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-block; padding: 2px 10px; border-radius: 999px; background: var(--primary); color: var(--primary-text); font-size: 0.8rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.decision-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--neu-fg); }
+.step-title { margin: 6px 0 4px; font-size: 1.02rem; }
+.path-tag { margin: 0 0 4px; font-size: 0.85rem; color: var(--muted); }
+.path-label { font-weight: 700; }
+.step-items { margin: 4px 0; padding-inline-start: 1.1rem; }
+.step-items li { margin: 3px 0; }
+.why { margin: 8px 0 0; font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.why-tag { font-weight: 700; }
+.answers { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.answer-btn {
+  flex: 1 1 140px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 52px; padding: 8px 12px;
+  border: 2px solid var(--primary); border-radius: var(--radius); background: var(--bg); color: var(--text); font: inherit; text-align: start; cursor: pointer;
+}
+.answer-btn[aria-pressed="true"] { background: var(--primary); color: var(--primary-text); }
+.answer-value { font-weight: 800; }
+.answer-text { font-size: 0.85rem; }
+.answer-btn:focus-visible, .full-toggle:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.answer-hint { margin: 6px 0 0; font-size: 0.85rem; }
+.full-toggle[aria-pressed="true"] { background: var(--primary); color: var(--primary-text); }
+.embed-calc { margin: 8px 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); }
+.embed-calc > summary {
+  min-height: var(--tap); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px;
+  padding: 6px 10px; cursor: pointer; font-weight: 700;
+}
+.embed-tag { display: inline-block; margin-inline-end: 6px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.embed-status { font-size: 0.85rem; max-width: 100%; white-space: normal; }
+.embed-calc[open] > summary { border-bottom: 1px solid var(--border); }
+.embed-body { padding: 10px; }
+.calc-grid.embedded { grid-template-columns: minmax(0, 1fr); }
+.calc-grid.embedded .col-result { position: static; max-height: none; overflow: visible; }
