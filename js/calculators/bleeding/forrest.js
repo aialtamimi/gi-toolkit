@@ -2,12 +2,12 @@
 import { ref } from "../../refs.js";
 
 export const ROWS = [
-  { cls: "Ia", finding: "Active spurting", risk: "55% (active bleeding, Ia and Ib combined)", action: "Endoscopic therapy, then high-dose PPI" },
-  { cls: "Ib", finding: "Active oozing", risk: "55% (combined with Ia)", action: "Endoscopic therapy, then high-dose PPI" },
-  { cls: "IIa", finding: "Non-bleeding visible vessel", risk: "43%", action: "Endoscopic therapy, then high-dose PPI" },
-  { cls: "IIb", finding: "Adherent clot", risk: "22%", action: "Consider clot removal and treat the underlying stigma; high-dose PPI" },
-  { cls: "IIc", finding: "Flat pigmented spot", risk: "10%", action: "No endoscopic therapy; standard PPI" },
-  { cls: "III", finding: "Clean base", risk: "5%", action: "No endoscopic therapy; standard PPI; early feeding and discharge if otherwise stable" }
+  { cls: "Ia", finding: "Active spurting", risk: "55% (active bleeding, Ia and Ib combined)", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
+  { cls: "Ib", finding: "Active oozing", risk: "55% (combined with Ia)", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
+  { cls: "IIa", finding: "Non-bleeding visible vessel", risk: "43%", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
+  { cls: "IIb", finding: "Adherent clot", risk: "22%", action: "Consider clot removal and treat the underlying stigma; high-dose proton pump inhibitor (PPI)" },
+  { cls: "IIc", finding: "Flat pigmented spot", risk: "10%", action: "No endoscopic therapy; standard proton pump inhibitor (PPI)" },
+  { cls: "III", finding: "Clean base", risk: "5%", action: "No endoscopic therapy; standard proton pump inhibitor (PPI); early feeding and discharge if otherwise stable" }
 ];
 
 export default {

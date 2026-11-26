@@ -54,3 +54,10 @@ test("footer and About page show the designer credit", async () => {
   const uses = app.match(/h\("p", \{ class: "designer" \}, DESIGNER\)/g) || [];
   assert.equal(uses.length, 2, "DESIGNER should be rendered in appFooter() and about()");
 });
+
+test("all pages reachable from search (B1.9 Phase 3): every calculator, card and emergency page", async () => {
+  const { CARDS, EMERGENCIES } = await import("../js/registry.js");
+  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES];
+  assert.equal(all.length, 43 + 8 + 18);
+  for (const item of all) assert.ok(search(item.name).includes(item), item.name);
+});

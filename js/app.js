@@ -1,5 +1,6 @@
 // Router, home, search, favorites, settings (SPEC.md B1.3, B1.6).
-import { CATEGORIES, CALCULATORS, EMERGENCIES, EMERGENCY_INDEX, findItem, itemsInCategory, search } from "./registry.js";
+import { CATEGORIES, CALCULATORS, CARDS, EMERGENCIES, EMERGENCY_INDEX, findItem, hrefFor, itemsInCategory, search } from "./registry.js";
+import { renderCard, renderEmergency } from "./pages.js";
 import { renderCalculator, h, FOOTER_TEXT } from "./engine.js";
 import { store } from "./storage.js";
 import { APP_VERSION, LAST_CLINICAL_REVIEW, CLINICAL_REVIEWER, DESIGNER } from "./version.js";
@@ -26,7 +27,8 @@ function appFooter() {
 function itemLink(item) {
   const isEm = item.id.startsWith("em_");
   const fav = store.isFavorite(item.id);
-  return h("li", {}, h("a", { class: "item-link", href: `#/${isEm ? "emergency" : "calc"}/${item.id}` },
+  return h("li", {}, h("a", { class: "item-link", href: hrefFor(item.id) },
+    isEm ? h("span", { class: "em-label" }, "Emergency") : null,
     h("span", { class: "item-name" }, item.name),
     item.short && item.short !== item.name ? h("span", { class: "item-short" }, item.short) : null,
     fav ? h("span", { class: "star", "aria-label": "Favorite" }, "★") : null));
@@ -87,9 +89,9 @@ function category(id) {
   main.replaceChildren(h("div", { class: "page" }, body), appFooter());
 }
 
-function calc(id) {
-  const def = CALCULATORS.find(c => c.id === id);
-  if (!def) return notFound();
+// Page header with title, one-line use and favorite toggle, shared by calculators, cards and emergencies.
+function itemPage(def, render) {
+  const id = def.id;
   setTitle(def.short || def.name, true);
   store.addRecent(id);
   const favBtn = h("button", { type: "button", class: "fav-btn", "aria-pressed": String(store.isFavorite(id)),
@@ -98,11 +100,31 @@ function calc(id) {
       favBtn.setAttribute("aria-pressed", String(on));
       favBtn.textContent = on ? "★ Favorite" : "☆ Favorite";
     } }, store.isFavorite(id) ? "★ Favorite" : "☆ Favorite");
-  const root = h("div", { class: "calc" });
+  const isEm = id.startsWith("em_");
+  const root = h("div", { class: isEm ? "emergency" : "calc" });
   const header = h("div", { class: "calc-header" },
-    h("div", {}, h("h2", {}, def.name), def.use ? h("p", { class: "use" }, def.use) : null), favBtn);
+    h("div", {}, isEm ? h("span", { class: "em-label" }, "Emergency") : null, h("h2", {}, def.name),
+      def.use && !(def.kind === "card" && !def.inputs) ? h("p", { class: "use" }, def.use) : null), favBtn);  // table cards show their clinical use below the table
   main.replaceChildren(h("div", { class: "page" }, header, root), appFooter());
-  renderCalculator(root, def, { onReset: () => calc(id) });
+  render(root);
+}
+
+function calc(id) {
+  const def = CALCULATORS.find(c => c.id === id);
+  if (!def) return notFound();
+  itemPage(def, root => renderCalculator(root, def, { onReset: () => calc(id) }));
+}
+
+function card(id) {
+  const def = CARDS.find(c => c.id === id);
+  if (!def) return notFound();
+  itemPage(def, root => renderCard(root, def, { onReset: () => card(id) }));
+}
+
+function emergency(id) {
+  const page = EMERGENCIES.find(c => c.id === id);
+  if (!page) return notFound();
+  itemPage(page, root => renderEmergency(root, page));
 }
 
 function about() {
@@ -160,7 +182,8 @@ function route() {
   if (parts[0] === "category" && parts[1]) return category(parts[1]);
   if (parts[0] === "about") return about();
   if (parts[0] === "settings") return settings();
-  if (parts[0] === "emergency") return notFound();
+  if (parts[0] === "card" && parts[1]) return card(parts[1]);
+  if (parts[0] === "emergency" && parts[1]) return emergency(parts[1]);
   return notFound();
 }
 

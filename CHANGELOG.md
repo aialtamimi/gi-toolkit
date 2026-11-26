@@ -2,6 +2,19 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.3.0 (2026-11-26) - Phase 3
+
+- B6 reference cards (8), in `content/cards/`: Boston Bowel Preparation Scale (calculator), Los Angeles classification, Prague C and M with Barrett's surveillance (calculator), Paris, NICE, Zargar, Bristol stool form scale, Lyon Consensus 2.0. Tap a table row to highlight it and copy "Classification: grade".
+- B7 emergency pages (18), in `content/emergencies/`, in the B7.19 order under Emergencies. Text, doses, thresholds and timings are copied verbatim from SPEC.md, and a test checks every block against SPEC.md. Each page has related-calculator buttons from its "Related:" line, its sources, and the footer "Check local protocol, renal function and allergies before prescribing." SPEC cross-references in the text (for example "GBS (B2.1)") are tappable links.
+- Every calculator, card and emergency page is reachable from search.
+- New routes `#/card/<id>` and `#/emergency/<id>`; `js/pages.js` renders cards and emergency pages.
+- Clinical owner decisions on the Phase 3 review (SPEC.md updated in the same change):
+  - Sources added: Ogilvie syndrome and volvulus cite Naveed M et al., ASGE 2020 (doi:10.1016/j.gie.2019.09.007); perforation cites Paspatis GA et al., ESGE 2020 (doi:10.1055/a-1222-3191). Every emergency page now lists a source.
+  - Expanded citations now carry a PMID and DOI where one exists, and link to their PubMed record: AASLD acute liver failure (PMID 22213561, cited under its exact title "Introduction to the revised AASLD Position Paper on acute liver failure 2011"), ESGE 2019 (PMID 30943551), Jalan 1969 (PMID 5305933), HELP trial (PMID 25243839), Lundell 1999 (PMID 10403727), Sharma 2006 (PMID 17101315). Added to SPEC.md B9.
+  - Drug classes are written in full with the abbreviation in brackets at first use on each page: proton pump inhibitor (PPI), direct oral anticoagulant (DOAC), vitamin K antagonist (VKA), prothrombin complex concentrate (PCC), fresh frozen plasma (FFP), non-steroidal anti-inflammatory drugs (NSAIDs). Applied to the emergency pages, the Lyon 2.0 card and the Forrest classification (each Forrest result shows the full form). Rule recorded in SPEC.md B1.8; a test checks every page.
+  - SPEC headings and order kept on all emergency pages.
+- Table cards show their clinical-use line below the table (B1.6 order: title, table, clinical use, reference).
+
 ## 0.2.2 (2026-11-26)
 
 - FibroScan (B3.20): at 25 kPa or more the Baveno VII line now reads "CSPH ruled in (Baveno VII)". Alcohol-related cutoff reference completed: JHEP Reports 2020;2(3):100101, doi:10.1016/j.jhepr.2020.100101, linked to PMC7267467. Stage colours confirmed (F0–F1 green, F2 amber, F3–F4 red). SPEC.md B3.20, B8.3 and B9 updated.
