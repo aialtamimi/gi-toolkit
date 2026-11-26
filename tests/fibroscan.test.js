@@ -14,18 +14,11 @@ test("FibroScan: MASLD, LSM 10.5, IQR/median 15%, 10 valid, CAP 310, ALT normal 
   assert.ok(!interp.sections.some(s => s.title.startsWith("Step 2")));
 });
 
-test("FibroScan: hepatitis C, LSM 13.0, IQR/median 20%, 12 valid → reliable; cirrhosis (F4)", () => {
+test("FibroScan: hepatitis C, LSM 13.0, IQR/median 20%, 12 valid → reliable; cirrhosis (F4); Baveno cACLD suggestive", () => {
   const { result } = calc(fs, { disease: "hcv", lsm: 13.0, iqr: 20, valid: 12 });
   assert.equal(result.quality.reliable, true);
   assert.equal(result.lsm.text, "Cirrhosis (F4)");
-});
-
-// B8.3 expects "Baveno: cACLD highly suggestive" for LSM 13.0, but B3.19 and B3.20 Step 4 both
-// define 10–15 kPa as "suggestive" and >15 kPa as "highly suggestive". The app follows the
-// rule text; this vector is reported in the pull request and kept visible here as a TODO.
-test("FibroScan: hepatitis C, LSM 13.0 → Baveno: cACLD highly suggestive (B8.3 vector; conflicts with B3.19)", { todo: "B8.3 vector conflicts with B3.19/B3.20 rule (10–15 kPa = suggestive). Needs clinical owner decision." }, () => {
-  const { result } = calc(fs, { disease: "hcv", lsm: 13.0, iqr: 20, valid: 12 });
-  assert.deepEqual(result.baveno, ["cACLD highly suggestive"]);
+  assert.deepEqual(result.baveno, ["cACLD suggestive"]);
 });
 
 test("FibroScan: hepatitis B, LSM 10.0, ALT normal, IQR/median 18%, 10 valid → reliable; advanced fibrosis or cirrhosis likely", () => {

@@ -255,7 +255,7 @@ Use: rebleeding and mortality. Two modes on one screen: pre-endoscopy (first thr
 | Diagnosis | Mallory-Weiss tear, or no lesion and no stigmata | All other diagnoses | Upper GI malignancy |  |
 | Stigmata of recent hemorrhage | None or dark spot only |  | Blood in upper GI tract, adherent clot, visible or spurting vessel |  |
 
-Shock is derived automatically from SBP and pulse inputs. Interpretation: pre-endoscopy score 0 = low risk; complete score ≤2 = low risk of rebleeding and death; complete score ≥8 = high risk.
+Shock is derived automatically from SBP and pulse inputs. Interpretation: pre-endoscopy score 0 = low risk; pre-endoscopy score ≥1 = not low risk. Complete score 0–2 = low risk of rebleeding and death; complete score 3–7 = intermediate risk; complete score ≥8 = high risk.
 
 ### B2.4 Oakland Score (id: oakland)
 
@@ -1259,7 +1259,7 @@ Every result below was computed with an independent reference implementation of 
 | GBS | Urea 5.0, Hb 13.5 g/dL, male, SBP 120, pulse 80, all others no | 0, low |
 | GBS | Urea 30, Hb 8.5 g/dL, female, SBP 85, pulse 120, melena, syncope, hepatic disease, cardiac failure all yes | 23 (maximum) |
 | AIMS65 | Albumin 2.8 g/dL, INR 1.6, mental status normal, SBP 100, age 70 | 3, mortality 10.3% |
-| Rockall | Age 72, pulse 105, SBP 110, ischemic heart disease; peptic ulcer; visible vessel | Pre-endoscopy 4; complete 7 |
+| Rockall | Age 72, pulse 105, SBP 110, ischemic heart disease; peptic ulcer; visible vessel | Pre-endoscopy 4, not low; complete 7, intermediate |
 | Oakland | Age 35, female, no previous admission, DRE no blood, HR 65, SBP 135, Hb 135 g/L | 6, low |
 | Oakland | Age 75, male, previous admission yes, DRE blood, HR 105, SBP 100, Hb 85 g/L | 28, not low |
 
@@ -1301,7 +1301,7 @@ FibroScan (B3.20) test vectors:
 | Inputs | Expected |
 | --- | --- |
 | MASLD, LSM 10.5, IQR/median 15%, 10 valid, CAP 310, ALT normal | Reliable; MASLD indeterminate; Baveno: cACLD suggestive; CAP S3 |
-| Hepatitis C, LSM 13.0, IQR/median 20%, 12 valid | Reliable; cirrhosis (F4); Baveno: cACLD highly suggestive |
+| Hepatitis C, LSM 13.0, IQR/median 20%, 12 valid | Reliable; cirrhosis (F4); Baveno: cACLD suggestive |
 | Hepatitis B, LSM 10.0, ALT normal, IQR/median 18%, 10 valid | Reliable; advanced fibrosis or cirrhosis likely |
 | Hepatitis B, LSM 10.0, ALT 2 × ULN, IQR/median 18%, 10 valid | Reliable; indeterminate |
 | MASLD, LSM 9.0, IQR/median 35%, 10 valid | Unreliable (IQR/median >30% with LSM ≥7.1): repeat |

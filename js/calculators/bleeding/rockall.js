@@ -7,6 +7,17 @@ export function shockPoints(sbp, pulse) {
   if (sbp < 100) return 2;           // Hypotension
   return pulse >= 100 ? 1 : 0;       // Tachycardia / None
 }
+export function preEndoscopyBand(pre) {
+  return pre === 0
+    ? { band: "Low risk", level: "low", text: "Pre-endoscopy score 0 = low risk." }
+    : { band: "Not low risk", level: "high", text: "Pre-endoscopy score ≥1 = not low risk." };
+}
+export function completeBand(c) {
+  if (c <= 2) return { band: "Low risk", level: "low", text: "Complete score 0–2 = low risk of rebleeding and death." };
+  if (c <= 7) return { band: "Intermediate risk", level: "intermediate", text: "Complete score 3–7 = intermediate risk." };
+  return { band: "High risk", level: "high", text: "Complete score ≥8 = high risk." };
+}
+const INTERPRETATION = "Interpretation: pre-endoscopy score 0 = low risk; pre-endoscopy score ≥1 = not low risk. Complete score 0–2 = low risk of rebleeding and death; complete score 3–7 = intermediate risk; complete score ≥8 = high risk.";
 const SHOCK_LABEL = ["None (SBP ≥100 and pulse <100)", "Tachycardia (SBP ≥100 and pulse ≥100)", "Hypotension (SBP <100)"];
 
 export default {
@@ -60,19 +71,16 @@ export default {
     };
   },
   interpret(r) {
-    const lines = [];
-    let band = "No interpretation band in SPEC.md for this score", level = "neutral";
-    if (r.complete !== null) {
-      if (r.complete <= 2) { band = "Low risk"; level = "low"; lines.push("Complete score ≤2 = low risk of rebleeding and death."); }
-      else if (r.complete >= 8) { band = "High risk"; level = "high"; lines.push("Complete score ≥8 = high risk."); }
-    } else if (r.pre === 0) {
-      band = "Low risk"; level = "low"; lines.push("Pre-endoscopy score 0 = low risk.");
+    const preBand = preEndoscopyBand(r.pre);
+    const sections = [{ title: `Pre-endoscopy score ${r.pre}`, level: preBand.level, lines: [preBand.text] }];
+    if (r.complete === null) {
+      return { band: preBand.band, level: preBand.level, text: preBand.text, notes: [INTERPRETATION],
+        copy: `Rockall pre-endoscopy ${r.pre}, ${preBand.band.toLowerCase()}` };
     }
-    const copy = r.complete !== null
-      ? `Rockall pre-endoscopy ${r.pre}, complete ${r.complete}${level !== "neutral" ? ", " + band.toLowerCase() : ""}`
-      : `Rockall pre-endoscopy ${r.pre}${level !== "neutral" ? ", " + band.toLowerCase() : ""}`;
-    return { band, level, text: lines.join(" "), copy,
-      notes: ["Interpretation: pre-endoscopy score 0 = low risk; complete score ≤2 = low risk of rebleeding and death; complete score ≥8 = high risk."] };
+    const cBand = completeBand(r.complete);
+    sections.push({ title: `Complete score ${r.complete}`, level: cBand.level, lines: [cBand.text] });
+    return { band: cBand.band, level: cBand.level, sections, notes: [INTERPRETATION],
+      copy: `Rockall pre-endoscopy ${r.pre}, ${preBand.band.toLowerCase()}; complete ${r.complete}, ${cBand.band.toLowerCase()}` };
   },
   notes: "Shock is derived automatically from SBP and pulse inputs.",
   references: [ref("Rockall TA et al. Gut 1996 (table)", "https://pmc.ncbi.nlm.nih.gov/articles/PMC4753192/table/T1")]
