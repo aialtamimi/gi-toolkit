@@ -38,3 +38,11 @@ export const albuminGlToGdl = v => convert("albumin", v, "si", "conv");
 export const hemoglobinGlToGdl = v => convert("hemoglobin", v, "si", "conv");
 export const glucoseMmolToMgdl = v => convert("glucose", v, "si", "conv");
 export const calciumMmolToMgdl = v => convert("calcium", v, "si", "conv");
+
+// For criteria whose spec states a cutoff in both unit systems (SPEC.md B4 preamble): returns the
+// value as the user entered it and its system, so the cutoff written for that unit is applied
+// without conversion. Falls back to the base value when no entry was recorded.
+export function asEntered(ctx, id, baseValue, baseSystem) {
+  const e = ctx && ctx.entered && ctx.entered[id];
+  return e ? { value: e.value, system: e.system } : { value: baseValue, system: baseSystem };
+}

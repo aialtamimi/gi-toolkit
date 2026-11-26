@@ -1,7 +1,7 @@
 // Service worker: versioned cache, cache-first (SPEC.md B1.7).
 // When adding or removing an app file, update PRECACHE and bump CACHE_VERSION
 // (tests/sw.test.js checks that every app file is listed).
-const CACHE_VERSION = "0.1.1";
+const CACHE_VERSION = "0.2.0";
 const CACHE_NAME = `gi-toolkit-v${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -22,6 +22,24 @@ const PRECACHE = [
   "./js/calculators/bleeding/gbs.js",
   "./js/calculators/bleeding/oakland.js",
   "./js/calculators/bleeding/rockall.js",
+  "./js/calculators/ibd/asuc_day3.js",
+  "./js/calculators/ibd/cdai.js",
+  "./js/calculators/ibd/hbi.js",
+  "./js/calculators/ibd/mayo_uc.js",
+  "./js/calculators/ibd/montreal.js",
+  "./js/calculators/ibd/rutgeerts.js",
+  "./js/calculators/ibd/ses_cd.js",
+  "./js/calculators/ibd/truelove_witts.js",
+  "./js/calculators/ibd/uceis.js",
+  "./js/calculators/pancreas/asge_cbd.js",
+  "./js/calculators/pancreas/atlanta.js",
+  "./js/calculators/pancreas/bisap.js",
+  "./js/calculators/pancreas/glasgow_imrie.js",
+  "./js/calculators/pancreas/marshall.js",
+  "./js/calculators/pancreas/mctsi.js",
+  "./js/calculators/pancreas/ranson.js",
+  "./js/calculators/pancreas/sirs.js",
+  "./js/calculators/pancreas/tg18_cholangitis.js",
   "./js/calculators/liver/abic.js",
   "./js/calculators/liver/aclf.js",
   "./js/calculators/liver/aih_simplified.js",
