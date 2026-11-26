@@ -1,0 +1,9 @@
+{
+  "name": "gi-toolkit",
+  "private": true,
+  "type": "module",
+  "description": "GI Toolkit PWA. No dependencies and no build step; this file only marks .js files as ES modules for Node's test runner.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
