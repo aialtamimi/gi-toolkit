@@ -1,6 +1,10 @@
 // SPEC.md B2.2 AIMS65
 import { ref } from "../../refs.js";
 import { INTEGER_NOTE } from "../../num.js";
+import { asEntered } from "../../units.js";
+
+// Albumin <3.0 g/dL (<30 g/L): the cutoff for the unit entered is applied, no conversion (B1.5).
+export function albuminLow(a) { return a.system === "si" ? a.value < 30 : a.value < 3.0; }
 
 const MORTALITY = ["0.3%", "1.2%", "5.3%", "10.3%", "16.5%", "24.5%"];
 
@@ -18,9 +22,9 @@ export default {
     { id: "sbp", label: "Systolic BP", type: "number", unit: "mmHg", min: 0, max: 300 },
     { id: "age", label: "Age", type: "number", unit: "years", min: 0, max: 120 }
   ],
-  compute(v) {
+  compute(v, ctx) {
     const breakdown = [
-      { item: "A, Albumin <3.0 g/dL (<30 g/L)", points: v.albumin < 3.0 ? 1 : 0 },
+      { item: "A, Albumin <3.0 g/dL (<30 g/L)", points: albuminLow(asEntered(ctx, "albumin", v.albumin, "conv")) ? 1 : 0 },
       { item: "I, INR >1.5", points: v.inr > 1.5 ? 1 : 0 },
       { item: "M, Mental status altered", points: v.mental ? 1 : 0 },
       { item: "S, Systolic BP ≤90 mmHg", points: v.sbp <= 90 ? 1 : 0 },

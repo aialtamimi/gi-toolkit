@@ -1,62 +1,100 @@
 // SPEC.md B8.3 FibroScan (B3.20) test vectors
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import fs from "../js/calculators/liver/fibroscan.js";
+import fs, { fibrosisStage, steatosisGrade, baveno, ALCOHOL_NOTE, IQR_WARNING, VALID_WARNING, FLARE_WARNING, CONFOUNDER_WARNING } from "../js/calculators/liver/fibroscan.js";
 import { calc } from "./helpers.js";
+import { evaluate } from "../js/engine.js";
 
-test("FibroScan: MASLD, LSM 10.5, IQR/median 15%, 10 valid, CAP 310, ALT normal → reliable; MASLD indeterminate; Baveno cACLD suggestive; CAP S3", () => {
-  const { result, interp } = calc(fs, { disease: "masld", lsm: 10.5, iqr: 15, valid: 10, cap: 310, altX: 1 });
-  assert.equal(result.quality.reliable, true);
-  assert.deepEqual(result.quality.messages, ["Reliable exam."]);
-  assert.equal(result.lsm.key, "indeterminate");
-  assert.deepEqual(result.baveno, ["cACLD suggestive"]);
-  assert.equal(result.cap, "S3 (severe)");
-  assert.ok(!interp.sections.some(s => s.title.startsWith("Step 2")));
+test("FibroScan: MASLD 10.5 kPa, CAP 310 → F3, S3", () => {
+  const { result } = calc(fs, { disease: "masld", lsm: 10.5, cap: 310 });
+  assert.equal(result.stage, "F3");
+  assert.equal(result.steatosis, "S3");
+  assert.deepEqual(result.display, ["Fibrosis: F3", "Steatosis: S3"]);
 });
 
-test("FibroScan: hepatitis C, LSM 13.0, IQR/median 20%, 12 valid → reliable; cirrhosis (F4); Baveno cACLD suggestive", () => {
-  const { result } = calc(fs, { disease: "hcv", lsm: 13.0, iqr: 20, valid: 12 });
-  assert.equal(result.quality.reliable, true);
-  assert.equal(result.lsm.text, "Cirrhosis (F4)");
-  assert.deepEqual(result.baveno, ["cACLD suggestive"]);
+test("FibroScan: MASLD 6.5 kPa, CAP 240 → F0–F1, S0", () => {
+  const { result } = calc(fs, { disease: "masld", lsm: 6.5, cap: 240 });
+  assert.equal(result.stage, "F0–F1");
+  assert.equal(result.steatosis, "S0");
 });
 
-test("FibroScan: hepatitis B, LSM 10.0, ALT normal, IQR/median 18%, 10 valid → reliable; advanced fibrosis or cirrhosis likely", () => {
-  const { result } = calc(fs, { disease: "hbv", lsm: 10.0, altX: 1, iqr: 18, valid: 10 });
-  assert.equal(result.quality.reliable, true);
-  assert.equal(result.lsm.text, "Advanced fibrosis or cirrhosis likely");
+test("FibroScan: hepatitis C 13.0 kPa → F4", () => {
+  assert.equal(calc(fs, { disease: "hcv", lsm: 13.0 }).result.stage, "F4");
 });
 
-test("FibroScan: hepatitis B, LSM 10.0, ALT 2 × ULN, IQR/median 18%, 10 valid → reliable; indeterminate", () => {
-  const { result } = calc(fs, { disease: "hbv", lsm: 10.0, altX: 2, iqr: 18, valid: 10 });
-  assert.equal(result.quality.reliable, true);
-  assert.equal(result.lsm.text, "Indeterminate");
+test("FibroScan: hepatitis B 10.0 kPa → F3", () => {
+  assert.equal(calc(fs, { disease: "hbv", lsm: 10.0 }).result.stage, "F3");
 });
 
-test("FibroScan: MASLD, LSM 9.0, IQR/median 35%, 10 valid → unreliable (IQR/median >30% with LSM ≥7.1): repeat", () => {
-  const { result, interp } = calc(fs, { disease: "masld", lsm: 9.0, iqr: 35, valid: 10 });
-  assert.equal(result.quality.reliable, false);
-  assert.deepEqual(result.quality.messages, ["Unreliable: IQR/median above 30%. Repeat the exam."]);
-  assert.ok(interp.sections.find(s => s.title === "Step 3: LSM interpretation").muted);
+test("FibroScan: alcohol-related 16 kPa → F3, with the abstinence note", () => {
+  const { result, interp } = calc(fs, { disease: "alcohol", lsm: 16 });
+  assert.equal(result.stage, "F3");
+  assert.ok(interp.notes.includes(ALCOHOL_NOTE));
+  assert.equal(ALCOHOL_NOTE, "Higher AST or bilirubin raises stiffness; repeat after abstinence.");
 });
 
-test("FibroScan: MASLD, LSM 6.5, IQR/median 35%, 10 valid → reliable (LSM <7.1); low risk", () => {
-  const { result } = calc(fs, { disease: "masld", lsm: 6.5, iqr: 35, valid: 10 });
-  assert.equal(result.quality.reliable, true);
-  assert.equal(result.lsm.key, "low");
+test("FibroScan: other 12 kPa → cACLD suggestive (no F stage)", () => {
+  const { result, interp } = calc(fs, { disease: "other", lsm: 12 });
+  assert.equal(result.stage, null);
+  assert.equal(result.baveno.text, "cACLD suggestive");
+  assert.deepEqual(result.display, ["Baveno VII: cACLD suggestive"]);
+  assert.equal(interp.band, "Baveno VII: cACLD suggestive");
 });
 
-test("FibroScan: any disease, ALT 6 × ULN → do-not-interpret warning shown", () => {
-  for (const disease of ["masld", "alcohol", "hcv", "hbv", "other"]) {
-    const { interp } = calc(fs, { disease, lsm: 9, iqr: 10, valid: 10, altX: 6 });
-    const step2 = interp.sections.find(s => s.title === "Step 2: Confounders");
-    assert.ok(step2 && step2.lines.includes("Do not interpret LSM for fibrosis during a hepatitis flare. Repeat when ALT settles."), disease);
+test("FibroScan: CAP 250 → S1; CAP 270 → S2", () => {
+  assert.equal(calc(fs, { disease: "masld", lsm: 6, cap: 250 }).result.steatosis, "S1");
+  assert.equal(calc(fs, { disease: "masld", lsm: 6, cap: 270 }).result.steatosis, "S2");
+});
+
+test("FibroScan: MASLD 9.0 kPa with IQR/median 35% → F2 shown, plus unreliable-exam warning", () => {
+  const { result, interp } = calc(fs, { disease: "masld", lsm: 9.0, iqr: 35 });
+  assert.equal(result.stage, "F2");
+  assert.deepEqual(result.display, ["Fibrosis: F2"]);
+  assert.ok(result.unreliable);
+  assert.deepEqual(interp.sections[0].lines, [IQR_WARNING]);
+});
+
+test("FibroScan: result needs only disease and kPa", () => {
+  const out = evaluate(fs, { disease: "hcv", lsm: 8 });
+  assert.deepEqual(out.missing, []);
+  assert.equal(out.result.stage, "F2");
+  assert.deepEqual(out.interp.sections, []);
+  assert.deepEqual(evaluate(fs, { disease: "hcv" }).missing, ["2. Liver stiffness"]);
+});
+
+test("FibroScan: exam-quality inputs only add warnings; the stage is unchanged", () => {
+  const plain = calc(fs, { disease: "hbv", lsm: 9 }).result.stage;
+  const { result } = calc(fs, { disease: "hbv", lsm: 9, valid: 6, iqr: 40, altX: 6, cFast: true });
+  assert.equal(result.stage, plain);
+  assert.deepEqual(result.warnings, [VALID_WARNING, IQR_WARNING, CONFOUNDER_WARNING, "Confounder: Fasting <3 hours", FLARE_WARNING]);
+  // IQR/median >30% with LSM <7.1 is not a warning.
+  assert.deepEqual(calc(fs, { disease: "masld", lsm: 6.5, iqr: 35 }).result.warnings, []);
+});
+
+test("FibroScan: stage cutoffs are 'at or above'", () => {
+  const cases = { masld: [8.2, 9.7, 13.6], hcv: [7.1, 9.5, 12.5], hbv: [7.9, 8.8, 11.7], alcohol: [9.0, 12.9, 18.6] };
+  for (const [d, [f2, f3, f4]] of Object.entries(cases)) {
+    assert.equal(fibrosisStage(d, f2 - 0.01), "F0–F1", d);
+    assert.equal(fibrosisStage(d, f2), "F2", d);
+    assert.equal(fibrosisStage(d, f3), "F3", d);
+    assert.equal(fibrosisStage(d, f4), "F4", d);
   }
 });
 
-test("FibroScan: alcohol-related, LSM 16, IQR/median 20%, 11 valid, platelets 120 → reliable; cACLD highly likely; Baveno highly suggestive", () => {
-  const { result } = calc(fs, { disease: "alcohol", lsm: 16, iqr: 20, valid: 11, plt: 120 });
-  assert.equal(result.quality.reliable, true);
-  assert.equal(result.lsm.text, "Compensated advanced chronic liver disease highly likely");
-  assert.deepEqual(result.baveno, ["cACLD highly suggestive"]);
+test("FibroScan: steatosis and Baveno VII boundaries", () => {
+  assert.equal(steatosisGrade(247), "S0");
+  assert.equal(steatosisGrade(248), "S1");
+  assert.equal(steatosisGrade(268), "S2");
+  assert.equal(steatosisGrade(280), "S3");
+  assert.equal(baveno(9.9).text, "cACLD unlikely");
+  assert.equal(baveno(10).text, "cACLD suggestive");
+  assert.equal(baveno(15).text, "cACLD suggestive");
+  assert.equal(baveno(15.1).text, "cACLD highly suggestive");
+  assert.equal(baveno(25).text, "cACLD highly suggestive; CSPH");
+});
+
+test("FibroScan: a Baveno VII line is shown under the result for every disease", () => {
+  for (const disease of ["masld", "alcohol", "hbv", "hcv"]) {
+    assert.equal(calc(fs, { disease, lsm: 12 }).interp.text, "Baveno VII: cACLD suggestive.", disease);
+  }
 });

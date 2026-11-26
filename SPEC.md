@@ -149,6 +149,8 @@ export default {
 
 Saudi laboratories report SI units, so SI is the default; every lab field has a toggle to conventional units. Convert at input and compute in the unit the original formula uses. Remember each field's unit choice.
 
+Cutoffs written in both units: where a criterion or band gives a cutoff in both units (for example "albumin <3.0 g/dL (<30 g/L)" or "bilirubin ≥2 mg/dL (≥34 µmol/L)"), compare the value in the unit the user entered with the cutoff written for that unit, without converting. This applies to every calculator (B2 to B5). Where only one unit is given, and for formulas, convert the entry to that unit.
+
 | Analyte | SI unit | Conventional unit | Conversion |
 | --- | --- | --- | --- |
 | Bilirubin | µmol/L | mg/dL | mg/dL = µmol/L ÷ 17.1 |
@@ -566,45 +568,49 @@ Inputs: liver stiffness by VCTE (kPa), platelets (×10⁹/L). Source: de Franchi
 
 ### B3.20 FibroScan (VCTE) interpretation (id: fibroscan)
 
-One screen that checks the quality of the exam, then interprets liver stiffness (LSM, kPa) by liver disease, and CAP (dB/m) for steatosis. Aliases for search: "FibroScan", "elastography", "VCTE", "LSM", "CAP".
+One simple screen: fibrosis stage from liver stiffness (LSM, kPa) by liver disease, and steatosis grade from CAP (dB/m). Aliases for search: "FibroScan", "elastography", "VCTE", "LSM", "CAP".
 
-**Inputs:** liver disease (MASLD; alcohol-related; hepatitis C; hepatitis B; other or mixed), LSM (kPa), IQR/median (%), number of valid measurements, CAP (dB/m, optional), ALT as multiple of ULN, platelets (×10⁹/L, optional), probe (M or XL, for display only).
+**Layout.** Three main sections at the top:
 
-**Step 1: quality check (show first, in its own colored box).**
+1. Disease: MASLD, Alcohol-related, Hepatitis B, Hepatitis C, Other/mixed.
+2. Liver stiffness (kPa).
+3. CAP (dB/m, optional).
 
-| Check | Rule | Message |
-| --- | --- | --- |
-| Valid measurements | Fewer than 10 | "Unreliable: fewer than 10 valid measurements. Repeat the exam." |
-| Variability | IQR/median >30% AND LSM ≥7.1 kPa | "Unreliable: IQR/median above 30%. Repeat the exam." |
-| Reliable | 10 or more valid measurements AND (IQR/median ≤30% OR LSM <7.1 kPa) | "Reliable exam." |
+The result appears as soon as disease and kPa are entered; it does not wait for any other field. It is shown in large clear text, for example "Fibrosis: F3" and "Steatosis: S2".
 
-If unreliable, still show the interpretation but grey it out under the warning.
+**Fibrosis stage by disease (kPa).** A value at or above a cutoff gets that stage; below the F2 cutoff = F0–F1.
 
-**Step 2: confounders (checkboxes; any ticked shows "LSM may overestimate fibrosis").** ALT >5 × ULN or acute hepatitis; extrahepatic cholestasis; heart failure or hepatic congestion; fasting <3 hours; heavy alcohol intake in the past weeks (alcohol-related disease). If ALT >5 × ULN is entered, show: "Do not interpret LSM for fibrosis during a hepatitis flare. Repeat when ALT settles."
+| Liver disease | F2 | F3 | F4 | Source |
+| --- | --- | --- | --- | --- |
+| MASLD | 8.2 | 9.7 | 13.6 | Eddowes, Gastroenterology 2019 |
+| Hepatitis C | 7.1 | 9.5 | 12.5 | Castera, Gastroenterology 2005 |
+| Hepatitis B | 7.9 | 8.8 | 11.7 | Chon, PLoS One 2012 meta-analysis |
+| Alcohol-related | 9.0 | 12.9 | 18.6 | JHEP Reports 2020 review table |
+| Other/mixed | No F stage; show Baveno VII only (below) | | | Baveno VII 2022 |
 
-**Step 3: LSM interpretation by liver disease.**
+Alcohol-related note: "Higher AST or bilirubin raises stiffness; repeat after abstinence."
 
-| Liver disease | LSM bands (kPa) and result text | Source |
-| --- | --- | --- |
-| MASLD | <8: low risk of advanced fibrosis. 8 to 12: indeterminate; consider ELF, MR elastography or hepatology review. >12: high risk of advanced fibrosis; refer to hepatology | AASLD 2023; EASL-EASD-EASO 2024 |
-| Alcohol-related | <8: advanced fibrosis ruled out. 8 to <12: indeterminate. 12 to <15: advanced fibrosis likely. ≥15: compensated advanced chronic liver disease highly likely | EASL NIT guideline 2021 |
-| Hepatitis C | <7.1: F0–F1. 7.1 to <9.5: significant fibrosis (≥F2). 9.5 to <12.5: advanced fibrosis (≥F3). ≥12.5: cirrhosis (F4) | Castera, Gastroenterology 2005 |
-| Hepatitis B, ALT normal | <6: significant fibrosis unlikely. 6 to 9: indeterminate. >9: advanced fibrosis or cirrhosis likely | NICE CG165; EASL HBV 2017 |
-| Hepatitis B, ALT raised (1–5 × ULN) | <6: significant fibrosis unlikely. 6 to 12: indeterminate. >12: advanced fibrosis or cirrhosis likely | NICE CG165; EASL HBV 2017 |
-| Other or mixed | Use the Baveno VII rule of five only (below) | Baveno VII 2022 |
+**Baveno VII.** For Other/mixed this is the result: <10 kPa cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more CSPH. For all diseases, show one small Baveno VII line under the result.
 
-**Step 4: always add the Baveno VII line (all diseases):** <10 kPa cACLD ruled out; 10–15 suggestive; >15 highly suggestive; ≥25 clinically significant portal hypertension. If platelets are entered, also show the B3.19 results (CSPH ruled out if LSM ≤15 and platelets ≥150; screening endoscopy can be avoided if LSM <20 and platelets >150).
-
-**Step 5: CAP (steatosis), if entered.** Source: Karlas, J Hepatol 2017.
+**Steatosis grade from CAP (all diseases).** Source: Karlas, J Hepatol 2017.
 
 | CAP (dB/m) | Steatosis grade |
 | --- | --- |
-| <248 | S0 (none) |
-| 248 to <268 | S1 (mild) |
-| 268 to <280 | S2 (moderate) |
-| ≥280 | S3 (severe) |
+| <248 | S0 |
+| 248 to <268 | S1 |
+| 268 to <280 | S2 |
+| ≥280 | S3 |
 
 Note under CAP: "CAP is influenced by BMI and diabetes and grades steatosis only roughly; it does not measure inflammation or fibrosis."
+
+**Exam quality (optional).** Below the result, in a collapsed section called "Exam quality (optional)": IQR/median (%), number of valid measurements, ALT as multiple of ULN, and confounder checkboxes (ALT >5 × ULN or acute hepatitis; extrahepatic cholestasis; heart failure or hepatic congestion; fasting <3 hours; heavy alcohol intake in the past weeks). If filled, they only add a warning under the result. They never block or hide the result.
+
+| Check | Rule | Warning |
+| --- | --- | --- |
+| Valid measurements | Fewer than 10 | "Unreliable: fewer than 10 valid measurements. Repeat the exam." |
+| Variability | IQR/median >30% AND LSM ≥7.1 kPa | "Unreliable: IQR/median above 30%. Repeat the exam." |
+| Confounders | Any ticked | "LSM may overestimate fibrosis" |
+| ALT | ALT >5 × ULN | "Do not interpret LSM for fibrosis during a hepatitis flare. Repeat when ALT settles." |
 
 Footer note: "Use the XL probe when the M probe fails or the skin-to-liver capsule distance is ≥25 mm. Cutoffs differ between diseases: always choose the correct disease."
 
@@ -612,7 +618,7 @@ Footer note: "Use the XL probe when the M probe fails or the skin-to-liver capsu
 
 Nine tools. ACG 2024 notes that [scoring systems and imaging alone are not accurate in predicting which patients will develop moderately severe or severe pancreatitis](https://guidelinecentral.com/guideline/12896), so every pancreatitis score shows: "Scores support but do not replace close monitoring in the first 24–48 hours."
 
-Units in B4: where a criterion gives a cutoff in both units (for example "BUN >25 mg/dL (urea >8.9 mmol/L)" or "total bilirubin ≥2 mg/dL (≥34 µmol/L)"), compare the value in the unit the user entered with the cutoff written for that unit, without converting. Where only one unit is given, convert the entry to that unit (B1.5).
+Units in B4: cutoffs written in both units are compared in the unit entered (B1.5), for example "BUN >25 mg/dL (urea >8.9 mmol/L)" or "total bilirubin ≥2 mg/dL (≥34 µmol/L)".
 
 ### B4.1 BISAP (id: bisap)
 
@@ -1308,14 +1314,24 @@ FibroScan (B3.20) test vectors:
 
 | Inputs | Expected |
 | --- | --- |
-| MASLD, LSM 10.5, IQR/median 15%, 10 valid, CAP 310, ALT normal | Reliable; MASLD indeterminate; Baveno: cACLD suggestive; CAP S3 |
-| Hepatitis C, LSM 13.0, IQR/median 20%, 12 valid | Reliable; cirrhosis (F4); Baveno: cACLD suggestive |
-| Hepatitis B, LSM 10.0, ALT normal, IQR/median 18%, 10 valid | Reliable; advanced fibrosis or cirrhosis likely |
-| Hepatitis B, LSM 10.0, ALT 2 × ULN, IQR/median 18%, 10 valid | Reliable; indeterminate |
-| MASLD, LSM 9.0, IQR/median 35%, 10 valid | Unreliable (IQR/median >30% with LSM ≥7.1): repeat |
-| MASLD, LSM 6.5, IQR/median 35%, 10 valid | Reliable (LSM <7.1); low risk |
-| Any disease, ALT 6 × ULN | Do-not-interpret warning shown |
-| Alcohol-related, LSM 16, IQR/median 20%, 11 valid, platelets 120 | Reliable; cACLD highly likely; Baveno: highly suggestive |
+| MASLD, 10.5 kPa, CAP 310 | F3, S3 |
+| MASLD, 6.5 kPa, CAP 240 | F0–F1, S0 |
+| Hepatitis C, 13.0 kPa | F4 |
+| Hepatitis B, 10.0 kPa | F3 |
+| Alcohol-related, 16 kPa | F3 |
+| Other, 12 kPa | cACLD suggestive |
+| CAP 250 | S1 |
+| CAP 270 | S2 |
+| MASLD, 9.0 kPa, IQR/median 35% | F2 shown, plus unreliable-exam warning |
+
+Unit rule (B1.5) test vectors for B2 and B3:
+
+| Calculator | Inputs | Expected |
+| --- | --- | --- |
+| AIMS65 | Albumin 29.9 g/L (entered in g/L) | Albumin point scored |
+| Child-Pugh | Bilirubin 34 µmol/L (entered in µmol/L) | Bilirubin 2 points |
+| Lille | Creatinine 115 µmol/L (entered in µmol/L) | Renal insufficiency 0 |
+| King's (acetaminophen) | Creatinine 3.4 mg/dL (entered in mg/dL) | Creatinine criterion not met |
 
 ### B8.4 Pancreatobiliary
 
@@ -1373,7 +1389,7 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | HRS-AKI | [Nadim MK et al. ICA-ADQI consensus. J Hepatol 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11193657) |
 | ACLF | Moreau R et al. CANONIC. Gastroenterology 2013 |
 | Alcohol-associated hepatitis | Louvet A et al. Hepatology 2007 (Lille); Dominguez M et al. Am J Gastroenterol 2008 (ABIC); Forrest EH et al. Gut 2005 (GAHS); Thursz MR et al. NEJM 2015 (STOPAH) |
-| Fibrosis scores | Angulo P et al. Hepatology 2007 (NFS); AASLD MASLD guidance 2023; EASL non-invasive tests guideline 2021; Castera L et al. Gastroenterology 2005 (FibroScan in hepatitis C); Karlas T et al. J Hepatol 2017 (CAP); NICE CG165 and EASL 2017 (hepatitis B) |
+| Fibrosis scores | Angulo P et al. Hepatology 2007 (NFS); AASLD MASLD guidance 2023; Eddowes PJ et al. Gastroenterology 2019 (FibroScan in MASLD); Castera L et al. Gastroenterology 2005 (FibroScan in hepatitis C); Chon YE et al. PLoS One 2012 (FibroScan in hepatitis B); JHEP Reports 2020 review table (FibroScan in alcohol-related liver disease); Karlas T et al. J Hepatol 2017 (CAP) |
 | AIH | [Hennes EM et al. Hepatology 2008](https://pmc.ncbi.nlm.nih.gov/articles/PMC7366136/table/T1) |
 | Wilson disease | [Ferenci P et al. Liver Int 2003; EASL 2012](https://pmc.ncbi.nlm.nih.gov/articles/PMC8584493/table/jcm-10-05097-t001) |
 | Acute pancreatitis | [Tenner S et al. ACG guideline 2024](https://guidelinecentral.com/guideline/12896); Banks PA et al. Revised Atlanta, Gut 2013; de-Madaria E et al. WATERFALL, NEJM 2022 |

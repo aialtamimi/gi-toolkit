@@ -2,6 +2,17 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.2.1 (2026-11-26)
+
+- FibroScan (B3.20) simplified, per the clinical owner:
+  - Three main inputs at the top: disease (MASLD, Alcohol-related, Hepatitis B, Hepatitis C, Other/mixed), liver stiffness (kPa), CAP (dB/m, optional). The result appears as soon as disease and kPa are entered.
+  - Result in large text, for example "Fibrosis: F3" and "Steatosis: S2". Fibrosis stage cutoffs by disease: MASLD 8.2/9.7/13.6 (Eddowes 2019), hepatitis C 7.1/9.5/12.5 (Castera 2005), hepatitis B 7.9/8.8/11.7 (Chon 2012), alcohol-related 9.0/12.9/18.6 (JHEP Reports 2020 review), with the abstinence note for alcohol-related disease. Other/mixed shows Baveno VII only. A Baveno VII line is shown under every result.
+  - IQR/median, valid measurements, ALT and confounders moved into a collapsed "Exam quality (optional)" section below the result. They only add warnings and never block, hide or grey out the result.
+  - Removed: the hepatitis B ALT-normal/ALT-raised split, the MASLD and alcohol-related risk bands, the platelet-based Baveno rules (still in the Baveno VII calculator) and the probe selector.
+  - SPEC.md B3.20, B8.3 FibroScan vectors and B9 updated.
+- Unit rule from Phase 2 applied to Phase 1: where a cutoff is written in both units, the value is compared in the unit entered (AIMS65 albumin; Child-Pugh bilirubin, cholestatic bilirubin and albumin; Lille creatinine; King's College creatinine and bilirubin). SPEC.md B1.5 now states the rule for all calculators; B8 unit-rule vectors added.
+- Engine: inputs can be grouped into a collapsed section below the result, and a result can show more than one large line.
+
 ## 0.2.0 (2026-11-26) - Phase 2
 
 - B4 Pancreatobiliary: BISAP, Ranson (non-gallstone and gallstone, with "48-hour items pending"), Glasgow-Imrie, SIRS, Modified Marshall (with FiO2 helper), Revised Atlanta (diagnosis, severity, collection name), modified CT severity index, Tokyo Guidelines 2018 for acute cholangitis (diagnosis and severity), ASGE 2019 choledocholithiasis risk. Every pancreatitis score shows "Scores support but do not replace close monitoring in the first 24–48 hours."

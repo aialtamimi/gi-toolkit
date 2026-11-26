@@ -1,6 +1,7 @@
 // SPEC.md B3.5 Lille model
 import { ref } from "../../refs.js";
 import { fmt } from "../../num.js";
+import { asEntered } from "../../units.js";
 
 export default {
   id: "lille",
@@ -17,14 +18,15 @@ export default {
     { id: "cr", label: "Creatinine", type: "number", analyte: "creatinine", base: "conv", min: 0, max: 30 },
     { id: "pt", label: "PT, day 0", type: "number", unit: "seconds", min: 0, max: 200 }
   ],
-  compute(v) {
-    const renal = v.cr > 1.3 ? 1 : 0;
+  compute(v, ctx) {
+    const crE = asEntered(ctx, "cr", v.cr, "conv");
+    const renal = (crE.system === "si" ? crE.value > 115 : crE.value > 1.3) ? 1 : 0;
     const terms = [
       { item: "Constant", value: 3.19 },
       { item: "−0.101 × age", value: -0.101 * v.age },
       { item: "+0.147 × albumin d0 (g/L)", value: 0.147 * v.alb },
       { item: "+0.0165 × (bili d0 − bili d7) (µmol/L)", value: 0.0165 * (v.bili0 - v.bili7) },
-      { item: `−0.206 × renal insufficiency (${renal}: creatinine ${renal ? ">" : "≤"} 1.3 mg/dL)`, value: -0.206 * renal },
+      { item: `−0.206 × renal insufficiency (${renal}: creatinine ${renal ? ">" : "≤"} ${crE.system === "si" ? "115 µmol/L" : "1.3 mg/dL"})`, value: -0.206 * renal },
       { item: "−0.0065 × bili d0 (µmol/L)", value: -0.0065 * v.bili0 },
       { item: "−0.0096 × PT d0 (s)", value: -0.0096 * v.pt }
     ];
@@ -42,6 +44,6 @@ export default {
       action: "Stop corticosteroids; consider early liver transplant evaluation at an expert center",
       copy: `Lille ${fmt(r.score, 3)}, non-responder` };
   },
-  notes: "Renal insufficiency = 1 if creatinine >1.3 mg/dL (>115 µmol/L), else 0. Creatinine entered in µmol/L is converted to mg/dL (÷ 88.4) before this test.",
+  notes: "Renal insufficiency = 1 if creatinine >1.3 mg/dL (>115 µmol/L), else 0. The cutoff written for the unit entered is applied, with no conversion.",
   references: [ref("Louvet A et al. The Lille model. Hepatology 2007")]
 };
