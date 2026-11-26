@@ -21,7 +21,7 @@ export default {
     {
       "type": "section",
       "title": "Do now",
-      "text": "stop diuretics, NSAIDs and other nephrotoxins; review non-selective beta-blockers; look for and treat infection; if volume status is unclear, fluid challenge with 250–500 mL crystalloid or 1–1.5 g/kg of 20–25% albumin; reassess at 24 hours."
+      "text": "stop diuretics, non-steroidal anti-inflammatory drugs (NSAIDs) and other nephrotoxins; review non-selective beta-blockers; look for and treat infection; if volume status is unclear, fluid challenge with 250–500 mL crystalloid or 1–1.5 g/kg of 20–25% albumin; reassess at 24 hours."
     },
     {
       "type": "section",

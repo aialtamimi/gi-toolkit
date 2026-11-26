@@ -182,7 +182,7 @@ Cutoffs written in both units: where a criterion or band gives a cutoff in both 
 
 ### B1.8 Design
 
-Clean clinical look, system font, high contrast, no decoration. One column on phones; two columns from 768 px. Numeric inputs use `inputmode="decimal"`. Results never round silently: show the rounding rule used.
+Clean clinical look, system font, high contrast, no decoration. Drug classes are written in full with the abbreviation in brackets at first use on each page, for example "proton pump inhibitor (PPI)"; later uses on the same page may use the abbreviation. One column on phones; two columns from 768 px. Numeric inputs use `inputmode="decimal"`. Results never round silently: show the rounding rule used.
 
 ### B1.9 Phases
 
@@ -284,12 +284,12 @@ Use: peptic ulcer stigmata at endoscopy. User taps a class; app shows rebleeding
 
 | Class | Finding | Rebleeding risk without endoscopic therapy | Action |
 | --- | --- | --- | --- |
-| Ia | Active spurting | 55% (active bleeding, Ia and Ib combined) | Endoscopic therapy, then high-dose PPI |
-| Ib | Active oozing | 55% (combined with Ia) | Endoscopic therapy, then high-dose PPI |
-| IIa | Non-bleeding visible vessel | 43% | Endoscopic therapy, then high-dose PPI |
-| IIb | Adherent clot | 22% | Consider clot removal and treat the underlying stigma; high-dose PPI |
-| IIc | Flat pigmented spot | 10% | No endoscopic therapy; standard PPI |
-| III | Clean base | 5% | No endoscopic therapy; standard PPI; early feeding and discharge if otherwise stable |
+| Ia | Active spurting | 55% (active bleeding, Ia and Ib combined) | Endoscopic therapy, then high-dose proton pump inhibitor (PPI) |
+| Ib | Active oozing | 55% (combined with Ia) | Endoscopic therapy, then high-dose proton pump inhibitor (PPI) |
+| IIa | Non-bleeding visible vessel | 43% | Endoscopic therapy, then high-dose proton pump inhibitor (PPI) |
+| IIb | Adherent clot | 22% | Consider clot removal and treat the underlying stigma; high-dose proton pump inhibitor (PPI) |
+| IIc | Flat pigmented spot | 10% | No endoscopic therapy; standard proton pump inhibitor (PPI) |
+| III | Clean base | 5% | No endoscopic therapy; standard proton pump inhibitor (PPI); early feeding and discharge if otherwise stable |
 
 High-dose PPI after endoscopic hemostasis: continuous or intermittent high dose for 3 days, then twice daily to complete 2 weeks, then once daily (ACG 2021).
 
@@ -997,7 +997,7 @@ Source: Lewis and Heaton, Scand J Gastroenterol 1997. Used in Rome IV IBS subtyp
 
 Source: [Gyawali, Gut 2024 (Lyon 2.0)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10846564/).
 
-| Evidence level | Endoscopy | Reflux monitoring off PPI |
+| Evidence level | Endoscopy | Reflux monitoring off proton pump inhibitor (PPI) |
 | --- | --- | --- |
 | Conclusive for GERD | LA grade B, C or D esophagitis; biopsy-proven Barrett's esophagus; peptic stricture | Acid exposure time (AET) >6% (24-hour study, or on ≥2 days of a wireless study) |
 | Borderline or inconclusive | LA grade A | AET 4–6%; reflux episodes 40–80 per day |
@@ -1015,7 +1015,7 @@ Eighteen emergency pages. Each page uses the same template so it can be read in 
 - **Do now:** two large-bore cannulas; crystalloid resuscitation; GBS (B2.1). Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease. Hold antithrombotics per B7.4.
 - **Within hours:** upper endoscopy within 24 hours of presentation after resuscitation (ACG 2021, ESGE 2021). IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation).
 - **At endoscopy:** treat Forrest Ia, Ib, IIa (B2.5) with thermal contact therapy, clips, or sclerosant injection; epinephrine injection only in combination. Hemostatic powder as temporary therapy for active bleeding. Over-the-scope clip for recurrent ulcer bleeding.
-- **Then:** high-dose PPI for 3 days after endoscopic hemostasis, then twice daily to complete 2 weeks, then once daily. Test for H. pylori and treat. Rebleeding: repeat endoscopy; if it fails, transcatheter arterial embolization, then surgery.
+- **Then:** high-dose proton pump inhibitor (PPI) for 3 days after endoscopic hemostasis, then twice daily to complete 2 weeks, then once daily. Test for H. pylori and treat. Rebleeding: repeat endoscopy; if it fails, transcatheter arterial embolization, then surgery.
 - **Avoid:** tranexamic acid (no benefit and more venous thrombosis in HALT-IT, Lancet 2020); urgent endoscopy within 6 hours does not improve mortality (Lau, NEJM 2020).
 
 | Drug | Dose |
@@ -1059,9 +1059,9 @@ Source: [ACG-CAG 2022](https://gastroenterology.acponline.org/archives/2022/03/2
 
 | Drug | Acute GI bleeding |
 | --- | --- |
-| Warfarin | Suggest against fresh frozen plasma and against vitamin K routinely; if reversal is needed, use 4-factor PCC rather than FFP |
-| DOAC (dabigatran, rivaroxaban, apixaban, edoxaban) | Suggest against routine PCC, idarucizumab and andexanet alfa; most bleeding settles with time because of short half-life |
-| Life-threatening bleeding on VKA or DOAC | Reversal agents may be considered (ACG 2023) with hematology input |
+| Warfarin | Suggest against fresh frozen plasma (FFP) and against vitamin K routinely; if reversal is needed, use 4-factor prothrombin complex concentrate (PCC) rather than FFP |
+| Direct oral anticoagulant (DOAC; dabigatran, rivaroxaban, apixaban, edoxaban) | Suggest against routine PCC, idarucizumab and andexanet alfa; most bleeding settles with time because of short half-life |
+| Life-threatening bleeding on vitamin K antagonist (VKA) or DOAC | Reversal agents may be considered (ACG 2023) with hematology input |
 | Antiplatelet drugs | Suggest against platelet transfusion |
 | Aspirin for secondary cardiovascular prevention | Avoid stopping, or resume as soon as hemostasis is secured; continuing aspirin lowered mortality (Sung, Ann Intern Med 2010) |
 | Dual antiplatelet therapy after recent coronary stent | Do not stop both drugs; decide with cardiology |
@@ -1074,7 +1074,7 @@ Show: "Restart anticoagulation once hemostasis is secure, individualized with ca
 - **Do now:** admit; IV corticosteroids; venous thromboembolism prophylaxis with low-molecular-weight heparin; stool culture and C. difficile toxin; flexible sigmoidoscopy with biopsies (CMV); plain abdominal X-ray; correct potassium and magnesium; involve colorectal surgeon early.
 - **Day 3:** Oxford criteria (B5.2). If positive: rescue therapy with infliximab or ciclosporin.
 - **Then:** no response to rescue within 5–7 days, or deterioration, toxic megacolon, perforation or massive bleeding: colectomy.
-- **Avoid:** NSAIDs, opioids, anticholinergics and antidiarrheals; delaying surgery in non-responders.
+- **Avoid:** non-steroidal anti-inflammatory drugs (NSAIDs), opioids, anticholinergics and antidiarrheals; delaying surgery in non-responders.
 
 | Drug | Dose |
 | --- | --- |
@@ -1098,7 +1098,7 @@ Related: Truelove and Witts, Day-3 Oxford, UCEIS, Mayo.
 - **Do now:** contact the liver transplant center at once; ICU if HE grade ≥2; N-acetylcysteine for acetaminophen cases (and consider for non-acetaminophen ALF with early HE grade 1–2; Lee, Gastroenterology 2009); glucose every 1–2 hours; check acetaminophen level, viral serology (hepatitis A, B with delta, E, HSV), autoimmune markers, ceruloplasmin, pregnancy test, toxicology.
 - **Within hours:** King's College criteria (B3.18). Intubate for HE grade 3–4. Intracranial pressure measures: head of bed 30°, sodium target 145–155 mmol/L with hypertonic saline.
 - **Clue to Wilson disease:** ALP to bilirubin ratio <4 and AST to ALT ratio >2.2.
-- **Avoid:** sedatives, lactulose (bowel distension), routine FFP to correct INR (masks prognosis), nephrotoxins.
+- **Avoid:** sedatives, lactulose (bowel distension), routine fresh frozen plasma (FFP) to correct INR (masks prognosis), nephrotoxins.
 
 | Drug | Dose |
 | --- | --- |
@@ -1122,7 +1122,7 @@ Related: Maddrey, MELD, GAHS, ABIC, Lille.
 - **Do now:** empirical antibiotics; IV albumin; blood and ascitic cultures (inoculate blood culture bottles at the bedside).
 - **Within 48 hours:** repeat paracentesis if no clinical improvement; PMN fall <25% = treatment failure, broaden antibiotics and look for secondary peritonitis.
 - **Then:** long-term secondary prophylaxis after the first episode.
-- **Avoid:** large-volume paracentesis during active SBP without albumin; NSAIDs; consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI.
+- **Avoid:** large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI.
 
 | Drug | Dose |
 | --- | --- |
@@ -1139,7 +1139,7 @@ Related: Ascitic fluid analysis, MELD.
 Source: [ICA-ADQI consensus, J Hepatol 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11193657).
 
 - **Recognize (2024 criteria):** cirrhosis with ascites; AKI by KDIGO (creatinine rise ≥0.3 mg/dL within 48 hours, or ≥50% from baseline within 7 days, and/or urine output ≤0.5 mL/kg/h for ≥6 hours); no improvement in creatinine and/or urine output within 24 hours of adequate volume resuscitation; no strong evidence of another primary cause. A 48-hour albumin trial is no longer required.
-- **Do now:** stop diuretics, NSAIDs and other nephrotoxins; review non-selective beta-blockers; look for and treat infection; if volume status is unclear, fluid challenge with 250–500 mL crystalloid or 1–1.5 g/kg of 20–25% albumin; reassess at 24 hours.
+- **Do now:** stop diuretics, non-steroidal anti-inflammatory drugs (NSAIDs) and other nephrotoxins; review non-selective beta-blockers; look for and treat infection; if volume status is unclear, fluid challenge with 250–500 mL crystalloid or 1–1.5 g/kg of 20–25% albumin; reassess at 24 hours.
 - **Treatment:** terlipressin plus albumin (first line); norepinephrine plus albumin in ICU if terlipressin is contraindicated or unavailable.
 - **Stop vasoconstrictor when:** creatinine returns to within 0.3 mg/dL of baseline; severe adverse event; no improvement after 48 hours at maximum tolerated dose; renal replacement therapy needed; or 14 days reached.
 - **Avoid:** terlipressin with hypoxia, ischemic heart or vascular disease, or fluid overload; continuing albumin when there is pulmonary edema.
@@ -1224,6 +1224,8 @@ Related: Zargar.
 
 ### B7.16 Acute colonic pseudo-obstruction, Ogilvie syndrome (id: em\_acpo)
 
+Source: [Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007).
+
 - **Recognize:** marked colonic dilatation without mechanical obstruction (confirm with CT), usually in hospitalized or post-operative patients. Cecal diameter >12 cm or prolonged distension raises perforation risk.
 - **Do now:** treat the cause (electrolytes, especially potassium and magnesium; stop opioids and anticholinergics; treat infection); NPO; nasogastric and rectal tube; mobilize; serial X-rays every 12–24 hours.
 - **If no response in 24–48 hours:** neostigmine with cardiac monitoring and atropine at the bedside.
@@ -1236,6 +1238,8 @@ Related: Zargar.
 
 ### B7.17 Colonic volvulus (id: em\_volvulus)
 
+Source: [Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007).
+
 - **Recognize:** abdominal distension and pain; CT shows whirl sign or coffee-bean sign.
 - **Sigmoid volvulus without ischemia or perforation:** endoscopic detorsion and decompression, leave a decompression tube; then elective sigmoidectomy during the same admission (high recurrence).
 - **Sigmoid volvulus with ischemia, perforation or peritonitis:** emergency surgery.
@@ -1243,6 +1247,8 @@ Related: Zargar.
 - **Avoid:** endoscopic detorsion when there is mucosal necrosis.
 
 ### B7.18 Iatrogenic endoscopic perforation (id: em\_perforation)
+
+Source: [Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191](https://doi.org/10.1055/a-1222-3191).
 
 - **Recognize:** visible defect, fat or extraluminal structures during the procedure; or post-procedure pain, subcutaneous emphysema, fever, tachycardia.
 - **Do now:** if recognized during the procedure and the field is clean, close endoscopically at once (through-the-scope clips for small defects; over-the-scope clip or other devices for larger ones); switch to CO2 insufflation; decompress tension pneumoperitoneum with a needle if ventilation or circulation is compromised; IV broad-spectrum antibiotics; NPO; urgent surgical consultation.
@@ -1403,5 +1409,13 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Barrett's surveillance | [Shaheen NJ et al. ACG 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC10259184/table/T5); [Weusten B et al. ESGE 2023](https://www.thieme-connect.de/products/ejournals/html/10.1055/a-2176-2440?lang=de) |
 | GERD | [Gyawali CP et al. Lyon Consensus 2.0. Gut 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC10846564/) |
 | Foreign bodies | [Birk M et al. ESGE 2016](https://www.doi.org/10.1055/S-0042-100456) |
+| Colonic pseudo-obstruction and volvulus | [Naveed M et al. ASGE guideline. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007) (PMID 31791596) |
+| Iatrogenic endoscopic perforation | [Paspatis GA et al. ESGE Position Statement, Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191](https://doi.org/10.1055/a-1222-3191) (PMID 32781470) |
+| Acute liver failure definition (AASLD) | Lee WM, Stravitz RT, Larson AM. Introduction to the revised AASLD Position Paper on acute liver failure 2011. Hepatology 2012;55(3):965-7. doi:10.1002/hep.25551 (PMID 22213561) |
+| Cholangitis drainage timing (ESGE 2019) | Manes G et al. Endoscopic management of common bile duct stones: ESGE guideline. Endoscopy 2019;51(5):472-491. doi:10.1055/a-0862-0346 (PMID 30943551) |
+| Toxic megacolon (Jalan criteria) | Jalan KN et al. An experience of ulcerative colitis. I. Toxic dilation in 55 cases. Gastroenterology 1969;57(1):68-82 (PMID 5305933) |
+| Hepatic encephalopathy (HELP trial) | Rahimi RS et al. Lactulose vs polyethylene glycol 3350-electrolyte solution for treatment of overt hepatic encephalopathy: the HELP randomized clinical trial. JAMA Intern Med 2014;174(11):1727-33. doi:10.1001/jamainternmed.2014.4746 (PMID 25243839) |
+| Los Angeles classification | Lundell LR et al. Endoscopic assessment of oesophagitis: clinical and functional correlates and further validation of the Los Angeles classification. Gut 1999;45(2):172-80. doi:10.1136/gut.45.2.172 (PMID 10403727) |
+| Prague C and M criteria | Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006;131(5):1392-9. doi:10.1053/j.gastro.2006.08.032 (PMID 17101315) |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

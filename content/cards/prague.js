@@ -53,6 +53,6 @@ export default {
   references: [
     ref("Shaheen NJ et al. ACG Clinical Guideline: diagnosis and management of Barrett's esophagus 2022 (Table 5)", "https://pmc.ncbi.nlm.nih.gov/articles/PMC10259184/table/T5"),
     ref("Weusten B et al. ESGE guideline on Barrett's esophagus 2023", "https://www.thieme-connect.de/products/ejournals/html/10.1055/a-2176-2440?lang=de"),
-    ref("Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006")
+    ref("Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006;131(5):1392-9. doi:10.1053/j.gastro.2006.08.032. PMID 17101315", "https://pubmed.ncbi.nlm.nih.gov/17101315/")
   ]
 };

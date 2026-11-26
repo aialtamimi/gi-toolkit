@@ -18,5 +18,5 @@ export default {
   ] },
   copy: row => `LA classification: grade ${row[0]}`,
   links: [{ label: "Lyon Consensus 2.0", target: "lyon2" }],
-  references: [ref("Lundell LR et al. Endoscopic assessment of oesophagitis: clinical and functional correlates and further validation of the Los Angeles classification. Gut 1999")]
+  references: [ref("Lundell LR et al. Endoscopic assessment of oesophagitis: clinical and functional correlates and further validation of the Los Angeles classification. Gut 1999;45(2):172-80. doi:10.1136/gut.45.2.172. PMID 10403727", "https://pubmed.ncbi.nlm.nih.gov/10403727/")]
 };

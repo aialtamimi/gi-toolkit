@@ -32,7 +32,7 @@ export default {
     {
       "type": "section",
       "title": "Avoid",
-      "text": "NSAIDs, opioids, anticholinergics and antidiarrheals; delaying surgery in non-responders."
+      "text": "non-steroidal anti-inflammatory drugs (NSAIDs), opioids, anticholinergics and antidiarrheals; delaying surgery in non-responders."
     },
     {
       "type": "table",

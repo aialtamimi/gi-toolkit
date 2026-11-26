@@ -36,5 +36,5 @@ export default {
     }
   ],
   related: ["tg18_cholangitis", "asge_cbd"],
-  references: [ref("Kiriyama S et al. Tokyo Guidelines 2018: diagnostic criteria and severity grading of acute cholangitis. J Hepatobiliary Pancreat Sci 2018", "https://pubmed.ncbi.nlm.nih.gov/29032610/"), ref("ASGE guideline on the management of cholangitis 2021", "https://guidelinecentral.com/guideline/1285200"), ref("Manes G et al. Endoscopic management of common bile duct stones: ESGE guideline. Endoscopy 2019")]
+  references: [ref("Kiriyama S et al. Tokyo Guidelines 2018: diagnostic criteria and severity grading of acute cholangitis. J Hepatobiliary Pancreat Sci 2018", "https://pubmed.ncbi.nlm.nih.gov/29032610/"), ref("ASGE guideline on the management of cholangitis 2021", "https://guidelinecentral.com/guideline/1285200"), ref("Manes G et al. Endoscopic management of common bile duct stones: European Society of Gastrointestinal Endoscopy (ESGE) guideline. Endoscopy 2019;51(5):472-491. doi:10.1055/a-0862-0346. PMID 30943551", "https://pubmed.ncbi.nlm.nih.gov/30943551/")]
 };

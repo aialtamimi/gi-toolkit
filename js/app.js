@@ -104,7 +104,7 @@ function itemPage(def, render) {
   const root = h("div", { class: isEm ? "emergency" : "calc" });
   const header = h("div", { class: "calc-header" },
     h("div", {}, isEm ? h("span", { class: "em-label" }, "Emergency") : null, h("h2", {}, def.name),
-      def.use ? h("p", { class: "use" }, def.use) : null), favBtn);
+      def.use && !(def.kind === "card" && !def.inputs) ? h("p", { class: "use" }, def.use) : null), favBtn);  // table cards show their clinical use below the table
   main.replaceChildren(h("div", { class: "page" }, header, root), appFooter());
   render(root);
 }

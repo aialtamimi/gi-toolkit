@@ -32,7 +32,7 @@ export default {
     {
       "type": "section",
       "title": "Then",
-      "text": "high-dose PPI for 3 days after endoscopic hemostasis, then twice daily to complete 2 weeks, then once daily. Test for H. pylori and treat. Rebleeding: repeat endoscopy; if it fails, transcatheter arterial embolization, then surgery."
+      "text": "high-dose proton pump inhibitor (PPI) for 3 days after endoscopic hemostasis, then twice daily to complete 2 weeks, then once daily. Test for H. pylori and treat. Rebleeding: repeat endoscopy; if it fails, transcatheter arterial embolization, then surgery."
     },
     {
       "type": "section",

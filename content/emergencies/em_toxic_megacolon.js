@@ -31,5 +31,5 @@ export default {
     }
   ],
   related: [],
-  references: [ref("Jalan KN et al. An experience of ulcerative colitis. I. Toxic dilation in 55 cases. Gastroenterology 1969 (Jalan criteria)")]
+  references: [ref("Jalan KN et al. An experience of ulcerative colitis. I. Toxic dilation in 55 cases. Gastroenterology 1969;57(1):68-82. PMID 5305933 (Jalan criteria)", "https://pubmed.ncbi.nlm.nih.gov/5305933/")]
 };

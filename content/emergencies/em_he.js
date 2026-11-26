@@ -52,5 +52,5 @@ export default {
     }
   ],
   related: ["west_haven", "meld_na", "child_pugh"],
-  references: [ref("Vilstrup H et al. Hepatic encephalopathy in chronic liver disease: 2014 Practice Guideline by AASLD and EASL. Hepatology 2014"), ref("Bass NM et al. Rifaximin treatment in hepatic encephalopathy. NEJM 2010"), ref("Rahimi RS et al. Lactulose vs polyethylene glycol 3350-electrolyte solution for treatment of overt hepatic encephalopathy: the HELP randomized clinical trial. JAMA Intern Med 2014")]
+  references: [ref("Vilstrup H et al. Hepatic encephalopathy in chronic liver disease: 2014 Practice Guideline by AASLD and EASL. Hepatology 2014"), ref("Bass NM et al. Rifaximin treatment in hepatic encephalopathy. NEJM 2010"), ref("Rahimi RS et al. Lactulose vs polyethylene glycol 3350-electrolyte solution for treatment of overt hepatic encephalopathy: the HELP randomized clinical trial. JAMA Intern Med 2014;174(11):1727-33. doi:10.1001/jamainternmed.2014.4746. PMID 25243839", "https://pubmed.ncbi.nlm.nih.gov/25243839/")]
 };

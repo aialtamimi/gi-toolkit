@@ -84,6 +84,7 @@ export function renderCard(root, card, opts = {}) {
   root.append(
     tbl,
     h("div", { class: "copy-row card-copy", "aria-live": "polite" }, copyBtn, preview),
+    h("p", { class: "card-use" }, card.use),
     ...(card.notes || []).map(n => h("p", { class: "note" }, n)),
     card.links && card.links.length ? h("div", { class: "links" }, card.links.map(l => linkTo(l.target, l.label))) : null,
     h("h3", {}, "Source"),

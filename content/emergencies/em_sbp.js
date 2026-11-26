@@ -32,7 +32,7 @@ export default {
     {
       "type": "section",
       "title": "Avoid",
-      "text": "large-volume paracentesis during active SBP without albumin; NSAIDs; consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI."
+      "text": "large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI."
     },
     {
       "type": "table",

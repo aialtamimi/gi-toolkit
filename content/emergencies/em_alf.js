@@ -32,7 +32,7 @@ export default {
     {
       "type": "section",
       "title": "Avoid",
-      "text": "sedatives, lactulose (bowel distension), routine FFP to correct INR (masks prognosis), nephrotoxins."
+      "text": "sedatives, lactulose (bowel distension), routine fresh frozen plasma (FFP) to correct INR (masks prognosis), nephrotoxins."
     },
     {
       "type": "table",
@@ -49,5 +49,5 @@ export default {
     }
   ],
   related: ["kings", "meld_na"],
-  references: [ref("Lee WM et al. AASLD position paper: the management of acute liver failure: update 2011. Hepatology 2012"), ref("Lee WM et al. Intravenous N-acetylcysteine improves transplant-free survival in early stage non-acetaminophen acute liver failure. Gastroenterology 2009")]
+  references: [ref("Lee WM, Stravitz RT, Larson AM. Introduction to the revised American Association for the Study of Liver Diseases Position Paper on acute liver failure 2011. Hepatology 2012;55(3):965-7. doi:10.1002/hep.25551. PMID 22213561", "https://pubmed.ncbi.nlm.nih.gov/22213561/"), ref("Lee WM et al. Intravenous N-acetylcysteine improves transplant-free survival in early stage non-acetaminophen acute liver failure. Gastroenterology 2009")]
 };

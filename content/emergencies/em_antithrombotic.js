@@ -22,14 +22,14 @@ export default {
       "rows": [
         [
           "Warfarin",
-          "Suggest against fresh frozen plasma and against vitamin K routinely; if reversal is needed, use 4-factor PCC rather than FFP"
+          "Suggest against fresh frozen plasma (FFP) and against vitamin K routinely; if reversal is needed, use 4-factor prothrombin complex concentrate (PCC) rather than FFP"
         ],
         [
-          "DOAC (dabigatran, rivaroxaban, apixaban, edoxaban)",
+          "Direct oral anticoagulant (DOAC; dabigatran, rivaroxaban, apixaban, edoxaban)",
           "Suggest against routine PCC, idarucizumab and andexanet alfa; most bleeding settles with time because of short half-life"
         ],
         [
-          "Life-threatening bleeding on VKA or DOAC",
+          "Life-threatening bleeding on vitamin K antagonist (VKA) or DOAC",
           "Reversal agents may be considered (ACG 2023) with hematology input"
         ],
         [

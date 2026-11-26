@@ -10,6 +10,10 @@ export default {
   category: "emergencies",
   blocks: [
     {
+      "type": "source",
+      "text": "[Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191](https://doi.org/10.1055/a-1222-3191)."
+    },
+    {
       "type": "section",
       "title": "Recognize",
       "text": "visible defect, fat or extraluminal structures during the procedure; or post-procedure pain, subcutaneous emphysema, fever, tachycardia."
@@ -31,5 +35,5 @@ export default {
     }
   ],
   related: [],
-  references: []
+  references: [ref("Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191. PMID 32781470", "https://doi.org/10.1055/a-1222-3191")]
 };

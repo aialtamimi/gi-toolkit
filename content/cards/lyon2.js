@@ -10,7 +10,7 @@ export default {
   category: "endoscopy",
   kind: "card",
   use: "Prolonged wireless pH monitoring off PPI is preferred for unproven GERD.",
-  table: { columns: ["Evidence level", "Endoscopy", "Reflux monitoring off PPI"], rows: [
+  table: { columns: ["Evidence level", "Endoscopy", "Reflux monitoring off proton pump inhibitor (PPI)"], rows: [
     ["Conclusive for GERD", "LA grade B, C or D esophagitis; biopsy-proven Barrett's esophagus; peptic stricture", "Acid exposure time (AET) >6% (24-hour study, or on ≥2 days of a wireless study)"],
     ["Borderline or inconclusive", "LA grade A", "AET 4–6%; reflux episodes 40–80 per day"],
     ["Against GERD", "Normal endoscopy (supportive only)", "AET <4% on every day of the study, with <40 reflux episodes per day"]

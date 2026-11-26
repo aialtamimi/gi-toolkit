@@ -6,12 +6,12 @@ import forrest from "../js/calculators/bleeding/forrest.js";
 import { calc } from "./helpers.js";
 
 const B25 = {
-  Ia: ["Active spurting", "55% (active bleeding, Ia and Ib combined)", "Endoscopic therapy, then high-dose PPI"],
-  Ib: ["Active oozing", "55% (combined with Ia)", "Endoscopic therapy, then high-dose PPI"],
-  IIa: ["Non-bleeding visible vessel", "43%", "Endoscopic therapy, then high-dose PPI"],
-  IIb: ["Adherent clot", "22%", "Consider clot removal and treat the underlying stigma; high-dose PPI"],
-  IIc: ["Flat pigmented spot", "10%", "No endoscopic therapy; standard PPI"],
-  III: ["Clean base", "5%", "No endoscopic therapy; standard PPI; early feeding and discharge if otherwise stable"]
+  Ia: ["Active spurting", "55% (active bleeding, Ia and Ib combined)", "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)"],
+  Ib: ["Active oozing", "55% (combined with Ia)", "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)"],
+  IIa: ["Non-bleeding visible vessel", "43%", "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)"],
+  IIb: ["Adherent clot", "22%", "Consider clot removal and treat the underlying stigma; high-dose proton pump inhibitor (PPI)"],
+  IIc: ["Flat pigmented spot", "10%", "No endoscopic therapy; standard proton pump inhibitor (PPI)"],
+  III: ["Clean base", "5%", "No endoscopic therapy; standard proton pump inhibitor (PPI); early feeding and discharge if otherwise stable"]
 };
 
 for (const [cls, [finding, risk, action]] of Object.entries(B25)) {

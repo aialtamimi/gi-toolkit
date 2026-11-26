@@ -10,6 +10,10 @@ export default {
   category: "emergencies",
   blocks: [
     {
+      "type": "source",
+      "text": "[Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007)."
+    },
+    {
       "type": "section",
       "title": "Recognize",
       "text": "marked colonic dilatation without mechanical obstruction (confirm with CT), usually in hospitalized or post-operative patients. Cecal diameter >12 cm or prolonged distension raises perforation risk."
@@ -49,5 +53,5 @@ export default {
     }
   ],
   related: [],
-  references: []
+  references: [ref("Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007. PMID 31791596", "https://doi.org/10.1016/j.gie.2019.09.007")]
 };
