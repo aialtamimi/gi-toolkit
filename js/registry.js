@@ -42,6 +42,32 @@ import cdai from "./calculators/ibd/cdai.js";
 import ses_cd from "./calculators/ibd/ses_cd.js";
 import rutgeerts from "./calculators/ibd/rutgeerts.js";
 import montreal from "./calculators/ibd/montreal.js";
+import bbps from "../content/cards/bbps.js";
+import la_grade from "../content/cards/la_grade.js";
+import prague from "../content/cards/prague.js";
+import paris from "../content/cards/paris.js";
+import nice from "../content/cards/nice.js";
+import zargar from "../content/cards/zargar.js";
+import bristol from "../content/cards/bristol.js";
+import lyon2 from "../content/cards/lyon2.js";
+import em_ugib from "../content/emergencies/em_ugib.js";
+import em_variceal from "../content/emergencies/em_variceal.js";
+import em_lgib from "../content/emergencies/em_lgib.js";
+import em_antithrombotic from "../content/emergencies/em_antithrombotic.js";
+import em_asuc from "../content/emergencies/em_asuc.js";
+import em_toxic_megacolon from "../content/emergencies/em_toxic_megacolon.js";
+import em_alf from "../content/emergencies/em_alf.js";
+import em_aah from "../content/emergencies/em_aah.js";
+import em_sbp from "../content/emergencies/em_sbp.js";
+import em_hrs from "../content/emergencies/em_hrs.js";
+import em_he from "../content/emergencies/em_he.js";
+import em_pancreatitis from "../content/emergencies/em_pancreatitis.js";
+import em_cholangitis from "../content/emergencies/em_cholangitis.js";
+import em_foreign_body from "../content/emergencies/em_foreign_body.js";
+import em_caustic from "../content/emergencies/em_caustic.js";
+import em_acpo from "../content/emergencies/em_acpo.js";
+import em_volvulus from "../content/emergencies/em_volvulus.js";
+import em_perforation from "../content/emergencies/em_perforation.js";
 
 export const CATEGORIES = [
   { id: "bleeding", name: "GI bleeding" },
@@ -61,9 +87,11 @@ export const CALCULATORS = [
   truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal
 ];
 
-// B6 cards and B7 emergency pages are added in Phase 3.
-export const CARDS = [];
-export const EMERGENCIES = [];
+// Phase 3: B6 reference cards (in SPEC order) and B7 emergency pages (in the B7.19 index order).
+export const CARDS = [bbps, la_grade, prague, paris, nice, zargar, bristol, lyon2];
+export const EMERGENCIES = [
+  em_ugib, em_variceal, em_lgib, em_antithrombotic, em_asuc, em_toxic_megacolon, em_alf, em_aah, em_sbp, em_hrs, em_he, em_pancreatitis, em_cholangitis, em_foreign_body, em_caustic, em_acpo, em_volvulus, em_perforation
+];
 
 // Emergency page names and order from SPEC.md B7.19, used for the home index and for
 // links from calculators before the pages exist.
@@ -75,6 +103,13 @@ export const EMERGENCY_INDEX = [
   ["em_foreign_body", "Foreign body"], ["em_caustic", "Caustic ingestion"], ["em_acpo", "Ogilvie syndrome"],
   ["em_volvulus", "Volvulus"], ["em_perforation", "Perforation"]
 ].map(([id, name]) => ({ id, name }));
+
+// Route for any calculator, card or emergency page.
+export function hrefFor(id) {
+  if (id.startsWith("em_")) return `#/emergency/${id}`;
+  if (CARDS.some(c => c.id === id)) return `#/card/${id}`;
+  return `#/calc/${id}`;
+}
 
 export function findItem(id) {
   return CALCULATORS.find(c => c.id === id) || CARDS.find(c => c.id === id) || EMERGENCIES.find(c => c.id === id) || null;

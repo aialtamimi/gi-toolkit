@@ -1,7 +1,7 @@
 // Service worker: versioned cache, cache-first (SPEC.md B1.7).
 // When adding or removing an app file, update PRECACHE and bump CACHE_VERSION
 // (tests/sw.test.js checks that every app file is listed).
-const CACHE_VERSION = "0.2.2";
+const CACHE_VERSION = "0.3.0";
 const CACHE_NAME = `gi-toolkit-v${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -12,6 +12,7 @@ const PRECACHE = [
   "./js/app.js",
   "./js/engine.js",
   "./js/num.js",
+  "./js/pages.js",
   "./js/refs.js",
   "./js/registry.js",
   "./js/storage.js",
@@ -60,6 +61,32 @@ const PRECACHE = [
   "./js/calculators/liver/nfs.js",
   "./js/calculators/liver/r_factor.js",
   "./js/calculators/liver/west_haven.js",
+  "./content/cards/bbps.js",
+  "./content/cards/bristol.js",
+  "./content/cards/la_grade.js",
+  "./content/cards/lyon2.js",
+  "./content/cards/nice.js",
+  "./content/cards/paris.js",
+  "./content/cards/prague.js",
+  "./content/cards/zargar.js",
+  "./content/emergencies/em_aah.js",
+  "./content/emergencies/em_acpo.js",
+  "./content/emergencies/em_alf.js",
+  "./content/emergencies/em_antithrombotic.js",
+  "./content/emergencies/em_asuc.js",
+  "./content/emergencies/em_caustic.js",
+  "./content/emergencies/em_cholangitis.js",
+  "./content/emergencies/em_foreign_body.js",
+  "./content/emergencies/em_he.js",
+  "./content/emergencies/em_hrs.js",
+  "./content/emergencies/em_lgib.js",
+  "./content/emergencies/em_pancreatitis.js",
+  "./content/emergencies/em_perforation.js",
+  "./content/emergencies/em_sbp.js",
+  "./content/emergencies/em_toxic_megacolon.js",
+  "./content/emergencies/em_ugib.js",
+  "./content/emergencies/em_variceal.js",
+  "./content/emergencies/em_volvulus.js",
   "./icons/apple-touch-icon.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",

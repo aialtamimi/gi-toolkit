@@ -2,6 +2,14 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.3.0 (2026-11-26) - Phase 3
+
+- B6 reference cards (8), in `content/cards/`: Boston Bowel Preparation Scale (calculator), Los Angeles classification, Prague C and M with Barrett's surveillance (calculator), Paris, NICE, Zargar, Bristol stool form scale, Lyon Consensus 2.0. Tap a table row to highlight it and copy "Classification: grade".
+- B7 emergency pages (18), in `content/emergencies/`, in the B7.19 order under Emergencies. Text, doses, thresholds and timings are copied verbatim from SPEC.md, and a test checks every block against SPEC.md. Each page has related-calculator buttons from its "Related:" line, its sources, and the footer "Check local protocol, renal function and allergies before prescribing." SPEC cross-references in the text (for example "GBS (B2.1)") are tappable links.
+- Every calculator, card and emergency page is reachable from search.
+- New routes `#/card/<id>` and `#/emergency/<id>`; `js/pages.js` renders cards and emergency pages.
+- No clinical content in SPEC.md changed.
+
 ## 0.2.2 (2026-11-26)
 
 - FibroScan (B3.20): at 25 kPa or more the Baveno VII line now reads "CSPH ruled in (Baveno VII)". Alcohol-related cutoff reference completed: JHEP Reports 2020;2(3):100101, doi:10.1016/j.jhepr.2020.100101, linked to PMC7267467. Stage colours confirmed (F0–F1 green, F2 amber, F3–F4 red). SPEC.md B3.20, B8.3 and B9 updated.

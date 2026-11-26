@@ -3,7 +3,7 @@
 // `base` ("si" or "conv"), i.e. the unit the original formula uses.
 import { ANALYTES, convert, unitLabel } from "./units.js";
 import { store } from "./storage.js";
-import { EMERGENCIES, EMERGENCY_INDEX, findItem } from "./registry.js";
+import { EMERGENCY_INDEX, findItem, hrefFor } from "./registry.js";
 
 export const FOOTER_TEXT = "Decision support only. Verify with clinical judgment and local protocols.";
 
@@ -101,8 +101,7 @@ export function h(tag, attrs = {}, ...children) {
 const LEVEL_CLASS = { low: "lvl-low", intermediate: "lvl-int", high: "lvl-high", neutral: "lvl-neutral" };
 
 export function linkTo(target, label) {
-  const exists = EMERGENCIES.some(e => e.id === target) || findItem(target);
-  if (exists) return h("a", { class: "btn btn-link", href: `#/${target.startsWith("em_") ? "emergency" : "calc"}/${target}` }, label);
+  if (findItem(target)) return h("a", { class: "btn btn-link", href: hrefFor(target) }, label);
   const planned = EMERGENCY_INDEX.find(e => e.id === target);
   return h("span", { class: "btn btn-link disabled", "aria-disabled": "true" }, `${label} (${planned ? "coming in a later update" : "not available"})`);
 }
