@@ -17,6 +17,13 @@ test("BISAP: urea entered in mmol/L converts to BUN before scoring (urea 10.71 m
   assert.equal(result.score, 3);
 });
 
+test("BISAP: urea is compared with the mmol/L cutoff as entered (>8.9 mmol/L), BUN with >25 mg/dL", () => {
+  // 8.92 mmol/L = 24.99 mg/dL: meets >8.9 mmol/L as entered.
+  assert.equal(calc(bisap, { bun: 8.92, gcs: 15, age: 40 }, { bun: "si" }).result.score, 1);
+  assert.equal(calc(bisap, { bun: 8.9, gcs: 15, age: 40 }, { bun: "si" }).result.score, 0);
+  assert.equal(calc(bisap, { bun: 25, gcs: 15, age: 40 }, { bun: "conv" }).result.score, 0);
+});
+
 test("BISAP B4.1 cutoffs are strict: BUN 25, GCS 15, age 60 score 0; 0–2 lower risk", () => {
   const { result, interp } = calc(bisap, { bun: 25, gcs: 15, age: 60 }, { bun: "conv" });
   assert.equal(result.score, 0);

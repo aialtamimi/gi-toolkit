@@ -14,9 +14,12 @@ export function isVisible(input, values) {
 }
 
 // raw: { [id]: string | boolean | value }, units: { [id]: "si" | "conv" }
-// Returns { values (base units), missing: [labels], errors: [{id, message}] }
+// Returns { values (base units), entered, missing: [labels], errors: [{id, message}] }
+// `entered` keeps each lab value exactly as typed with its unit system ({ value, system }), for
+// criteria whose spec states a cutoff in both units (compared in the unit entered, SPEC.md B4).
 export function collectValues(def, raw, units = {}) {
   const values = {};
+  const entered = {};
   const errors = [];
   // First pass: non-number values so showIf can depend on them.
   for (const inp of def.inputs) {
@@ -36,6 +39,7 @@ export function collectValues(def, raw, units = {}) {
     if (inp.integer && !Number.isInteger(n)) { errors.push({ id: inp.id, message: "Enter a whole number" }); continue; }
     let base = n;
     if (inp.analyte) base = convert(inp.analyte, n, units[inp.id] || inp.base, inp.base);
+    if (inp.analyte) entered[inp.id] = { value: n, system: units[inp.id] || inp.base };
     if ((inp.min !== undefined && base < inp.min) || (inp.max !== undefined && base > inp.max)) {
       const sys = units[inp.id] || inp.base;
       const lo = inp.analyte ? convert(inp.analyte, inp.min, inp.base, sys) : inp.min;
@@ -50,15 +54,16 @@ export function collectValues(def, raw, units = {}) {
   const missing = [];
   for (const inp of def.inputs) {
     if (!inp.id) continue;
-    if (!isVisible(inp, values)) { delete values[inp.id]; continue; }
+    if (!isVisible(inp, values)) { delete values[inp.id]; delete entered[inp.id]; continue; }
     if (inp.type === "checkbox" || inp.optional) continue;
     if (values[inp.id] === undefined && !errors.some(e => e.id === inp.id)) missing.push(inp.label);
   }
-  return { values, missing, errors };
+  for (const id of Object.keys(entered)) if (values[id] === undefined) delete entered[id];
+  return { values, entered, missing, errors };
 }
 
-export function run(def, values) {
-  const result = def.compute(values);
+export function run(def, values, entered = {}) {
+  const result = def.compute(values, { entered });
   const interp = def.interpret(result);
   return { result, interp };
 }
@@ -67,7 +72,7 @@ export function run(def, values) {
 export function evaluate(def, raw, units = {}) {
   const c = collectValues(def, raw, units);
   if (c.errors.length || c.missing.length) return { ...c, result: null, interp: null };
-  return { ...c, ...run(def, c.values) };
+  return { ...c, ...run(def, c.values, c.entered) };
 }
 
 function tidy(x) {
@@ -174,7 +179,7 @@ export function renderCalculator(root, def, opts = {}) {
       return;
     }
     let out;
-    try { out = run(def, c.values); }
+    try { out = run(def, c.values, c.entered); }
     catch (e) {
       card.append(h("p", { class: "result-pending" }, "Unable to calculate with these values."));
       console.error(e);

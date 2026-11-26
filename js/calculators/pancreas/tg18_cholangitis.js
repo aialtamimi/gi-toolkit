@@ -1,6 +1,7 @@
 // SPEC.md B4.8 Tokyo Guidelines 2018 for acute cholangitis
 import { ref } from "../../refs.js";
 import { isNum } from "../../num.js";
+import { asEntered } from "../../units.js";
 
 export const ORGAN_DYSFUNCTION = [
   { id: "odCv", label: "Hypotension needing dopamine ≥5 µg/kg/min or any norepinephrine" },
@@ -17,10 +18,13 @@ export const ACTIONS = {
   3: "Organ support and urgent biliary drainage once stabilized."
 };
 
-export function diagnosis(v) {
+// B-1 total bilirubin ≥2 mg/dL (≥34 µmol/L): the cutoff for the unit entered is applied, no conversion.
+export function biliB1(b) { return b.system === "si" ? b.value >= 34 : b.value >= 2; }
+
+export function diagnosis(v, ctx) {
   const a1 = v.temp > 38 || !!v.chills;
   const a2 = v.wbc < 4 || v.wbc > 10 || (isNum(v.crp) && v.crp >= 10);
-  const b1 = v.bili >= 2;
+  const b1 = biliB1(asEntered(ctx, "bili", v.bili, "conv"));
   const b2 = !!v.enzymes;
   const c1 = !!v.dilatation, c2 = !!v.cause;
   const A = a1 || a2, B = b1 || b2, C = c1 || c2;
@@ -68,8 +72,8 @@ export default {
     { type: "heading", label: "Severity: grade III, organ dysfunction (any one)" },
     ...ORGAN_DYSFUNCTION.map(o => ({ id: o.id, label: o.label, type: "checkbox" }))
   ],
-  compute(v) {
-    const dx = diagnosis(v);
+  compute(v, ctx) {
+    const dx = diagnosis(v, ctx);
     const sev = severity(v);
     const yn = b => (b ? "Yes" : "No");
     const breakdown = [
@@ -86,7 +90,7 @@ export default {
       { label: "Severity", value: `Grade ${["I", "II", "III"][sev.grade - 1]}` }];
     return { score: sev.grade, dx, sev, details, breakdown,
       display: `${dx.status === "Not met" ? "Criteria not met" : dx.status}; grade ${["I", "II", "III"][sev.grade - 1]}`,
-      label: "TG18", rounding: "Categorical; no rounding. Bilirubin is compared in mg/dL, the unit of the original criteria." };
+      label: "TG18", rounding: "Categorical; no rounding. B-1 bilirubin uses the cutoff written for the unit entered (≥2 mg/dL or ≥34 µmol/L); the grade II cutoff (≥5 mg/dL) is given in mg/dL only, so µmol/L entries are converted (÷17.1)." };
   },
   interpret(r) {
     const roman = ["I", "II", "III"][r.sev.grade - 1];

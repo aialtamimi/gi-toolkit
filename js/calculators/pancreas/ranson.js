@@ -2,22 +2,25 @@
 import { ref } from "../../refs.js";
 import { INTEGER_NOTE, isNum } from "../../num.js";
 import { MONITORING_NOTE } from "./bisap.js";
+import { asEntered } from "../../units.js";
 
-// Cutoffs exactly as SPEC.md B4.2. Lab values are compared in the original units
-// (WBC ×10⁹/L, glucose mg/dL, BUN mg/dL, calcium mg/dL).
+// Cutoffs exactly as SPEC.md B4.2. Where the spec gives a cutoff in both units (glucose,
+// BUN rise, calcium), the cutoff for the unit entered is applied with no conversion.
+// `u(id)` returns { value, system } as entered.
+const by = (e, si, conv) => (e.system === "si" ? si(e.value) : conv(e.value));
 export const CRITERIA = {
   non: {
     admission: [
       { id: "age", item: "Age >55 years", met: v => v.age > 55 },
       { id: "wbc", item: "WBC >16 ×10⁹/L", met: v => v.wbc > 16 },
-      { id: "glucose", item: "Glucose >200 mg/dL (>11.1 mmol/L)", met: v => v.glucose > 200 },
+      { id: "glucose", item: "Glucose >200 mg/dL (>11.1 mmol/L)", met: (v, u) => by(u("glucose"), x => x > 11.1, x => x > 200) },
       { id: "ldh", item: "LDH >350 IU/L", met: v => v.ldh > 350 },
       { id: "ast", item: "AST >250 IU/L", met: v => v.ast > 250 }
     ],
     h48: [
       { id: "hctFall", item: "Hematocrit fall >10 percentage points", met: v => v.hctFall > 10 },
-      { id: "bunRise", item: "BUN rise >5 mg/dL (urea >1.8 mmol/L)", met: v => v.bunRise > 5 },
-      { id: "calcium", item: "Calcium <8 mg/dL (<2.0 mmol/L)", met: v => v.calcium < 8 },
+      { id: "bunRise", item: "BUN rise >5 mg/dL (urea >1.8 mmol/L)", met: (v, u) => by(u("bunRise"), x => x > 1.8, x => x > 5) },
+      { id: "calcium", item: "Calcium <8 mg/dL (<2.0 mmol/L)", met: (v, u) => by(u("calcium"), x => x < 2.0, x => x < 8) },
       { id: "pao2", item: "PaO2 <60 mmHg", met: v => v.pao2 < 60 },
       { id: "baseDeficit", item: "Base deficit >4 mmol/L", met: v => v.baseDeficit > 4 },
       { id: "fluid", item: "Fluid sequestration >6 L", met: v => v.fluid > 6 }
@@ -27,14 +30,14 @@ export const CRITERIA = {
     admission: [
       { id: "age", item: "Age >70 years", met: v => v.age > 70 },
       { id: "wbc", item: "WBC >18 ×10⁹/L", met: v => v.wbc > 18 },
-      { id: "glucose", item: "Glucose >220 mg/dL (>12.2 mmol/L)", met: v => v.glucose > 220 },
+      { id: "glucose", item: "Glucose >220 mg/dL (>12.2 mmol/L)", met: (v, u) => by(u("glucose"), x => x > 12.2, x => x > 220) },
       { id: "ldh", item: "LDH >400 IU/L", met: v => v.ldh > 400 },
       { id: "ast", item: "AST >250 IU/L", met: v => v.ast > 250 }
     ],
     h48: [
       { id: "hctFall", item: "Hematocrit fall >10 percentage points", met: v => v.hctFall > 10 },
-      { id: "bunRise", item: "BUN rise >2 mg/dL (urea >0.7 mmol/L)", met: v => v.bunRise > 2 },
-      { id: "calcium", item: "Calcium <8 mg/dL (<2.0 mmol/L)", met: v => v.calcium < 8 },
+      { id: "bunRise", item: "BUN rise >2 mg/dL (urea >0.7 mmol/L)", met: (v, u) => by(u("bunRise"), x => x > 0.7, x => x > 2) },
+      { id: "calcium", item: "Calcium <8 mg/dL (<2.0 mmol/L)", met: (v, u) => by(u("calcium"), x => x < 2.0, x => x < 8) },
       // PaO2: not used in the gallstone version.
       { id: "baseDeficit", item: "Base deficit >5 mmol/L", met: v => v.baseDeficit > 5 },
       { id: "fluid", item: "Fluid sequestration >4 L", met: v => v.fluid > 4 }
@@ -76,19 +79,21 @@ export default {
     { id: "baseDeficit", label: "Base deficit", type: "number", unit: "mmol/L", min: -50, max: 50, optional: true },
     { id: "fluid", label: "Fluid sequestration", type: "number", unit: "L", min: 0, max: 50, optional: true }
   ],
-  compute(v) {
+  compute(v, ctx) {
     const set = CRITERIA[v.type];
+    const base = { glucose: "conv", bunRise: "conv", calcium: "conv" };
+    const u = id => asEntered(ctx, id, v[id], base[id]);
     const breakdown = [];
     let admission = 0, h48 = 0;
     for (const c of set.admission) {
-      const p = c.met(v) ? 1 : 0;
+      const p = c.met(v, u) ? 1 : 0;
       admission += p;
       breakdown.push({ item: `Admission: ${c.item}`, points: p });
     }
     const pending = [];
     for (const c of set.h48) {
       if (!isNum(v[c.id])) { pending.push(c.item); breakdown.push({ item: `48 h: ${c.item}`, value: "pending" }); continue; }
-      const p = c.met(v) ? 1 : 0;
+      const p = c.met(v, u) ? 1 : 0;
       h48 += p;
       breakdown.push({ item: `48 h: ${c.item}`, points: p });
     }
@@ -123,7 +128,7 @@ export default {
       : `Ranson (${version}) ${r.score} at admission${r.h48 ? ` plus ${r.h48} at 48 h so far` : ""}, 48-hour items pending${severe ? ", severe pancreatitis" : ""}`;
     return { band, level, text, sections, notes, copy };
   },
-  notes: "Glucose, BUN and calcium are compared in mg/dL, the units of the original criteria; SI entries are converted first (B1.5).",
+  notes: "Glucose, BUN rise and calcium are compared with the cutoff written for the unit entered (mg/dL or mmol/L), with no conversion.",
   references: [
     ref("Ranson JH et al. Prognostic signs and the role of operative management in acute pancreatitis. Surg Gynecol Obstet 1974"),
     ref("Ranson JH. Etiological and prognostic factors in human acute pancreatitis: a review. Am J Gastroenterol 1982"),

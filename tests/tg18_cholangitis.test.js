@@ -26,7 +26,22 @@ test("TG18: suspected when A plus B only; grade I action", () => {
   assert.equal(interp.action, "Antibiotics and supportive care; biliary drainage if no response within 24 hours.");
 });
 
+test("TG18: bilirubin 34 µmol/L meets B-1 (cutoff for the unit entered)", () => {
+  const si = calc(tg18, { temp: 38.5, wbc: 8, bili: 34, age: 50 }, { wbc: "si", bili: "si" });
+  assert.equal(si.result.dx.b1, true);
+  assert.equal(si.result.dx.status, "Suspected");
+  assert.equal(calc(tg18, { temp: 38.5, wbc: 8, bili: 33.9, age: 50 }, { wbc: "si", bili: "si" }).result.dx.b1, false);
+  assert.equal(calc(tg18, { temp: 38.5, wbc: 8, bili: 1.99, age: 50 }, { wbc: "si", bili: "conv" }).result.dx.b1, false);
+});
+
 test("TG18: CRP ≥10 mg/L meets A-2; no A item means criteria not met", () => {
   assert.equal(calc(tg18, { temp: 37, wbc: 8, crp: 10, bili: 2.5, age: 50, dilatation: true }, { wbc: "si", bili: "conv" }).result.dx.status, "Definite");
   assert.equal(calc(tg18, { temp: 37, wbc: 8, crp: 9.9, bili: 2.5, age: 50, dilatation: true }, { wbc: "si", bili: "conv" }).result.dx.status, "Not met");
+});
+
+test("B8.4 TG18: temperature 38.5 °C, WBC 8, bilirubin 34 µmol/L, age 50, no imaging findings → B-1 met; suspected; grade I", () => {
+  const { result } = calc(tg18, { temp: 38.5, wbc: 8, bili: 34, age: 50 }, { wbc: "si", bili: "si" });
+  assert.equal(result.dx.b1, true);
+  assert.equal(result.dx.status, "Suspected");
+  assert.equal(result.sev.grade, 1);
 });

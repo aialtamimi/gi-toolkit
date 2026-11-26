@@ -26,10 +26,15 @@ test("Full Mayo bands", () => {
   assert.equal(fullBand(10, [3, 3, 2, 2]).band, "Moderate");
   assert.equal(fullBand(11, [3, 3, 3, 2]).band, "Severe");
   assert.equal(fullBand(12, [3, 3, 3, 3]).band, "Severe");
-  // Total ≤2 with a subscore >1: not remission, and no other band in the spec.
-  const gap = fullBand(2, [2, 0, 0, 0]);
-  assert.ok(gap.unclassified);
-  assert.match(gap.band, /^Not in remission/);
+  // Total 0–5 that does not meet remission (a subscore >1) is mild.
+  assert.equal(fullBand(2, [2, 0, 0, 0]).band, "Mild");
+  assert.equal(fullBand(2, [0, 0, 2, 0]).band, "Mild");
+});
+
+test("Full Mayo: subscores 2, 0, 0, 0 → 2, mild (remission criteria not met)", () => {
+  const { result, interp } = calc(mayo, { mode: "full", stool: 2, bleeding: 0, endo: 0, pga: 0 });
+  assert.equal(result.score, 2);
+  assert.equal(interp.band, "Mild");
 });
 
 test("Partial Mayo bands", () => {

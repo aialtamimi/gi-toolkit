@@ -11,11 +11,9 @@ export const ITEMS = [
   { id: "pga", label: "Physician global assessment", options: opts(["Normal", "Mild", "Moderate", "Severe"]) }
 ];
 
+// Remission ≤2 with no subscore >1; a total of 0–5 that does not meet remission is mild.
 export function fullBand(total, subs) {
-  if (total <= 2) {
-    if (subs.every(s => s <= 1)) return { band: "Remission", level: "low" };
-    return { band: "Not in remission (a subscore >1); total ≤2 has no other band in the specification", level: "neutral", unclassified: true };
-  }
+  if (total <= 2 && subs.every(s => s <= 1)) return { band: "Remission", level: "low" };
   if (total <= 5) return { band: "Mild", level: "low" };
   if (total <= 10) return { band: "Moderate", level: "intermediate" };
   return { band: "Severe", level: "high" };
@@ -54,12 +52,12 @@ export default {
   interpret(r) {
     const b = r.mode === "full" ? fullBand(r.score, r.subs) : partialBand(r.score);
     const text = r.mode === "full"
-      ? "Full Mayo: remission ≤2 with no subscore >1; mild 3–5; moderate 6–10; severe 11–12."
+      ? "Full Mayo: remission ≤2 with no subscore >1; mild 3–5, or 0–2 with a subscore >1; moderate 6–10; severe 11–12."
       : "Partial Mayo: remission 0–1; mild 2–4; moderate 5–6; severe 7–9.";
     const name = r.mode === "full" ? "Mayo" : "Partial Mayo";
     return { band: b.band, level: b.level, text,
       notes: ["In trials, the modified Mayo score excludes the physician global assessment and scores friability as 2."],
-      copy: `${name} ${r.score}, ${b.unclassified ? "not in remission" : b.band.toLowerCase()}${r.mes !== null ? `; MES ${r.mes}` : ""}` };
+      copy: `${name} ${r.score}, ${b.band.toLowerCase()}${r.mes !== null ? `; MES ${r.mes}` : ""}` };
   },
   references: [ref("Schroeder KW et al. Coated oral 5-aminosalicylic acid therapy for mildly to moderately active ulcerative colitis. NEJM 1987"),
     ref("Lewis JD et al. Use of the noninvasive components of the Mayo score to assess clinical response in ulcerative colitis. Inflamm Bowel Dis 2008")]

@@ -612,6 +612,8 @@ Footer note: "Use the XL probe when the M probe fails or the skin-to-liver capsu
 
 Nine tools. ACG 2024 notes that [scoring systems and imaging alone are not accurate in predicting which patients will develop moderately severe or severe pancreatitis](https://guidelinecentral.com/guideline/12896), so every pancreatitis score shows: "Scores support but do not replace close monitoring in the first 24–48 hours."
 
+Units in B4: where a criterion gives a cutoff in both units (for example "BUN >25 mg/dL (urea >8.9 mmol/L)" or "total bilirubin ≥2 mg/dL (≥34 µmol/L)"), compare the value in the unit the user entered with the cutoff written for that unit, without converting. Where only one unit is given, convert the entry to that unit (B1.5).
+
 ### B4.1 BISAP (id: bisap)
 
 One point each, range 0–5, within 24 hours of admission. Source: Wu, Gut 2008.
@@ -680,9 +682,11 @@ Score each organ 0–4. Any organ ≥2 = organ failure. Source: Banks, Gut 2013 
 
 | Organ | 0 | 1 | 2 | 3 | 4 |
 | --- | --- | --- | --- | --- | --- |
-| Respiratory, PaO2/FiO2 | >400 | 301–400 | 201–300 | 101–200 | ≤101 |
+| Respiratory, PaO2/FiO2 | >400 | 301–400 | 201–300 | 101–200 | ≤100 |
 | Renal, creatinine µmol/L (mg/dL) | ≤134 (<1.4) | 134–169 (1.4–1.8) | 170–310 (1.9–3.6) | 311–439 (3.6–4.9) | >439 (>4.9) |
 | Cardiovascular, SBP off inotropes | >90 | <90, fluid responsive | <90, not fluid responsive | <90, pH <7.3 | <90, pH <7.2 |
+
+Non-integer values between bands are scored as contiguous ranges from each band's upper limit (for example PaO2/FiO2 100.5 = 3; creatinine 1.85 mg/dL = 2). Creatinine is scored with the bands written for the unit entered (µmol/L or mg/dL). Cardiovascular is a pick list of the five labels above, so the clinician chooses the band.
 
 FiO2 estimate for non-ventilated patients (show as helper): room air 0.21; 2 L/min 0.25; 4 L/min 0.30; 6–8 L/min 0.40; 9–10 L/min 0.50. Note: "No formal correction exists for pre-existing chronic kidney disease."
 
@@ -767,6 +771,8 @@ Source: Truelove and Witts, BMJ 1955; ECCO UC guideline.
 
 Severe result text: "Acute severe ulcerative colitis: admit. Open the ASUC emergency page."
 
+UI: mild needs a confirming tick box "No systemic toxicity and normal ESR", and none of the entered severe-list features may be present. Anything not severe and not mild is moderate.
+
 ### B5.2 Day-3 response in acute severe UC: Oxford and Lindgren (id: asuc\_day3)
 
 Inputs on day 3 of IV corticosteroids: stool frequency (per 24 h), CRP (mg/L). Source: [Travis, Gut 1996](https://pubmed.ncbi.nlm.nih.gov/8984031/); Lindgren, Eur J Gastroenterol Hepatol 1998.
@@ -791,7 +797,7 @@ Two modes: full (4 items, 0–12) and partial (no endoscopy, 0–9). Source: Sch
 
 | Mode | Remission | Mild | Moderate | Severe |
 | --- | --- | --- | --- | --- |
-| Full Mayo | ≤2 with no subscore >1 | 3–5 | 6–10 | 11–12 |
+| Full Mayo | ≤2 with no subscore >1 | 3–5, or 0–2 with a subscore >1 | 6–10 | 11–12 |
 | Partial Mayo | 0–1 | 2–4 | 5–6 | 7–9 |
 
 Also show the Mayo endoscopic subscore alone, labeled "Mayo endoscopic score (MES)". Note: "In trials, the modified Mayo score excludes the physician global assessment and scores friability as 2."
@@ -837,7 +843,7 @@ Source: Best, Gastroenterology 1976; [weights](https://pmc.ncbi.nlm.nih.gov/arti
 | Hematocrit | Men: 47 − Hct (%); women: 42 − Hct (%); may be negative | ×6 |
 | Body weight | 100 × (1 − weight / standard weight); if below −10, use −10 | ×1 |
 
-<150 remission; 150–219 mild; 220–450 moderate; >450 severe. Clinical response: fall of ≥100 points (≥70 in some trials). UI: offer a 7-day diary entry or direct entry of the 7-day sums.
+<150 remission; 150–219 mild; 220–450 moderate; >450 severe. The weight term can make the total a non-integer, so the bands are applied as <150, 150 to <220, 220 to 450, and >450. Clinical response: fall of ≥100 points (≥70 in some trials). UI: offer a 7-day diary entry or direct entry of the 7-day sums.
 
 ### B5.7 SES-CD (id: ses\_cd)
 
@@ -864,7 +870,9 @@ Neo-terminal ileum 6–12 months after ileocolonic resection. Source: Rutgeerts,
 | i3 | Diffuse aphthous ileitis with diffusely inflamed mucosa |
 | i4 | Diffuse inflammation with larger ulcers, nodules and/or narrowing |
 
-Result text: i0–i1 "No endoscopic recurrence"; ≥i2 "Endoscopic recurrence: consider escalating therapy."
+The user selects i0, i1, i2a, i2b, i3 or i4 (i2 is selected as its modified subcategory).
+
+Result text: i0, i1 and i2a "No endoscopic recurrence"; for i2a also show the note "i2a carries lower risk; individualize". i2b, i3 and i4 "Endoscopic recurrence: consider escalating therapy."
 
 ### B5.9 Montreal classification (id: montreal; selectable card)
 
@@ -1318,6 +1326,9 @@ FibroScan (B3.20) test vectors:
 | Modified Marshall | PaO2/FiO2 250, creatinine 1.2 mg/dL, SBP 120 | Respiratory 2, renal 0, cardiovascular 0: organ failure present |
 | Modified CTSI | Fluid collection, necrosis ≤30%, pleural effusion | 8, severe |
 | TG18 cholangitis | Temperature 39.2 °C, WBC 14, bilirubin 3 mg/dL, dilated duct with stone, age 80, albumin normal, no organ dysfunction | Definite; grade II |
+| TG18 cholangitis | Temperature 38.5 °C, WBC 8, bilirubin 34 µmol/L (entered in µmol/L), age 50, no imaging findings | B-1 met; suspected; grade I |
+| Modified Marshall | PaO2/FiO2 101, creatinine 124 µmol/L, SBP >90 | Respiratory 3, renal 0, cardiovascular 0 |
+| Modified Marshall | PaO2/FiO2 100, creatinine 1.4 mg/dL (entered in mg/dL), SBP >90 | Respiratory 4, renal 1, cardiovascular 0 |
 | ASGE choledocholithiasis | CBD 8 mm, bilirubin 3 mg/dL, no stone seen, no cholangitis | Intermediate |
 
 ### B8.5 IBD
@@ -1328,11 +1339,14 @@ FibroScan (B3.20) test vectors:
 | Oxford / Lindgren | Day-3 stools 5, CRP 50 mg/L | Oxford positive |
 | Oxford / Lindgren | Day-3 stools 6, CRP 30 mg/L | Oxford negative; Lindgren 10.2, positive |
 | Mayo (full) | Subscores 2, 2, 2, 2 | 8, moderate |
+| Mayo (full) | Subscores 2, 0, 0, 0 | 2, mild (remission criteria not met) |
 | Partial Mayo | Subscores 2, 2, 2 | 6, moderate |
 | UCEIS | 2, 2, 2 | 6 |
 | HBI | Well-being 2, pain 2, 5 liquid stools, no mass, 1 complication | 10, moderate |
 | CDAI | 7-day stools 28, pain sum 14, well-being sum 14, 1 complication, no antidiarrheal, no mass, male Hct 40%, weight 63 kg, standard weight 70 kg | 296, moderate |
 | SES-CD | Ileum 2/2/2/1, right colon 1/1/1/0, others 0 | 10, moderate |
+| Rutgeerts | i2a | No endoscopic recurrence; note "i2a carries lower risk; individualize" |
+| Rutgeerts | i2b | Endoscopic recurrence: consider escalating therapy |
 
 ### B8.6 Endoscopy
 

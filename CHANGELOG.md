@@ -9,7 +9,14 @@ All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 - Engine: count inputs (stools, diary ratings, GCS) accept whole numbers only, and use the numeric keypad.
 - Footer and About page: "Designed by Dr. Abdulaziz Altamimi".
 - Tests: B8.4 and B8.5 vectors as `node --test` unit tests, plus boundary checks from the B4 and B5 text for tools that have no B8 vector.
-- No clinical content in SPEC.md changed. Last clinical review: not yet reviewed.
+- Clinical owner decisions on the Phase 2 review (SPEC.md and B8 updated in the same change):
+  - B4 units: where a criterion gives a cutoff in both units, the value is compared in the unit entered with the cutoff written for that unit (BISAP BUN/urea; Ranson glucose, BUN rise and calcium; TG18 bilirubin B-1, so 34 µmol/L meets B-1; Modified Marshall creatinine).
+  - Modified Marshall respiratory: PaO2/FiO2 101–200 = 3, 100 or less = 4. Cardiovascular stays a pick list.
+  - Full Mayo: a total of 0–5 that does not meet remission is mild.
+  - Rutgeerts: i0, i1 and i2a = no endoscopic recurrence (i2a shows "i2a carries lower risk; individualize"); i2b, i3 and i4 = endoscopic recurrence. i2 is selected as i2a or i2b.
+  - Truelove and Witts mild confirmation tick box and CDAI band boundaries recorded in SPEC.md as implemented.
+- Engine: compute() also receives each lab value as entered with its unit, for the B4 per-unit cutoffs.
+- Last clinical review: not yet reviewed.
 
 ## 0.1.1 (2026-11-26)
 

@@ -37,6 +37,18 @@ test("Ranson complete, below 3 shows mortality under 5%", () => {
   assert.match(interp.text, /under 5%/);
 });
 
+test("Ranson: glucose, BUN rise and calcium use the cutoff for the unit entered", () => {
+  const base = { type: "non", age: 40, wbc: 10, ldh: 200, ast: 100, hctFall: 0, pao2: 90, baseDeficit: 0, fluid: 0 };
+  // Glucose 11.11 mmol/L (199.98 mg/dL) meets >11.1 mmol/L; BUN rise 1.79 mmol/L (5.01 mg/dL) does not meet >1.8 mmol/L;
+  // calcium 1.99 mmol/L meets <2.0 mmol/L.
+  const si = calc(ranson, { ...base, glucose: 11.11, bunRise: 1.79, calcium: 1.99 }, { glucose: "si", bunRise: "si", calcium: "si" });
+  assert.deepEqual(si.result.breakdown.filter(b => /Glucose|BUN rise|Calcium/.test(b.item)).map(b => b.points), [1, 0, 1]);
+  const conv = calc(ranson, { ...base, glucose: 200, bunRise: 5.01, calcium: 8 }, { glucose: "conv", bunRise: "conv", calcium: "conv" });
+  assert.deepEqual(conv.result.breakdown.filter(b => /Glucose|BUN rise|Calcium/.test(b.item)).map(b => b.points), [0, 1, 0]);
+  const gs = calc(ranson, { ...base, type: "gallstone", glucose: 12.21, bunRise: 0.71, calcium: 2.0 }, { glucose: "si", bunRise: "si", calcium: "si" });
+  assert.deepEqual(gs.result.breakdown.filter(b => /Glucose|BUN rise|Calcium/.test(b.item)).map(b => b.points), [1, 1, 0]);
+});
+
 test("Ranson commonly cited mortality bands", () => {
   assert.equal(mortality(2), "under 5%");
   assert.equal(mortality(3), "about 15%");
