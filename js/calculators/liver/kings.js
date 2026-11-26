@@ -1,16 +1,21 @@
 // SPEC.md B3.18 King's College criteria
 import { ref } from "../../refs.js";
 import { isNum } from "../../num.js";
+import { asEntered } from "../../units.js";
 
 const MET_TEXT = "Meets King's College criteria: poor prognosis without transplant. Contact a liver transplant center now.";
 const apap = v => v.type === "apap";
 const nonApap = v => v.type === "non";
 
-export function evaluate(v) {
+// Creatinine and bilirubin use the cutoff written for the unit entered, with no conversion (B1.5).
+const crHigh = c => (c.system === "si" ? c.value > 300 : c.value > 3.4);
+const biliHigh = b => (b.system === "si" ? b.value > 300 : b.value > 17.6);
+
+export function evaluate(v, ctx) {
   const inrHigh = (isNum(v.inr) && v.inr > 6.5) || (isNum(v.pt) && v.pt > 100);
   if (v.type === "apap") {
     const ph = isNum(v.ph) && v.ph < 7.30;
-    const triad = { inr: inrHigh, cr: isNum(v.cr) && v.cr > 300, he: !!v.he34 };
+    const triad = { inr: inrHigh, cr: isNum(v.cr) && crHigh(asEntered(ctx, "cr", v.cr, "si")), he: !!v.he34 };
     const triadMet = triad.inr && triad.cr && triad.he;
     const lactate = !!v.modified && ((isNum(v.lac4) && v.lac4 > 3.5) || (isNum(v.lac12) && v.lac12 > 3.0));
     const criteria = [
@@ -28,7 +33,7 @@ export function evaluate(v) {
     { item: "Cause non-A non-B hepatitis, halothane, or idiosyncratic drug reaction", met: !!v.cause },
     { item: "Jaundice to encephalopathy >7 days", met: !!v.jaundice7 },
     { item: "INR >3.5 (PT >50 s)", met: (isNum(v.inr) && v.inr > 3.5) || (isNum(v.pt) && v.pt > 50) },
-    { item: "Bilirubin >17.6 mg/dL (>300 µmol/L)", met: isNum(v.bili) && v.bili > 300 }
+    { item: "Bilirubin >17.6 mg/dL (>300 µmol/L)", met: isNum(v.bili) && biliHigh(asEntered(ctx, "bili", v.bili, "si")) }
   ];
   const count = minor.filter(m => m.met).length;
   return { met: inrHigh || count >= 3, count, inrHigh,
@@ -58,8 +63,8 @@ export default {
     { id: "jaundice7", label: "Jaundice to encephalopathy >7 days", type: "checkbox", showIf: nonApap },
     { id: "bili", label: "Bilirubin", type: "number", analyte: "bilirubin", base: "si", min: 0, max: 2000, optional: true, showIf: nonApap }
   ],
-  compute(v) {
-    const e = evaluate(v);
+  compute(v, ctx) {
+    const e = evaluate(v, ctx);
     return { score: e.met ? 1 : 0, ...e, display: e.met ? "Criteria met" : "Criteria not met", label: "King's College",
       rounding: "Checklist; no rounding.",
       breakdown: e.criteria.map(c => ({ item: c.item, value: c.met ? "Met" : "Not met" })) };
@@ -72,6 +77,6 @@ export default {
       text: "Missing values count as not met. Reassess as results return.",
       copy: `King's College criteria not met${countTxt}` };
   },
-  notes: "Creatinine and bilirubin cutoffs are applied in µmol/L (300 µmol/L); mg/dL entries are converted (× 88.4 and × 17.1).",
+  notes: "Creatinine and bilirubin are compared with the cutoff written for the unit entered (>3.4 mg/dL or >300 µmol/L; >17.6 mg/dL or >300 µmol/L), with no conversion.",
   references: [ref("O'Grady JG et al. Early indicators of prognosis in fulminant hepatic failure. Gastroenterology 1989")]
 };

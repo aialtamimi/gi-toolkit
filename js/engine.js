@@ -118,10 +118,16 @@ export function renderCalculator(root, def, opts = {}) {
 
   const form = h("form", { class: "inputs", autocomplete: "off", onsubmit: e => e.preventDefault() });
   const fieldEls = {};
+  // Inputs with `group` go into a collapsed section placed below the result (def.groups[group] = label).
+  const groupEls = {};
+  for (const [g, label] of Object.entries(def.groups || {})) {
+    groupEls[g] = h("details", { class: "input-group" }, h("summary", {}, label),
+      h("form", { class: "inputs", autocomplete: "off", onsubmit: e => e.preventDefault() }));
+  }
   def.inputs.forEach((inp, i) => {
     const el = renderInput(def, inp, i, raw, units, update);
     if (inp.id) fieldEls[inp.id] = el;
-    form.append(el);
+    (inp.group ? groupEls[inp.group].querySelector("form") : form).append(el);
   });
   const resetBtn = h("button", { type: "button", class: "btn btn-secondary", onclick: () => opts.onReset && opts.onReset() }, "Clear inputs");
   form.append(h("div", { class: "form-actions" }, resetBtn));
@@ -142,7 +148,7 @@ export function renderCalculator(root, def, opts = {}) {
   root.append(
     h("div", { class: "calc-grid" },
       h("div", { class: "col-inputs" }, form),
-      h("div", { class: "col-result" }, card, tableBlock, info)
+      h("div", { class: "col-result" }, card, ...Object.values(groupEls), tableBlock, info)
     ),
     bar
   );
@@ -186,8 +192,9 @@ export function renderCalculator(root, def, opts = {}) {
       return;
     }
     renderResult(card, def, out.result, out.interp);
+    const shown = Array.isArray(out.result.display) ? out.result.display.join(" · ") : out.result.display;
     bar.append(
-      h("span", { class: "bar-value" }, `${out.result.label}: ${out.result.display}`),
+      h("span", { class: "bar-value" }, `${out.result.label}: ${shown}`),
       h("span", { class: `badge ${LEVEL_CLASS[out.interp.level] || "lvl-neutral"}` }, out.interp.band)
     );
     if (tableBlock && out.result.row) highlightRow(tableBlock, def.table.rows.findIndex(r => r[0] === Object.values(out.result.row)[0]));
@@ -284,7 +291,9 @@ export function renderResult(card, def, r, it) {
   card.append(
     h("div", { class: "result-head" },
       h("div", { class: "result-label" }, r.label),
-      h("div", { class: "result-value" }, r.display)),
+      Array.isArray(r.display)
+        ? h("div", { class: "result-values" }, r.display.map(d => h("div", { class: "result-value" }, d)))
+        : h("div", { class: "result-value" }, r.display)),
     h("div", { class: `band ${lvl}` }, h("span", { class: "band-tag" }, "Band"), h("span", { class: "band-text" }, it.band))
   );
   if (r.details && r.details.length) {
