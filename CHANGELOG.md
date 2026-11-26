@@ -2,6 +2,15 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.4.0 (2026-11-26) - Phase 4
+
+- Arabic interface (Settings, Language): the interface switches to Arabic and right-to-left. Clinical content stays in English: calculator, card and emergency pages are marked English and left-to-right, so names, inputs, results, interpretations, drug names, doses, scores, formulas and tables keep their original wording and order. Interface labels inside those pages appear as Arabic right-to-left islands. The two mandatory footers stay in English with an Arabic translation underneath. Category names are translated; clinical abbreviations (IBD) and units stay in English.
+- Dark mode (Settings, Theme): light, dark, or same as device (new default). All colours are theme variables; a test checks WCAG AA contrast (4.5:1) for every text and background pair in both themes.
+- App icons redrawn: white "GI" on dark teal (#0b5563), centred, at 180, 192 and 512 px, plus a maskable 512 px icon with the letters inside the safe zone.
+- Accessibility: axe-core audit of all 78 screens in English and Arabic, light and dark (312 runs), plus filled-in result states, with no violations; no touch target under 44 px. Fixes: card table rows now select through a real button (ARIA-valid), header buttons keep contrast in dark mode, the favorite button's accessible name matches its visible text, and result-card section headings follow the page heading order.
+- Re-check: all 76 B8 test vectors pass (listed in the pull request).
+- No clinical content in SPEC.md changed.
+
 ## 0.3.0 (2026-11-26) - Phase 3
 
 - B6 reference cards (8), in `content/cards/`: Boston Bowel Preparation Scale (calculator), Los Angeles classification, Prague C and M with Barrett's surveillance (calculator), Paris, NICE, Zargar, Bristol stool form scale, Lyon Consensus 2.0. Tap a table row to highlight it and copy "Classification: grade".

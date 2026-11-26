@@ -33,8 +33,10 @@ export const store = {
   clearFieldUnits() {
     try { Object.keys(localStorage).filter(k => k.startsWith(P + "units.") && k !== P + "units.default").forEach(k => localStorage.removeItem(k)); } catch { /* ignore */ }
   },
-  theme: () => read("theme", "light"),
-  language: () => read("language", "en"),
+  theme: () => read("theme", "system"),          // "light" | "dark" | "system"
+  setTheme: t => write("theme", t),
+  language: () => read("language", "en"),        // "en" | "ar"
+  setLanguage: l => write("language", l),
   disclaimerAccepted: () => read("disclaimer.accepted", false),
   acceptDisclaimer: () => write("disclaimer.accepted", true)
 };
