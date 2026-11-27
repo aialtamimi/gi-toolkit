@@ -159,11 +159,12 @@ export function pathVectors() {
   return { shown, marks };
 }
 
-// B8.9 rows: { page, decision, calc (SPEC name), inputs (text), suggested: [values] }.
+// B8.9 rows: { page, decision, calc (SPEC name), inputs (text), suggested: [values], notes: [text] }.
 export function suggestionVectors() {
   const { body } = section("B8.9");
   return body.split("\n").filter(l => l.startsWith("|")).slice(2).map(l => {
-    const [page, decision, calc, inputs, suggested] = cells(l);
-    return { page: page.replace(/\\_/g, "_"), decision, calc, inputs, suggested: suggested === "none" ? [] : suggested.split("; ") };
+    const [page, decision, calc, inputs, suggested, note] = cells(l);
+    return { page: page.replace(/\\_/g, "_"), decision, calc, inputs, suggested: suggested === "none" ? [] : suggested.split("; "),
+      notes: !note || note === "none" ? [] : [note] };
   });
 }

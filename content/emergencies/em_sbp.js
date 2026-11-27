@@ -130,7 +130,8 @@ export default {
         ]
       ],
       "items": [
-        "Runyon criteria or polymicrobial culture: suspect secondary peritonitis, urgent CT and surgical review."
+        "Runyon criteria or polymicrobial culture: suspect secondary peritonitis, urgent CT and surgical review.",
+        "Start broad-spectrum antibiotics with anaerobic cover (for example ceftriaxone plus metronidazole, or piperacillin-tazobactam per local resistance) (EASL 2018)."
       ],
       "calcs": [],
       "doses": [],
@@ -248,6 +249,8 @@ export default {
     "meld_na"
   ],
   "references": [
-    ref("Sort P et al. Effect of intravenous albumin on renal impairment and mortality in patients with cirrhosis and spontaneous bacterial peritonitis. NEJM 1999. PMID 10432325", "https://pubmed.ncbi.nlm.nih.gov/10432325/")
+    ref("Sort P et al. Effect of intravenous albumin on renal impairment and mortality in patients with cirrhosis and spontaneous bacterial peritonitis. NEJM 1999. PMID 10432325", "https://pubmed.ncbi.nlm.nih.gov/10432325/"),
+    ref("EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018. PMID 29653741", "https://pubmed.ncbi.nlm.nih.gov/29653741/"),
+    ref("Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021. PMID 33942342", "https://pubmed.ncbi.nlm.nih.gov/33942342/")
   ]
 };

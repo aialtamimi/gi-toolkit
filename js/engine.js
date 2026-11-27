@@ -110,7 +110,8 @@ export function linkTo(target, label) {
   return h("span", { class: "btn btn-link disabled", "aria-disabled": "true" }, label, " ", (planned ? "(coming in a later update)" : "(not available)"));
 }
 
-// opts.embedded: rendered inside a bedside algorithm step (SPEC.md B7.0): one column, no sticky result bar.
+// opts.embedded: rendered inside a bedside algorithm step (SPEC.md B7.0): one column, no sticky result bar;
+// opts.idPrefix: prefix for input ids.
 // opts.onResult(out | null) is called after every update; opts.hideLinks lists page ids not to link to
 // (the page the calculator is embedded in).
 export function renderCalculator(root, def, opts = {}) {
@@ -131,7 +132,7 @@ export function renderCalculator(root, def, opts = {}) {
       h("form", { class: "inputs", autocomplete: "off", onsubmit: e => e.preventDefault() }));
   }
   def.inputs.forEach((inp, i) => {
-    const el = renderInput(def, inp, i, raw, units, update);
+    const el = renderInput(def, inp, i, raw, units, update, opts.idPrefix);
     if (inp.id) fieldEls[inp.id] = el;
     (inp.group ? groupEls[inp.group].querySelector("form") : form).append(el);
   });
@@ -227,11 +228,12 @@ function renderTable(t) {
       )));
 }
 
-function fieldId(def, inp) { return `f-${def.id}-${inp.id}`; }
+// opts.idPrefix keeps input ids unique when the same calculator is shown twice on one page (SPEC.md B7.0).
+export function fieldId(def, inp, prefix) { return `f-${prefix ? prefix + "-" : ""}${def.id}-${inp.id}`; }
 
-function renderInput(def, inp, idx, raw, units, update) {
+function renderInput(def, inp, idx, raw, units, update, prefix) {
   if (inp.type === "heading") return h("h3", { class: "input-heading" }, inp.label);
-  const id = fieldId(def, inp);
+  const id = fieldId(def, inp, prefix);
   const err = h("div", { class: "field-error", role: "alert" });
   const help = inp.help ? h("div", { class: "field-help" }, inp.help) : null;
 

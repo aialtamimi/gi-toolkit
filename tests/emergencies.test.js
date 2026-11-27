@@ -104,11 +104,11 @@ for (const spec of ALGORITHMS) {
     }
   });
 
-  test(`${spec.id}: built-in calculators exist and appear once on the page`, () => {
+  test(`${spec.id}: built-in calculators exist, at most once per block (each copy gets its own input ids)`, () => {
     const page = EMERGENCIES.find(p => p.id === spec.id);
     const ids = page.blocks.flatMap(b => b.calcs || []);
     assert.ok(ids.length > 0);
-    assert.equal(new Set(ids).size, ids.length, "a calculator is embedded twice (duplicate input ids)");
+    for (const b of page.blocks) if (b.calcs) assert.equal(new Set(b.calcs).size, b.calcs.length, `${b.id || b.type}: calculator listed twice`);
     for (const id of ids) assert.ok(findItem(id) && findItem(id).inputs, `${id} is not a calculator`);
   });
 

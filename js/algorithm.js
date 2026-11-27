@@ -50,30 +50,40 @@ export function pageText(page) {
 
 // Suggested answers from built-in calculators (SPEC.md B7.0 table; test vectors B8.9). A suggestion only
 // outlines a button: the clinician must still choose the answer. Each rule takes the calculator's
-// { result, interp } and returns the suggested answer values (empty when none).
+// { result, interp } and returns { answers: [values], note } (no answers when none is suggested).
 export const SUGGESTIONS = [
   { page: "em_ugib", decision: "D2", calc: "child_pugh",
-    rule: ({ result }) => (result.score >= 10 && result.score <= 13 ? ["Yes"] : []) },
+    rule: ({ result }) => {
+      if (result.score >= 10 && result.score <= 13) return { answers: ["Yes"] };
+      if (result.score >= 14 && result.score <= 15) return { answers: ["No"], note: "Pre-emptive TIPS not recommended (Child-Pugh >13)" };
+      return { answers: [] };
+    } },
   { page: "em_ugib", decision: "D3", calc: "forrest",
-    rule: ({ result }) => (["Ia", "Ib", "IIa", "IIb"].includes(result.row.cls) ? ["High-risk stigmata"] : ["Low-risk stigmata"]) },
+    rule: ({ result }) => ({ answers: ["Ia", "Ib", "IIa", "IIb"].includes(result.row.cls) ? ["High-risk stigmata"] : ["Low-risk stigmata"] }) },
   { page: "em_asuc", decision: "D1", calc: "asuc_day3",
-    rule: ({ result }) => (result.oxford || result.lindgrenPositive ? ["Yes"] : ["No"]) },
+    rule: ({ result }) => ({ answers: result.oxford || result.lindgrenPositive ? ["Yes"] : ["No"] }) },
   { page: "em_sbp", decision: "D1", calc: "ascites",
-    rule: ({ result }) => [
-      ...(typeof result.pmn === "number" && result.pmn >= 250 ? ["PMN 250/mm³ or more"] : []),
-      ...(result.runyonCount >= 2 ? ["Runyon criteria or polymicrobial culture"] : [])
-    ] },
+    rule: ({ result }) => {
+      if (!(typeof result.pmn === "number" && result.pmn >= 250)) return { answers: [] };
+      return { answers: [result.runyonCount >= 2 ? "Runyon criteria or polymicrobial culture" : "PMN 250/mm³ or more"] };
+    } },
   { page: "em_cholangitis", decision: "D1", calc: "tg18_cholangitis",
-    rule: ({ result }) => (result.dx.status === "Not met" ? [] : [`Grade ${["I", "II", "III"][result.sev.grade - 1]}`]) }
+    rule: ({ result }) => ({ answers: result.dx.status === "Not met" ? [] : [`Grade ${["I", "II", "III"][result.sev.grade - 1]}`] }) }
 ];
 
-// Suggested answer values for one decision, given the latest outputs of the page's calculators
-// ({ [calcId]: { result, interp } | null }).
-export function suggestedAnswers(page, decisionId, outputs = {}) {
-  const out = new Set();
+// Suggestions for one decision, given the latest outputs of the page's calculators
+// ({ [calcId]: { result, interp } | null }). Returns { answers: [values], notes: [text] }.
+export function suggestions(page, decisionId, outputs = {}) {
+  const answers = new Set(), notes = [];
   for (const s of SUGGESTIONS) {
     if (s.page !== page.id || s.decision !== decisionId || !outputs[s.calc]) continue;
-    for (const v of s.rule(outputs[s.calc])) out.add(v);
+    const r = s.rule(outputs[s.calc]);
+    for (const v of r.answers) answers.add(v);
+    if (r.note) notes.push(r.note);
   }
-  return [...out];
+  return { answers: [...answers], notes };
+}
+
+export function suggestedAnswers(page, decisionId, outputs = {}) {
+  return suggestions(page, decisionId, outputs).answers;
 }

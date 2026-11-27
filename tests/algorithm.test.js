@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { EMERGENCIES, CALCULATORS, CARDS, findItem } from "../js/registry.js";
-import { stepStates, shownSteps, steps, entryAnswers, pageText, suggestedAnswers, SUGGESTIONS } from "../js/algorithm.js";
+import { stepStates, shownSteps, steps, entryAnswers, pageText, suggestedAnswers, suggestions, SUGGESTIONS } from "../js/algorithm.js";
 import { DOSES, doseLine, parseWeight, terlipressinMg, validWeight, WEIGHT_MIN, WEIGHT_MAX } from "../js/doses.js";
 import { calc } from "./helpers.js";
 import { pathVectors, doseVectors, weightTable, suggestionVectors, CALC_NAMES, section } from "./spec_b7.js";
@@ -281,7 +281,7 @@ test("every built-in calculator referenced in the request is on its page", () =>
   assert.deepEqual(calcs("em_ugib"), ["gbs", "aims65", "child_pugh", "forrest"]);
   assert.deepEqual(calcs("em_asuc"), ["truelove_witts", "asuc_day3"]);
   assert.deepEqual(calcs("em_sbp"), ["ascites"]);
-  assert.deepEqual(calcs("em_pancreatitis"), ["marshall", "atlanta", "bisap", "sirs", "mctsi"]);
+  assert.deepEqual(calcs("em_pancreatitis"), ["marshall", "atlanta", "bisap", "sirs", "marshall", "mctsi"]);
   assert.deepEqual(calcs("em_cholangitis"), ["tg18_cholangitis"]);
   for (const id of ["gbs", "forrest", "child_pugh", "truelove_witts", "asuc_day3", "tg18_cholangitis", "bisap", "ascites"]) assert.ok(findItem(id));
 });
@@ -351,6 +351,9 @@ test("why lines name their sources (decision 12)", () => {
 const SUGGESTION_INPUTS = {
   "bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.0, ascites moderate to severe, encephalopathy none": { bili: 3.5, alb: 2.5, inr: 2.0, ascites: 3, he: 1 },
   "bilirubin 1.5 mg/dL, albumin 3.6 g/dL, INR 1.2, ascites none, encephalopathy none": { bili: 1.5, alb: 3.6, inr: 1.2, ascites: 1, he: 1 },
+  "bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 1–2": { bili: 3.5, alb: 2.5, inr: 2.5, ascites: 3, he: 2 },
+  "bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 3–4": { bili: 3.5, alb: 2.5, inr: 2.5, ascites: 3, he: 3 },
+  "bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy none": { bili: 3.5, alb: 2.5, inr: 2.5, ascites: 3, he: 1 },
   "IIb": { cls: "IIb" },
   "IIc": { cls: "IIc" },
   "stools 9, CRP 10 mg/L": { stools: 9, crp: 10 },
@@ -358,6 +361,8 @@ const SUGGESTION_INPUTS = {
   "WBC 500/mm³, neutrophils 60%": { wbc: 500, neut: 60 },
   "WBC 300/mm³, neutrophils 50%": { wbc: 300, neut: 50 },
   "WBC 1000/mm³, neutrophils 90%, total protein 1.5 g/dL, glucose 40 mg/dL": { wbc: 1000, neut: 90, aprot: 1.5, aglu: 40 },
+  "WBC 1000/mm³, neutrophils 90%, total protein 1.5 g/dL, glucose 60 mg/dL": { wbc: 1000, neut: 90, aprot: 1.5, aglu: 60 },
+  "WBC 300/mm³, neutrophils 50%, total protein 1.5 g/dL, glucose 40 mg/dL": { wbc: 300, neut: 50, aprot: 1.5, aglu: 40 },
   "temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 50": { temp: 38.5, wbc: 15, bili: 3, dilatation: true, age: 50 },
   "temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 80": { temp: 38.5, wbc: 15, bili: 3, dilatation: true, age: 80 },
   "temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors": { temp: 38.5, wbc: 8, bili: 0.8, age: 80, odCv: true }
@@ -375,15 +380,17 @@ test("B8.9 covers every suggestion rule, and every rule's calculator is on the p
 });
 
 for (const v of suggestionRows) {
-  test(`B8.9 ${v.page} ${v.decision}, ${v.calc} (${v.inputs}): suggested ${v.suggested.join("; ") || "none"}`, () => {
+  test(`B8.9 ${v.page} ${v.decision}, ${v.calc} (${v.inputs}): suggested ${v.suggested.join("; ") || "none"}${v.notes.length ? `, note "${v.notes[0]}"` : ""}`, () => {
     const raw = SUGGESTION_INPUTS[v.inputs];
     assert.ok(raw, `no raw inputs for "${v.inputs}"`);
     const id = CALC_NAMES[v.calc];
     const def = [...CALCULATORS, ...CARDS].find(c => c.id === id);
     const out = calc(def, raw);
     const p = page(v.page);
-    const got = suggestedAnswers(p, v.decision, { [id]: { result: out.result, interp: out.interp } });
+    const sug = suggestions(p, v.decision, { [id]: { result: out.result, interp: out.interp } });
+    const got = sug.answers;
     assert.deepEqual(got, v.suggested);
+    assert.deepEqual(sug.notes, v.notes);
     const d = steps(p).find(s => s.id === v.decision);
     for (const g of got) assert.ok(d.options.some(o => o.value === g), `"${g}" is not an answer of ${v.decision}`);
   });
@@ -423,3 +430,59 @@ test("trial and source references link to their exact PubMed record (decision 14
 function SPEC_B9() {
   return readFileSync(new URL("../SPEC.md", import.meta.url), "utf8").split("## Part B9: References")[1];
 }
+
+// ---------- follow-up decisions (version 0.6.1) ----------
+
+test("SBP secondary peritonitis step starts broad-spectrum antibiotics with anaerobic cover (EASL 2018)", () => {
+  const s4 = steps(page("em_sbp")).find(s => s.id === "S4");
+  assert.deepEqual(s4.when, [["D1", "Runyon criteria or polymicrobial culture"]]);
+  assert.ok(s4.items.includes("Start broad-spectrum antibiotics with anaerobic cover (for example ceftriaxone plus metronidazole, or piperacillin-tazobactam per local resistance) (EASL 2018)."));
+});
+
+test("SBP suggestion: secondary peritonitis only with PMN ≥250/mm³ and 2 or more Runyon criteria, and then alone", () => {
+  const p = page("em_sbp");
+  const run = r => suggestedAnswers(p, "D1", { ascites: { result: r } });
+  assert.deepEqual(run({ pmn: 250, runyonCount: 2 }), ["Runyon criteria or polymicrobial culture"]);
+  assert.deepEqual(run({ pmn: 250, runyonCount: 3 }), ["Runyon criteria or polymicrobial culture"]);
+  assert.deepEqual(run({ pmn: 250, runyonCount: 1 }), ["PMN 250/mm³ or more"]);
+  assert.deepEqual(run({ pmn: 249, runyonCount: 3 }), []);
+  assert.deepEqual(run({ runyonCount: 2 }), []);
+  for (const r of [{ pmn: 900, runyonCount: 2 }, { pmn: 900, runyonCount: 0 }]) assert.equal(run(r).length, 1);
+});
+
+test("pre-emptive TIPS suggestion: Child-Pugh 10–13 Yes; 14–15 No with the note; otherwise none", () => {
+  const p = page("em_ugib");
+  const run = score => suggestions(p, "D2", { child_pugh: { result: { score } } });
+  for (const sc of [5, 7, 8, 9]) assert.deepEqual(run(sc), { answers: [], notes: [] }, String(sc));
+  for (const sc of [10, 13]) assert.deepEqual(run(sc), { answers: ["Yes"], notes: [] }, String(sc));
+  for (const sc of [14, 15]) assert.deepEqual(run(sc), { answers: ["No"], notes: ["Pre-emptive TIPS not recommended (Child-Pugh >13)"] }, String(sc));
+  assert.ok(pageText(p).includes("Salvage TIPS is not recommended if Child-Pugh >13."));
+});
+
+test("SBP page cites EASL 2018 and AASLD 2021 with exact PubMed links", () => {
+  const refs = page("em_sbp").references;
+  const easl = refs.find(r => r.citation.startsWith("EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis"));
+  const aasld = refs.find(r => r.citation.startsWith("Biggins SW et al."));
+  assert.ok(easl && easl.citation.includes("J Hepatol 2018") && easl.citation.includes("PMID 29653741"));
+  assert.equal(easl.url, "https://pubmed.ncbi.nlm.nih.gov/29653741/");
+  assert.ok(aasld && aasld.citation.includes("Hepatology 2021") && aasld.citation.includes("PMID 33942342"));
+  assert.equal(aasld.url, "https://pubmed.ncbi.nlm.nih.gov/33942342/");
+  const b9 = SPEC_B9();
+  assert.ok(b9.includes("(PMID 29653741)](https://pubmed.ncbi.nlm.nih.gov/29653741/)"));
+  assert.ok(b9.includes("(PMID 33942342)](https://pubmed.ncbi.nlm.nih.gov/33942342/)"));
+});
+
+test("acute pancreatitis: modified Marshall in the red flags box and in step P2, under the red flag line", async () => {
+  const p = page("em_pancreatitis");
+  assert.deepEqual(p.blocks.find(b => b.type === "redflags").calcs, ["marshall"]);
+  const p2 = steps(p).find(s => s.id === "P2");
+  assert.deepEqual(p2.calcs, ["marshall"]);
+  assert.ok(p2.items.includes("Red flag: organ failure, modified Marshall score 2 or more (B4.5): HDU or ICU."));
+  // The two copies get different input ids.
+  const { fieldId } = await import("../js/engine.js");
+  const marshall = findItem("marshall");
+  const ids = where => marshall.inputs.filter(i => i.id).map(i => fieldId(marshall, i, `em_pancreatitis-${where}`));
+  const a = ids("redflags"), b = ids("P2");
+  assert.equal(new Set([...a, ...b]).size, a.length + b.length);
+  assert.equal(fieldId(marshall, marshall.inputs.find(i => i.id), undefined), `f-marshall-${marshall.inputs.find(i => i.id).id}`);
+});

@@ -372,3 +372,4 @@ main { padding: 12px 14px calc(84px + var(--safe-bottom)); max-width: 1100px; ma
 .suggested-label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 1px 6px; border-radius: 4px; background: var(--int-bg); color: var(--int-fg); }
 .dose-line.dose-target { border-inline-start-color: var(--neu-bd); background: var(--neu-bg); color: var(--neu-fg); }
 .dose-tag { display: inline-block; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--neu-bd); }
+.suggested-note { margin: 8px 0 0; padding: 6px 10px; border-inline-start: 4px solid var(--int-bd); background: var(--int-bg); color: var(--int-fg); font-weight: 700; border-radius: 6px; }

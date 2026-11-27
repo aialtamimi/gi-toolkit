@@ -1019,7 +1019,7 @@ Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-varic
 | Weight | Weight (kg) field, on pages with weight-based doses. Weight-based doses calculate automatically. The weight is kept in memory for that page only and is never stored (Build Rule 4). Accepted entry 20–350 kg; any other entry shows "Enter weight between 20 and 350 kg" and no dose |
 | Recognize | The Recognize line |
 | Algorithm | Step cards in time order, each with a timeline chip (for example 0 h, Day 3). Decision steps have answer buttons (Yes and No, or named answers); choosing one shows and highlights the steps of that path and hides the steps of the other answers. Steps without "shown when" are always shown; a step whose decision is hidden is hidden too. "Show full algorithm" shows every step and marks the steps that are off the chosen path. Answers are kept in memory for that page only. Answers are always chosen by the clinician: a built-in calculator never chooses one, but its result can mark an answer "Suggested" (outline and label; table below) |
-| Built-in calculators | Inside the step, collapsed, rendered by the calculator engine (inputs with units, result, band, action, breakdown, reference); the collapsed bar shows the current result and band |
+| Built-in calculators | Inside the step, collapsed, rendered by the calculator engine (inputs with units, result, band, action, breakdown, reference); the collapsed bar shows the current result and band. A calculator can appear in two places on a page (for example in the red flags box and in a step); each copy has its own inputs |
 | Weight-based lines | Inside the step: the calculated dose for the entered weight (table below) |
 | Why | One short line in small italic under key steps, naming the trial or guideline |
 | After the algorithm | Avoid, other tables, Doses (adult doses; weight-based rows show the calculated dose under the written dose), Related calculators, Sources |
@@ -1040,14 +1040,14 @@ Weight-based doses. W = weight in kg as entered. Calculated values are shown to 
 | lactated Ringer's bolus | B7.12, Lactated Ringer's | 10 × W mL | Lactated Ringer's bolus if hypovolemic, 10 mL/kg: [10 × W] mL |
 | urine output target | B7.12, none (step P2) | 0.5 × W mL/h | Target, not a dose. Urine output >0.5 mL/kg/h: >[0.5 × W] mL/h |
 
-Suggested answers. When a built-in calculator on the page has a result, the matching answer button gets a "Suggested" outline and label. The clinician must still tap it; no other answer is suggested. Test vectors: B8.9.
+Suggested answers. When a built-in calculator on the page has a result, the matching answer button gets a "Suggested" outline and label, and any note in the table is shown under the answers. The clinician must still tap it; no other answer is suggested. Test vectors: B8.9.
 
 | Page | Decision | Calculator | Suggested answer |
 | --- | --- | --- | --- |
-| B7.1 | D2 Pre-emptive TIPS criteria met? | Child-Pugh | Yes when the score is 10–13; none otherwise (the other criteria are not in the calculator) |
+| B7.1 | D2 Pre-emptive TIPS criteria met? | Child-Pugh | Yes when the score is 10–13; No when the score is 14–15, with the note "Pre-emptive TIPS not recommended (Child-Pugh >13)"; none otherwise (the other criteria are not in the calculator) |
 | B7.1 | D3 High-risk or low-risk stigmata? | Forrest | High-risk stigmata for Ia, Ib, IIa, IIb; Low-risk stigmata for IIc, III |
 | B7.5 | D1 Day-3 criteria positive? | Day-3 Oxford | Yes when Oxford or Lindgren is positive; No when both are negative |
-| B7.9 | D1 Ascitic fluid result? | Ascitic fluid analysis | PMN 250/mm³ or more when PMN ≥250/mm³; Runyon criteria or polymicrobial culture when 2 or more Runyon criteria are met (both can be suggested); none otherwise (culture is not in the calculator) |
+| B7.9 | D1 Ascitic fluid result? | Ascitic fluid analysis | Runyon criteria or polymicrobial culture when PMN ≥250/mm³ and 2 or more Runyon criteria are met (then only this answer); PMN 250/mm³ or more when PMN ≥250/mm³ with fewer than 2 Runyon criteria met; none otherwise, including PMN <250/mm³ (culture is not in the calculator) |
 | B7.13 | D1 TG18 severity grade? | TG18 cholangitis | The grade shown (Grade I, II or III) when the diagnosis is suspected or definite; none when criteria are not met |
 
 ### B7.1 Upper GI bleeding: non-variceal and variceal (id: em\_ugib)
@@ -1295,6 +1295,7 @@ Algorithm:
   - Act on the culture result when it returns.
 - **S4 · Now · Suspected secondary peritonitis** (shown when D1 = Runyon criteria or polymicrobial culture)
   - Runyon criteria or polymicrobial culture: suspect secondary peritonitis, urgent CT and surgical review.
+  - Start broad-spectrum antibiotics with anaerobic cover (for example ceftriaxone plus metronidazole, or piperacillin-tazobactam per local resistance) (EASL 2018).
 - **S5 · Within 6 h · Treat: antibiotics and albumin** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
   - Empirical antibiotics: community-acquired, cefotaxime 2 g IV every 8 hours (or ceftriaxone) for 5–7 days; nosocomial, recent antibiotics or sepsis, piperacillin-tazobactam or a carbapenem per local resistance.
   - IV albumin 1.5 g/kg within 6 hours of diagnosis (day 1) and 1 g/kg on day 3.
@@ -1375,8 +1376,10 @@ Algorithm:
   - Why: Aggressive fluids caused more fluid overload without benefit (WATERFALL, NEJM 2022).
 - **P2 · 6–48 h · Reassess often and feed early**
   - Reassess often: heart rate, urine output >0.5 mL/kg/h, BUN, hematocrit; monitor closely for the first 24–48 hours; reduce fluids if fluid overload.
+  - Red flag: organ failure, modified Marshall score 2 or more (B4.5): HDU or ICU.
   - No prophylactic antibiotics.
   - Early oral feeding within 24–48 hours as tolerated (low-fat solid diet in mild pancreatitis); enteral rather than parenteral feeding in severe pancreatitis.
+  - Calculators: Marshall.
   - Weight-based: urine output target.
 - **D1 · Within 24 h · Cholangitis?**
   - Urgent ERCP (within 24 hours) only if concomitant cholangitis.
@@ -1719,20 +1722,25 @@ Steps shown in the normal view for each set of answers (several answers separate
 
 Calculator inputs are in the calculator's own units. "none" = no answer suggested.
 
-| Page | Decision | Calculator | Inputs | Suggested |
-| --- | --- | --- | --- | --- |
-| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.0, ascites moderate to severe, encephalopathy none | Yes |
-| em\_ugib | D2 | Child-Pugh | bilirubin 1.5 mg/dL, albumin 3.6 g/dL, INR 1.2, ascites none, encephalopathy none | none |
-| em\_ugib | D3 | Forrest | IIb | High-risk stigmata |
-| em\_ugib | D3 | Forrest | IIc | Low-risk stigmata |
-| em\_asuc | D1 | Day-3 Oxford | stools 9, CRP 10 mg/L | Yes |
-| em\_asuc | D1 | Day-3 Oxford | stools 4, CRP 20 mg/L | No |
-| em\_sbp | D1 | Ascitic fluid analysis | WBC 500/mm³, neutrophils 60% | PMN 250/mm³ or more |
-| em\_sbp | D1 | Ascitic fluid analysis | WBC 300/mm³, neutrophils 50% | none |
-| em\_sbp | D1 | Ascitic fluid analysis | WBC 1000/mm³, neutrophils 90%, total protein 1.5 g/dL, glucose 40 mg/dL | PMN 250/mm³ or more; Runyon criteria or polymicrobial culture |
-| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 50 | Grade I |
-| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 80 | Grade II |
-| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors | none |
+| Page | Decision | Calculator | Inputs | Suggested | Note shown |
+| --- | --- | --- | --- | --- | --- |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.0, ascites moderate to severe, encephalopathy none | Yes | none |
+| em\_ugib | D2 | Child-Pugh | bilirubin 1.5 mg/dL, albumin 3.6 g/dL, INR 1.2, ascites none, encephalopathy none | none | none |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 1–2 | No | Pre-emptive TIPS not recommended (Child-Pugh >13) |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 3–4 | No | Pre-emptive TIPS not recommended (Child-Pugh >13) |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy none | Yes | none |
+| em\_ugib | D3 | Forrest | IIb | High-risk stigmata | none |
+| em\_ugib | D3 | Forrest | IIc | Low-risk stigmata | none |
+| em\_asuc | D1 | Day-3 Oxford | stools 9, CRP 10 mg/L | Yes | none |
+| em\_asuc | D1 | Day-3 Oxford | stools 4, CRP 20 mg/L | No | none |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 500/mm³, neutrophils 60% | PMN 250/mm³ or more | none |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 300/mm³, neutrophils 50% | none | none |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 1000/mm³, neutrophils 90%, total protein 1.5 g/dL, glucose 40 mg/dL | Runyon criteria or polymicrobial culture | none |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 1000/mm³, neutrophils 90%, total protein 1.5 g/dL, glucose 60 mg/dL | PMN 250/mm³ or more | none |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 300/mm³, neutrophils 50%, total protein 1.5 g/dL, glucose 40 mg/dL | none | none |
+| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 50 | Grade I | none |
+| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 80 | Grade II | none |
+| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors | none | none |
 
 ## Part B9: References
 
@@ -1773,5 +1781,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Los Angeles classification | Lundell LR et al. Endoscopic assessment of oesophagitis: clinical and functional correlates and further validation of the Los Angeles classification. Gut 1999;45(2):172-80. doi:10.1136/gut.45.2.172 (PMID 10403727) |
 | Prague C and M criteria | Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006;131(5):1392-9. doi:10.1053/j.gastro.2006.08.032 (PMID 17101315) |
 | Bedside algorithm trials and sources (B7.0) | Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013 (PMID 23281973); Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010 (PMID 20573925); Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020 (PMID 32242355); HALT-IT Trial Collaborators. Lancet 2020 (PMID 32563378); Chavez-Tapia NC et al. Antibiotic prophylaxis for cirrhotic patients with upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010 (PMID 20824832); Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012 (PMID 23063316); Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016 (PMID 27595142); Grainge MJ et al. Venous thromboembolism during active disease and remission in inflammatory bowel disease: a cohort study. Lancet 2010 (PMID 20149425); Randall J et al. Delayed surgery for acute severe colitis is associated with increased risk of postoperative complications. Br J Surg 2010 (PMID 20101648); Sort P et al. NEJM 1999 (PMID 10432325); de-Madaria E et al. Aggressive or moderate fluid resuscitation in acute pancreatitis (WATERFALL). NEJM 2022;387:989-1000 (PMID 36103415); Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020 (PMID 32682482); da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015 (PMID 26460661); Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021 (PMID 34614330). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
+| Spontaneous bacterial peritonitis (B7.9) | [EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018 (PMID 29653741)](https://pubmed.ncbi.nlm.nih.gov/29653741/); [Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021 (PMID 33942342)](https://pubmed.ncbi.nlm.nih.gov/33942342/) |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

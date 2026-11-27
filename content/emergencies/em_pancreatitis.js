@@ -69,10 +69,13 @@ export default {
       "when": [],
       "items": [
         "Reassess often: heart rate, urine output >0.5 mL/kg/h, BUN, hematocrit; monitor closely for the first 24–48 hours; reduce fluids if fluid overload.",
+        "Red flag: organ failure, modified Marshall score 2 or more (B4.5): HDU or ICU.",
         "No prophylactic antibiotics.",
         "Early oral feeding within 24–48 hours as tolerated (low-fat solid diet in mild pancreatitis); enteral rather than parenteral feeding in severe pancreatitis."
       ],
-      "calcs": [],
+      "calcs": [
+        "marshall"
+      ],
       "doses": [
         "urine_output"
       ],
