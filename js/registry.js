@@ -23,7 +23,7 @@ import west_haven from "./calculators/liver/west_haven.js";
 import aclf from "./calculators/liver/aclf.js";
 import clif_c_aclf from "./calculators/liver/clif_c_aclf.js";
 import kings from "./calculators/liver/kings.js";
-import baveno7 from "./calculators/liver/baveno7.js";
+import baveno8 from "./calculators/liver/baveno8.js";
 import fibroscan from "./calculators/liver/fibroscan.js";
 import bisap from "./calculators/pancreas/bisap.js";
 import ranson from "./calculators/pancreas/ranson.js";
@@ -84,7 +84,7 @@ export const CATEGORIES = [
 export const CALCULATORS = [
   gbs, aims65, rockall, oakland, forrest,
   child_pugh, meld_na, meld3, maddrey, lille, gahs, abic, fib4, apri, nfs, albi,
-  ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, clif_c_aclf, kings, baveno7, fibroscan,
+  ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, clif_c_aclf, kings, baveno8, fibroscan,
   bisap, ranson, glasgow_imrie, sirs, marshall, atlanta, mctsi, tg18_cholangitis, asge_cbd,
   truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal, jalan
 ];
@@ -108,16 +108,17 @@ export const EMERGENCY_INDEX = [
   ["em_volvulus", "Volvulus"], ["em_perforation", "Perforation"]
 ].map(([id, name]) => ({ id, name }));
 
-// Old ids without a page, index entry or search result (SPEC.md B7.2). Links, favorites and recent items
-// that still point to them open the page and entry point named here.
+// Old ids without a page, index entry or search result. Links, favorites and recent items that still point to
+// them open the page (and entry point) or calculator named here: em_variceal (SPEC.md B7.2) and baveno7 (B3.19).
 export const REDIRECTS = [
-  { id: "em_variceal", name: "Acute variceal bleeding", short: "Variceal bleeding", category: "emergencies", redirect: { page: "em_ugib", entry: "variceal" } }
+  { id: "em_variceal", name: "Acute variceal bleeding", short: "Variceal bleeding", category: "emergencies", redirect: { page: "em_ugib", entry: "variceal" } },
+  { id: "baveno7", name: "Baveno VIII non-invasive portal hypertension", short: "Baveno VIII", category: "liver", redirect: { calc: "baveno8" } }
 ];
 
 // Route for any calculator, card or emergency page.
 export function hrefFor(id) {
   const r = REDIRECTS.find(x => x.id === id);
-  if (r) return `#/emergency/${r.redirect.page}/${r.redirect.entry}`;
+  if (r) return r.redirect.calc ? hrefFor(r.redirect.calc) : `#/emergency/${r.redirect.page}/${r.redirect.entry}`;
   if (id.startsWith("em_")) return `#/emergency/${id}`;
   if (CARDS.some(c => c.id === id)) return `#/card/${id}`;
   return `#/calc/${id}`;

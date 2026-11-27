@@ -156,7 +156,8 @@ test("variceal bleeding (B7.2): no page or index entry; its search words open th
 
 test("old links to the variceal page redirect to the variceal pathway (favorites, recent items, #/emergency/em_variceal)", () => {
   const v = findItem("em_variceal");
-  assert.deepEqual(REDIRECTS, [v]);
+  assert.deepEqual(REDIRECTS.map(r => r.id), ["em_variceal", "baveno7"]);
+  assert.equal(REDIRECTS[0], v);
   assert.deepEqual(v.redirect, { page: "em_ugib", entry: "variceal" });
   assert.equal(hrefFor("em_variceal"), "#/emergency/em_ugib/variceal");
   const app = readFileSync(new URL("../js/app.js", import.meta.url), "utf8");

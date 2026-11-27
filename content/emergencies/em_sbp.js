@@ -206,6 +206,8 @@ export default {
       ],
       "items": [
         "Long-term secondary prophylaxis after the first episode: norfloxacin 400 mg daily, ciprofloxacin 500 mg daily, or trimethoprim-sulfamethoxazole.",
+        "Stop secondary prophylaxis on recompensation (Baveno VIII).",
+        "Data are insufficient for rifaximin as secondary prophylaxis (Baveno VIII).",
         "Refer for liver transplant assessment."
       ],
       "calcs": [],
@@ -254,6 +256,7 @@ export default {
   "references": [
     ref("Sort P et al. Effect of intravenous albumin on renal impairment and mortality in patients with cirrhosis and spontaneous bacterial peritonitis. NEJM 1999. PMID 10432325", "https://pubmed.ncbi.nlm.nih.gov/10432325/"),
     ref("EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018. PMID 29653741", "https://pubmed.ncbi.nlm.nih.gov/29653741/"),
-    ref("Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021. PMID 33942342", "https://pubmed.ncbi.nlm.nih.gov/33942342/")
+    ref("Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021. PMID 33942342", "https://pubmed.ncbi.nlm.nih.gov/33942342/"),
+    ref("Baveno VIII Faculty. Baveno VIII - Advancing consensus in portal hypertension. J Hepatol 2026;85:993-1018. PMID 42624290", "https://pubmed.ncbi.nlm.nih.gov/42624290/")
   ]
 };

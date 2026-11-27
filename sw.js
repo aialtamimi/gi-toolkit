@@ -1,7 +1,7 @@
 // Service worker: versioned cache, cache-first (SPEC.md B1.7).
 // When adding or removing an app file, update PRECACHE and bump CACHE_VERSION
 // (tests/sw.test.js checks that every app file is listed).
-const CACHE_VERSION = "0.8.1";
+const CACHE_VERSION = "0.9.0";
 const CACHE_NAME = `gi-toolkit-v${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -51,7 +51,7 @@ const PRECACHE = [
   "./js/calculators/liver/apri.js",
   "./js/calculators/liver/clif_c_aclf.js",
   "./js/calculators/liver/ascites.js",
-  "./js/calculators/liver/baveno7.js",
+  "./js/calculators/liver/baveno8.js",
   "./js/calculators/liver/child_pugh.js",
   "./js/calculators/liver/fib4.js",
   "./js/calculators/liver/fibroscan.js",

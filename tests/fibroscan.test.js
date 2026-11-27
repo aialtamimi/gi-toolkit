@@ -1,7 +1,7 @@
 // SPEC.md B8.3 FibroScan (B3.20) test vectors
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import fs, { fibrosisStage, steatosisGrade, baveno, ALCOHOL_NOTE, IQR_WARNING, VALID_WARNING, FLARE_WARNING, CONFOUNDER_WARNING } from "../js/calculators/liver/fibroscan.js";
+import fs, { fibrosisStage, steatosisGrade, baveno, OBESE_LINE, ALCOHOL_NOTE, IQR_WARNING, VALID_WARNING, FLARE_WARNING, CONFOUNDER_WARNING } from "../js/calculators/liver/fibroscan.js";
 import { calc } from "./helpers.js";
 import { evaluate } from "../js/engine.js";
 
@@ -37,8 +37,8 @@ test("FibroScan: other 12 kPa → cACLD suggestive (no F stage)", () => {
   const { result, interp } = calc(fs, { disease: "other", lsm: 12 });
   assert.equal(result.stage, null);
   assert.equal(result.baveno.text, "cACLD suggestive");
-  assert.deepEqual(result.display, ["Baveno VII: cACLD suggestive"]);
-  assert.equal(interp.band, "Baveno VII: cACLD suggestive");
+  assert.deepEqual(result.display, ["Baveno VIII: cACLD suggestive"]);
+  assert.equal(interp.band, "Baveno VIII: cACLD suggestive");
 });
 
 test("FibroScan: CAP 250 → S1; CAP 270 → S2", () => {
@@ -81,29 +81,58 @@ test("FibroScan: stage cutoffs are 'at or above'", () => {
   }
 });
 
-test("FibroScan: steatosis and Baveno VII boundaries", () => {
+test("FibroScan: steatosis and Baveno VIII cACLD boundaries", () => {
   assert.equal(steatosisGrade(247), "S0");
   assert.equal(steatosisGrade(248), "S1");
   assert.equal(steatosisGrade(268), "S2");
   assert.equal(steatosisGrade(280), "S3");
-  assert.equal(baveno(9.9).text, "cACLD unlikely");
-  assert.equal(baveno(10).text, "cACLD suggestive");
-  assert.equal(baveno(15).text, "cACLD suggestive");
-  assert.equal(baveno(15.1).text, "cACLD highly suggestive");
-  assert.equal(baveno(24.9).text, "cACLD highly suggestive");
-  assert.equal(baveno(25).text, "cACLD highly suggestive; CSPH ruled in (Baveno VII)");
+  assert.equal(baveno(9.9, "hbv").text, "cACLD ruled out");
+  assert.equal(baveno(10, "hbv").text, "cACLD suggestive");
+  assert.equal(baveno(15, "hbv").text, "cACLD suggestive");
+  assert.equal(baveno(15.1, "hbv").text, "cACLD highly suggestive");
+  assert.equal(baveno(24.9, "hbv").text, "cACLD highly suggestive");
+  assert.equal(baveno(25, "hbv").text, "cACLD highly suggestive; CSPH ruled in (Baveno VIII)");
 });
 
-test("FibroScan: a Baveno VII line is shown under the result for every disease", () => {
+test("FibroScan Baveno VIII: CSPH ruled in at 25 kPa only for hepatitis B, hepatitis C, alcohol-related and non-obese MASLD", () => {
+  for (const d of ["hbv", "hcv", "alcohol", "masld"]) assert.equal(baveno(25, d).text, "cACLD highly suggestive; CSPH ruled in (Baveno VIII)", d);
+  assert.equal(baveno(27, "other").text, "cACLD highly suggestive");
+  assert.equal(baveno(30, "masld", true).text, `cACLD highly suggestive; ${OBESE_LINE}`);
+  assert.equal(OBESE_LINE, "LSM rule for CSPH not applicable in obese MASLD (Baveno VIII)");
+  for (const lsm of [25, 30, 50, 75]) assert.ok(!baveno(lsm, "masld", true).text.includes("CSPH ruled in"), String(lsm));
+});
+
+test("FibroScan: a Baveno VIII line is shown under the result for every disease, with a link to the Baveno VIII calculator", () => {
   for (const disease of ["masld", "alcohol", "hbv", "hcv"]) {
-    assert.equal(calc(fs, { disease, lsm: 12 }).interp.text, "Baveno VII: cACLD suggestive.", disease);
+    const { interp } = calc(fs, { disease, lsm: 12 });
+    assert.equal(interp.text, "Baveno VIII: cACLD suggestive.", disease);
+    assert.ok(interp.links.some(l => l.target === "baveno8"), disease);
   }
+  assert.ok(calc(fs, { disease: "other", lsm: 12 }).interp.links.some(l => l.target === "baveno8"));
 });
 
-test("FibroScan: other/mixed 27 kPa → CSPH ruled in (Baveno VII)", () => {
+test("FibroScan B8.3: other/mixed 27 kPa → cACLD highly suggestive, no CSPH ruled in", () => {
   const { result, interp } = calc(fs, { disease: "other", lsm: 27 });
-  assert.deepEqual(result.display, ["Baveno VII: cACLD highly suggestive; CSPH ruled in (Baveno VII)"]);
+  assert.deepEqual(result.display, ["Baveno VIII: cACLD highly suggestive"]);
   assert.equal(interp.level, "high");
+  assert.deepEqual(calc(fs, { disease: "other", lsm: 9.9 }).result.display, ["Baveno VIII: cACLD ruled out"]);
+});
+
+test("FibroScan B8.3: hepatitis B 25 kPa and MASLD 25 kPa → F4 with CSPH ruled in; MASLD with BMI 30 or more 30 kPa → never ruled in", () => {
+  assert.equal(calc(fs, { disease: "hbv", lsm: 25 }).interp.text, "Baveno VIII: cACLD highly suggestive; CSPH ruled in (Baveno VIII).");
+  assert.equal(calc(fs, { disease: "masld", lsm: 25 }).interp.text, "Baveno VIII: cACLD highly suggestive; CSPH ruled in (Baveno VIII).");
+  const obese = calc(fs, { disease: "masld", lsm: 30, obese: true });
+  assert.equal(obese.result.stage, "F4");
+  assert.equal(obese.interp.text, "Baveno VIII: cACLD highly suggestive; LSM rule for CSPH not applicable in obese MASLD (Baveno VIII).");
+});
+
+test("FibroScan: the BMI 30 or more tick box is shown only for MASLD", () => {
+  const inp = fs.inputs.find(i => i.id === "obese");
+  assert.equal(inp.type, "checkbox");
+  assert.equal(inp.showIf({ disease: "masld" }), true);
+  for (const d of ["alcohol", "hbv", "hcv", "other"]) assert.equal(inp.showIf({ disease: d }), false);
+  // Ticked then disease changed: the hidden box is ignored.
+  assert.equal(calc(fs, { disease: "hbv", lsm: 30, obese: true }).interp.text, "Baveno VIII: cACLD highly suggestive; CSPH ruled in (Baveno VIII).");
 });
 
 test("FibroScan: the alcohol-related reference links to JHEP Reports 2020;2(3):100101", () => {

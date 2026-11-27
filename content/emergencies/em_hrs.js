@@ -84,7 +84,8 @@ export default {
         ]
       ],
       "items": [
-        "HRS-AKI: terlipressin plus albumin (first line); norepinephrine plus albumin in ICU if terlipressin is contraindicated or unavailable."
+        "HRS-AKI: terlipressin plus albumin (first line); norepinephrine plus albumin in ICU if terlipressin is contraindicated or unavailable.",
+        "Terlipressin preferably by continuous infusion, starting 2–3 mg/24 hours (Baveno VIII); escalation and stop rules as below."
       ],
       "calcs": [],
       "doses": [],
@@ -161,7 +162,7 @@ export default {
       "rows": [
         [
           "Terlipressin",
-          "Continuous infusion 2 mg/day, or IV bolus 1–2 mg every 6 hours; if creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day"
+          "Preferably continuous infusion, starting 2–3 mg/24 hours (Baveno VIII), or IV bolus 1–2 mg every 6 hours; if creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day"
         ],
         [
           "Albumin 20–25%",
@@ -184,6 +185,7 @@ export default {
   ],
   "references": [
     ref("Nadim MK et al. ICA-ADQI consensus on hepatorenal syndrome. J Hepatol 2024. PMID 38527522", "https://pubmed.ncbi.nlm.nih.gov/38527522/"),
-    ref("Wong F et al. Terlipressin plus albumin for the treatment of type 1 hepatorenal syndrome (CONFIRM). NEJM 2021. PMID 33657294", "https://pubmed.ncbi.nlm.nih.gov/33657294/")
+    ref("Wong F et al. Terlipressin plus albumin for the treatment of type 1 hepatorenal syndrome (CONFIRM). NEJM 2021. PMID 33657294", "https://pubmed.ncbi.nlm.nih.gov/33657294/"),
+    ref("Baveno VIII Faculty. Baveno VIII - Advancing consensus in portal hypertension. J Hepatol 2026;85:993-1018. PMID 42624290", "https://pubmed.ncbi.nlm.nih.gov/42624290/")
   ]
 };

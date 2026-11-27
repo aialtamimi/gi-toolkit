@@ -2,6 +2,17 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.9.0 (2026-11-27)
+
+Update from Baveno VII to Baveno VIII (Baveno VIII Faculty. J Hepatol 2026;85:993-1018. PMID 42624290). "Baveno VII" is replaced by "Baveno VIII" in every name, text and reference in the app and SPEC.md; "Baveno VI criteria" is kept where cited as such. Earlier CHANGELOG entries are left as written.
+- Baveno VIII non-invasive portal hypertension calculator (B3.19), new id `baveno8`. The old id `baveno7` opens it, so links, favorites and recent items keep working. Inputs: LSM, etiology (viral, alcohol, MASLD, other), platelets, spleen stiffness (SSM), BMI 30 or more (MASLD), eligibility for carvedilol or a non-selective beta-blocker. Shows cACLD (with the PSVD line below 10 kPa and "repeat fasting LSM" from 10 kPa), CSPH ruled in (LSM ≥25 in viral, alcohol or non-obese MASLD; SSM >55 kPa), ruled out (LSM ≤15 and platelets ≥150) or indeterminate, the obese MASLD line, treatment (carvedilol preferred), screening endoscopy (Baveno VI criteria or SSM <40 kPa), the rule of five, the 12-month repeat note and the stages of cirrhosis.
+- FibroScan (B3.20): the portal hypertension line follows Baveno VIII; new "BMI 30 or more" tick box for MASLD; obese MASLD and Other/mixed never show CSPH ruled in from LSM; "cACLD ruled out" below 10 kPa; link to the Baveno VIII calculator.
+- Upper GI bleeding (B7.1): erythromycin 30–90 minutes before endoscopy. Variceal pathway rewritten to Baveno VIII: care setting, intubation, transfusion target Hb 7–8 g/dL, antibiotic duration, lactulose, nutrition, no routine fresh frozen plasma, platelets, fibrinogen, recombinant factor VIIa or tranexamic acid, anticoagulants held; endoscopy within 12 h and CT or MRI in every bleed; new decision "Bleeding source?" (OV or GOV1: band ligation and the pre-emptive TIPS decision; GOV2 or IGV1: cyanoacrylate then TIPS); pre-emptive TIPS criteria (HVPG 20 mmHg or more), covered stent and the missed-window line; shorter vasoactive course; covered metal stent over balloon tamponade; salvage TIPS considered for every patient with refractory bleeding (replaces "not recommended if Child-Pugh >13"); before discharge carvedilol preferred, band ligation every 2–4 weeks, iron, transplant evaluation. Child-Pugh suggestion rules unchanged.
+- HRS-AKI (B7.10): terlipressin preferably by continuous infusion, starting 2–3 mg/24 h; escalation and stop rules kept.
+- SBP (B7.9): stop secondary prophylaxis on recompensation; data insufficient for rifaximin as secondary prophylaxis.
+- Hepatic encephalopathy (B7.11): recurrent or persistent HE despite optimal therapy: shunt embolization, transplant evaluation, L-ornithine L-aspartate.
+- Tests for every rule, path and test vector (B8.3, B8.8), the old-id redirect, and a check that "Baveno VII" appears nowhere in the app or SPEC.md.
+
 ## 0.8.1 (2026-11-27)
 
 Fix: lab values entered in SI units could fall just below a cutoff because of floating-point conversion (SPEC.md B1.5 and B8.1 updated in the same change).

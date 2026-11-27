@@ -14,6 +14,12 @@ const SECTIONS = FIXTURE.split(/\n(?=### B7\.)/).filter(s => s.startsWith("### B
 // Clauses the new page words differently on purpose, mapped to the new wording (none: every clause is kept verbatim).
 const REWORDED = {};
 
+// Table rows changed later by a clinical owner decision: the row must still exist (same first cell) and its new
+// text must contain the listed phrase.
+const OWNER_CHANGED_ROWS = {
+  em_hrs: { Terlipressin: "Preferably continuous infusion, starting 2–3 mg/24 hours (Baveno VIII)" }  // version 0.9.0
+};
+
 const norm = s => s.toLowerCase().replace(/\s+/g, " ").trim();
 
 function clauses(text) {
@@ -44,6 +50,11 @@ for (const sec of SECTIONS) {
       } else if (line.startsWith("|")) {
         const row = cells(line);
         if (row.every(x => /^-+$/.test(x))) continue;
+        const changed = (OWNER_CHANGED_ROWS[id] || {})[row[0]];
+        if (changed) {
+          if (!tables.some(t => t.rows.some(r => r[0] === row[0] && r.join(" | ").includes(changed)))) missing.push(`changed row: ${row[0]}`);
+          continue;
+        }
         const found = tables.some(t => JSON.stringify(t.columns) === JSON.stringify(row) || t.rows.some(r => JSON.stringify(r) === JSON.stringify(row)));
         if (!found) missing.push(`table row: ${row.join(" | ")}`);
       } else if ((m = line.match(/^Sources?: (.*)$/))) {

@@ -116,6 +116,8 @@ function itemPage(def, render) {
 }
 
 function calc(id) {
+  // Old calculator ids (for example baveno7) open their replacement.
+  if (REDIRECTS.some(r => r.id === id && r.redirect.calc)) { location.replace(hrefFor(id)); return; }
   const def = CALCULATORS.find(c => c.id === id);
   if (!def) return notFound();
   itemPage(def, root => renderCalculator(root, def, { onReset: () => calc(id) }));
