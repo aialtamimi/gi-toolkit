@@ -2,15 +2,14 @@
 import { ref } from "../../refs.js";
 import { fmt, isNum } from "../../num.js";
 
-// Converted lab values can carry floating-point noise (205.2 µmol/L ÷ 17.1 = 11.999999999999998 mg/dL);
-// compare cutoffs on the value trimmed to 12 significant digits so exact equivalents score correctly.
-const clean = x => Number(x.toPrecision(12));
+// SI entries arrive already converted to mg/dL and rounded (js/units.js), so exact SI equivalents of a
+// cutoff (205.2 µmol/L = 12 mg/dL) score correctly.
 
 export function organScores(v) {
   const s = {}, missing = [];
-  if (isNum(v.bili)) { const b = clean(v.bili); s.Liver = b < 6 ? 1 : b < 12 ? 2 : 3; } else missing.push("Bilirubin");
+  if (isNum(v.bili)) s.Liver = v.bili < 6 ? 1 : v.bili < 12 ? 2 : 3; else missing.push("Bilirubin");
   if (v.rrt) s.Kidney = 3;
-  else if (isNum(v.cr)) { const c = clean(v.cr); s.Kidney = c < 2 ? 1 : c < 3.5 ? 2 : 3; } else missing.push("Creatinine (or renal replacement therapy)");
+  else if (isNum(v.cr)) s.Kidney = v.cr < 2 ? 1 : v.cr < 3.5 ? 2 : 3; else missing.push("Creatinine (or renal replacement therapy)");
   s.Brain = { none: 1, "1-2": 2, "3-4": 3 }[v.he];
   if (isNum(v.inr)) s.Coagulation = v.inr < 2 ? 1 : v.inr < 2.5 ? 2 : 3; else missing.push("INR");
   if (v.vaso) s.Circulation = 3;

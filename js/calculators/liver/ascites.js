@@ -1,6 +1,6 @@
 // SPEC.md B3.12 Ascitic fluid analysis: SAAG and PMN
 import { ref } from "../../refs.js";
-import { fmt, isNum } from "../../num.js";
+import { fmt, isNum, tidy } from "../../num.js";
 
 export default {
   id: "ascites",
@@ -26,7 +26,7 @@ export default {
   compute(v) {
     const r = { breakdown: [], details: [] };
     if (isNum(v.salb) && isNum(v.aalb)) {
-      r.saag = v.salb - v.aalb;
+      r.saag = tidy(v.salb - v.aalb);  // 3.3 − 2.2 must be 1.1, not 1.0999999999999996
       r.breakdown.push({ item: "SAAG = serum albumin − ascitic albumin (g/dL)", value: fmt(r.saag, 2) });
     }
     if (isNum(v.aprot)) r.aprot = v.aprot;
