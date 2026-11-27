@@ -168,3 +168,30 @@ test("every lab input with a unit toggle is covered: exact-equivalent rows, both
   }
   assert.deepEqual(missing, []);
 });
+
+// ---------- just across each one-unit cutoff ----------
+// The exact SI equivalent and a value 0.1 SI unit across the cutoff must give different results (the cutoff is
+// where the result changes, and conversion does not move it).
+// [calculator, cutoff, base inputs, input, SI value at the cutoff, SI value just across]
+const ACROSS = [
+  ["aclf", "Liver failure: bilirubin ≥12 mg/dL", { cr: 1.6, inr: 1.2, he: "none" }, "bili", 205.2, 205.1],
+  ["aclf", "Kidney failure: creatinine ≥2.0 mg/dL", { bili: 1, inr: 1.2, he: "none" }, "cr", 176.8, 176.7],
+  ["aclf", "Kidney dysfunction: creatinine ≥1.5 mg/dL", { bili: 1, inr: 2.6, he: "none" }, "cr", 132.6, 132.5],
+  ["clif_c_aclf", "Liver 2 points: bilirubin ≥6 mg/dL", { cr: 1, he: "none", inr: 1.2, map: 80, pf: 400, age: 50, wbc: 10 }, "bili", 102.6, 102.5],
+  ["clif_c_aclf", "Liver 3 points: bilirubin ≥12 mg/dL", { cr: 1, he: "none", inr: 1.2, map: 80, pf: 400, age: 50, wbc: 10 }, "bili", 205.2, 205.1],
+  ["clif_c_aclf", "Kidney 2 points: creatinine ≥2 mg/dL", { bili: 1, he: "none", inr: 1.2, map: 80, pf: 400, age: 50, wbc: 10 }, "cr", 176.8, 176.7],
+  ["clif_c_aclf", "Kidney 3 points: creatinine ≥3.5 mg/dL", { bili: 1, he: "none", inr: 1.2, map: 80, pf: 400, age: 50, wbc: 10 }, "cr", 309.4, 309.3],
+  ["asge_cbd", "Total bilirubin >4 mg/dL", { cbd: 8, age: 40 }, "bili", 68.4, 68.5],
+  ["tg18_cholangitis", "Grade II: total bilirubin ≥5 mg/dL", { temp: 38.5, wbc: 15, dilatation: true, age: 50 }, "bili", 85.5, 85.4],
+  ["gbs", "Hemoglobin, men ≥13.0 g/dL", { urea: 5, sex: "M", sbp: 120, pulse: 80 }, "hb", 130, 129.9],
+  ["truelove_witts", "Hemoglobin <10.5 g/dL", { stools: 8, blood: "bloody" }, "hb", 105, 104.9]
+];
+
+for (const [calc, cutoff, base, id, at, across] of ACROSS) {
+  test(`${calc}: ${cutoff}: ${id} ${at} and ${across} (SI) fall on opposite sides`, () => {
+    const def = calcById(calc);
+    const a = summary(evaluate(def, { ...base, [id]: at }, { [id]: "si" }));
+    const b = summary(evaluate(def, { ...base, [id]: across }, { [id]: "si" }));
+    assert.notDeepEqual(a, b);
+  });
+}

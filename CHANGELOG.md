@@ -9,6 +9,7 @@ Fix: lab values entered in SI units could fall just below a cutoff because of fl
 - Cases that were wrong before the fix: ACLF grade at bilirubin 205.2 µmol/L (liver failure missed) and creatinine 132.6 µmol/L (kidney dysfunction missed); CLIF-C OF at 102.6 and 205.2 µmol/L bilirubin and 309.4 µmol/L creatinine (protected in 0.8.0 by a local workaround, now removed).
 - SAAG: the difference of the two albumins is rounded the same way, so 3.3 − 2.2 g/dL (or 33 − 22 g/L) gives 1.1 and counts as portal hypertension. This was wrong in either unit.
 - New `tests/unit_cutoffs.test.js`: every cutoff of every calculator with a unit toggle, at its exact equivalent in the other unit, gives the same result as the entry in the formula's unit; cutoffs written in both units are checked as written; a coverage test lists every converted input as tested, an identity conversion (platelets, WBC) or a cutoff with no exact equivalent (a repeating decimal). Removing the fix makes these tests fail.
+- Each one-unit cutoff is also tested just across (for example 205.2 µmol/L is liver failure and 205.1 is not).
 
 ## 0.8.0 (2026-11-27)
 
