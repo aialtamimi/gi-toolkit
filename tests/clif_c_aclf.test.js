@@ -38,6 +38,16 @@ test("B8.3: SI entries at the exact cutoff equivalents score as the mg/dL cutoff
   assert.equal(result.of, 11);
 });
 
+test("SI entries at every bilirubin and creatinine cutoff equivalent score as the mg/dL cutoff (B3.21, B1.5)", () => {
+  const organs = (bili, cr) => calc(def, { bili, cr, inr: 1.2, map: 80, pf: 400, ...base }, { bili: "si", cr: "si" }).result.organs;
+  // Bilirubin: 102.6 µmol/L = 6 mg/dL, 205.2 µmol/L = 12 mg/dL.
+  assert.equal(organs(102.5, 80).Liver, 1); assert.equal(organs(102.6, 80).Liver, 2);
+  assert.equal(organs(205.1, 80).Liver, 2); assert.equal(organs(205.2, 80).Liver, 3);
+  // Creatinine: 176.8 µmol/L = 2 mg/dL, 309.4 µmol/L = 3.5 mg/dL.
+  assert.equal(organs(20, 176.7).Kidney, 1); assert.equal(organs(20, 176.8).Kidney, 2);
+  assert.equal(organs(20, 309.3).Kidney, 2); assert.equal(organs(20, 309.4).Kidney, 3);
+});
+
 test("B8.3: renal replacement therapy, intubated for HE, INR 2.5, MAP 69, SpO2/FiO2 214 → OF 16", () => {
   const { result } = calc(def, { bili: 102.6, rrt: true, he: "3-4", inr: 2.5, map: 69, sf: 214, age: 50, wbc: 10 }, { bili: "si" });
   assert.deepEqual(result.organs, { Liver: 2, Kidney: 3, Brain: 3, Coagulation: 3, Circulation: 2, Respiration: 3 });

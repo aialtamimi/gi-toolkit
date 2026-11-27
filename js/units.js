@@ -17,13 +17,20 @@ export const ANALYTES = {
   protein:    { name: "Total protein", si: "g/L", conv: "g/dL", siToConv: v => v / 10, convToSi: v => v * 10 }
 };
 
+// Converted values are trimmed to 12 significant digits. Binary floating point leaves noise in the
+// last digits (205.2 µmol/L ÷ 17.1 = 11.999999999999998 mg/dL), so the exact equivalent of a cutoff
+// written in one unit only (bilirubin ≥12 mg/dL) would land just below it. 12 digits is far beyond
+// any laboratory precision, so no clinical value changes.
+const SIG_DIGITS = 12;
+const trimNoise = x => (Number.isFinite(x) ? Number(x.toPrecision(SIG_DIGITS)) : x);
+
 // Convert `value` entered in `fromSystem` ("si" | "conv") to `toSystem`.
 export function convert(analyte, value, fromSystem, toSystem) {
   const a = ANALYTES[analyte];
   if (!a) throw new Error(`Unknown analyte ${analyte}`);
   if (value === null || value === undefined || Number.isNaN(value)) return value;
   if (fromSystem === toSystem) return value;
-  return fromSystem === "si" ? a.siToConv(value) : a.convToSi(value);
+  return trimNoise(fromSystem === "si" ? a.siToConv(value) : a.convToSi(value));
 }
 
 export function unitLabel(analyte, system) {

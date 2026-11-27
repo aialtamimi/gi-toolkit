@@ -2,6 +2,15 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.8.1 (2026-11-27)
+
+Fix: unit conversion left floating-point noise, so an SI value exactly equal to a cutoff written in mg/dL only landed just below it. For example, bilirubin 205.2 µmol/L converted to 11.999999999999998 mg/dL instead of 12, and creatinine 132.6 µmol/L to 1.4999999999999998 instead of 1.5.
+- `convert()` in `js/units.js` now trims every converted value to 12 significant digits, far beyond any laboratory precision. No formula, cutoff or result text changes.
+- ACLF grade (B3.17): bilirubin 205.2 µmol/L now counts as liver failure (≥12 mg/dL), and creatinine 132.6 µmol/L as kidney dysfunction (1.5–1.9 mg/dL). Both were missed before.
+- CLIF-C OF and CLIF-C ACLF (B3.21): the calculator's own workaround is removed; the shared conversion now handles it (bilirubin 102.6 and 205.2 µmol/L, creatinine 176.8 and 309.4 µmol/L).
+- Checked every calculator with lab inputs. Cutoffs written in both units already compare in the unit entered (B1.5). The other single-unit cutoffs reached by conversion (hemoglobin, albumin, ascitic protein, glucose, calcium; bilirubin 4 and 5 mg/dL) already converted exactly and are unchanged.
+- New tests: exact SI equivalents of these cutoffs for ACLF grade and CLIF-C OF, the exact conversion of each single-unit cutoff, and a check that every exactly typeable equivalent of a 2-decimal value (0.01 to 50) converts back exactly for every analyte.
+
 ## 0.8.0 (2026-11-27)
 
 - New emergency page B7.20 Acute-on-chronic liver failure (`em_aclf`), bedside algorithm design (B7.0), listed as "ACLF" after Acute liver failure in the emergency index (18 entries). Search "ACLF" or "acute-on-chronic liver failure" finds it.
