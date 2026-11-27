@@ -54,9 +54,10 @@ export default {
       "items": [
         "Two large-bore cannulas; crystalloid resuscitation; bloods: CBC, INR, urea, creatinine, liver tests, crossmatch.",
         "GBS (B2.1) and AIMS65 (B2.2). GBS 0–1 with no other concern: outpatient management can be considered.",
-        "Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.",
+        "Non-variceal: transfuse at Hb <7 g/dL, target 7–9 g/dL (8 g/dL threshold in cardiovascular disease).",
+        "Suspected variceal: target 7–8 g/dL, individualized (Baveno VIII).",
         "Hold antithrombotics per B7.4.",
-        "IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation).",
+        "IV erythromycin 250 mg 30–90 minutes before endoscopy if no contraindication (QT prolongation).",
         "Start high-dose IV proton pump inhibitor now: pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h infusion until endoscopy. Do not delay endoscopy for it."
       ],
       "calcs": [
@@ -105,11 +106,16 @@ export default {
         ]
       ],
       "items": [
-        "Vasoactive drug as soon as variceal bleeding is suspected, before endoscopy, continued 2–5 days.",
-        "Antibiotic prophylaxis: ceftriaxone 1 g IV every 24 hours for up to 7 days.",
-        "Restrictive transfusion: Hb threshold 7 g/dL, target 7–9 g/dL ([ESGE 2022](https://pubmed.ncbi.nlm.nih.gov/36174643)).",
-        "Protect the airway if massive hematemesis or HE grade 3–4.",
-        "Do not give fresh frozen plasma or platelets to correct INR alone.",
+        "Intensive or intermediate care.",
+        "Intubate before endoscopy if altered consciousness or active hematemesis.",
+        "Transfusion target Hb 7–8 g/dL, individualized for cardiovascular disease, age, hemodynamics and ongoing bleeding.",
+        "Vasoactive drug as soon as possible, for 2–5 days or until TIPS; monitor sodium on terlipressin.",
+        "Antibiotic prophylaxis at presentation with a third-generation cephalosporin (ceftriaxone 1 g IV every 24 hours, up to 7 days); duration individualized (Child-Pugh A: shorter course or none).",
+        "Lactulose to prevent or treat overt hepatic encephalopathy; continue during admission.",
+        "Early oral nutrition.",
+        "No routine fresh frozen plasma, platelets or fibrinogen (platelets or fibrinogen only if bleeding is not controlled); no recombinant factor VIIa or tranexamic acid.",
+        "Hold anticoagulants until bleeding is controlled.",
+        "Cautious nasogastric tube.",
         "Erythromycin before endoscopy."
       ],
       "calcs": [],
@@ -117,14 +123,14 @@ export default {
         "terlipressin"
       ],
       "why": [
-        "Antibiotic prophylaxis reduces infection, rebleeding and death (Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VII). Over-transfusion raises portal pressure."
+        "Antibiotic prophylaxis reduces infection, rebleeding and death (Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VIII). Over-transfusion raises portal pressure."
       ]
     },
     {
       "type": "step",
       "id": "V2",
       "chip": "Within 12 h",
-      "title": "Variceal: endoscopy",
+      "title": "Variceal: endoscopy and imaging",
       "when": [
         [
           "D1",
@@ -132,9 +138,76 @@ export default {
         ]
       ],
       "items": [
-        "Endoscopy within 12 hours.",
+        "Endoscopy within 12 hours (as soon as possible if unstable).",
+        "Contrast CT or MRI of the abdomen in every variceal bleed (portal vein thrombosis, HCC, collaterals)."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": []
+    },
+    {
+      "type": "decision",
+      "id": "D4",
+      "chip": "At endoscopy",
+      "title": "Bleeding source?",
+      "when": [
+        [
+          "D1",
+          "Yes"
+        ]
+      ],
+      "items": [
+        "OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": [],
+      "options": [
+        {
+          "value": "OV or GOV1",
+          "text": "band ligation."
+        },
+        {
+          "value": "GOV2 or IGV1",
+          "text": "cyanoacrylate, then TIPS."
+        }
+      ]
+    },
+    {
+      "type": "step",
+      "id": "V8",
+      "chip": "At endoscopy",
+      "title": "Esophageal varices or GOV1",
+      "when": [
+        [
+          "D4",
+          "OV or GOV1"
+        ]
+      ],
+      "items": [
         "Esophageal varices: band ligation.",
-        "Gastric varices GOV2 or IGV1: cyanoacrylate injection."
+        "Clips, over-the-scope clips, hemostatic powder or fibrin are not first-line."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": []
+    },
+    {
+      "type": "step",
+      "id": "V9",
+      "chip": "At endoscopy, then within 24–72 h",
+      "title": "Gastric varices GOV2 or IGV1",
+      "when": [
+        [
+          "D4",
+          "GOV2 or IGV1"
+        ]
+      ],
+      "items": [
+        "Gastric varices GOV2 or IGV1: cyanoacrylate injection.",
+        "Acute: cyanoacrylate injection, or EUS-guided coil plus cyanoacrylate in experienced centres.",
+        "Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh score <14 (Child-Pugh A, B, or C up to 13).",
+        "If TIPS is contraindicated: transvenous obliteration, endoscopic (including EUS) or surgical options after multidisciplinary discussion."
       ],
       "calcs": [],
       "doses": [],
@@ -154,8 +227,7 @@ export default {
       "items": [
         "Continue vasoactive drug for 2–5 days.",
         "Continue ceftriaxone, up to 7 days in total.",
-        "Stop the proton pump inhibitor unless there is another indication.",
-        "Lactulose to prevent hepatic encephalopathy."
+        "Stop the proton pump inhibitor unless there is another indication."
       ],
       "calcs": [],
       "doses": [],
@@ -168,12 +240,14 @@ export default {
       "title": "Pre-emptive TIPS criteria met?",
       "when": [
         [
-          "D1",
-          "Yes"
+          "D4",
+          "OV or GOV1"
         ]
       ],
       "items": [
-        "Child-Pugh C 10–13, or Child-Pugh B >7 with active bleeding at endoscopy, or HVPG >20 mmHg."
+        "Child-Pugh C 10–13, or Child-Pugh B >7 with active bleeding at endoscopy, or HVPG 20 mmHg or more.",
+        "Also consider: age <75, creatinine <3 mg/dL, no heart failure.",
+        "ACLF, overt HE, high bilirubin, high MELD and severe alcohol-associated hepatitis are not absolute contraindications."
       ],
       "calcs": [
         "child_pugh"
@@ -203,7 +277,8 @@ export default {
         ]
       ],
       "items": [
-        "Pre-emptive TIPS within 72 hours (ideally 24)."
+        "Pre-emptive TIPS with a covered stent within 72 hours, ideally <24 hours.",
+        "Window missed: TIPS within 2 weeks (Child-Pugh C 10–13) or within 1 week (Child-Pugh B >7 with active bleeding) may still help."
       ],
       "calcs": [],
       "doses": [],
@@ -223,7 +298,7 @@ export default {
         ]
       ],
       "items": [
-        "Continue the vasoactive drug for 2–5 days."
+        "Continue the vasoactive drug for 2–5 days; a shorter course (even 24 hours) can be considered after successful hemostasis if carvedilol or a non-selective beta-blocker is then started."
       ],
       "calcs": [],
       "doses": [],
@@ -241,8 +316,9 @@ export default {
         ]
       ],
       "items": [
-        "Refractory bleeding (persistent bleeding or early rebleeding): balloon tamponade or esophageal stent as bridge to rescue TIPS.",
-        "Salvage TIPS is not recommended if Child-Pugh >13."
+        "Treatment failure: uncontrolled bleeding or rebleeding within 5 days.",
+        "Refractory bleeding (persistent bleeding or early rebleeding): covered self-expanding metal stent preferred over balloon tamponade as a bridge to TIPS or transplant.",
+        "Consider salvage TIPS in every patient with refractory bleeding, regardless of age, Child-Pugh or MELD, case by case."
       ],
       "calcs": [],
       "doses": [],
@@ -260,8 +336,10 @@ export default {
         ]
       ],
       "items": [
-        "Start non-selective beta-blocker (carvedilol or propranolol) when vasoactive drug stops.",
-        "Repeat band ligation every 1–4 weeks until eradication.",
+        "Carvedilol (preferred over propranolol or nadolol) when the vasoactive drug stops, plus band ligation every 2–4 weeks until eradication.",
+        "Iron if Hb <10 g/dL.",
+        "Evaluate for liver transplant.",
+        "Proton pump inhibitors are not routinely used for post-banding ulcers.",
         "After eradication: endoscopy at 3–6 months, then every 6–12 months (AASLD 2017)."
       ],
       "calcs": [],
@@ -482,7 +560,7 @@ export default {
       "rows": [
         [
           "Erythromycin",
-          "250 mg IV over 5–30 minutes, given 30–120 minutes before endoscopy"
+          "250 mg IV over 5–30 minutes, given 30–90 minutes before endoscopy"
         ],
         [
           "Pantoprazole or esomeprazole, high dose",
@@ -502,7 +580,7 @@ export default {
         ],
         [
           "Ceftriaxone",
-          "1 g IV every 24 hours, maximum 7 days"
+          "1 g IV every 24 hours, maximum 7 days; duration individualized (Child-Pugh A: shorter course or none)"
         ]
       ]
     }
@@ -520,7 +598,7 @@ export default {
     ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021. PMID 33929377", "https://pubmed.ncbi.nlm.nih.gov/33929377/"),
     ref("Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021. PMID 33567467", "https://pubmed.ncbi.nlm.nih.gov/33567467/"),
     ref("Sreedharan A et al. Proton pump inhibitor treatment initiated prior to endoscopic diagnosis in upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010. PMID 20614440", "https://pubmed.ncbi.nlm.nih.gov/20614440/"),
-    ref("de Franchis R et al. Baveno VII: renewing consensus in portal hypertension. J Hepatol 2022"),
+    ref("Baveno VIII Faculty. Baveno VIII - Advancing consensus in portal hypertension. J Hepatol 2026;85:993-1018. PMID 42624290", "https://pubmed.ncbi.nlm.nih.gov/42624290/"),
     ref("Gralnek IM et al. ESGE variceal guideline 2022", "https://pubmed.ncbi.nlm.nih.gov/36174643"),
     ref("Garcia-Tsao G et al. Portal hypertensive bleeding in cirrhosis: risk stratification, diagnosis, and management: 2016 practice guidance by the American Association for the Study of Liver Diseases. Hepatology 2017. PMID 27786365", "https://pubmed.ncbi.nlm.nih.gov/27786365/"),
     ref("HALT-IT Trial Collaborators. Effects of a high-dose 24-h infusion of tranexamic acid on death and thromboembolic events in patients with acute gastrointestinal bleeding (HALT-IT). Lancet 2020. PMID 32563378", "https://pubmed.ncbi.nlm.nih.gov/32563378/"),

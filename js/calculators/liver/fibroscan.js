@@ -44,15 +44,26 @@ export function steatosisGrade(cap) {
   return "S3";
 }
 
-// Baveno VII: <10 cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more: CSPH ruled in (Baveno VII).
-export function baveno(lsm) {
+// Baveno VIII (SPEC.md B3.19, B3.20): <10 cACLD ruled out; 10–15 suggestive; >15 highly suggestive. CSPH ruled in at
+// 25 kPa or more only for hepatitis B, hepatitis C, alcohol-related, and MASLD without BMI ≥30. Obese MASLD never
+// shows CSPH ruled in from LSM; Other/mixed is not covered by the LSM rule.
+export const OBESE_LINE = "LSM rule for CSPH not applicable in obese MASLD (Baveno VIII)";
+export const OTHER_LINE = "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG";
+export function baveno(lsm, disease, obese = false) {
   let text, level;
-  if (lsm < 10) { text = "cACLD unlikely"; level = "low"; }
+  if (lsm < 10) { text = "cACLD ruled out"; level = "low"; }
   else if (lsm <= 15) { text = "cACLD suggestive"; level = "intermediate"; }
   else { text = "cACLD highly suggestive"; level = "high"; }
-  if (lsm >= 25) text += "; CSPH ruled in (Baveno VII)";
+  const obeseMasld = disease === "masld" && obese;
+  const lsmRule = ["hbv", "hcv", "alcohol"].includes(disease) || (disease === "masld" && !obeseMasld);
+  if (lsm >= 25 && lsmRule) text += "; CSPH ruled in (Baveno VIII)";
+  else if (lsm >= 25 && obeseMasld) text += `; ${OBESE_LINE}`;
+  else if (lsm >= 25 && disease === "other") text += `; ${OTHER_LINE}`;
   return { text, level };
 }
+
+// CSPH ruled out needs platelets, and spleen stiffness has its own input: both are in the Baveno VIII calculator.
+const BAVENO_LINK = { label: "Baveno VIII calculator (platelets, spleen stiffness)", target: "baveno8" };
 
 const CONFOUNDERS = [
   { id: "cAlt", label: "ALT >5 × ULN or acute hepatitis" },
@@ -86,6 +97,7 @@ export default {
   groups: { [Q]: "Exam quality (optional)" },
   inputs: [
     { id: "disease", label: "1. Disease", type: "radio", options: DISEASES },
+    { id: "obese", label: "BMI 30 or more", type: "checkbox", showIf: v => v.disease === "masld" },
     { id: "lsm", label: "2. Liver stiffness", type: "number", unit: "kPa", min: 1, max: 80 },
     { id: "cap", label: "3. CAP", type: "number", unit: "dB/m", min: 50, max: 450, optional: true },
     { id: "iqr", label: "IQR/median", type: "number", unit: "%", min: 0, max: 100, optional: true, group: Q },
@@ -97,14 +109,14 @@ export default {
   compute(v) {
     const stage = fibrosisStage(v.disease, v.lsm);
     const steatosis = isNum(v.cap) ? steatosisGrade(v.cap) : null;
-    const bav = baveno(v.lsm);
+    const bav = baveno(v.lsm, v.disease, v.obese);
     const q = examWarnings(v);
-    const display = [stage ? `Fibrosis: ${stage}` : `Baveno VII: ${bav.text}`];
+    const display = [stage ? `Fibrosis: ${stage}` : `Baveno VIII: ${bav.text}`];
     if (steatosis) display.push(`Steatosis: ${steatosis}`);
     const c = CUTOFFS[v.disease];
     const breakdown = [{ item: "Liver stiffness", value: `${fmt(v.lsm, 1)} kPa` }];
     if (c) breakdown.push({ item: `Cutoffs (${c.source})`, value: `F2 ${c.f2}, F3 ${c.f3}, F4 ${c.f4} kPa` });
-    else breakdown.push({ item: "Other/mixed", value: "No F stage; Baveno VII only" });
+    else breakdown.push({ item: "Other/mixed", value: "No F stage; Baveno VIII only" });
     if (steatosis) breakdown.push({ item: "CAP (Karlas, J Hepatol 2017)", value: `${fmt(v.cap, 0)} dB/m` });
     return { score: v.lsm, disease: v.disease, stage, steatosis, baveno: bav, cutoffs: c || null, ...q, breakdown, display,
       label: "FibroScan", rounding: "Cutoffs applied to the values as entered; no rounding." };
@@ -118,14 +130,14 @@ export default {
     const capCopy = r.steatosis ? `; steatosis ${r.steatosis}` : "";
     const qualCopy = r.unreliable ? "; exam unreliable" : "";
     if (!r.stage) {
-      return { band: `Baveno VII: ${r.baveno.text}`, level: r.baveno.level,
-        text: "Baveno VII: <10 kPa cACLD unlikely; 10–15 suggestive; >15 highly suggestive; 25 or more: CSPH ruled in (Baveno VII).",
-        sections, notes,
+      return { band: `Baveno VIII: ${r.baveno.text}`, level: r.baveno.level,
+        text: "Baveno VIII: <10 kPa cACLD ruled out; 10–15 suggestive; >15 highly suggestive; 25 or more: CSPH ruled in for hepatitis B, hepatitis C, alcohol-related and non-obese MASLD only.",
+        sections, notes, links: [BAVENO_LINK],
         copy: `FibroScan ${diseaseLabel} ${fmt(r.score, 1)} kPa: ${r.baveno.text}${capCopy}${qualCopy}` };
     }
     return { band: `Fibrosis ${r.stage} (${diseaseLabel} cutoffs)`, level: STAGE_LEVEL[r.stage],
-      text: `Baveno VII: ${r.baveno.text}.`,
-      sections, notes,
+      text: `Baveno VIII: ${r.baveno.text}.`,
+      sections, notes, links: [BAVENO_LINK],
       copy: `FibroScan ${diseaseLabel} ${fmt(r.score, 1)} kPa: fibrosis ${r.stage}${capCopy}${qualCopy}` };
   },
   notes: "Use the XL probe when the M probe fails or the skin-to-liver capsule distance is ≥25 mm. Cutoffs differ between diseases: always choose the correct disease.",
@@ -135,6 +147,6 @@ export default {
     ref("Chon YE et al. Performance of transient elastography for the staging of liver fibrosis in patients with chronic hepatitis B: a meta-analysis. PLoS One 2012"),
     ref("JHEP Reports 2020;2(3):100101. doi:10.1016/j.jhepr.2020.100101 (review table: liver stiffness cutoffs in alcohol-related liver disease)", "https://pmc.ncbi.nlm.nih.gov/articles/PMC7267467/"),
     ref("Karlas T et al. Individual patient data meta-analysis of controlled attenuation parameter (CAP). J Hepatol 2017"),
-    ref("de Franchis R et al. Baveno VII. J Hepatol 2022")
+    ref("Baveno VIII Faculty. Baveno VIII - Advancing consensus in portal hypertension. J Hepatol 2026;85:993-1018. PMID 42624290", "https://pubmed.ncbi.nlm.nih.gov/42624290/")
   ]
 };

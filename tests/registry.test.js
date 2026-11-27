@@ -5,7 +5,7 @@ import { CALCULATORS, search } from "../js/registry.js";
 
 const PHASE1 = ["gbs", "aims65", "rockall", "oakland", "forrest",
   "child_pugh", "meld_na", "meld3", "maddrey", "lille", "gahs", "abic", "fib4", "apri", "nfs", "albi",
-  "ascites", "r_factor", "aih_simplified", "leipzig", "west_haven", "aclf", "clif_c_aclf", "kings", "baveno7", "fibroscan"];
+  "ascites", "r_factor", "aih_simplified", "leipzig", "west_haven", "aclf", "clif_c_aclf", "kings", "baveno8", "fibroscan"];
 const PHASE2 = ["bisap", "ranson", "glasgow_imrie", "sirs", "marshall", "atlanta", "mctsi", "tg18_cholangitis", "asge_cbd",
   "truelove_witts", "asuc_day3", "mayo_uc", "uceis", "hbi", "cdai", "ses_cd", "rutgeerts", "montreal", "jalan"];
 
