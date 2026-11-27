@@ -15,7 +15,7 @@ export default {
     "IGV2",
     "fundal varices"
   ],
-  "category": "endoscopy",
+  "category": "bleeding",
   "kind": "card",
   "use": "Treatment depends on the type: see the bleeding source decision in variceal bleeding (B7.1).",
   "table": {

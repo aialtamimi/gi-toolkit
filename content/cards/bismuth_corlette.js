@@ -14,7 +14,7 @@ export default {
     "perihilar cholangiocarcinoma",
     "biliary stricture"
   ],
-  "category": "endoscopy",
+  "category": "pancreas",
   "kind": "card",
   "use": "Guides drainage and surgery: plan with MRCP before ERCP; types III–IV at an expert centre.",
   "table": {

@@ -84,7 +84,7 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 
 ### B1.1 Scope
 
-- 45 calculators and selectable cards (B2 to B5), 22 classification reference cards (B6; five are calculators), and 18 emergency pages (B7), all in the emergency index; every emergency page is an interactive bedside algorithm (B7.0).
+- 45 calculators and selectable cards (B2 to B5), 3 motility calculators (B10), 22 classification reference cards (B6; five are calculators), and 18 emergency pages (B7), all in the emergency index; every emergency page is an interactive bedside algorithm (B7.0).
 - Everything works offline after the first load.
 - English interface only; no language option.
 
@@ -168,7 +168,7 @@ Exact equivalents: a converted value is rounded to 12 significant digits before 
 
 | Screen | Content |
 | --- | --- |
-| Home | Search bar matching names, aliases and tags; category tiles (GI bleeding, Liver, Pancreas and biliary, IBD, Endoscopy classifications, Emergencies); Favorites (star); Recent (last 10) |
+| Home | Search bar matching names, aliases and tags; category tiles in this order (GI bleeding, Liver, Pancreas and biliary, IBD, Motility, Endoscopy classifications, Emergencies); each calculator and card appears in exactly one category; in a category, calculators come first (in SPEC order), then cards (in SPEC order); Favorites (star); Recent (last 10) |
 | Calculator | Inputs; sticky result card that updates live; band label plus color (green low, amber intermediate, red high; text label always shown, never color alone); interpretation; action; points breakdown; references; "Copy result" (one line, e.g. "GBS 7, not low risk", no identifiers) |
 | Classification card | Title, table, one-line clinical use, reference |
 | Emergency page: bedside algorithm (B7.0) | Red flags box; weight field (kg, never stored); Recognize; step cards with timeline chips, decision buttons, built-in calculators, weight-based doses and why lines; Show full algorithm toggle; Avoid; tables; Doses; buttons to related calculators; reference list |
@@ -965,7 +965,7 @@ Result: "Criteria met" when A, at least 3 of B and at least 1 of C are ticked (b
 
 ## Part B6: Endoscopy and luminal classifications
 
-Twenty-two reference cards (five of them calculators: BBPS, Prague, EREFS, Spigelman, OLGA and OLGIM). Each table card: title, table, the user can tap a row to highlight it and copy "Classification: grade", one-line clinical use, notes, links to related items, and the source. Every card added from B6.9 cites its source with an exact PubMed link.
+Twenty-two reference cards (five of them calculators: BBPS, Prague, EREFS, Spigelman, OLGA and OLGIM). Each table card: title, table, the user can tap a row to highlight it and copy "Classification: grade", one-line clinical use, notes, links to related items, and the source. Every card added from B6.9 cites its source with an exact PubMed link. Cards are listed under "Endoscopy classifications" unless their section has a "Category:" line: Bristol and Lyon 2.0 are under Motility (B10), Sarin under GI bleeding (after Forrest), Bismuth-Corlette and Strasberg under Pancreas and biliary. Search, links, favorites and recent items open every card wherever it is listed.
 
 ### B6.1 Boston Bowel Preparation Scale (id: bbps; calculator)
 
@@ -1052,6 +1052,8 @@ Source: Zargar, Gastrointest Endosc 1991. Clinical use: grades 0–2a usually al
 
 ### B6.7 Bristol stool form scale (id: bristol)
 
+Category: Motility.
+
 | Type | Description | Suggests |
 | --- | --- | --- |
 | 1 | Separate hard lumps, like nuts | Slow transit |
@@ -1065,6 +1067,8 @@ Source: Zargar, Gastrointest Endosc 1991. Clinical use: grades 0–2a usually al
 Source: Lewis and Heaton, Scand J Gastroenterol 1997. Used in Rome IV IBS subtyping.
 
 ### B6.8 Lyon Consensus 2.0 for GERD (id: lyon2)
+
+Category: Motility.
 
 Source: [Gyawali, Gut 2024 (Lyon 2.0)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10846564/).
 
@@ -1152,6 +1156,8 @@ Sources: [Haggitt RC et al. Gastroenterology 1985 (PMID 4007423)](https://pubmed
 Clinical use: "Lymph node risk rises with Haggitt level 4 and Kikuchi sm2–sm3." Note: "Endoscopic resection is curative when: submucosal invasion <1000 µm, well or moderately differentiated (or papillary), no lymphovascular invasion, tumor budding grade 1, negative vertical margin (JSCCR 2019); otherwise discuss surgery."
 
 ### B6.14 Sarin classification of gastric varices (id: sarin)
+
+Category: GI bleeding.
 
 Source: [Sarin SK et al. Hepatology 1992 (PMID 1446890)](https://pubmed.ncbi.nlm.nih.gov/1446890/).
 
@@ -1257,6 +1263,8 @@ Clinical use: "Grade IV, or failed office treatment: hemorrhoidectomy."
 
 ### B6.21 Bismuth-Corlette classification of hilar biliary strictures (id: bismuth\_corlette)
 
+Category: Pancreas and biliary.
+
 Sources: [Bismuth H, Corlette MB. Surg Gynecol Obstet 1975 (PMID 1079096)](https://pubmed.ncbi.nlm.nih.gov/1079096/); [Bismuth H et al. Ann Surg 1992, types IIIa and IIIb (PMID 1309988)](https://pubmed.ncbi.nlm.nih.gov/1309988/).
 
 | Type | Level |
@@ -1270,6 +1278,8 @@ Sources: [Bismuth H, Corlette MB. Surg Gynecol Obstet 1975 (PMID 1079096)](https
 Clinical use: "Guides drainage and surgery: plan with MRCP before ERCP; types III–IV at an expert centre."
 
 ### B6.22 Strasberg classification of bile duct injury (id: strasberg)
+
+Category: Pancreas and biliary.
 
 Source: [Strasberg SM et al. J Am Coll Surg 1995 (PMID 8000648)](https://pubmed.ncbi.nlm.nih.gov/8000648/).
 
@@ -2670,6 +2680,57 @@ Calculator inputs are in the calculator's own units. "none" = no answer suggeste
 | em\_caustic | D2 | Zargar | grade 3b | 3b | none |
 | em\_caustic | D2 | Zargar | grade 4 | Grade 4 (perforation) | none |
 
+### B8.10 Motility
+
+Chicago inputs below use the default upper limits (supine 15, upright 12 mmHg) unless stated; percentages not listed are 0; symptoms and supportive test are not ticked unless stated.
+
+| Calculator | Inputs | Expected |
+| --- | --- | --- |
+| Chicago | IRP 30 supine, 25 upright; failed 100%; pressurization 40% | Achalasia type II |
+| Chicago | IRP 30 supine, 25 upright; failed 100%; pressurization 20% | Achalasia type II |
+| Chicago | IRP 30 supine, 25 upright; failed 100%; pressurization 19% | Achalasia type I |
+| Chicago | IRP 28 supine, 20 upright; failed 30%, weak 20%, fragmented 10%, premature 40% | Achalasia type III |
+| Chicago | IRP 28 supine, 20 upright; premature 30%; elevated intrabolus pressure 30% | EGJ outflow obstruction, inconclusive (normal peristalsis present, so not achalasia type III) |
+| Chicago | IRP 22 supine, 18 upright; elevated intrabolus pressure 25%; symptoms; supportive test abnormal | EGJ outflow obstruction, clinically relevant |
+| Chicago | IRP 22 supine, 18 upright; elevated intrabolus pressure 25%; symptoms | EGJ outflow obstruction, inconclusive; action "Inconclusive: obtain timed barium esophagram or FLIP, exclude mechanical obstruction and opioid effect." |
+| Chicago | IRP 22 supine, 10 upright; elevated intrabolus pressure 25% | Normal esophageal motility, with the note that EGJ outflow obstruction criteria are not met |
+| Chicago | IRP 22 supine, 18 upright; elevated intrabolus pressure 19% | Normal esophageal motility, with the note that EGJ outflow obstruction criteria are not met |
+| Chicago | IRP 15 supine, 12 upright (at the upper limits); failed 100% | Absent contractility |
+| Chicago | Upper limits 25 supine, 20 upright; IRP 22 supine, 18 upright; failed 100% | Absent contractility |
+| Chicago | IRP 10 supine, 8 upright; premature 20%; symptoms | Distal esophageal spasm, clinically relevant |
+| Chicago | IRP 10 supine, 8 upright; premature 30% | Distal esophageal spasm pattern, inconclusive |
+| Chicago | IRP 10 supine, 8 upright; hypercontractile 25%; symptoms | Hypercontractile esophagus, clinically relevant |
+| Chicago | IRP 10 supine, 8 upright; hypercontractile 25% | Hypercontractile esophagus pattern, inconclusive |
+| Chicago | IRP 10 supine, 8 upright; failed 50% | Ineffective esophageal motility |
+| Chicago | IRP 10 supine, 8 upright; failed 20%, weak 40%, fragmented 20% (ineffective 80%) | Ineffective esophageal motility |
+| Chicago | IRP 10 supine, 8 upright; failed 20%, weak 50% (ineffective 70%) | Ineffective esophageal motility, inconclusive |
+| Chicago | IRP 10 supine, 8 upright; weak 50% (ineffective 50%) | Ineffective esophageal motility, inconclusive |
+| Chicago | IRP 10 supine, 8 upright; weak 40% (ineffective 40%) | Normal esophageal motility |
+| Eckardt | Dysphagia 1, regurgitation 1, pain 0, weight loss 0; before treatment | 2, stage I |
+| Eckardt | 0, 1, 0, 0; before treatment | 1, stage 0 |
+| Eckardt | 2, 2, 0, 0; before treatment | 4, stage II |
+| Eckardt | 3, 2, 1, 0; before treatment | 6, stage II |
+| Eckardt | 3, 3, 1, 0; before treatment | 7, stage III |
+| Eckardt | 3, 3, 3, 3; before treatment | 12, stage III |
+| Eckardt | 2, 1, 0, 0; after treatment | 3, stage I; No treatment failure (score 3 or less) |
+| Eckardt | 2, 1, 1, 0; after treatment | 4, stage II; Treatment failure (score >3) |
+| London | Everything normal (RAIR present, normal pressures, normal expulsion, no dyssynergia or poor propulsion, normal sensation) | No disorder of anorectal function |
+| London | RAIR absent, everything else normal | Rectoanal areflexia (major); band Major disorder |
+| London | Low resting and low squeeze | Combined anal hypotension and hypocontractility (major) |
+| London | Low resting, normal squeeze | Anal hypotension with normal contractility (minor); band Minor disorder |
+| London | Normal resting, low squeeze | Anal normotension with hypocontractility (minor) |
+| London | High resting, normal squeeze | Anal hypertension (minor) |
+| London | High resting, low squeeze | Anal hypertension (minor) and anal hypocontractility (minor) |
+| London | Abnormal expulsion, dyssynergia, poor propulsion | Abnormal expulsion with dyssynergia and poor propulsion (minor) |
+| London | Abnormal expulsion, dyssynergia only | Abnormal expulsion with dyssynergia (minor) |
+| London | Abnormal expulsion, poor propulsion only | Abnormal expulsion with poor propulsion (minor) |
+| London | Abnormal expulsion, normal pattern | Abnormal expulsion with a normal pushing pattern (inconclusive); band Inconclusive |
+| London | Normal expulsion, dyssynergia | Normal expulsion with an abnormal pushing pattern (inconclusive) |
+| London | First constant sensation and desire to defecate above upper limit | Rectal hyposensitivity (major) |
+| London | Maximum tolerated volume above upper limit only | Borderline rectal hyposensitivity (minor) |
+| London | Maximum tolerated volume below lower limit | Rectal hypersensitivity (major) |
+| London | RAIR absent; high resting; abnormal expulsion with dyssynergia | Rectoanal areflexia (major), anal hypertension (minor), abnormal expulsion with dyssynergia (minor); band Major disorder |
+
 ## Part B9: References
 
 Primary guidelines and papers behind Part B. Claude Code shows the relevant one on each screen; links below are the pages used to check this spec.
@@ -2713,5 +2774,104 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Emergency page sources (B7.3 to B7.18) | [Sengupta N et al. ACG guideline 2023 (PMID 36735555)](https://pubmed.ncbi.nlm.nih.gov/36735555/); [Abraham NS et al. ACG-CAG guideline 2022 (PMID 35297395)](https://pubmed.ncbi.nlm.nih.gov/35297395/); [Gralnek IM et al. ESGE 2021 (PMID 33567467)](https://pubmed.ncbi.nlm.nih.gov/33567467/); [Sung JJ et al. Ann Intern Med 2010 (PMID 19949136)](https://pubmed.ncbi.nlm.nih.gov/19949136/); [McDonald LC et al. IDSA/SHEA C. difficile guideline. Clin Infect Dis 2018 (PMID 29462280)](https://pubmed.ncbi.nlm.nih.gov/29462280/); [Randall J et al. Br J Surg 2010 (PMID 20101648)](https://pubmed.ncbi.nlm.nih.gov/20101648/); [Lee WM et al. Gastroenterology 2009 (PMID 19524577)](https://pubmed.ncbi.nlm.nih.gov/19524577/); [EASL acute liver failure guideline. J Hepatol 2017 (PMID 28417882)](https://pubmed.ncbi.nlm.nih.gov/28417882/); [Thursz MR et al. STOPAH. NEJM 2015 (PMID 25901427)](https://pubmed.ncbi.nlm.nih.gov/25901427/); [Louvet A et al. Lille model. Hepatology 2007 (PMID 17518367)](https://pubmed.ncbi.nlm.nih.gov/17518367/); [Arab JP et al. J Hepatol 2021 (PMID 34166722)](https://pubmed.ncbi.nlm.nih.gov/34166722/); [Nadim MK et al. ICA-ADQI. J Hepatol 2024 (PMID 38527522)](https://pubmed.ncbi.nlm.nih.gov/38527522/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Vilstrup H et al. AASLD-EASL. Hepatology 2014 (PMID 25042402)](https://pubmed.ncbi.nlm.nih.gov/25042402/); [Bass NM et al. NEJM 2010 (PMID 20335583)](https://pubmed.ncbi.nlm.nih.gov/20335583/); [Birk M et al. ESGE. Endoscopy 2016 (PMID 26862844)](https://pubmed.ncbi.nlm.nih.gov/26862844/); [Zargar SA et al. Gastrointest Endosc 1991 (PMID 2032601)](https://pubmed.ncbi.nlm.nih.gov/2032601/); [Ponec RJ et al. NEJM 1999 (PMID 10403850)](https://pubmed.ncbi.nlm.nih.gov/10403850/); [Sgouros SN et al. Gut 2006 (PMID 16306137)](https://pubmed.ncbi.nlm.nih.gov/16306137/); [Hirota WK et al. ASGE guideline: the role of endoscopy in the surveillance of premalignant conditions of the upper GI tract. Gastrointest Endosc 2006 (PMID 16564854)](https://pubmed.ncbi.nlm.nih.gov/16564854/) |
 | Acute-on-chronic liver failure (B3.17, B3.21, B7.20) | [EASL Clinical Practice Guidelines on acute-on-chronic liver failure. J Hepatol 2023 (PMID 37364789)](https://pubmed.ncbi.nlm.nih.gov/37364789/); [Bajaj JS et al. ACG Clinical Guideline: acute-on-chronic liver failure. Am J Gastroenterol 2022 (PMID 35006099)](https://pubmed.ncbi.nlm.nih.gov/35006099/); [Moreau R et al. CANONIC. Gastroenterology 2013 (PMID 23474284)](https://pubmed.ncbi.nlm.nih.gov/23474284/); [Jalan R et al. CLIF-C ACLF score. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/); [Gustot T et al. Clinical course of ACLF. Hepatology 2015 (PMID 25877702)](https://pubmed.ncbi.nlm.nih.gov/25877702/); [Artru F et al. Transplant in ACLF grade 3. J Hepatol 2017 (PMID 28645736)](https://pubmed.ncbi.nlm.nih.gov/28645736/); [Engelmann C et al. GRAFT. J Hepatol 2021 (PMID 34364917)](https://pubmed.ncbi.nlm.nih.gov/34364917/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Engelmann C et al. CLIF-C ACLF futility threshold. Crit Care 2018 (PMID 30305132)](https://pubmed.ncbi.nlm.nih.gov/30305132/) |
 | Classification cards (B6.9 to B6.22) | Hirano 2013 (PMID 22619364); Burgess 2017 (PMID 27464708); Sano 2016 (PMID 26927367); Kudo 1996 (PMID 8836710); Haggitt 1985 (PMID 4007423); Kikuchi 1995 (PMID 7497841); Hashiguchi, JSCCR 2019, Int J Clin Oncol 2020 (PMID 31203527); Sarin 1992 (PMID 1446890); Hill 1996 (PMID 8934159); Siewert 1998 (PMID 9823902); Spigelman 1989 (PMID 2571019); Syngal, ACG 2015 (PMID 25645574); Rugge 2007 (PMID 17142647); Capelle 2010 (PMID 20381801); Dinis-Ribeiro, MAPS III 2025 (PMID 40112834); Oberhuber 1999 (PMID 10524652); Hawkins, ASCRS 2024 (PMID 38294832); Bismuth 1975 (PMID 1079096); Bismuth 1992 (PMID 1309988); Strasberg 1995 (PMID 8000648). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
+| Motility (B10) | [Yadlapati R et al. Chicago Classification v4.0. Neurogastroenterol Motil 2021 (PMID 33373111)](https://pubmed.ncbi.nlm.nih.gov/33373111/); [Eckardt VF et al. Gastroenterology 1992 (PMID 1451966)](https://pubmed.ncbi.nlm.nih.gov/1451966/); [Carrington EV et al. London classification. Neurogastroenterol Motil 2020 (PMID 31407463)](https://pubmed.ncbi.nlm.nih.gov/31407463/) |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |
+
+## Part B10: Motility
+
+Category "Motility" (id: motility): the three calculators below, then the Lyon Consensus 2.0 (B6.8) and Bristol stool form (B6.7) cards.
+
+### B10.1 Chicago Classification v4.0 (id: chicago)
+
+Source: [Yadlapati R et al. Neurogastroenterol Motil 2021 (PMID 33373111)](https://pubmed.ncbi.nlm.nih.gov/33373111/). Inputs from the high-resolution manometry report.
+
+| Input | Unit or options |
+| --- | --- |
+| Median IRP, supine | mmHg |
+| Median IRP, upright | mmHg |
+| IRP upper limit of normal, supine | mmHg; default 15 (Medtronic), editable for other systems |
+| IRP upper limit of normal, upright | mmHg; default 12 (Medtronic), editable for other systems |
+| Failed swallows (DCI <100 mmHg·s·cm) | % of swallows |
+| Weak swallows (DCI 100–450 mmHg·s·cm) | % of swallows |
+| Fragmented swallows (break >5 cm, DCI >450 mmHg·s·cm) | % of swallows |
+| Premature swallows (DL <4.5 s, DCI >450 mmHg·s·cm) | % of swallows |
+| Hypercontractile swallows (DCI >8000 mmHg·s·cm) | % of swallows |
+| Panesophageal pressurization | % of swallows |
+| Supine swallows with elevated intrabolus pressure | % of supine swallows |
+| Obstructive symptoms (dysphagia and/or non-cardiac chest pain) | tick box |
+| Supportive test abnormal (timed barium esophagram or FLIP) | tick box |
+
+Definitions: IRP "above the upper limit" means greater than the upper limit of normal. Ineffective swallows = failed + weak + fragmented. No normal peristalsis = failed + weak + fragmented + premature + hypercontractile swallows add up to 100% or more.
+
+Rules, applied in this order; the first that applies gives the result.
+
+| # | Condition | Band | Action or note |
+| --- | --- | --- | --- |
+| 1 | Supine IRP above the upper limit; failed 100%; panesophageal pressurization 20% or more | Achalasia type II |  |
+| 2 | Supine IRP above the upper limit; failed 100%; panesophageal pressurization <20% | Achalasia type I |  |
+| 3 | Supine IRP above the upper limit; no normal peristalsis; premature 20% or more | Achalasia type III |  |
+| 4 | Supine and upright IRP above the upper limit; elevated intrabolus pressure in 20% or more of supine swallows; obstructive symptoms and an abnormal supportive test | EGJ outflow obstruction, clinically relevant |  |
+| 5 | As rule 4, without obstructive symptoms or without an abnormal supportive test | EGJ outflow obstruction, inconclusive | "Inconclusive: obtain timed barium esophagram or FLIP, exclude mechanical obstruction and opioid effect." |
+| 6 | Failed 100% (IRP not above the upper limit) | Absent contractility | "If IRP is borderline or pressurization is present, consider achalasia type I with supportive testing." |
+| 7 | Premature 20% or more, with obstructive symptoms | Distal esophageal spasm, clinically relevant |  |
+| 8 | Premature 20% or more, without obstructive symptoms | Distal esophageal spasm pattern, inconclusive | "Clinically relevant only with obstructive symptoms." |
+| 9 | Hypercontractile 20% or more, with obstructive symptoms | Hypercontractile esophagus, clinically relevant |  |
+| 10 | Hypercontractile 20% or more, without obstructive symptoms | Hypercontractile esophagus pattern, inconclusive | "Clinically relevant only with obstructive symptoms." |
+| 11 | Ineffective >70%, or failed 50% or more | Ineffective esophageal motility |  |
+| 12 | Ineffective 50–70% | Ineffective esophageal motility, inconclusive | "Inconclusive: use supportive testing (contractile reserve on multiple rapid swallows, barium)." |
+| 13 | None of the above | Normal esophageal motility |  |
+
+When the supine IRP is above the upper limit but rules 1 to 5 do not apply, rules 6 to 13 are applied and the result shows the note "Supine IRP above the upper limit, but the criteria for EGJ outflow obstruction (upright IRP and intrabolus pressure) are not met."
+
+Always shown: Note: "Requires the Chicago Classification v4.0 protocol (supine and upright swallows, provocative tests)." Note: "Exclude mechanical obstruction." Note: "Study off opioids when possible."
+
+Breakdown: supine and upright IRP against their upper limits, failed, ineffective, premature, hypercontractile, panesophageal pressurization, elevated intrabolus pressure, normal peristalsis present or absent, obstructive symptoms, supportive test.
+
+### B10.2 Eckardt score (id: eckardt)
+
+Source: [Eckardt VF et al. Gastroenterology 1992 (PMID 1451966)](https://pubmed.ncbi.nlm.nih.gov/1451966/).
+
+| Item | 0 | 1 | 2 | 3 |
+| --- | --- | --- | --- | --- |
+| Dysphagia | None | Occasional | Daily | Every meal |
+| Regurgitation | None | Occasional | Daily | Every meal |
+| Retrosternal pain | None | Occasional | Daily | Every meal |
+| Weight loss | None | <5 kg | 5–10 kg | >10 kg |
+
+Total 0–12. Stage 0: 0–1; stage I: 2–3; stage II: 4–6; stage III: >6. A second input, "Timing", is before treatment or after treatment. Before treatment the band is the stage. After treatment: total >3, band "Treatment failure (score >3)"; total 3 or less, band "No treatment failure (score 3 or less)"; the stage is shown as well.
+
+### B10.3 London classification of anorectal function (id: london)
+
+Source: [Carrington EV et al. Neurogastroenterol Motil 2020 (PMID 31407463)](https://pubmed.ncbi.nlm.nih.gov/31407463/). Checklist; every input is judged against the laboratory's own normal values.
+
+| Input | Options |
+| --- | --- |
+| Rectoanal inhibitory reflex (RAIR) | Present; absent |
+| Resting pressure | Low; normal; high |
+| Squeeze pressure | Low; normal |
+| Balloon expulsion | Normal; abnormal |
+| During push: dyssynergia | Yes; no |
+| During push: poor propulsion | Yes; no |
+| First constant sensation | Normal; above upper limit; below lower limit |
+| Desire to defecate | Normal; above upper limit; below lower limit |
+| Maximum tolerated volume | Normal; above upper limit; below lower limit |
+
+| Part | Finding | Label |
+| --- | --- | --- |
+| 1 | RAIR absent: rectoanal areflexia | Major |
+| 2 | Low resting and low squeeze pressure: combined anal hypotension and hypocontractility | Major |
+| 2 | Low resting pressure, normal squeeze: anal hypotension with normal contractility | Minor |
+| 2 | Normal resting pressure, low squeeze: anal normotension with hypocontractility | Minor |
+| 2 | High resting pressure: anal hypertension | Minor |
+| 2 | High resting pressure and low squeeze: anal hypertension, and anal hypocontractility | Minor (each) |
+| 3 | Abnormal expulsion with dyssynergia and poor propulsion: abnormal expulsion with dyssynergia and poor propulsion | Minor |
+| 3 | Abnormal expulsion with dyssynergia: abnormal expulsion with dyssynergia | Minor |
+| 3 | Abnormal expulsion with poor propulsion: abnormal expulsion with poor propulsion | Minor |
+| 3 | Abnormal expulsion with a normal pattern: abnormal expulsion with a normal pushing pattern | Inconclusive |
+| 3 | Normal expulsion with dyssynergia and/or poor propulsion: normal expulsion with an abnormal pushing pattern | Inconclusive |
+| 4 | 2 or more thresholds above the upper limit: rectal hyposensitivity | Major |
+| 4 | 1 threshold above the upper limit: borderline rectal hyposensitivity | Minor |
+| 4 | 1 or more thresholds below the lower limit: rectal hypersensitivity | Major |
+
+Each finding is shown with its label in brackets, for example "Rectoanal areflexia (major)"; a part with no finding shows "Normal". Hyposensitivity and hypersensitivity findings are both shown if both apply. Band: "Major disorder" if any finding is major, otherwise "Minor disorder" if any is minor, otherwise "Inconclusive" if any is inconclusive, otherwise "No disorder of anorectal function".
