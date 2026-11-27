@@ -53,14 +53,16 @@ test("every emergency page lists at least one source", () => {
   for (const p of EMERGENCIES) assert.ok(p.references.length > 0, p.id);
 });
 
-test("Ogilvie syndrome and volvulus cite Naveed 2020; perforation cites Paspatis 2020", () => {
+test("Ogilvie syndrome and volvulus cite Naveed 2020; perforation cites Paspatis 2020 (PubMed links, DOI kept in the citation)", () => {
   const cites = id => EMERGENCIES.find(p => p.id === id).references;
   for (const id of ["em_acpo", "em_volvulus"]) {
     const r = cites(id).find(r => r.citation.startsWith("Naveed M"));
-    assert.ok(r && r.citation.includes("doi:10.1016/j.gie.2019.09.007") && r.url === "https://doi.org/10.1016/j.gie.2019.09.007", id);
+    assert.ok(r && r.citation.includes("doi:10.1016/j.gie.2019.09.007") && r.citation.endsWith("PMID 31791596"), id);
+    assert.equal(r.url, "https://pubmed.ncbi.nlm.nih.gov/31791596/", id);
   }
   const p = cites("em_perforation").find(r => r.citation.startsWith("Paspatis GA"));
-  assert.ok(p && p.citation.includes("doi:10.1055/a-1222-3191") && p.url === "https://doi.org/10.1055/a-1222-3191");
+  assert.ok(p && p.citation.includes("doi:10.1055/a-1222-3191") && p.citation.endsWith("PMID 32781470"));
+  assert.equal(p.url, "https://pubmed.ncbi.nlm.nih.gov/32781470/");
 });
 
 test("expanded citations carry a PMID and link to their PubMed record", () => {

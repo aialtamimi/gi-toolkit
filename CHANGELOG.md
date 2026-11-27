@@ -2,6 +2,27 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.7.0 (2026-11-27)
+
+The remaining twelve emergency pages are now bedside algorithms (SPEC.md B7.0): lower GI bleeding, anticoagulants and antiplatelets, toxic megacolon, acute liver failure, severe alcohol-associated hepatitis, HRS-AKI, overt hepatic encephalopathy, foreign body, caustic ingestion, Ogilvie syndrome, colonic volvulus and iatrogenic perforation. Every emergency page now uses the same design.
+- Every line, dose and source of the classic pages is kept. `tests/fixtures/b7_classic_0.6.2.md` holds the classic text, and `tests/carryover.test.js` checks that every clause, table row, source line, note and related calculator is still on its page.
+- Red flags, step cards with timeline chips, decisions and "why" lines as specified by the clinical owner; new built-in calculators in the steps: Oakland, ACLF grade (red flags), MELD, Maddrey, GAHS, ABIC, Lille, King's College criteria, West Haven, Zargar (the B6 table card, tap a row) and the new Jalan checklist.
+- New calculator B5.10 Jalan criteria for toxic megacolon (checklist, IBD category; 44 calculators).
+- "Suggested" answers where a built-in calculator alone settles the answer: Oakland ≤8; King's College criteria met (Yes only); Lille ≥0.45; West Haven grade 3–4; Zargar grade group (none for grade 4).
+- Weight-based doses (weight field only on these pages): 4-factor prothrombin complex concentrate for each INR band with its cap, N-acetylcysteine 150, 50 and 100 mg/kg (with the note on local dosing-weight caps), albumin challenge 1 and 1.5 g/kg in grams and mL of 20% and 25% albumin, and the protein target (labelled "Target, not a dose").
+- Exact PubMed links, with the PMID at the end of the citation, for the 19 sources listed by the clinical owner, wherever they are cited (including the Oakland, Lille and West Haven calculators and the Zargar card).
+- Fix found while testing: on a page with weight-based doses but no red flags box (anticoagulants), the weight field now shows before the first block.
+- Clinical owner decisions on the review (SPEC.md B7.0, B7.4, B7.6, B7.7, B7.8, B7.14, B7.15, B8.7 to B8.9 and B9 updated in the same change):
+  - Anticoagulants: red flags box added (hemodynamic instability despite resuscitation, ongoing transfusion need, or bleeding into a critical site: treat as life-threatening; ICU; reversal with hematology input). "INR below 2: no label dose; discuss with hematology." Andexanet alfa or 4-factor prothrombin complex concentrate for apixaban or rivaroxaban: "dose per product label or local protocol, with hematology" (step and doses row; no dose calculated). Vitamin K and idarucizumab rows confirmed.
+  - N-acetylcysteine: dosing weight capped at 100 kg ("Dosing weight capped at 100 kg (US label); follow local protocol."); 150 kg gives 15000, 5000 and 10000 mg.
+  - King's College: "Yes" is the only suggestion; "Not met may mean incomplete data; reassess at least daily."
+  - Caustic: grade 3b adds monitoring for perforation, enteral nutrition and stricture surveillance from about 3 weeks if no surgery; new answer "Grade 4 (perforation): emergency surgery", suggested by Zargar grade 4. Surveillance source: Hirota WK et al., ASGE 2006 (PMID 16564854).
+  - Naveed (ASGE 2020) and Paspatis (ESGE 2020) now link to PubMed (PMID 31791596, 32781470); the DOI stays in the citation.
+  - Toxic megacolon: methylprednisolone 60 mg IV every 24 hours; vancomycin orally or by nasogastric tube (never IV for C. difficile); metronidazole IV.
+  - Alcohol-associated hepatitis: MELD or MELD-Na (not MELD 3.0); "Thresholds (>20; 21–51) come from studies using MELD."
+  - Foreign body red flags: emergent endoscopy (within 2 h, at most 6 h); airway compromise: secure the airway first (ICU or anesthesia); perforation signs: CT and surgical review.
+- SPEC.md: B1.1, B1.6, B5 intro, new B5.10, B7 intro, B7.0, B7.3, B7.4, B7.6 to B7.8, B7.10, B7.11, B7.14 to B7.18, B8.5, B8.7, B8.8, B8.9 and B9. Engine: a B6 table card can be built into a step and report the tapped row.
+
 ## 0.6.2 (2026-11-27)
 
 Upper GI bleeding page, clinical owner changes (SPEC.md B7.0, B7.1, B7.2, B7.19, B8.8 and B9 updated in the same change):

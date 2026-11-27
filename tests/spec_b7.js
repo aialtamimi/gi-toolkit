@@ -11,7 +11,7 @@ export const CALC_NAMES = {
   UCEIS: "uceis", Mayo: "mayo_uc", "King's College criteria": "kings", MELD: "meld_na", Maddrey: "maddrey", GAHS: "gahs",
   ABIC: "abic", Lille: "lille", "Ascitic fluid analysis": "ascites", "ACLF grade": "aclf", BISAP: "bisap", Ranson: "ranson",
   "Glasgow-Imrie": "glasgow_imrie", SIRS: "sirs", Marshall: "marshall", "Revised Atlanta": "atlanta", "modified CTSI": "mctsi",
-  "TG18 cholangitis": "tg18_cholangitis", "ASGE choledocholithiasis risk": "asge_cbd", Zargar: "zargar"
+  "TG18 cholangitis": "tg18_cholangitis", "ASGE choledocholithiasis risk": "asge_cbd", Zargar: "zargar", "Jalan criteria": "jalan"
 };
 
 export function section(num) {
@@ -66,7 +66,8 @@ export function weightTable() {
   const end = lines.findIndex((l, i) => i > start && !l.startsWith("|"));
   return lines.slice(start + 2, end < 0 ? undefined : end).map(l => {
     const [name, where, calculation, shownAs] = cells(l);
-    const [page, row] = where.split(", ");
+    const i = where.indexOf(", ");
+    const [page, row] = [where.slice(0, i), where.slice(i + 2)];
     return { name, page, row, calculation, shownAs };
   });
 }
@@ -86,6 +87,7 @@ export function parseAlgorithm(num) {
     if ((m = line.match(/^Search words that open the (\w+) pathway: (.*)\.$/))) { page.entryWords[m[1]] = m[2].split(", "); continue; }
     if (line === "Algorithm:") { current = null; continue; }
     if ((m = line.match(/^Sources?: (.*)$/))) { page.blocks.push({ type: "source", text: m[1] }); current = null; continue; }
+    if ((m = line.match(/^Show: "(.*)"$/))) { page.blocks.push({ type: "note", text: m[1] }); current = null; continue; }
     if ((m = line.match(/^Related: (.*)\.$/))) { page.related = m[1].split(",").map(s => s.trim()); continue; }
     if ((m = line.match(/^\*\*(.+)\*\*$/))) { tableTitle = m[1]; continue; }
     if (line.startsWith("|")) {

@@ -31,5 +31,5 @@ export default {
       copy: `West Haven: ${name}, ${r.row.category.toLowerCase()}` };
   },
   table: { columns: ["Grade", "Features", "Category"], rows: ROWS.map(r => [r.grade, r.features, r.category]) },
-  references: [ref("Vilstrup H et al. Hepatic encephalopathy in chronic liver disease: 2014 Practice Guideline by AASLD and EASL. Hepatology 2014")]
+  references: [ref("Vilstrup H et al. Hepatic encephalopathy in chronic liver disease: 2014 Practice Guideline by AASLD and EASL. Hepatology 2014. PMID 25042402", "https://pubmed.ncbi.nlm.nih.gov/25042402/")]
 };

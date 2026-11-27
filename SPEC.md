@@ -84,7 +84,7 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 
 ### B1.1 Scope
 
-- 43 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 17 emergency pages (B7), all in the emergency index; five emergency pages are interactive bedside algorithms (B7.0).
+- 44 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 17 emergency pages (B7), all in the emergency index; every emergency page is an interactive bedside algorithm (B7.0).
 - Everything works offline after the first load.
 - English interface only; no language option.
 
@@ -169,8 +169,7 @@ Cutoffs written in both units: where a criterion or band gives a cutoff in both 
 | Home | Search bar matching names, aliases and tags; category tiles (GI bleeding, Liver, Pancreas and biliary, IBD, Endoscopy classifications, Emergencies); Favorites (star); Recent (last 10) |
 | Calculator | Inputs; sticky result card that updates live; band label plus color (green low, amber intermediate, red high; text label always shown, never color alone); interpretation; action; points breakdown; references; "Copy result" (one line, e.g. "GBS 7, not low risk", no identifiers) |
 | Classification card | Title, table, one-line clinical use, reference |
-| Emergency page | Sections: Recognize, Do now, Within hours, Then, Avoid, Doses table; buttons to related calculators; reference list |
-| Bedside algorithm page (B7.0) | Red flags box; weight field (kg, never stored); Recognize; step cards with timeline chips, decision buttons, built-in calculators, weight-based doses and why lines; Show full algorithm toggle; Avoid; tables; Doses; buttons to related calculators; reference list |
+| Emergency page: bedside algorithm (B7.0) | Red flags box; weight field (kg, never stored); Recognize; step cards with timeline chips, decision buttons, built-in calculators, weight-based doses and why lines; Show full algorithm toggle; Avoid; tables; Doses; buttons to related calculators; reference list |
 | About | Version; "Designed by Dr. Abdulaziz Altamimi"; the line "All formulas, cutoffs and recommendations are based on published guidelines and original papers. Each calculator lists its sources."; privacy |
 | Settings | Default units (SI or conventional), theme |
 
@@ -763,7 +762,7 @@ Dilated common bile duct: >6 mm with gallbladder in situ.
 
 ## Part B5: IBD scores
 
-Nine tools: four for ulcerative colitis, three for Crohn's disease activity, one post-operative score and the Montreal classification.
+Ten tools: four for ulcerative colitis, three for Crohn's disease activity, one post-operative score, the Montreal classification and the Jalan criteria for toxic megacolon.
 
 ### B5.1 Truelove and Witts (id: truelove\_witts)
 
@@ -897,6 +896,18 @@ Source: Silverberg, Can J Gastroenterol 2005.
 
 Output: a code such as "A2 L3 B1p" or "E2 S2".
 
+### B5.10 Jalan criteria for toxic megacolon (id: jalan)
+
+Checklist, built into the toxic megacolon page (B7.6). Source: [Jalan KN et al. Gastroenterology 1969 (PMID 5305933)](https://pubmed.ncbi.nlm.nih.gov/5305933/).
+
+| Part | Items (tick boxes) | Needed |
+| --- | --- | --- |
+| A | Colonic dilatation >6 cm on X-ray | Required |
+| B | Fever >38.6 °C; heart rate >120/min; neutrophil count >10.5 ×10⁹/L; anemia | At least 3 of 4 |
+| C | Dehydration; altered consciousness; electrolyte disturbance; hypotension | At least 1 of 4 |
+
+Result: "Criteria met" when A, at least 3 of B and at least 1 of C are ticked (band high; action text: "Toxic megacolon: urgent surgical review and the toxic megacolon algorithm."); otherwise "Criteria not met" (band neutral). Breakdown: A yes or no, B count of 4, C count of 4.
+
 ## Part B6: Endoscopy and luminal classifications
 
 Eight reference cards. Each card: title, table, the user can tap a row to highlight it and copy "Classification: grade", one-line clinical use, and the source.
@@ -1007,11 +1018,11 @@ Adjunctive evidence: reflux episodes >80 per day supports GERD; mean nocturnal b
 
 ## Part B7: GI emergency pages
 
-Seventeen emergency pages, all listed in the emergency index (B7.19). Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1) and has no page or index entry of its own. Twelve pages use the classic template so they can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Five pages (B7.1, B7.5, B7.9, B7.12 and B7.13) are interactive bedside algorithms (B7.0). Drug doses are adult doses.
+Seventeen emergency pages, all listed in the emergency index (B7.19). Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1) and has no page or index entry of its own. Every page is an interactive bedside algorithm (B7.0). Drug doses are adult doses.
 
 ### B7.0 Bedside algorithm pages
 
-Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-variceal and variceal), B7.5 acute severe ulcerative colitis, B7.9 spontaneous bacterial peritonitis, B7.12 acute pancreatitis and B7.13 acute cholangitis. They keep every line, dose and source of the earlier pages, reorganized into this layout, top to bottom:
+Every emergency page is an interactive bedside algorithm. The first five (B7.1, B7.5, B7.9, B7.12, B7.13) were converted in version 0.6.0 and the other twelve in version 0.7.0. Each keeps every line, dose and source of its earlier page, reorganized into this layout, top to bottom (a part with no content on a page is left out):
 
 | Part | What it shows |
 | --- | --- |
@@ -1024,9 +1035,9 @@ Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-varic
 | Why | One short line in small italic under key steps, naming the trial or guideline |
 | After the algorithm | Avoid, other tables, Doses (adult doses; weight-based rows show the calculated dose under the written dose), Related calculators, Sources |
 
-Format of the algorithm in B7.1, B7.5, B7.9, B7.12 and B7.13: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (a why line; a step can have more than one, shown in order) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps. A line "Search words that open the X pathway: ..." lists search words that open the page at entry point X.
+Format of the algorithm on every B7 page: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (a why line; a step can have more than one, shown in order) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps. A line "Search words that open the X pathway: ..." lists search words that open the page at entry point X. A line Show: "..." is a highlighted note shown after the algorithm. A built-in calculator can also be a B6 table card: tapping a row reports the selected row.
 
-Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of albumin is calculated from the unrounded grams (20% albumin: 1 g = 5 mL; 25% albumin: 1 g = 4 mL). The urine output line is a target, not a dose, and is labelled so. B7.13 has no weight-based dose, so it has no weight field. Test vectors: B8.7.
+Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of albumin is calculated from the unrounded grams (20% albumin: 1 g = 5 mL; 25% albumin: 1 g = 4 mL). The urine output line is a target, not a dose, and is labelled so. Pages without a weight-based dose (B7.3, B7.6, B7.8, B7.13 to B7.18) have no weight field. Test vectors: B8.7.
 
 | Name | Page and doses row | Calculation | Shown as |
 | --- | --- | --- | --- |
@@ -1039,6 +1050,15 @@ Weight-based doses. W = weight in kg as entered. Calculated values are shown to 
 | lactated Ringer's infusion | B7.12, Lactated Ringer's | 1.5 × W mL/h | Lactated Ringer's 1.5 mL/kg/h: [1.5 × W] mL/h |
 | lactated Ringer's bolus | B7.12, Lactated Ringer's | 10 × W mL | Lactated Ringer's bolus if hypovolemic, 10 mL/kg: [10 × W] mL |
 | urine output target | B7.12, none (step P2) | 0.5 × W mL/h | Target, not a dose. Urine output >0.5 mL/kg/h: >[0.5 × W] mL/h |
+| prothrombin complex concentrate INR 2 to <4 | B7.4, 4-factor prothrombin complex concentrate (warfarin, life-threatening bleeding) | 25 × W units, maximum 2500 units | 4-factor prothrombin complex concentrate, INR 2 to <4, 25 units/kg (max 2500 units): [25 × W] units IV; when 25 × W >2500: 2500 units IV (maximum) |
+| prothrombin complex concentrate INR 4–6 | B7.4, 4-factor prothrombin complex concentrate (warfarin, life-threatening bleeding) | 35 × W units, maximum 3500 units | 4-factor prothrombin complex concentrate, INR 4–6, 35 units/kg (max 3500 units): [35 × W] units IV; when 35 × W >3500: 3500 units IV (maximum) |
+| prothrombin complex concentrate INR >6 | B7.4, 4-factor prothrombin complex concentrate (warfarin, life-threatening bleeding) | 50 × W units, maximum 5000 units | 4-factor prothrombin complex concentrate, INR >6, 50 units/kg (max 5000 units): [50 × W] units IV; when 50 × W >5000: 5000 units IV (maximum) |
+| N-acetylcysteine 150 mg/kg | B7.7, N-acetylcysteine, 21-hour IV regimen | 150 × dosing weight mg; dosing weight = W, capped at 100 kg | N-acetylcysteine 150 mg/kg over 1 hour: [150 × dosing weight] mg; when W >100: "(dosing weight capped at 100 kg)" added |
+| N-acetylcysteine 50 mg/kg | B7.7, N-acetylcysteine, 21-hour IV regimen | 50 × dosing weight mg; dosing weight = W, capped at 100 kg | N-acetylcysteine 50 mg/kg over 4 hours: [50 × dosing weight] mg; when W >100: "(dosing weight capped at 100 kg)" added |
+| N-acetylcysteine 100 mg/kg | B7.7, N-acetylcysteine, 21-hour IV regimen | 100 × dosing weight mg; dosing weight = W, capped at 100 kg | N-acetylcysteine 100 mg/kg over 16 hours: [100 × dosing weight] mg; when W >100: "(dosing weight capped at 100 kg)" added |
+| albumin challenge 1 g/kg | B7.10, Albumin 20–25%, fluid challenge if volume status is unclear | 1 × W g; 20%: mL = g × 5; 25%: mL = g × 4 | Albumin challenge, 1 g/kg: [W] g = [5 × W] mL of 20% albumin or [4 × W] mL of 25% albumin |
+| albumin challenge 1.5 g/kg | B7.10, Albumin 20–25%, fluid challenge if volume status is unclear | 1.5 × W g; 20%: mL = g × 5; 25%: mL = g × 4 | Albumin challenge, 1.5 g/kg: [1.5 × W] g = [7.5 × W] mL of 20% albumin or [6 × W] mL of 25% albumin |
+| protein target | B7.11, none (step E8) | 1.2 × W to 1.5 × W g/day | Target, not a dose. Protein 1.2–1.5 g/kg/day: [1.2 × W]–[1.5 × W] g/day |
 
 Suggested answers. When a built-in calculator on the page has a result, the matching answer button gets a "Suggested" outline and label, and any note in the table is shown under the answers. The clinician must still tap it; no other answer is suggested. Test vectors: B8.9.
 
@@ -1049,6 +1069,11 @@ Suggested answers. When a built-in calculator on the page has a result, the matc
 | B7.5 | D1 Day-3 criteria positive? | Day-3 Oxford | Yes when Oxford or Lindgren is positive; No when both are negative |
 | B7.9 | D1 Ascitic fluid result? | Ascitic fluid analysis | Runyon criteria or polymicrobial culture when PMN ≥250/mm³ and 2 or more Runyon criteria are met (then only this answer); PMN 250/mm³ or more when PMN ≥250/mm³ with fewer than 2 Runyon criteria met; none otherwise, including PMN <250/mm³ (culture is not in the calculator) |
 | B7.13 | D1 TG18 severity grade? | TG18 cholangitis | The grade shown (Grade I, II or III) when the diagnosis is suspected or definite; none when criteria are not met |
+| B7.3 | D2 Oakland 8 or less? | Oakland | Yes when the score is ≤8; No when >8 |
+| B7.7 | D2 King's College criteria met? | King's College criteria | Yes when the criteria are met; none otherwise (its inputs are optional, so "not met" can mean incomplete data) |
+| B7.8 | D2 Lille 0.45 or more? | Lille | Yes when Lille ≥0.45; No when <0.45 |
+| B7.11 | D1 Grade 3–4? | West Haven | Yes for grade 3 or 4; No for minimal, grade 1 or grade 2 |
+| B7.15 | D2 Zargar grade? | Zargar | 0–2a for grade 0, 1 or 2a; 2b–3a for grade 2b or 3a; 3b for grade 3b; Grade 4 (perforation) for grade 4 |
 
 ### B7.1 Upper GI bleeding: non-variceal and variceal (id: em\_ugib)
 
@@ -1168,10 +1193,42 @@ Merged into B7.1; no page and no emergency index entry of its own. The search wo
 
 ### B7.3 Acute lower GI bleeding (id: em\_lgib)
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** shock index >1 or systolic BP <90 mmHg, ongoing large-volume hematochezia, Hb drop >2 g/dL: ICU or HDU.
 - **Recognize:** hematochezia or bright red blood per rectum. With hemodynamic instability, think of an upper GI source and do an upper endoscopy first.
-- **Do now:** resuscitate; Oakland score (B2.4). Transfuse at Hb <7 g/dL (8 g/dL in cardiovascular disease) (ACG 2023).
-- **Within hours:** hemodynamically significant ongoing bleeding: CT angiography first, then catheter angiography and embolization if a blush is seen (ACG 2023).
-- **Then:** inpatient colonoscopy after adequate bowel preparation; urgent colonoscopy within 24 hours has not improved outcomes. Oakland ≤8: consider early discharge with outpatient colonoscopy.
+
+Algorithm:
+
+- **L1 · 0–1 h · Resuscitate and risk-stratify**
+  - Resuscitate.
+  - Oakland score (B2.4).
+  - Transfuse at Hb <7 g/dL (8 g/dL in cardiovascular disease) (ACG 2023).
+  - Antithrombotics per B7.4.
+  - Hemodynamic instability: think of an upper GI source and do an upper endoscopy first.
+  - Calculators: Oakland.
+- **D1 · 0–1 h · Hemodynamically unstable or ongoing brisk bleeding?**
+  - Answer Yes: CT angiography first.
+  - Answer No: decide by the Oakland score.
+- **L2 · Within hours · CT angiography first** (shown when D1 = Yes)
+  - Hemodynamically significant ongoing bleeding: CT angiography first, then catheter angiography and embolization if a blush is seen (ACG 2023).
+  - Blush: catheter angiography and embolization.
+  - Negative CT angiography: colonoscopy after bowel preparation.
+- **D2 · After resuscitation · Oakland 8 or less?** (shown when D1 = No)
+  - Answer Yes: consider early discharge, outpatient colonoscopy.
+  - Answer No: admit, inpatient colonoscopy.
+- **L3 · Discharge · Oakland 8 or less** (shown when D2 = Yes)
+  - Oakland ≤8: consider early discharge with outpatient colonoscopy.
+- **L4 · Admission · Oakland more than 8** (shown when D2 = No)
+  - Admit: inpatient colonoscopy after adequate bowel preparation; urgent colonoscopy within 24 hours has not improved outcomes.
+  - Why: Urgent colonoscopy within 24 h did not improve outcomes (ACG 2023).
+- **L5 · At colonoscopy · Endoscopic therapy**
+  - Diverticular bleeding with high-risk stigmata (active bleeding, visible vessel, adherent clot): clips or band ligation.
+  - Post-polypectomy bleeding: clips.
+- **L6 · Discharge · Before discharge**
+  - Avoid non-aspirin non-steroidal anti-inflammatory drugs (NSAIDs).
+  - Continue aspirin for secondary prevention.
+  - Restart anticoagulants per B7.4.
 - **Avoid:** routine early colonoscopy without preparation; stopping aspirin used for secondary cardiovascular prevention.
 
 Related: Oakland.
@@ -1179,6 +1236,33 @@ Related: Oakland.
 ### B7.4 Anticoagulants and antiplatelets in GI bleeding (id: em\_antithrombotic)
 
 Source: [ACG-CAG 2022](https://gastroenterology.acponline.org/archives/2022/03/25/1.htm) and ACG 2023 lower GI bleeding guideline.
+
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** hemodynamic instability despite resuscitation, ongoing transfusion need, or bleeding into a critical site (intracranial, airway): treat as life-threatening; ICU; reversal with hematology input.
+
+Algorithm:
+
+- **D1 · 0 h · Life-threatening bleeding?**
+  - Answer No: no routine reversal.
+  - Answer Yes: reversal with hematology input.
+- **T1 · 0 h · No routine reversal** (shown when D1 = No)
+  - No routine reversal: follow the drug table below.
+- **T2 · 0 h · Reversal with hematology input** (shown when D1 = Yes)
+  - Life-threatening bleeding: reversal with hematology input.
+  - Warfarin: 4-factor prothrombin complex concentrate (PCC) by INR (INR 2 to <4: 25 units/kg, max 2500 units; INR 4–6: 35 units/kg, max 3500 units; INR >6: 50 units/kg, max 5000 units) plus vitamin K 10 mg slow IV (product label).
+  - INR below 2: no label dose; discuss with hematology.
+  - Dabigatran: idarucizumab 5 g IV.
+  - Apixaban or rivaroxaban: andexanet alfa where available, or 4-factor PCC; dose per product label or local protocol, with hematology.
+  - Weight-based: prothrombin complex concentrate INR 2 to <4, prothrombin complex concentrate INR 4–6, prothrombin complex concentrate INR >6.
+- **T3 · After hemostasis · When to restart**
+  - Aspirin for secondary prevention: do not stop; if stopped, restart as soon as hemostasis is secured, preferably within 3–5 days (ESGE 2021).
+  - Dual antiplatelet therapy: continue aspirin; if the P2Y12 inhibitor is held, restart as soon as possible (ideally within 5 days) with cardiology.
+  - Warfarin or direct oral anticoagulant (DOAC): resume once bleeding is controlled, preferably within or soon after 7 days, based on thrombotic risk (ESGE 2021).
+
+Show: "Restart anticoagulation once hemostasis is secure, individualized with cardiology or hematology."
+
+**Acute GI bleeding, drug by drug**
 
 | Drug | Acute GI bleeding |
 | --- | --- |
@@ -1189,7 +1273,12 @@ Source: [ACG-CAG 2022](https://gastroenterology.acponline.org/archives/2022/03/2
 | Aspirin for secondary cardiovascular prevention | Avoid stopping, or resume as soon as hemostasis is secured; continuing aspirin lowered mortality (Sung, Ann Intern Med 2010) |
 | Dual antiplatelet therapy after recent coronary stent | Do not stop both drugs; decide with cardiology |
 
-Show: "Restart anticoagulation once hemostasis is secure, individualized with cardiology or hematology."
+| Drug | Dose |
+| --- | --- |
+| 4-factor prothrombin complex concentrate (warfarin, life-threatening bleeding) | By INR: INR 2 to <4: 25 units/kg, max 2500 units; INR 4–6: 35 units/kg, max 3500 units; INR >6: 50 units/kg, max 5000 units (product label). INR below 2: no label dose; discuss with hematology |
+| Vitamin K (warfarin, life-threatening bleeding) | 10 mg slow IV, with 4-factor prothrombin complex concentrate |
+| Idarucizumab (dabigatran, life-threatening bleeding) | 5 g IV |
+| Andexanet alfa or 4-factor prothrombin complex concentrate (apixaban or rivaroxaban, life-threatening bleeding) | Dose per product label or local protocol, with hematology |
 
 ### B7.5 Acute severe ulcerative colitis (id: em\_asuc)
 
@@ -1248,17 +1337,92 @@ Related: Truelove and Witts, Day-3 Oxford, UCEIS, Mayo.
 
 ### B7.6 Toxic megacolon (id: em\_toxic\_megacolon)
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** perforation, peritonitis, massive bleeding, shock: emergency surgery.
 - **Recognize (Jalan criteria):** colonic dilatation >6 cm on X-ray PLUS at least 3 of: fever >38.6 °C, heart rate >120/min, neutrophil count >10.5 ×10⁹/L, anemia; PLUS at least 1 of: dehydration, altered consciousness, electrolyte disturbance, hypotension.
-- **Do now:** urgent surgical review; NPO, nasogastric decompression; IV fluids and electrolytes; broad-spectrum antibiotics; IV corticosteroids if IBD (and treat C. difficile if present); serial abdominal X-rays.
-- **Then:** no improvement within 24–72 hours, perforation, or worsening: colectomy.
+
+Algorithm:
+
+- **M1 · 0 h · Confirm and start supportive care**
+  - Jalan criteria (B5.10): colonic dilatation >6 cm plus 3 or more of 4 plus 1 or more of 4.
+  - Urgent surgical review; NPO, nasogastric decompression; IV fluids and electrolytes; broad-spectrum antibiotics; IV corticosteroids if IBD (and treat C. difficile if present); serial abdominal X-rays.
+  - Calculators: Jalan criteria.
+- **M2 · 0 h · Treat the cause**
+  - IBD: IV hydrocortisone 100 mg every 6 hours or methylprednisolone 60 mg IV every 24 hours (B7.5).
+  - C. difficile: vancomycin 500 mg orally or by nasogastric tube 4 times daily plus metronidazole 500 mg IV every 8 hours; add rectal vancomycin if ileus (IDSA/SHEA 2017).
+  - Correct potassium and magnesium.
+- **D1 · 24–72 h · Improving?**
+  - Answer Yes: continue, serial X-rays.
+  - Answer No: colectomy.
+- **M3 · 24–72 h · Improving** (shown when D1 = Yes)
+  - Continue treatment and serial abdominal X-rays.
+- **M4 · 24–72 h · Colectomy** (shown when D1 = No)
+  - No improvement within 24–72 hours, perforation, or worsening: colectomy.
+  - Subtotal colectomy with end ileostomy.
+  - Why: Delayed colectomy increases complications (Randall, Br J Surg 2010).
 - **Avoid:** colonoscopy, opioids, anticholinergics, antidiarrheals.
+
+| Drug | Dose |
+| --- | --- |
+| Hydrocortisone (IBD) | 100 mg IV every 6 hours |
+| Methylprednisolone (IBD, alternative) | 60 mg IV every 24 hours |
+| Vancomycin (C. difficile) | 500 mg orally or by nasogastric tube 4 times daily (never IV for C. difficile); add rectal vancomycin if ileus |
+| Metronidazole (C. difficile) | 500 mg IV every 8 hours |
+
+Related: Jalan criteria.
 
 ### B7.7 Acute liver failure (id: em\_alf)
 
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** HE grade 2 or more: ICU; grade 3–4: intubate; hypoglycemia; shock; signs of raised intracranial pressure (hypertension with bradycardia, pupil changes).
 - **Recognize:** INR ≥1.5 and any degree of hepatic encephalopathy, without pre-existing cirrhosis, illness <26 weeks (AASLD).
-- **Do now:** contact the liver transplant center at once; ICU if HE grade ≥2; N-acetylcysteine for acetaminophen cases (and consider for non-acetaminophen ALF with early HE grade 1–2; Lee, Gastroenterology 2009); glucose every 1–2 hours; check acetaminophen level, viral serology (hepatitis A, B with delta, E, HSV), autoimmune markers, ceruloplasmin, pregnancy test, toxicology.
-- **Within hours:** King's College criteria (B3.18). Intubate for HE grade 3–4. Intracranial pressure measures: head of bed 30°, sodium target 145–155 mmol/L with hypertonic saline.
-- **Clue to Wilson disease:** ALP to bilirubin ratio <4 and AST to ALT ratio >2.2.
+
+Algorithm:
+
+- **F1 · 0–1 h · Call the transplant center and investigate**
+  - Contact the liver transplant center at once; ICU if HE grade ≥2; glucose every 1–2 hours.
+  - N-acetylcysteine for acetaminophen cases (and consider for non-acetaminophen ALF with early HE grade 1–2; Lee, Gastroenterology 2009).
+  - Check acetaminophen level, viral serology (hepatitis A, B with delta, E, HSV), autoimmune markers, ceruloplasmin, pregnancy test, toxicology.
+  - Add arterial ammonia, lactate and phosphate.
+  - Arterial ammonia >150–200 µmol/L raises the risk of intracranial hypertension (EASL 2017).
+- **D1 · 0–1 h · Acetaminophen (paracetamol) cause?**
+  - Answer Yes: N-acetylcysteine 21-hour regimen.
+  - Answer No: cause-specific treatment.
+- **F2 · 0–21 h and beyond · N-acetylcysteine** (shown when D1 = Yes)
+  - N-acetylcysteine 21-hour regimen; continue until INR improves.
+  - Dosing weight capped at 100 kg (US label); follow local protocol.
+  - Weight-based: N-acetylcysteine 150 mg/kg, N-acetylcysteine 50 mg/kg, N-acetylcysteine 100 mg/kg.
+- **F3 · 0–6 h · Cause-specific treatment** (shown when D1 = No)
+  - Consider N-acetylcysteine if HE grade 1–2 (Lee, Gastroenterology 2009).
+  - Cause-specific treatment (AASLD 2011):
+  - HSV: IV acyclovir.
+  - Hepatitis B: entecavir or tenofovir.
+  - Amanita mushroom: N-acetylcysteine plus silibinin or penicillin G.
+  - Acute fatty liver of pregnancy or HELLP: urgent delivery.
+  - Wilson disease: urgent transplant listing, plasma exchange as bridge. Clue to Wilson disease: ALP to bilirubin ratio <4 and AST to ALT ratio >2.2.
+  - Budd-Chiari: anticoagulation, consider TIPS.
+  - Autoimmune: discuss corticosteroids with the transplant center.
+  - Dosing weight capped at 100 kg (US label); follow local protocol.
+  - Weight-based: N-acetylcysteine 150 mg/kg, N-acetylcysteine 50 mg/kg, N-acetylcysteine 100 mg/kg.
+- **D2 · Within hours · King's College criteria met?**
+  - King's College criteria (B3.18).
+  - Not met may mean incomplete data; reassess at least daily.
+  - Calculators: King's College criteria.
+  - Answer Yes: urgent transplant listing.
+  - Answer No: reassess at least daily.
+- **F4 · Now · Urgent transplant listing** (shown when D2 = Yes)
+  - Urgent transplant listing.
+- **F5 · Daily · Reassess** (shown when D2 = No)
+  - Reassess King's College criteria at least daily.
+- **F6 · ICU · ICU care**
+  - Intubate for HE grade 3–4.
+  - Intracranial pressure measures: head of bed 30°, sodium target 145–155 mmol/L with hypertonic saline.
+  - Glucose every 1–2 hours.
+  - Low threshold for antibiotics.
+  - Continuous renal replacement therapy for AKI, acidosis or high ammonia (EASL 2017).
+  - No routine fresh frozen plasma (FFP).
 - **Avoid:** sedatives, lactulose (bowel distension), routine fresh frozen plasma (FFP) to correct INR (masks prognosis), nephrotoxins.
 
 | Drug | Dose |
@@ -1269,13 +1433,47 @@ Related: King's College criteria, MELD.
 
 ### B7.8 Severe alcohol-associated hepatitis (id: em\_aah)
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** sepsis, GI bleeding, AKI, HE grade 3–4, organ failure (ACLF grade, B3.17): ICU.
+  - Calculators: ACLF grade.
 - **Recognize:** jaundice (bilirubin >3 mg/dL) within 8 weeks of heavy alcohol use, AST >50 IU/L, AST to ALT >1.5, both <400 IU/L; severe if MELD >20 or Maddrey DF ≥32.
-- **Do now:** screen for infection (blood, urine, ascitic cultures, chest X-ray), GI bleeding and AKI; alcohol withdrawal management; nutrition (oral or enteral); thiamine.
-- **Treatment:** prednisolone 40 mg once daily for 28 days if no contraindication. Lille on day 7 (B3.5): ≥0.45 stop steroids.
-- **Then:** alcohol use disorder treatment; early liver transplant evaluation in selected non-responders at expert centers.
+
+Algorithm:
+
+- **H1 · Day 0 · Assess severity and screen**
+  - Screen for infection (blood, urine, ascitic cultures, chest X-ray), GI bleeding and AKI; alcohol withdrawal management; nutrition (oral or enteral); thiamine.
+  - Transjugular liver biopsy only if the diagnosis is uncertain.
+  - Calculators: MELD, Maddrey, GAHS, ABIC.
+- **D1 · Day 0 · Severe (MELD >20 or Maddrey 32 or more) and no contraindication (uncontrolled infection, active GI bleeding)?**
+  - MELD >51: steroids unlikely to help.
+  - Use MELD or MELD-Na (B3.2), not MELD 3.0. Thresholds (>20; 21–51) come from studies using MELD.
+  - Answer Yes: prednisolone 40 mg once daily.
+  - Answer No: supportive care, then reassess.
+  - Why: Steroids improved 30-day survival only at MELD 21–51, most at 25–39 (Arab, J Hepatol 2021).
+  - Why: In STOPAH, prednisolone gave a trend to lower 28-day mortality; pentoxifylline gave no benefit (Thursz, NEJM 2015).
+- **H2 · Day 0 · Start prednisolone** (shown when D1 = Yes)
+  - Prednisolone 40 mg once daily for 28 days if no contraindication.
+- **H3 · Day 0 · Supportive care** (shown when D1 = No)
+  - Supportive care, nutrition, abstinence; treat infection or bleeding first, then reassess.
+- **D2 · Day 7 · Lille 0.45 or more?** (shown when D1 = Yes)
+  - Lille on day 7 (B3.5): ≥0.45 stop steroids.
+  - Calculators: Lille.
+  - Answer Yes: stop prednisolone (non-responder).
+  - Answer No: complete 28 days.
+- **H4 · Day 7 · Non-responder** (shown when D2 = Yes)
+  - Stop prednisolone (non-responder); consider early transplant evaluation at an expert center.
+- **H5 · Day 7 to 28 · Responder** (shown when D2 = No)
+  - Complete 28 days of prednisolone.
+- **H6 · Long term · Then**
+  - Alcohol use disorder treatment; early liver transplant evaluation in selected non-responders at expert centers.
 - **Avoid:** pentoxifylline (no survival benefit in STOPAH, NEJM 2015); starting steroids with uncontrolled infection.
 
-Related: Maddrey, MELD, GAHS, ABIC, Lille.
+| Drug | Dose |
+| --- | --- |
+| Prednisolone | 40 mg orally once daily for 28 days; stop at day 7 if Lille ≥0.45 |
+
+Related: Maddrey, MELD, GAHS, ABIC, Lille, ACLF grade.
 
 ### B7.9 Spontaneous bacterial peritonitis (id: em\_sbp)
 
@@ -1333,25 +1531,79 @@ Related: Ascitic fluid analysis, MELD.
 
 Source: [ICA-ADQI consensus, J Hepatol 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11193657).
 
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** hyperkalemia, severe acidosis, fluid overload or SpO2 <90%, anuria: ICU, consider renal replacement therapy.
 - **Recognize (2024 criteria):** cirrhosis with ascites; AKI by KDIGO (creatinine rise ≥0.3 mg/dL within 48 hours, or ≥50% from baseline within 7 days, and/or urine output ≤0.5 mL/kg/h for ≥6 hours); no improvement in creatinine and/or urine output within 24 hours of adequate volume resuscitation; no strong evidence of another primary cause. A 48-hour albumin trial is no longer required.
-- **Do now:** stop diuretics, non-steroidal anti-inflammatory drugs (NSAIDs) and other nephrotoxins; review non-selective beta-blockers; look for and treat infection; if volume status is unclear, fluid challenge with 250–500 mL crystalloid or 1–1.5 g/kg of 20–25% albumin; reassess at 24 hours.
-- **Treatment:** terlipressin plus albumin (first line); norepinephrine plus albumin in ICU if terlipressin is contraindicated or unavailable.
-- **Stop vasoconstrictor when:** creatinine returns to within 0.3 mg/dL of baseline; severe adverse event; no improvement after 48 hours at maximum tolerated dose; renal replacement therapy needed; or 14 days reached.
-- **Avoid:** terlipressin with hypoxia, ischemic heart or vascular disease, or fluid overload; continuing albumin when there is pulmonary edema.
+
+Algorithm:
+
+- **R1 · 0 h · Stop, look and challenge**
+  - Stop diuretics, non-steroidal anti-inflammatory drugs (NSAIDs) and other nephrotoxins; review non-selective beta-blockers; look for and treat infection; if volume status is unclear, fluid challenge with 250–500 mL crystalloid or 1–1.5 g/kg of 20–25% albumin; reassess at 24 hours.
+  - Diagnostic paracentesis to exclude spontaneous bacterial peritonitis; urinalysis; renal ultrasound.
+  - Weight-based: albumin challenge 1 g/kg, albumin challenge 1.5 g/kg.
+- **D1 · 24 h · No improvement after volume, and no other likely cause?**
+  - Answer Yes: HRS-AKI, start vasoconstrictor plus albumin.
+  - Answer No: treat the other cause.
+- **R2 · 24 h · Start vasoconstrictor plus albumin** (shown when D1 = Yes)
+  - HRS-AKI: terlipressin plus albumin (first line); norepinephrine plus albumin in ICU if terlipressin is contraindicated or unavailable.
+  - Why: Terlipressin improved HRS reversal but caused more respiratory failure (CONFIRM, NEJM 2021).
+- **R3 · 24 h · Treat the other cause** (shown when D1 = No)
+  - Another cause is likely: treat the other cause.
+- **R4 · Daily · Daily review** (shown when D1 = Yes)
+  - Check creatinine, volume status and SpO2 daily; escalate per the Doses table.
+  - Stop vasoconstrictor when: creatinine returns to within 0.3 mg/dL of baseline; severe adverse event; no improvement after 48 hours at maximum tolerated dose; renal replacement therapy needed; or 14 days reached.
+- **R5 · Then · Transplant referral** (shown when D1 = Yes)
+  - Refer for liver transplant assessment.
+- **Avoid:** terlipressin with hypoxia, ischemic heart or vascular disease, or fluid overload; continuing albumin when there is pulmonary edema; terlipressin if SpO2 <90%.
 
 | Drug | Dose |
 | --- | --- |
 | Terlipressin | Continuous infusion 2 mg/day, or IV bolus 1–2 mg every 6 hours; if creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day |
 | Albumin 20–25% | 20–40 g/day, adjusted daily to volume status |
 | Norepinephrine | 0.5 mg/h IV, increase by 0.5 mg/h every 4 hours up to 3 mg/h to raise MAP (ICU, central line) |
+| Albumin 20–25%, fluid challenge if volume status is unclear | 1–1.5 g/kg |
 
 Related: MELD 3.0, ACLF grade.
 
 ### B7.11 Overt hepatic encephalopathy (id: em\_he)
 
+Bedside algorithm (B7.0). Weight field: yes.
+
+- **Red flags:** grade 3–4, seizures, focal signs, hypoglycemia: ICU.
 - **Recognize:** West Haven grade 2–4 (B3.16) in cirrhosis; exclude other causes (glucose, sepsis, drugs, intracranial bleed; CT head if focal signs, first episode, or fall).
-- **Do now:** find and treat precipitants (infection, GI bleeding, constipation, dehydration, hypokalemia or hyponatremia, sedatives, AKI, TIPS); protect the airway in grade 3–4; lactulose.
-- **Then:** rifaximin added to lactulose after a recurrence (Bass, NEJM 2010); review benzodiazepines and opioids; nutrition with normal protein intake (1.2–1.5 g/kg/day).
+
+Algorithm:
+
+- **E1 · 0 h · Confirm and grade**
+  - Grade with West Haven.
+  - A normal ammonia makes HE unlikely; a high ammonia alone does not confirm it (AASLD-EASL 2014).
+  - Calculators: West Haven.
+- **D1 · 0 h · Grade 3–4?**
+  - Answer Yes: ICU, protect airway.
+  - Answer No: ward, oral lactulose.
+- **E2 · 0 h · ICU** (shown when D1 = Yes)
+  - ICU; protect the airway in grade 3–4; lactulose by nasogastric tube or enema.
+- **E3 · 0 h · Ward** (shown when D1 = No)
+  - Ward; oral lactulose.
+- **E4 · 0–24 h · Find and treat precipitants**
+  - Find and treat precipitants (infection, GI bleeding, constipation, dehydration, hypokalemia or hyponatremia, sedatives, AKI, TIPS).
+- **E5 · 0–24 h · Treat with lactulose or polyethylene glycol 3350**
+  - Lactulose, or polyethylene glycol 3350 (see Doses).
+  - Why: Polyethylene glycol 3350 resolved HE faster than lactulose (HELP, JAMA Intern Med 2014).
+- **D2 · 24–48 h · Improving?**
+  - Answer Yes: continue.
+  - Answer No: look for another cause.
+- **E6 · 24–48 h · Improving** (shown when D2 = Yes)
+  - Continue treatment.
+- **E7 · 24–48 h · Not improving** (shown when D2 = No)
+  - Look for another cause, check lactulose response (2–3 soft stools/day), consider adding rifaximin.
+- **E8 · Before discharge · Prevent recurrence**
+  - Rifaximin added to lactulose after a recurrence (Bass, NEJM 2010); review benzodiazepines and opioids; nutrition with normal protein intake (1.2–1.5 g/kg/day).
+  - Lactulose as secondary prophylaxis.
+  - Consider transplant referral.
+  - Weight-based: protein target.
+  - Why: Rifaximin reduced recurrence and HE hospitalization (Bass, NEJM 2010).
 - **Avoid:** protein restriction; sedatives; under-dosed lactulose.
 
 | Drug | Dose |
@@ -1473,6 +1725,48 @@ Related: TG18 cholangitis, ASGE choledocholithiasis risk.
 
 Source: [ESGE 2016](https://www.doi.org/10.1055/S-0042-100456).
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** cannot swallow saliva, drooling, airway compromise, perforation signs (fever, crepitus, chest pain, peritonitis), battery in the esophagus: emergent endoscopy (within 2 h, at most 6 h). Airway compromise: secure the airway first (ICU or anesthesia). Perforation signs: CT and surgical review.
+
+Algorithm:
+
+- **B1 · 0 h · History and imaging**
+  - History: object, time, symptoms.
+  - Plain X-ray (neck, chest, abdomen) for radiopaque objects; CT if perforation is suspected; protect the airway (overtube or intubation if high aspiration risk).
+- **D1 · 0 h · Object and location?**
+  - Answer Complete esophageal obstruction (cannot swallow saliva): Emergent: preferably within 2 hours, at the latest within 6 hours.
+  - Answer Sharp-pointed object or battery in the esophagus: Emergent: preferably within 2 hours, at the latest within 6 hours.
+  - Answer Other esophageal foreign body without complete obstruction: Urgent: within 24 hours.
+  - Answer Stomach (sharp-pointed objects, magnets, batteries, large or long objects): Urgent: within 24 hours.
+  - Answer Stomach (medium-sized blunt objects): Non-urgent: within 72 hours.
+  - Answer Small blunt objects (not batteries or magnets) beyond the esophagus: Observation; outpatient if feasible.
+  - Answer Drug packets (body packing): No endoscopic removal; observe; surgery if obstruction or leak.
+- **B2 · Within 2–6 h · Complete esophageal obstruction** (shown when D1 = Complete esophageal obstruction (cannot swallow saliva))
+  - Emergent endoscopy: preferably within 2 hours, at the latest within 6 hours.
+- **B3 · Within 2–6 h · Sharp-pointed object or battery in the esophagus** (shown when D1 = Sharp-pointed object or battery in the esophagus)
+  - Emergent endoscopy: preferably within 2 hours, at the latest within 6 hours.
+  - Why: Batteries in the esophagus cause severe injury within hours (ESGE 2016).
+- **B4 · Within 24 h · Other esophageal foreign body** (shown when D1 = Other esophageal foreign body without complete obstruction)
+  - Urgent endoscopy: within 24 hours.
+- **B5 · Within 24 h · Stomach: sharp, magnets, batteries, large or long** (shown when D1 = Stomach (sharp-pointed objects, magnets, batteries, large or long objects))
+  - Urgent endoscopy: within 24 hours.
+- **B6 · Within 72 h · Stomach: medium-sized blunt objects** (shown when D1 = Stomach (medium-sized blunt objects))
+  - Non-urgent endoscopy: within 72 hours.
+- **B7 · Observe · Small blunt objects beyond the esophagus** (shown when D1 = Small blunt objects (not batteries or magnets) beyond the esophagus)
+  - Observation; outpatient if feasible.
+- **B8 · Observe · Drug packets (body packing)** (shown when D1 = Drug packets (body packing))
+  - No endoscopic removal; observe; surgery if obstruction or leak.
+- **B9 · At endoscopy · Technique**
+  - Food bolus can be gently pushed into the stomach or retrieved.
+  - Overtube or protector hood for sharp objects.
+- **B10 · After removal · After removal**
+  - Take esophageal biopsies to look for eosinophilic esophagitis.
+  - Look for stricture or malignancy.
+- **Avoid:** barium swallow (aspiration risk, impairs endoscopy); blind pushing of sharp objects; delays with batteries.
+
+**Timing of endoscopy (ESGE 2016)**
+
 | Situation | Timing of endoscopy |
 | --- | --- |
 | Complete esophageal obstruction (cannot swallow saliva) | Emergent: preferably within 2 hours, at the latest within 6 hours |
@@ -1483,16 +1777,44 @@ Source: [ESGE 2016](https://www.doi.org/10.1055/S-0042-100456).
 | Small blunt objects (not batteries or magnets) beyond the esophagus | Observation; outpatient if feasible |
 | Drug packets (body packing) | No endoscopic removal; observe; surgery if obstruction or leak |
 
-- **Do now:** plain X-ray (neck, chest, abdomen) for radiopaque objects; CT if perforation is suspected; protect the airway (overtube or intubation if high aspiration risk).
-- **Technique:** food bolus can be gently pushed into the stomach or retrieved; take esophageal biopsies to look for eosinophilic esophagitis.
-- **Avoid:** barium swallow (aspiration risk, impairs endoscopy); blind pushing of sharp objects; delays with batteries.
-
 ### B7.15 Caustic ingestion (id: em\_caustic)
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** stridor or airway edema, signs of perforation, shock, severe acidosis: ICU and surgery.
 - **Recognize:** acid or alkali ingestion; drooling, dysphagia, odynophagia, stridor, chest or abdominal pain. Symptoms do not predict injury severity.
-- **Do now:** airway assessment (early intubation if stridor or airway edema); IV access; NPO; identify the agent; CT chest and abdomen with IV contrast if perforation or transmural necrosis is suspected; surgical team involvement for severe cases.
-- **Within hours:** endoscopy within 12–48 hours to grade injury (Zargar, B6.6), unless perforation is evident.
-- **Then:** grade 0–2a: oral intake early and discharge. Grade 2b–3: admit, nutritional support, monitor for perforation; stricture surveillance from about 3 weeks.
+
+Algorithm:
+
+- **K1 · 0 h · Airway, assessment and imaging**
+  - Airway assessment (early intubation if stridor or airway edema); IV access; NPO; identify the agent; CT chest and abdomen with IV contrast if perforation or transmural necrosis is suspected; surgical team involvement for severe cases.
+  - Psychiatric review if intentional.
+- **D1 · 0–12 h · Perforation or transmural necrosis (clinical or CT)?**
+  - Answer Yes: emergency surgery.
+  - Answer No: endoscopy within 12–48 hours.
+- **K2 · Now · Emergency surgery** (shown when D1 = Yes)
+  - Perforation or transmural necrosis: emergency surgery.
+- **K3 · 12–48 h · Endoscopy** (shown when D1 = No)
+  - Endoscopy within 12–48 hours to grade injury (Zargar, B6.6), unless perforation is evident.
+- **D2 · 12–48 h · Zargar grade?** (shown when D1 = No)
+  - Calculators: Zargar.
+  - Answer 0–2a: early oral intake, discharge.
+  - Answer 2b–3a: admit, enteral nutrition.
+  - Answer 3b: ICU, surgical evaluation.
+  - Answer Grade 4 (perforation): emergency surgery.
+- **K4 · Day 1 · Grade 0–2a** (shown when D2 = 0–2a)
+  - Grade 0–2a: oral intake early and discharge.
+- **K5 · Admission · Grade 2b–3a** (shown when D2 = 2b–3a)
+  - Grade 2b–3: admit, nutritional support, monitor for perforation; stricture surveillance from about 3 weeks.
+  - Enteral nutrition (tube placed under endoscopic guidance).
+- **K6 · Now · Grade 3b** (shown when D2 = 3b)
+  - ICU, surgical evaluation.
+  - Monitor for perforation, enteral nutrition, stricture surveillance from about 3 weeks if no surgery.
+- **K7 · Now · Grade 4 (perforation)** (shown when D2 = Grade 4 (perforation))
+  - Grade 4 (perforation): emergency surgery.
+- **K8 · Weeks to years · Then**
+  - Dilation for strictures.
+  - Long-term esophageal cancer risk: surveillance endoscopy from 15–20 years after ingestion (ASGE).
 - **Avoid:** induced vomiting, neutralizing agents, blind nasogastric tube, routine corticosteroids; endoscopy between day 5 and day 15 (weakest wall, higher perforation risk).
 
 Related: Zargar.
@@ -1501,10 +1823,33 @@ Related: Zargar.
 
 Source: [Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007).
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** cecum >12 cm, peritonitis, perforation, signs of ischemia: surgical review.
 - **Recognize:** marked colonic dilatation without mechanical obstruction (confirm with CT), usually in hospitalized or post-operative patients. Cecal diameter >12 cm or prolonged distension raises perforation risk.
-- **Do now:** treat the cause (electrolytes, especially potassium and magnesium; stop opioids and anticholinergics; treat infection); NPO; nasogastric and rectal tube; mobilize; serial X-rays every 12–24 hours.
-- **If no response in 24–48 hours:** neostigmine with cardiac monitoring and atropine at the bedside.
-- **Then:** neostigmine failure or contraindication: colonoscopic decompression with tube placement. Perforation or peritonitis: surgery.
+
+Algorithm:
+
+- **O1 · 0–24 h · Treat the cause and decompress**
+  - Treat the cause (electrolytes, especially potassium and magnesium; stop opioids and anticholinergics; treat infection); NPO; nasogastric and rectal tube; mobilize; serial X-rays every 12–24 hours.
+- **D1 · 24–48 h · Improving?**
+  - Answer Yes: continue conservative care.
+  - Answer No, or cecum >12 cm: consider neostigmine.
+- **O2 · 24–48 h · Improving** (shown when D1 = Yes)
+  - Continue conservative care.
+- **D2 · 24–48 h · Contraindication to neostigmine?** (shown when D1 = No, or cecum >12 cm)
+  - Mechanical obstruction, bradycardia, active bronchospasm or recent myocardial infarction.
+  - Answer No: neostigmine.
+  - Answer Yes, or neostigmine fails: colonoscopic decompression.
+- **O3 · 24–48 h · Neostigmine** (shown when D2 = No)
+  - If no response in 24–48 hours: neostigmine with cardiac monitoring and atropine at the bedside.
+  - Neostigmine 2 mg IV over 3–5 minutes; may repeat once.
+  - Why: Neostigmine gave prompt decompression in most patients (Ponec, NEJM 1999).
+- **O4 · 24–48 h · Colonoscopic decompression** (shown when D2 = Yes, or neostigmine fails)
+  - Neostigmine failure or contraindication: colonoscopic decompression with tube placement.
+- **O5 · After decompression · After decompression**
+  - Daily polyethylene glycol reduces recurrence (Sgouros, Gut 2006).
+  - Perforation or peritonitis: surgery.
 - **Avoid:** neostigmine with mechanical obstruction, bradycardia, active bronchospasm or recent myocardial infarction.
 
 | Drug | Dose |
@@ -1515,19 +1860,56 @@ Source: [Naveed M et al. ASGE guideline on the role of endoscopy in the manageme
 
 Source: [Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007).
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** peritonitis, perforation, shock, signs of ischemia: emergency surgery.
 - **Recognize:** abdominal distension and pain; CT shows whirl sign or coffee-bean sign.
-- **Sigmoid volvulus without ischemia or perforation:** endoscopic detorsion and decompression, leave a decompression tube; then elective sigmoidectomy during the same admission (high recurrence).
-- **Sigmoid volvulus with ischemia, perforation or peritonitis:** emergency surgery.
-- **Cecal volvulus:** surgery; endoscopic detorsion is not recommended.
+
+Algorithm:
+
+- **Y1 · 0 h · Confirm and prepare**
+  - CT; resuscitate; nasogastric tube; involve surgeons.
+- **D1 · 0 h · Sigmoid or cecal?**
+  - Answer Sigmoid: check for ischemia, perforation or peritonitis.
+  - Answer Cecal: surgery.
+- **Y2 · Now · Cecal volvulus** (shown when D1 = Cecal)
+  - Cecal volvulus: surgery; endoscopic detorsion is not recommended.
+- **D2 · 0 h · Ischemia, perforation or peritonitis?** (shown when D1 = Sigmoid)
+  - Answer Yes: emergency surgery.
+  - Answer No: endoscopic detorsion.
+- **Y3 · Now · Sigmoid volvulus with ischemia, perforation or peritonitis** (shown when D2 = Yes)
+  - Sigmoid volvulus with ischemia, perforation or peritonitis: emergency surgery.
+- **Y4 · Within hours · Endoscopic detorsion** (shown when D2 = No)
+  - Sigmoid volvulus without ischemia or perforation: endoscopic detorsion and decompression, leave a decompression tube; then elective sigmoidectomy during the same admission (high recurrence).
+  - Necrotic mucosa at endoscopy: stop, surgery.
+  - Why: Recurrence after detorsion alone is high (ASGE 2020).
 - **Avoid:** endoscopic detorsion when there is mucosal necrosis.
 
 ### B7.18 Iatrogenic endoscopic perforation (id: em\_perforation)
 
 Source: [Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191](https://doi.org/10.1055/a-1222-3191).
 
+Bedside algorithm (B7.0). Weight field: no.
+
+- **Red flags:** tension pneumoperitoneum (ventilation or circulation compromised), sepsis, peritonitis.
 - **Recognize:** visible defect, fat or extraluminal structures during the procedure; or post-procedure pain, subcutaneous emphysema, fever, tachycardia.
-- **Do now:** if recognized during the procedure and the field is clean, close endoscopically at once (through-the-scope clips for small defects; over-the-scope clip or other devices for larger ones); switch to CO2 insufflation; decompress tension pneumoperitoneum with a needle if ventilation or circulation is compromised; IV broad-spectrum antibiotics; NPO; urgent surgical consultation.
-- **Then:** CT to assess the leak; surgery if endoscopic closure fails, the defect is large, or peritonitis or sepsis develops.
+
+Algorithm:
+
+- **D1 · 0 h · Recognized during the procedure?**
+  - Answer Yes: close at once if the field is clean.
+  - Answer No: delayed recognition.
+- **P1 · During the procedure · Recognized during the procedure** (shown when D1 = Yes)
+  - If recognized during the procedure and the field is clean, close endoscopically at once (through-the-scope clips for small defects; over-the-scope clip or other devices for larger ones); switch to CO2 insufflation; decompress tension pneumoperitoneum with a needle if ventilation or circulation is compromised; IV broad-spectrum antibiotics; NPO; urgent surgical consultation.
+  - Then CT.
+- **P2 · Delayed · Delayed recognition** (shown when D1 = No)
+  - CT, antibiotics, NPO, urgent surgical review; endoscopic closure only in selected early cases.
+- **P3 · Closure · By site (ESGE 2020)**
+  - Esophagus: clips or over-the-scope clip; covered stent or endoscopic vacuum therapy for larger defects.
+  - ERCP: duodenal wall (scope) perforation: endoscopic closure or surgery; periampullary: biliary and/or pancreatic stent; guidewire or retroperitoneal air only: conservative.
+  - Colon: clips or over-the-scope clip.
+- **P4 · Then · Leak and surgery**
+  - CT to assess the leak; surgery if endoscopic closure fails, the defect is large, or peritonitis or sepsis develops.
 - **Avoid:** delaying surgical review; air insufflation.
 
 ### B7.19 Index of emergency pages
@@ -1647,6 +2029,10 @@ Unit rule (B1.5) test vectors for B2 and B3:
 | SES-CD | Ileum 2/2/2/1, right colon 1/1/1/0, others 0 | 10, moderate |
 | Rutgeerts | i2a | No endoscopic recurrence; note "i2a carries lower risk; individualize" |
 | Rutgeerts | i2b | Endoscopic recurrence: consider escalating therapy |
+| Jalan | Dilatation; fever, heart rate, anemia; dehydration | Criteria met (B 3 of 4, C 1 of 4) |
+| Jalan | Dilatation; fever, heart rate; dehydration, hypotension | Criteria not met (B 2 of 4) |
+| Jalan | Fever, heart rate, neutrophils, anemia; altered consciousness | Criteria not met (no dilatation) |
+| Jalan | Dilatation; all 4 of B; none of C | Criteria not met (C 0 of 4) |
 
 ### B8.6 Endoscopy
 
@@ -1681,6 +2067,25 @@ Weight entries outside 20–350 kg, or blank, show no calculated dose; entries o
 | albumin day 1 | 20 | Albumin day 1, 1.5 g/kg: 30 g = 150 mL of 20% albumin or 120 mL of 25% albumin |
 | albumin day 3 | 350 | Albumin day 3, 1 g/kg: 350 g = 1750 mL of 20% albumin or 1400 mL of 25% albumin |
 | albumin day 1 | 73.3 | Albumin day 1, 1.5 g/kg: 110 g = 549.8 mL of 20% albumin or 439.8 mL of 25% albumin |
+| prothrombin complex concentrate INR 2 to <4 | 70 | 4-factor prothrombin complex concentrate, INR 2 to <4, 25 units/kg (max 2500 units): 1750 units IV |
+| prothrombin complex concentrate INR 2 to <4 | 100 | 4-factor prothrombin complex concentrate, INR 2 to <4, 25 units/kg (max 2500 units): 2500 units IV |
+| prothrombin complex concentrate INR 2 to <4 | 120 | 4-factor prothrombin complex concentrate, INR 2 to <4, 25 units/kg (max 2500 units): 2500 units IV (maximum) |
+| prothrombin complex concentrate INR 4–6 | 70 | 4-factor prothrombin complex concentrate, INR 4–6, 35 units/kg (max 3500 units): 2450 units IV |
+| prothrombin complex concentrate INR 4–6 | 100.5 | 4-factor prothrombin complex concentrate, INR 4–6, 35 units/kg (max 3500 units): 3500 units IV (maximum) |
+| prothrombin complex concentrate INR >6 | 70 | 4-factor prothrombin complex concentrate, INR >6, 50 units/kg (max 5000 units): 3500 units IV |
+| prothrombin complex concentrate INR >6 | 130 | 4-factor prothrombin complex concentrate, INR >6, 50 units/kg (max 5000 units): 5000 units IV (maximum) |
+| N-acetylcysteine 150 mg/kg | 72.5 | N-acetylcysteine 150 mg/kg over 1 hour: 10875 mg |
+| N-acetylcysteine 50 mg/kg | 72.5 | N-acetylcysteine 50 mg/kg over 4 hours: 3625 mg |
+| N-acetylcysteine 100 mg/kg | 72.5 | N-acetylcysteine 100 mg/kg over 16 hours: 7250 mg |
+| N-acetylcysteine 150 mg/kg | 100 | N-acetylcysteine 150 mg/kg over 1 hour: 15000 mg |
+| N-acetylcysteine 150 mg/kg | 120 | N-acetylcysteine 150 mg/kg over 1 hour: 15000 mg (dosing weight capped at 100 kg) |
+| N-acetylcysteine 150 mg/kg | 150 | N-acetylcysteine 150 mg/kg over 1 hour: 15000 mg (dosing weight capped at 100 kg) |
+| N-acetylcysteine 50 mg/kg | 150 | N-acetylcysteine 50 mg/kg over 4 hours: 5000 mg (dosing weight capped at 100 kg) |
+| N-acetylcysteine 100 mg/kg | 150 | N-acetylcysteine 100 mg/kg over 16 hours: 10000 mg (dosing weight capped at 100 kg) |
+| albumin challenge 1 g/kg | 72.5 | Albumin challenge, 1 g/kg: 72.5 g = 362.5 mL of 20% albumin or 290 mL of 25% albumin |
+| albumin challenge 1.5 g/kg | 72.5 | Albumin challenge, 1.5 g/kg: 108.8 g = 543.8 mL of 20% albumin or 435 mL of 25% albumin |
+| protein target | 72.5 | Target, not a dose. Protein 1.2–1.5 g/kg/day: 87–108.8 g/day |
+| protein target | 60 | Target, not a dose. Protein 1.2–1.5 g/kg/day: 72–90 g/day |
 
 ### B8.8 Bedside algorithm paths (B7.0)
 
@@ -1718,6 +2123,68 @@ Steps shown in the normal view for each set of answers (several answers separate
 | em\_cholangitis | D1 = Grade I | C1, D1, C4, D2, C7, C8, C9 |
 | em\_cholangitis | D1 = Grade III; D2 = Unstable or coagulopathic | C1, D1, C2, D2, C6, C7, C8, C9 |
 | em\_cholangitis | D2 = Stable | C1, D1, D2, C5, C7, C8, C9 |
+| em\_lgib | none | L1, D1, L5, L6 |
+| em\_lgib | D1 = Yes | L1, D1, L2, L5, L6 |
+| em\_lgib | D1 = No | L1, D1, D2, L5, L6 |
+| em\_lgib | D1 = No; D2 = Yes | L1, D1, D2, L3, L5, L6 |
+| em\_lgib | D1 = No; D2 = No | L1, D1, D2, L4, L5, L6 |
+| em\_lgib | D1 = Yes; D2 = Yes | L1, D1, L2, L5, L6 |
+| em\_antithrombotic | none | D1, T3 |
+| em\_antithrombotic | D1 = No | D1, T1, T3 |
+| em\_antithrombotic | D1 = Yes | D1, T2, T3 |
+| em\_toxic\_megacolon | none | M1, M2, D1 |
+| em\_toxic\_megacolon | D1 = Yes | M1, M2, D1, M3 |
+| em\_toxic\_megacolon | D1 = No | M1, M2, D1, M4 |
+| em\_alf | none | F1, D1, D2, F6 |
+| em\_alf | D1 = Yes | F1, D1, F2, D2, F6 |
+| em\_alf | D1 = No | F1, D1, F3, D2, F6 |
+| em\_alf | D2 = Yes | F1, D1, D2, F4, F6 |
+| em\_alf | D2 = No | F1, D1, D2, F5, F6 |
+| em\_alf | D1 = Yes; D2 = Yes | F1, D1, F2, D2, F4, F6 |
+| em\_aah | none | H1, D1, H6 |
+| em\_aah | D1 = Yes | H1, D1, H2, D2, H6 |
+| em\_aah | D1 = No | H1, D1, H3, H6 |
+| em\_aah | D1 = Yes; D2 = Yes | H1, D1, H2, D2, H4, H6 |
+| em\_aah | D1 = Yes; D2 = No | H1, D1, H2, D2, H5, H6 |
+| em\_aah | D1 = No; D2 = Yes | H1, D1, H3, H6 |
+| em\_hrs | none | R1, D1 |
+| em\_hrs | D1 = Yes | R1, D1, R2, R4, R5 |
+| em\_hrs | D1 = No | R1, D1, R3 |
+| em\_he | none | E1, D1, E4, E5, D2, E8 |
+| em\_he | D1 = Yes | E1, D1, E2, E4, E5, D2, E8 |
+| em\_he | D1 = No | E1, D1, E3, E4, E5, D2, E8 |
+| em\_he | D2 = Yes | E1, D1, E4, E5, D2, E6, E8 |
+| em\_he | D2 = No | E1, D1, E4, E5, D2, E7, E8 |
+| em\_foreign\_body | none | B1, D1, B9, B10 |
+| em\_foreign\_body | D1 = Complete esophageal obstruction (cannot swallow saliva) | B1, D1, B2, B9, B10 |
+| em\_foreign\_body | D1 = Sharp-pointed object or battery in the esophagus | B1, D1, B3, B9, B10 |
+| em\_foreign\_body | D1 = Other esophageal foreign body without complete obstruction | B1, D1, B4, B9, B10 |
+| em\_foreign\_body | D1 = Stomach (sharp-pointed objects, magnets, batteries, large or long objects) | B1, D1, B5, B9, B10 |
+| em\_foreign\_body | D1 = Stomach (medium-sized blunt objects) | B1, D1, B6, B9, B10 |
+| em\_foreign\_body | D1 = Small blunt objects (not batteries or magnets) beyond the esophagus | B1, D1, B7, B9, B10 |
+| em\_foreign\_body | D1 = Drug packets (body packing) | B1, D1, B8, B9, B10 |
+| em\_caustic | none | K1, D1, K8 |
+| em\_caustic | D1 = Yes | K1, D1, K2, K8 |
+| em\_caustic | D1 = No | K1, D1, K3, D2, K8 |
+| em\_caustic | D1 = No; D2 = 0–2a | K1, D1, K3, D2, K4, K8 |
+| em\_caustic | D1 = No; D2 = 2b–3a | K1, D1, K3, D2, K5, K8 |
+| em\_caustic | D1 = No; D2 = 3b | K1, D1, K3, D2, K6, K8 |
+| em\_caustic | D1 = No; D2 = Grade 4 (perforation) | K1, D1, K3, D2, K7, K8 |
+| em\_caustic | D1 = Yes; D2 = 3b | K1, D1, K2, K8 |
+| em\_acpo | none | O1, D1, O5 |
+| em\_acpo | D1 = Yes | O1, D1, O2, O5 |
+| em\_acpo | D1 = No, or cecum >12 cm | O1, D1, D2, O5 |
+| em\_acpo | D1 = No, or cecum >12 cm; D2 = No | O1, D1, D2, O3, O5 |
+| em\_acpo | D1 = No, or cecum >12 cm; D2 = Yes, or neostigmine fails | O1, D1, D2, O4, O5 |
+| em\_volvulus | none | Y1, D1 |
+| em\_volvulus | D1 = Cecal | Y1, D1, Y2 |
+| em\_volvulus | D1 = Sigmoid | Y1, D1, D2 |
+| em\_volvulus | D1 = Sigmoid; D2 = Yes | Y1, D1, D2, Y3 |
+| em\_volvulus | D1 = Sigmoid; D2 = No | Y1, D1, D2, Y4 |
+| em\_volvulus | D1 = Cecal; D2 = No | Y1, D1, Y2 |
+| em\_perforation | none | D1, P3, P4 |
+| em\_perforation | D1 = Yes | D1, P1, P3, P4 |
+| em\_perforation | D1 = No | D1, P2, P3, P4 |
 
 "Show full algorithm" marks: on path (answer chosen), off path (another answer chosen, or its decision is off path), or not yet decided.
 
@@ -1727,6 +2194,8 @@ Steps shown in the normal view for each set of answers (several answers separate
 | em\_ugib | none | none | none | V1, V2, V3, D2, V4, V5, V6, V7, N1, N2, D3, N3, N4, N5, N6, N7 |
 | em\_sbp | D1 = Runyon criteria or polymicrobial culture | S4 | S2, S3, S5, S6, S7 | none |
 | em\_asuc | D1 = No | A3 | A2, D2, A4, A5 | none |
+| em\_volvulus | D1 = Sigmoid | D2 | Y2 | Y3, Y4 |
+| em\_caustic | D1 = No; D2 = 3b | K3, D2, K6 | K2, K4, K5, K7 | none |
 
 ### B8.9 Suggested answers (B7.0)
 
@@ -1751,6 +2220,22 @@ Calculator inputs are in the calculator's own units. "none" = no answer suggeste
 | em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 50 | Grade I | none |
 | em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 80 | Grade II | none |
 | em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors | none | none |
+| em\_lgib | D2 | Oakland | age 35, female, heart rate 75/min, systolic BP 125 mmHg, hemoglobin 140 g/L | Yes | none |
+| em\_lgib | D2 | Oakland | age 35, female, heart rate 75/min, systolic BP 125 mmHg, hemoglobin 140 g/L, blood on rectal exam | No | none |
+| em\_alf | D2 | King's College criteria | acetaminophen, arterial pH 7.2 | Yes | none |
+| em\_alf | D2 | King's College criteria | acetaminophen, arterial pH 7.35 | none | none |
+| em\_aah | D2 | Lille | age 50, albumin 25 g/L, bilirubin day 0 300 µmol/L, day 7 280 µmol/L, creatinine 1.0 mg/dL, PT 20 s | Yes | none |
+| em\_aah | D2 | Lille | age 50, albumin 30 g/L, bilirubin day 0 300 µmol/L, day 7 150 µmol/L, creatinine 1.0 mg/dL, PT 15 s | No | none |
+| em\_he | D1 | West Haven | grade 3 | Yes | none |
+| em\_he | D1 | West Haven | grade 4 | Yes | none |
+| em\_he | D1 | West Haven | grade 2 | No | none |
+| em\_he | D1 | West Haven | minimal | No | none |
+| em\_caustic | D2 | Zargar | grade 0 | 0–2a | none |
+| em\_caustic | D2 | Zargar | grade 2a | 0–2a | none |
+| em\_caustic | D2 | Zargar | grade 2b | 2b–3a | none |
+| em\_caustic | D2 | Zargar | grade 3a | 2b–3a | none |
+| em\_caustic | D2 | Zargar | grade 3b | 3b | none |
+| em\_caustic | D2 | Zargar | grade 4 | Grade 4 (perforation) | none |
 
 ## Part B9: References
 
@@ -1782,8 +2267,8 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Barrett's surveillance | [Shaheen NJ et al. ACG 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC10259184/table/T5); [Weusten B et al. ESGE 2023](https://www.thieme-connect.de/products/ejournals/html/10.1055/a-2176-2440?lang=de) |
 | GERD | [Gyawali CP et al. Lyon Consensus 2.0. Gut 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC10846564/) |
 | Foreign bodies | [Birk M et al. ESGE 2016](https://www.doi.org/10.1055/S-0042-100456) |
-| Colonic pseudo-obstruction and volvulus | [Naveed M et al. ASGE guideline. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007](https://doi.org/10.1016/j.gie.2019.09.007) (PMID 31791596) |
-| Iatrogenic endoscopic perforation | [Paspatis GA et al. ESGE Position Statement, Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191](https://doi.org/10.1055/a-1222-3191) (PMID 32781470) |
+| Colonic pseudo-obstruction and volvulus | [Naveed M et al. ASGE guideline. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007 (PMID 31791596)](https://pubmed.ncbi.nlm.nih.gov/31791596/) |
+| Iatrogenic endoscopic perforation | [Paspatis GA et al. ESGE Position Statement, Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191 (PMID 32781470)](https://pubmed.ncbi.nlm.nih.gov/32781470/) |
 | Acute liver failure definition (AASLD) | Lee WM, Stravitz RT, Larson AM. Introduction to the revised AASLD Position Paper on acute liver failure 2011. Hepatology 2012;55(3):965-7. doi:10.1002/hep.25551 (PMID 22213561) |
 | Cholangitis drainage timing (ESGE 2019) | Manes G et al. Endoscopic management of common bile duct stones: ESGE guideline. Endoscopy 2019;51(5):472-491. doi:10.1055/a-0862-0346 (PMID 30943551) |
 | Toxic megacolon (Jalan criteria) | Jalan KN et al. An experience of ulcerative colitis. I. Toxic dilation in 55 cases. Gastroenterology 1969;57(1):68-82 (PMID 5305933) |
@@ -1792,5 +2277,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Prague C and M criteria | Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006;131(5):1392-9. doi:10.1053/j.gastro.2006.08.032 (PMID 17101315) |
 | Bedside algorithm trials and sources (B7.0) | Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013 (PMID 23281973); Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010 (PMID 20573925); Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020 (PMID 32242355); HALT-IT Trial Collaborators. Lancet 2020 (PMID 32563378); Chavez-Tapia NC et al. Antibiotic prophylaxis for cirrhotic patients with upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010 (PMID 20824832); Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012 (PMID 23063316); Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016 (PMID 27595142); Grainge MJ et al. Venous thromboembolism during active disease and remission in inflammatory bowel disease: a cohort study. Lancet 2010 (PMID 20149425); Randall J et al. Delayed surgery for acute severe colitis is associated with increased risk of postoperative complications. Br J Surg 2010 (PMID 20101648); Sort P et al. NEJM 1999 (PMID 10432325); de-Madaria E et al. Aggressive or moderate fluid resuscitation in acute pancreatitis (WATERFALL). NEJM 2022;387:989-1000 (PMID 36103415); Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020 (PMID 32682482); da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015 (PMID 26460661); Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021 (PMID 34614330). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
 | Spontaneous bacterial peritonitis (B7.9) | [EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018 (PMID 29653741)](https://pubmed.ncbi.nlm.nih.gov/29653741/); [Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021 (PMID 33942342)](https://pubmed.ncbi.nlm.nih.gov/33942342/) |
+| Emergency page sources (B7.3 to B7.18) | [Sengupta N et al. ACG guideline 2023 (PMID 36735555)](https://pubmed.ncbi.nlm.nih.gov/36735555/); [Abraham NS et al. ACG-CAG guideline 2022 (PMID 35297395)](https://pubmed.ncbi.nlm.nih.gov/35297395/); [Gralnek IM et al. ESGE 2021 (PMID 33567467)](https://pubmed.ncbi.nlm.nih.gov/33567467/); [Sung JJ et al. Ann Intern Med 2010 (PMID 19949136)](https://pubmed.ncbi.nlm.nih.gov/19949136/); [McDonald LC et al. IDSA/SHEA C. difficile guideline. Clin Infect Dis 2018 (PMID 29462280)](https://pubmed.ncbi.nlm.nih.gov/29462280/); [Randall J et al. Br J Surg 2010 (PMID 20101648)](https://pubmed.ncbi.nlm.nih.gov/20101648/); [Lee WM et al. Gastroenterology 2009 (PMID 19524577)](https://pubmed.ncbi.nlm.nih.gov/19524577/); [EASL acute liver failure guideline. J Hepatol 2017 (PMID 28417882)](https://pubmed.ncbi.nlm.nih.gov/28417882/); [Thursz MR et al. STOPAH. NEJM 2015 (PMID 25901427)](https://pubmed.ncbi.nlm.nih.gov/25901427/); [Louvet A et al. Lille model. Hepatology 2007 (PMID 17518367)](https://pubmed.ncbi.nlm.nih.gov/17518367/); [Arab JP et al. J Hepatol 2021 (PMID 34166722)](https://pubmed.ncbi.nlm.nih.gov/34166722/); [Nadim MK et al. ICA-ADQI. J Hepatol 2024 (PMID 38527522)](https://pubmed.ncbi.nlm.nih.gov/38527522/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Vilstrup H et al. AASLD-EASL. Hepatology 2014 (PMID 25042402)](https://pubmed.ncbi.nlm.nih.gov/25042402/); [Bass NM et al. NEJM 2010 (PMID 20335583)](https://pubmed.ncbi.nlm.nih.gov/20335583/); [Birk M et al. ESGE. Endoscopy 2016 (PMID 26862844)](https://pubmed.ncbi.nlm.nih.gov/26862844/); [Zargar SA et al. Gastrointest Endosc 1991 (PMID 2032601)](https://pubmed.ncbi.nlm.nih.gov/2032601/); [Ponec RJ et al. NEJM 1999 (PMID 10403850)](https://pubmed.ncbi.nlm.nih.gov/10403850/); [Sgouros SN et al. Gut 2006 (PMID 16306137)](https://pubmed.ncbi.nlm.nih.gov/16306137/); [Hirota WK et al. ASGE guideline: the role of endoscopy in the surveillance of premalignant conditions of the upper GI tract. Gastrointest Endosc 2006 (PMID 16564854)](https://pubmed.ncbi.nlm.nih.gov/16564854/) |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

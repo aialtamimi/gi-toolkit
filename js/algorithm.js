@@ -68,7 +68,25 @@ export const SUGGESTIONS = [
       return { answers: [result.runyonCount >= 2 ? "Runyon criteria or polymicrobial culture" : "PMN 250/mm³ or more"] };
     } },
   { page: "em_cholangitis", decision: "D1", calc: "tg18_cholangitis",
-    rule: ({ result }) => ({ answers: result.dx.status === "Not met" ? [] : [`Grade ${["I", "II", "III"][result.sev.grade - 1]}`] }) }
+    rule: ({ result }) => ({ answers: result.dx.status === "Not met" ? [] : [`Grade ${["I", "II", "III"][result.sev.grade - 1]}`] }) },
+  { page: "em_lgib", decision: "D2", calc: "oakland",
+    rule: ({ result }) => ({ answers: [result.score <= 8 ? "Yes" : "No"] }) },
+  { page: "em_alf", decision: "D2", calc: "kings",
+    rule: ({ result }) => ({ answers: result.met ? ["Yes"] : [] }) },
+  { page: "em_aah", decision: "D2", calc: "lille",
+    rule: ({ result }) => ({ answers: [result.score >= 0.45 ? "Yes" : "No"] }) },
+  { page: "em_he", decision: "D1", calc: "west_haven",
+    rule: ({ result }) => ({ answers: [["3", "4"].includes(result.row.grade) ? "Yes" : "No"] }) },
+  // Zargar is a B6 table card: its "result" is the tapped row, [grade, finding].
+  { page: "em_caustic", decision: "D2", calc: "zargar",
+    rule: ({ result }) => {
+      const g = result.row[0];
+      if (["0", "1", "2a"].includes(g)) return { answers: ["0–2a"] };
+      if (["2b", "3a"].includes(g)) return { answers: ["2b–3a"] };
+      if (g === "3b") return { answers: ["3b"] };
+      if (g === "4") return { answers: ["Grade 4 (perforation)"] };
+      return { answers: [] };
+    } }
 ];
 
 // Suggestions for one decision, given the latest outputs of the page's calculators

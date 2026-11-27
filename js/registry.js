@@ -42,6 +42,7 @@ import cdai from "./calculators/ibd/cdai.js";
 import ses_cd from "./calculators/ibd/ses_cd.js";
 import rutgeerts from "./calculators/ibd/rutgeerts.js";
 import montreal from "./calculators/ibd/montreal.js";
+import jalan from "./calculators/ibd/jalan.js";
 import bbps from "../content/cards/bbps.js";
 import la_grade from "../content/cards/la_grade.js";
 import prague from "../content/cards/prague.js";
@@ -83,7 +84,7 @@ export const CALCULATORS = [
   child_pugh, meld_na, meld3, maddrey, lille, gahs, abic, fib4, apri, nfs, albi,
   ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, kings, baveno7, fibroscan,
   bisap, ranson, glasgow_imrie, sirs, marshall, atlanta, mctsi, tg18_cholangitis, asge_cbd,
-  truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal
+  truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal, jalan
 ];
 
 // Phase 3: B6 reference cards (in SPEC order) and B7 emergency pages (in the B7.19 index order).
