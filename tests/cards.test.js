@@ -93,7 +93,8 @@ test("all 22 B6 cards are registered in SPEC order; five are calculators", () =>
   assert.deepEqual(CARDS.map(c => c.id), Object.keys(SPEC_NUM));
   for (const c of CARDS) {
     assert.equal(c.spec, SPEC_NUM[c.id]);
-    assert.equal(c.category, "endoscopy");
+    const cat = section(c.spec).match(/^Category: (.+?)\.$/m);
+    assert.equal(c.category, { Motility: "motility", "GI bleeding": "bleeding", "Pancreas and biliary": "pancreas" }[cat?.[1]] || "endoscopy", c.id);
     assert.ok(section(c.spec).includes(`(id: ${c.id.replace(/_/g, "\\_")}`), `${c.id} id in SPEC heading`);
     assert.equal(hrefFor(c.id), `#/card/${c.id}`);
     assert.ok(c.use && c.references.length);

@@ -7,7 +7,7 @@ export default {
   name: "Bristol stool form scale",
   short: "Bristol stool",
   aliases: ["Bristol", "Bristol stool form scale", "stool form", "stool type", "IBS subtype", "Rome IV"],
-  category: "endoscopy",
+  category: "motility",
   kind: "card",
   use: "Used in Rome IV IBS subtyping.",
   table: { columns: ["Type", "Description", "Suggests"], rows: [

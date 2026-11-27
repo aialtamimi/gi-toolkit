@@ -8,9 +8,14 @@ const PHASE1 = ["gbs", "aims65", "rockall", "oakland", "forrest",
   "ascites", "r_factor", "aih_simplified", "leipzig", "west_haven", "aclf", "clif_c_aclf", "kings", "baveno8", "fibroscan"];
 const PHASE2 = ["bisap", "ranson", "glasgow_imrie", "sirs", "marshall", "atlanta", "mctsi", "tg18_cholangitis", "asge_cbd",
   "truelove_witts", "asuc_day3", "mayo_uc", "uceis", "hbi", "cdai", "ses_cd", "rutgeerts", "montreal", "jalan"];
+const MOTILITY = ["chicago", "eckardt", "london"];
 
-test("registry contains every B2, B3, B4 and B5 calculator (B5.10 Jalan included)", () => {
-  assert.deepEqual(CALCULATORS.map(c => c.id).sort(), [...PHASE1, ...PHASE2].sort());
+test("registry contains every B2, B3, B4, B5 and B10 calculator (B5.10 Jalan included)", () => {
+  assert.deepEqual(CALCULATORS.map(c => c.id).sort(), [...PHASE1, ...PHASE2, ...MOTILITY].sort());
+});
+
+test("B10 calculators are in the motility category", () => {
+  for (const id of MOTILITY) assert.equal(CALCULATORS.find(c => c.id === id).category, "motility", id);
 });
 
 test("B4 tools are in the pancreas category and B5 tools in IBD", () => {
@@ -58,6 +63,6 @@ test("footer and About page show the designer credit", async () => {
 test("all pages reachable from search (B1.9 Phase 3): every calculator, card and emergency page", async () => {
   const { CARDS, EMERGENCIES } = await import("../js/registry.js");
   const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES];
-  assert.equal(all.length, 45 + 22 + 18);
+  assert.equal(all.length, 48 + 22 + 18);
   for (const item of all) assert.ok(search(item.name).includes(item), item.name);
 });

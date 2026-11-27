@@ -13,7 +13,7 @@ export default {
     "cholecystectomy injury",
     "bile leak"
   ],
-  "category": "endoscopy",
+  "category": "pancreas",
   "kind": "card",
   "use": "A and small D: usually ERCP (stent with or without sphincterotomy); B, C, larger D and E: hepatobiliary surgical centre.",
   "table": {

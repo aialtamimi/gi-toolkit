@@ -44,6 +44,9 @@ import ses_cd from "./calculators/ibd/ses_cd.js";
 import rutgeerts from "./calculators/ibd/rutgeerts.js";
 import montreal from "./calculators/ibd/montreal.js";
 import jalan from "./calculators/ibd/jalan.js";
+import chicago from "./calculators/motility/chicago.js";
+import eckardt from "./calculators/motility/eckardt.js";
+import london from "./calculators/motility/london.js";
 import bbps from "../content/cards/bbps.js";
 import la_grade from "../content/cards/la_grade.js";
 import prague from "../content/cards/prague.js";
@@ -90,17 +93,19 @@ export const CATEGORIES = [
   { id: "liver", name: "Liver" },
   { id: "pancreas", name: "Pancreas and biliary" },
   { id: "ibd", name: "IBD" },
+  { id: "motility", name: "Motility" },
   { id: "endoscopy", name: "Endoscopy classifications" },
   { id: "emergencies", name: "Emergencies", emergency: true }
 ];
 
-// Phase 1: B2 (bleeding) and B3 (liver). Phase 2: B4 (pancreatobiliary) and B5 (IBD).
+// Phase 1: B2 (bleeding) and B3 (liver). Phase 2: B4 (pancreatobiliary) and B5 (IBD). Motility: B10.
 export const CALCULATORS = [
   gbs, aims65, rockall, oakland, forrest,
   child_pugh, meld_na, meld3, maddrey, lille, gahs, abic, fib4, apri, nfs, albi,
   ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, clif_c_aclf, kings, baveno8, fibroscan,
   bisap, ranson, glasgow_imrie, sirs, marshall, atlanta, mctsi, tg18_cholangitis, asge_cbd,
-  truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal, jalan
+  truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal, jalan,
+  chicago, eckardt, london
 ];
 
 // Phase 3: B6 reference cards (in SPEC order) and B7 emergency pages (in the B7.19 index order).

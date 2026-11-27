@@ -36,7 +36,8 @@ export function collectValues(def, raw, units = {}) {
   }
   for (const inp of def.inputs) {
     if (!inp.id || inp.type !== "number") continue;
-    const s = raw[inp.id];
+    // A number input with a default (for example an editable upper limit of normal) uses it until the user edits the field.
+    const s = raw[inp.id] !== undefined ? raw[inp.id] : inp.default;
     if (s === undefined || s === null || String(s).trim() === "") continue;
     const n = typeof s === "number" ? s : Number(String(s).trim().replace(",", "."));
     if (!Number.isFinite(n)) { errors.push({ id: inp.id, message: "Enter a number" }); continue; }
@@ -239,6 +240,7 @@ function renderInput(def, inp, idx, raw, units, update, prefix) {
 
   if (inp.type === "number") {
     const input = h("input", { id, type: "text", inputmode: inp.integer ? "numeric" : "decimal", enterkeyhint: "next", autocomplete: "off",
+      value: inp.default !== undefined ? String(inp.default) : null,
       oninput: e => { raw[inp.id] = e.target.value; update(); } });
     let unitEl;
     if (inp.analyte) {
@@ -333,7 +335,7 @@ export function renderResult(card, def, r, it, opts = {}) {
       h("summary", {}, (hasPts ? "Points breakdown" : "Breakdown")),
       h("table", {}, h("tbody", {}, r.breakdown.map(b => h("tr", {},
         h("td", {}, b.item),
-        h("td", { class: "num" }, b.points !== undefined ? String(b.points).replace("-", "−") : b.value)))))));
+        h("td", { class: b.points === undefined && String(b.value).length > 16 ? "num long" : "num" }, b.points !== undefined ? String(b.points).replace("-", "−") : b.value)))))));
   }
   if (r.rounding) card.append(h("p", { class: "rounding" }, "Rounding: " + r.rounding));
   const copyBtn = h("button", { type: "button", class: "btn btn-primary copy-btn", onclick: async () => {

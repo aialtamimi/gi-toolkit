@@ -7,7 +7,7 @@ export default {
   name: "Lyon Consensus 2.0 for GERD",
   short: "Lyon 2.0",
   aliases: ["Lyon", "Lyon 2.0", "Lyon Consensus", "GERD", "reflux", "acid exposure time", "AET", "pH monitoring", "MNBI"],
-  category: "endoscopy",
+  category: "motility",
   kind: "card",
   use: "Prolonged wireless pH monitoring off PPI is preferred for unproven GERD.",
   table: { columns: ["Evidence level", "Endoscopy", "Reflux monitoring off proton pump inhibitor (PPI)"], rows: [
