@@ -47,6 +47,7 @@ export default {
   },
   "copy": row => `Bismuth-Corlette type ${row[0]}`,
   "references": [
-    ref("Bismuth H, Corlette MB. Intrahepatic cholangioenteric anastomosis in carcinoma of the hilus of the liver. Surg Gynecol Obstet 1975. PMID 1079096", "https://pubmed.ncbi.nlm.nih.gov/1079096/")
+    ref("Bismuth H, Corlette MB. Intrahepatic cholangioenteric anastomosis in carcinoma of the hilus of the liver. Surg Gynecol Obstet 1975. PMID 1079096", "https://pubmed.ncbi.nlm.nih.gov/1079096/"),
+    ref("Bismuth H et al. Management strategies in resection for hilar cholangiocarcinoma. Ann Surg 1992. PMID 1309988", "https://pubmed.ncbi.nlm.nih.gov/1309988/")
   ]
 };

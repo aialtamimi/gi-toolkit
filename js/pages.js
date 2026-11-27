@@ -88,7 +88,7 @@ export function renderCard(root, card, opts = {}) {
     h("p", { class: "card-use" }, card.use),
     ...(card.notes || []).map(n => h("p", { class: "note" }, n)),
     (card.links || []).filter(l => !(opts.hideLinks || []).includes(l.target)).length
-      ? h("div", { class: "links" }, card.links.filter(l => !(opts.hideLinks || []).includes(l.target)).map(l => linkTo(l.target, l.label))) : null,
+      ? h("div", { class: "links" }, card.links.filter(l => !(opts.hideLinks || []).includes(l.target)).map(l => linkTo(l.target, l.label, l.entry))) : null,
     h("h3", {}, "Source"),
     refList(card.references));
 }
@@ -312,7 +312,8 @@ export function renderAlgorithm(root, page, opts = {}) {
   updateDoses();
   update();
 
-  // Entry point: scroll to the first decision it answers (for example D1 for "variceal").
-  const first = opts.entry && Object.keys(answers)[0];
+  // Entry point: scroll to its "opens at" step (for example D4 for "source"), otherwise to the first
+  // decision it answers (for example D1 for "variceal").
+  const first = opts.entry && ((page.entryFocus || {})[opts.entry] || Object.keys(answers)[0]);
   if (first && stepEls[first]) requestAnimationFrame(() => stepEls[first].card.scrollIntoView({ block: "start" }));
 }

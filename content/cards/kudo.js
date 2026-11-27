@@ -16,7 +16,7 @@ export default {
   ],
   "category": "endoscopy",
   "kind": "card",
-  "use": "Type VI needs en bloc resection; type VN suggests deep submucosal invasion: surgery.",
+  "use": "Type VI needs en bloc resection (high-grade VI may indicate deep invasion, so consider surgery); type VN suggests deep submucosal invasion: surgery.",
   "table": {
     "columns": [
       "Type",
@@ -52,7 +52,7 @@ export default {
       [
         "VI",
         "Irregular",
-        "High-grade dysplasia or superficial submucosal cancer: en bloc resection"
+        "High-grade dysplasia or superficial submucosal cancer: en bloc resection; high-grade VI may indicate deep invasion, so consider surgery"
       ],
       [
         "VN",

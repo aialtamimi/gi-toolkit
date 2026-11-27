@@ -37,7 +37,7 @@ export default {
       [
         "II",
         "Focal loss of the submucosal plane; muscle injury cannot be excluded",
-        "Consider clip closure"
+        "Clip closure (muscle injury cannot be excluded)"
       ],
       [
         "III",

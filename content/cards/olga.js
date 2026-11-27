@@ -41,7 +41,7 @@ export default {
   },
   interpret(r) {
     const high = r.stage === "III" || r.stage === "IV";
-    return { band: high ? "High risk" : "Lower risk", level: high ? "high" : "low", action: high ? HIGH_ACTION : LOW_ACTION,
+    return { band: high ? "High risk (stage III–IV)" : "Lower risk (stage 0–II)", level: high ? "high" : "low", action: high ? HIGH_ACTION : LOW_ACTION,
       copy: `${r.system} stage ${r.stage}, ${high ? "high risk" : "lower risk"}` };
   },
   table: { columns: ["Antrum \\ Corpus", "None", "Mild", "Moderate", "Severe"],

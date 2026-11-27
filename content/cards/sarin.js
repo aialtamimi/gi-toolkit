@@ -44,8 +44,9 @@ export default {
   },
   "links": [
     {
-      "label": "Variceal bleeding",
-      "target": "em_variceal"
+      "label": "Bleeding source decision",
+      "target": "em_ugib",
+      "entry": "source"
     }
   ],
   "copy": row => `Sarin: ${row[0]}`,

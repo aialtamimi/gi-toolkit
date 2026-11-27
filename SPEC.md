@@ -991,7 +991,7 @@ Total 0–9. Adequate preparation: total ≥6 with every segment ≥2. If inadeq
 
 Clinical use: grades B, C and D are conclusive evidence of GERD (Lyon 2.0); grade A is not conclusive.
 
-### B6.3 Prague C and M criteria with Barrett's surveillance (id: prague)
+### B6.3 Prague C and M criteria with Barrett's surveillance (id: prague; calculator)
 
 Inputs: C = circumferential extent (cm above the gastroesophageal junction); M = maximum extent (cm). Landmark: top of the gastric folds. Islands are not included. Output: "C2M5".
 
@@ -1084,11 +1084,11 @@ Source: [Hirano I et al. Gut 2013 (PMID 22619364)](https://pubmed.ncbi.nlm.nih.g
 | --- | --- |
 | Edema | 0 absent; 1 present |
 | Rings | 0 none; 1 mild (subtle ridges); 2 moderate (distinct rings, standard scope passes); 3 severe (scope does not pass) |
-| Exudates | 0 none; 1 mild (<10% of surface); 2 severe (>10% of surface) |
+| Exudates | 0 none; 1 mild (10% or less of the surface); 2 severe (>10% of the surface) |
 | Furrows | 0 none; 1 mild; 2 severe |
 | Stricture | 0 absent; 1 present |
 
-Result: proximal score, distal score and total (no bands). Note: "Minor features, not scored: crepe-paper mucosa, narrow-caliber esophagus." Note: "Score before biopsies; use the score to follow response to treatment."
+Result: proximal score, distal score and total (no bands). Note: "Minor features, not scored: crepe-paper mucosa, narrow-caliber esophagus." Note: "Score before biopsies; use the score to follow response to treatment." Note: "No validated cut-off; higher scores mean more active disease. Use to compare over time; histology (15 or more eosinophils per high-power field) is still required."
 
 ### B6.10 Sydney classification of deep mural injury after EMR (id: sydney\_dmi)
 
@@ -1098,7 +1098,7 @@ Source: [Burgess NG et al. Gut 2017 (PMID 27464708)](https://pubmed.ncbi.nlm.nih
 | --- | --- | --- |
 | 0 | Normal blue-mat submucosa | No closure needed |
 | I | Muscularis propria visible, not injured | No closure needed |
-| II | Focal loss of the submucosal plane; muscle injury cannot be excluded | Consider clip closure |
+| II | Focal loss of the submucosal plane; muscle injury cannot be excluded | Clip closure (muscle injury cannot be excluded) |
 | III | Muscle injured (target sign on the specimen or mirror target in the defect) | Close promptly with through-the-scope or over-the-scope clips |
 | IV | Hole within a white cautery ring, no contamination | Close promptly with through-the-scope or over-the-scope clips; antibiotics, admission and surgical review |
 | V | Hole with contamination | Close promptly with through-the-scope or over-the-scope clips; antibiotics, admission and surgical review |
@@ -1111,7 +1111,7 @@ Source: [Sano Y et al. Dig Endosc 2016 (PMID 26927367)](https://pubmed.ncbi.nlm.
 
 | Type | Vessel pattern | Surface pattern | Likely histology | Action |
 | --- | --- | --- | --- | --- |
-| 1 | Invisible | Regular dark or white spots, like normal mucosa | Hyperplastic polyp or sessile serrated lesion | Resect sessile serrated lesions; small rectosigmoid hyperplastic polyps can be left |
+| 1 | Invisible | Regular dark or white spots, like normal mucosa | Hyperplastic polyp or sessile serrated lesion | Diminutive (5 mm or less) rectosigmoid hyperplastic polyps can be left in place only with a high-confidence optical diagnosis; resect sessile serrated lesions. |
 | 2A | Regular caliber and distribution (meshed or spiral) | Regular tubular, branched or papillary | Low-grade intramucosal neoplasia | Endoscopic resection |
 | 2B | Variable caliber, irregular distribution | Irregular or obscure | High-grade intramucosal neoplasia or shallow submucosal invasive cancer | En bloc resection; add magnifying chromoendoscopy (pit pattern) |
 | 3 | Loose vessel areas, interruption of thick vessels | Amorphous areas | Deep submucosal invasive cancer | Surgery |
@@ -1129,10 +1129,10 @@ Source: [Kudo S et al. Gastrointest Endosc 1996 (PMID 8836710)](https://pubmed.n
 | IIIS | Small tubular or round | Depressed adenoma or early cancer |
 | IIIL | Large tubular or roundish | Adenoma |
 | IV | Branch-like or gyrus-like | Adenoma, often villous |
-| VI | Irregular | High-grade dysplasia or superficial submucosal cancer: en bloc resection |
+| VI | Irregular | High-grade dysplasia or superficial submucosal cancer: en bloc resection; high-grade VI may indicate deep invasion, so consider surgery |
 | VN | Non-structural | Deep submucosal invasion: surgery |
 
-Clinical use: "Type VI needs en bloc resection; type VN suggests deep submucosal invasion: surgery."
+Clinical use: "Type VI needs en bloc resection (high-grade VI may indicate deep invasion, so consider surgery); type VN suggests deep submucosal invasion: surgery."
 
 ### B6.13 Malignant colorectal polyp: Haggitt and Kikuchi levels (id: haggitt\_kikuchi)
 
@@ -1162,7 +1162,7 @@ Source: [Sarin SK et al. Hepatology 1992 (PMID 1446890)](https://pubmed.ncbi.nlm
 | IGV1 | Isolated gastric varices in the fundus |
 | IGV2 | Isolated gastric varices elsewhere (body, antrum, pylorus, duodenum) |
 
-Clinical use: "Treatment depends on the type: see the bleeding source decision in variceal bleeding (B7.1)." Links: Variceal bleeding (em\_variceal).
+Clinical use: "Treatment depends on the type: see the bleeding source decision in variceal bleeding (B7.1)." Links: Bleeding source decision (em\_ugib, entry point source).
 
 ### B6.15 Hill grade of the gastroesophageal flap valve (id: hill)
 
@@ -1181,13 +1181,13 @@ Clinical use: "Grades III–IV are associated with GERD." Links: Lyon Consensus 
 
 Source: [Siewert JR, Stein HJ. Br J Surg 1998 (PMID 9823902)](https://pubmed.ncbi.nlm.nih.gov/9823902/).
 
-| Type | Tumor center | Treated as |
+| Type | Tumor center | Staging and treatment |
 | --- | --- | --- |
 | I | 1–5 cm above the gastroesophageal junction | Esophageal cancer |
-| II | 1 cm above to 2 cm below the gastroesophageal junction | Per staging and multidisciplinary team |
-| III | 2–5 cm below the gastroesophageal junction | Gastric cancer |
+| II | 1 cm above to 2 cm below the gastroesophageal junction | Staged as esophageal cancer (AJCC 8th edition: epicenter within 2 cm of the gastroesophageal junction). Surgical approach decided by the multidisciplinary team. |
+| III | 2–5 cm below the gastroesophageal junction | Staged as gastric cancer |
 
-Clinical use: "Type I is treated as esophageal cancer, type III as gastric cancer, type II per staging and multidisciplinary team."
+Clinical use: "Type I is treated as esophageal cancer; type II is staged as esophageal cancer, with the surgical approach decided by the multidisciplinary team; type III is staged as gastric cancer."
 
 ### B6.17 Spigelman classification of duodenal polyposis, modified (id: spigelman; calculator)
 
@@ -1225,7 +1225,7 @@ Choose atrophy (OLGA) or intestinal metaplasia (OLGIM); score the antrum (includ
 | Moderate | II | II | III | IV |
 | Severe | III | III | IV | IV |
 
-Stage III–IV: band "High risk"; action "H. pylori eradication and high-quality endoscopy every 3 years (MAPS III)." Stage 0–II: band "Lower risk"; action "Eradicate H. pylori; no routine surveillance unless other risk factors (first-degree family history, incomplete intestinal metaplasia, persistent H. pylori): individualize."
+Stage III–IV: band "High risk (stage III–IV)"; action "H. pylori eradication and high-quality endoscopy every 3 years (MAPS III)." Stage 0–II: band "Lower risk (stage 0–II)"; action "Eradicate H. pylori; no routine surveillance unless other risk factors (first-degree family history, incomplete intestinal metaplasia, persistent H. pylori): individualize."
 
 ### B6.19 Marsh-Oberhuber classification of celiac disease (id: marsh)
 
@@ -1257,7 +1257,7 @@ Clinical use: "Grade IV, or failed office treatment: hemorrhoidectomy."
 
 ### B6.21 Bismuth-Corlette classification of hilar biliary strictures (id: bismuth\_corlette)
 
-Source: [Bismuth H, Corlette MB. Surg Gynecol Obstet 1975 (PMID 1079096)](https://pubmed.ncbi.nlm.nih.gov/1079096/).
+Sources: [Bismuth H, Corlette MB. Surg Gynecol Obstet 1975 (PMID 1079096)](https://pubmed.ncbi.nlm.nih.gov/1079096/); [Bismuth H et al. Ann Surg 1992, types IIIa and IIIb (PMID 1309988)](https://pubmed.ncbi.nlm.nih.gov/1309988/).
 
 | Type | Level |
 | --- | --- |
@@ -1306,7 +1306,7 @@ Every emergency page is an interactive bedside algorithm. The first five (B7.1, 
 | Why | One short line in small italic under key steps, naming the trial or guideline |
 | After the algorithm | Avoid, other tables, Doses (adult doses; weight-based rows show the calculated dose under the written dose), Related calculators, Sources |
 
-Format of the algorithm on every B7 page: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (a why line; a step can have more than one, shown in order) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps. A line "Search words that open the X pathway: ..." lists search words that open the page at entry point X. A line Show: "..." is a highlighted note shown after the algorithm. A built-in calculator can also be a B6 table card: tapping a row reports the selected row.
+Format of the algorithm on every B7 page: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (a why line; a step can have more than one, shown in order) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps. A line "Search words that open the X pathway: ..." lists search words that open the page at entry point X. A line "Entry point X: answers; opens at D" opens the page with those answers chosen and scrolls to step D; without "opens at", it scrolls to the first decision answered. A line Show: "..." is a highlighted note shown after the algorithm. A built-in calculator can also be a B6 table card: tapping a row reports the selected row.
 
 Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of albumin is calculated from the unrounded grams (20% albumin: 1 g = 5 mL; 25% albumin: 1 g = 4 mL). The urine output line is a target, not a dose, and is labelled so. Pages without a weight-based dose (B7.3, B7.6, B7.8, B7.13 to B7.18) have no weight field. Test vectors: B8.7.
 
@@ -1356,6 +1356,8 @@ Suggested answers. When a built-in calculator on the page has a result, the matc
 Bedside algorithm (B7.0). Weight field: yes.
 
 Entry point variceal: D1 = Yes (opened by the search words below and by old links to the variceal page, B7.2).
+
+Entry point source: D1 = Yes; opens at D4 (opened by the link on the Sarin card, B6.14).
 
 Search words that open the variceal pathway: variceal bleeding, varices, esophageal varices, terlipressin, TIPS, band ligation.
 
@@ -2521,6 +2523,7 @@ Steps shown in the normal view for each set of answers (several answers separate
 | em\_ugib | D1 = No; D3 = Low-risk stigmata | U1, D1, N1, N2, D3, N4, N5, N6, N7 |
 | em\_ugib | D1 = No; D2 = Yes | U1, D1, N1, N2, D3, N5, N6, N7 |
 | em\_ugib | entry point variceal | U1, D1, V1, V2, D4, V3, V6, V7 |
+| em\_ugib | entry point source | U1, D1, V1, V2, D4, V3, V6, V7 |
 | em\_asuc | none | A1, D1 |
 | em\_asuc | D1 = Yes | A1, D1, A2, D2 |
 | em\_asuc | D1 = Yes; D2 = Yes | A1, D1, A2, D2, A4 |
@@ -2709,6 +2712,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Spontaneous bacterial peritonitis (B7.9) | [EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018 (PMID 29653741)](https://pubmed.ncbi.nlm.nih.gov/29653741/); [Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021 (PMID 33942342)](https://pubmed.ncbi.nlm.nih.gov/33942342/) |
 | Emergency page sources (B7.3 to B7.18) | [Sengupta N et al. ACG guideline 2023 (PMID 36735555)](https://pubmed.ncbi.nlm.nih.gov/36735555/); [Abraham NS et al. ACG-CAG guideline 2022 (PMID 35297395)](https://pubmed.ncbi.nlm.nih.gov/35297395/); [Gralnek IM et al. ESGE 2021 (PMID 33567467)](https://pubmed.ncbi.nlm.nih.gov/33567467/); [Sung JJ et al. Ann Intern Med 2010 (PMID 19949136)](https://pubmed.ncbi.nlm.nih.gov/19949136/); [McDonald LC et al. IDSA/SHEA C. difficile guideline. Clin Infect Dis 2018 (PMID 29462280)](https://pubmed.ncbi.nlm.nih.gov/29462280/); [Randall J et al. Br J Surg 2010 (PMID 20101648)](https://pubmed.ncbi.nlm.nih.gov/20101648/); [Lee WM et al. Gastroenterology 2009 (PMID 19524577)](https://pubmed.ncbi.nlm.nih.gov/19524577/); [EASL acute liver failure guideline. J Hepatol 2017 (PMID 28417882)](https://pubmed.ncbi.nlm.nih.gov/28417882/); [Thursz MR et al. STOPAH. NEJM 2015 (PMID 25901427)](https://pubmed.ncbi.nlm.nih.gov/25901427/); [Louvet A et al. Lille model. Hepatology 2007 (PMID 17518367)](https://pubmed.ncbi.nlm.nih.gov/17518367/); [Arab JP et al. J Hepatol 2021 (PMID 34166722)](https://pubmed.ncbi.nlm.nih.gov/34166722/); [Nadim MK et al. ICA-ADQI. J Hepatol 2024 (PMID 38527522)](https://pubmed.ncbi.nlm.nih.gov/38527522/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Vilstrup H et al. AASLD-EASL. Hepatology 2014 (PMID 25042402)](https://pubmed.ncbi.nlm.nih.gov/25042402/); [Bass NM et al. NEJM 2010 (PMID 20335583)](https://pubmed.ncbi.nlm.nih.gov/20335583/); [Birk M et al. ESGE. Endoscopy 2016 (PMID 26862844)](https://pubmed.ncbi.nlm.nih.gov/26862844/); [Zargar SA et al. Gastrointest Endosc 1991 (PMID 2032601)](https://pubmed.ncbi.nlm.nih.gov/2032601/); [Ponec RJ et al. NEJM 1999 (PMID 10403850)](https://pubmed.ncbi.nlm.nih.gov/10403850/); [Sgouros SN et al. Gut 2006 (PMID 16306137)](https://pubmed.ncbi.nlm.nih.gov/16306137/); [Hirota WK et al. ASGE guideline: the role of endoscopy in the surveillance of premalignant conditions of the upper GI tract. Gastrointest Endosc 2006 (PMID 16564854)](https://pubmed.ncbi.nlm.nih.gov/16564854/) |
 | Acute-on-chronic liver failure (B3.17, B3.21, B7.20) | [EASL Clinical Practice Guidelines on acute-on-chronic liver failure. J Hepatol 2023 (PMID 37364789)](https://pubmed.ncbi.nlm.nih.gov/37364789/); [Bajaj JS et al. ACG Clinical Guideline: acute-on-chronic liver failure. Am J Gastroenterol 2022 (PMID 35006099)](https://pubmed.ncbi.nlm.nih.gov/35006099/); [Moreau R et al. CANONIC. Gastroenterology 2013 (PMID 23474284)](https://pubmed.ncbi.nlm.nih.gov/23474284/); [Jalan R et al. CLIF-C ACLF score. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/); [Gustot T et al. Clinical course of ACLF. Hepatology 2015 (PMID 25877702)](https://pubmed.ncbi.nlm.nih.gov/25877702/); [Artru F et al. Transplant in ACLF grade 3. J Hepatol 2017 (PMID 28645736)](https://pubmed.ncbi.nlm.nih.gov/28645736/); [Engelmann C et al. GRAFT. J Hepatol 2021 (PMID 34364917)](https://pubmed.ncbi.nlm.nih.gov/34364917/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Engelmann C et al. CLIF-C ACLF futility threshold. Crit Care 2018 (PMID 30305132)](https://pubmed.ncbi.nlm.nih.gov/30305132/) |
-| Classification cards (B6.9 to B6.22) | Hirano 2013 (PMID 22619364); Burgess 2017 (PMID 27464708); Sano 2016 (PMID 26927367); Kudo 1996 (PMID 8836710); Haggitt 1985 (PMID 4007423); Kikuchi 1995 (PMID 7497841); Hashiguchi, JSCCR 2019, Int J Clin Oncol 2020 (PMID 31203527); Sarin 1992 (PMID 1446890); Hill 1996 (PMID 8934159); Siewert 1998 (PMID 9823902); Spigelman 1989 (PMID 2571019); Syngal, ACG 2015 (PMID 25645574); Rugge 2007 (PMID 17142647); Capelle 2010 (PMID 20381801); Dinis-Ribeiro, MAPS III 2025 (PMID 40112834); Oberhuber 1999 (PMID 10524652); Hawkins, ASCRS 2024 (PMID 38294832); Bismuth 1975 (PMID 1079096); Strasberg 1995 (PMID 8000648). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
+| Classification cards (B6.9 to B6.22) | Hirano 2013 (PMID 22619364); Burgess 2017 (PMID 27464708); Sano 2016 (PMID 26927367); Kudo 1996 (PMID 8836710); Haggitt 1985 (PMID 4007423); Kikuchi 1995 (PMID 7497841); Hashiguchi, JSCCR 2019, Int J Clin Oncol 2020 (PMID 31203527); Sarin 1992 (PMID 1446890); Hill 1996 (PMID 8934159); Siewert 1998 (PMID 9823902); Spigelman 1989 (PMID 2571019); Syngal, ACG 2015 (PMID 25645574); Rugge 2007 (PMID 17142647); Capelle 2010 (PMID 20381801); Dinis-Ribeiro, MAPS III 2025 (PMID 40112834); Oberhuber 1999 (PMID 10524652); Hawkins, ASCRS 2024 (PMID 38294832); Bismuth 1975 (PMID 1079096); Bismuth 1992 (PMID 1309988); Strasberg 1995 (PMID 8000648). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

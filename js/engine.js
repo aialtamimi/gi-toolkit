@@ -104,8 +104,8 @@ export function h(tag, attrs = {}, ...children) {
 
 const LEVEL_CLASS = { low: "lvl-low", intermediate: "lvl-int", high: "lvl-high", neutral: "lvl-neutral" };
 
-export function linkTo(target, label) {
-  if (findItem(target)) return h("a", { class: "btn btn-link", href: hrefFor(target) }, label);
+export function linkTo(target, label, entry) {
+  if (findItem(target)) return h("a", { class: "btn btn-link", href: hrefFor(target) + (entry ? `/${entry}` : "") }, label);
   const planned = EMERGENCY_INDEX.find(e => e.id === target);
   return h("span", { class: "btn btn-link disabled", "aria-disabled": "true" }, label, " ", (planned ? "(coming in a later update)" : "(not available)"));
 }

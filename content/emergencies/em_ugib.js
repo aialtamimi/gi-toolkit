@@ -22,7 +22,13 @@ export default {
   "entries": {
     "variceal": {
       "D1": "Yes"
+    },
+    "source": {
+      "D1": "Yes"
     }
+  },
+  "entryFocus": {
+    "source": "D4"
   },
   "entryWords": {
     "variceal": [

@@ -6,7 +6,7 @@ import { CARDS, EMERGENCIES, search, hrefFor, findItem } from "../js/registry.js
 import bbps, { INADEQUATE_ACTION } from "../content/cards/bbps.js";
 import prague, { intervalRow, DYSPLASIA_NOTE } from "../content/cards/prague.js";
 import nice, { SPEC_TABLE } from "../content/cards/nice.js";
-import erefs, { MINOR_NOTE, USE_NOTE } from "../content/cards/erefs.js";
+import erefs, { MINOR_NOTE, USE_NOTE, CUTOFF_NOTE } from "../content/cards/erefs.js";
 import spigelman, { SURVEILLANCE, AMPULLA_NOTE } from "../content/cards/spigelman.js";
 import olga, { GRADES, MATRIX, HIGH_ACTION, LOW_ACTION } from "../content/cards/olga.js";
 import { SPEC_REFS } from "../js/pages.js";
@@ -89,7 +89,7 @@ const CALCULATOR_CARDS = ["bbps", "prague", "erefs", "spigelman", "olga"];
 test("all 22 B6 cards are registered in SPEC order; five are calculators", () => {
   assert.equal(CARDS.length, 22);
   assert.deepEqual(CARDS.filter(c => c.inputs).map(c => c.id), CALCULATOR_CARDS);
-  for (const c of CARDS) assert.equal(/; calculator\)$/.test(section(c.spec).split("\n")[0]), ["bbps", "erefs", "spigelman", "olga"].includes(c.id), c.id);
+  for (const c of CARDS) assert.equal(/; calculator\)$/.test(section(c.spec).split("\n")[0]), CALCULATOR_CARDS.includes(c.id), c.id);
   assert.deepEqual(CARDS.map(c => c.id), Object.keys(SPEC_NUM));
   for (const c of CARDS) {
     assert.equal(c.spec, SPEC_NUM[c.id]);
@@ -196,16 +196,29 @@ test("B6.9 to B6.22: every search alias finds its card", () => {
 test("table cards: SPEC 'Links:' lines are the card links, and every link opens an existing item", () => {
   for (const c of CARDS.filter(c => c.kind === "card" && Number(c.spec.split(".")[1]) >= 9)) {
     const m = section(c.spec).match(/Links: (.+?)\.?$/m);
-    const specLinks = m ? [...m[1].matchAll(/([^,(]+?) \(([a-z0-9_\\]+)\)/g)].map(x => ({ label: x[1].trim(), target: x[2].replace(/\\_/g, "_") })) : [];
+    const specLinks = m ? [...m[1].matchAll(/([^,(]+?) \(([a-z0-9_\\]+)(?:, entry point (\w+))?\)/g)]
+      .map(x => ({ label: x[1].trim(), target: x[2].replace(/\\_/g, "_"), ...(x[3] ? { entry: x[3] } : {}) })) : [];
     assert.deepEqual(c.links || [], specLinks, c.id);
   }
-  for (const c of CARDS) for (const l of c.links || []) assert.ok(findItem(l.target), `${c.id} → ${l.target}`);
+  for (const c of CARDS) for (const l of c.links || []) {
+    assert.ok(findItem(l.target), `${c.id} → ${l.target}`);
+    if (l.entry) assert.ok(findItem(l.target).entries[l.entry], `${c.id} → ${l.target}/${l.entry}`);
+  }
   const targets = id => CARDS.find(c => c.id === id).links.map(l => l.target);
   assert.deepEqual(targets("sydney_dmi"), ["em_perforation"]);
   assert.deepEqual(targets("jnet"), ["nice", "kudo"]);
-  assert.deepEqual(targets("sarin"), ["em_variceal"]);
-  assert.equal(hrefFor("em_variceal"), "#/emergency/em_ugib/variceal");
+  assert.deepEqual(targets("sarin"), ["em_ugib"]);
   assert.deepEqual(targets("hill"), ["lyon2"]);
+});
+
+test("Sarin opens the upper GI bleeding page at D4 'Bleeding source?' with the variceal pathway chosen", () => {
+  const sarin = CARDS.find(c => c.id === "sarin");
+  assert.deepEqual(sarin.links, [{ label: "Bleeding source decision", target: "em_ugib", entry: "source" }]);
+  const ugib = EMERGENCIES.find(p => p.id === "em_ugib");
+  assert.deepEqual(ugib.entries.source, { D1: "Yes" });
+  assert.deepEqual(ugib.entryFocus, { source: "D4" });
+  assert.equal(ugib.blocks.find(b => b.id === "D4").title, "Bleeding source?");
+  assert.equal(`${hrefFor("em_ugib")}/source`, "#/emergency/em_ugib/source");
 });
 
 test("perforation page links to the Sydney card (P3 and Related); the UGIB bleeding-source decision cites Sarin", () => {
@@ -243,7 +256,7 @@ test("EREFS: proximal 1,1,0,1,0 and distal 1,2,1,2,0 → proximal 3, distal 6, t
   assert.deepEqual([result.proximal, result.distal, result.score], [3, 6, 9]);
   assert.equal(interp.band, "Proximal 3, distal 6, total 9");
   assert.equal(result.breakdown.length, 10);
-  assert.deepEqual(interp.notes, [MINOR_NOTE, USE_NOTE]);
+  assert.deepEqual(interp.notes, [MINOR_NOTE, USE_NOTE, CUTOFF_NOTE]);
   for (const n of interp.notes) assert.ok(section("B6.9").includes(`Note: "${n}"`));
   assert.equal(interp.action, undefined);
 });
@@ -302,13 +315,13 @@ test("Spigelman: no polyps hides the other items; stage table and note are SPEC 
 test("OLGA and OLGIM: B8.6 vectors", () => {
   const run = (system, antrum, corpus) => calc(olga, { system, antrum, corpus });
   let o = run("olga", "moderate", "mild");
-  assert.equal(o.result.display, "OLGA stage II"); assert.equal(o.interp.band, "Lower risk"); assert.equal(o.interp.action, LOW_ACTION);
+  assert.equal(o.result.display, "OLGA stage II"); assert.equal(o.interp.band, "Lower risk (stage 0–II)"); assert.equal(o.interp.action, LOW_ACTION);
   o = run("olga", "mild", "severe");
-  assert.equal(o.result.display, "OLGA stage III"); assert.equal(o.interp.band, "High risk"); assert.equal(o.interp.action, HIGH_ACTION);
+  assert.equal(o.result.display, "OLGA stage III"); assert.equal(o.interp.band, "High risk (stage III–IV)"); assert.equal(o.interp.action, HIGH_ACTION);
   o = run("olgim", "severe", "moderate");
-  assert.equal(o.result.display, "OLGIM stage IV"); assert.equal(o.interp.band, "High risk");
+  assert.equal(o.result.display, "OLGIM stage IV"); assert.equal(o.interp.band, "High risk (stage III–IV)");
   o = run("olga", "none", "none");
-  assert.equal(o.result.display, "OLGA stage 0"); assert.equal(o.interp.band, "Lower risk");
+  assert.equal(o.result.display, "OLGA stage 0"); assert.equal(o.interp.band, "Lower risk (stage 0–II)");
 });
 
 test("OLGA and OLGIM: every matrix cell gives the stage in the SPEC.md B6.18 matrix", () => {
@@ -318,7 +331,23 @@ test("OLGA and OLGIM: every matrix cell gives the stage in the SPEC.md B6.18 mat
     const { result, interp } = calc(olga, { system, antrum, corpus });
     assert.equal(result.stage, m.rows[i][j + 1], `${system} ${antrum}/${corpus}`);
     assert.equal(result.stage, MATRIX[i][j]);
-    assert.equal(interp.band, ["III", "IV"].includes(result.stage) ? "High risk" : "Lower risk");
+    assert.equal(interp.band, ["III", "IV"].includes(result.stage) ? "High risk (stage III–IV)" : "Lower risk (stage 0–II)");
   }));
-  for (const a of [HIGH_ACTION, LOW_ACTION]) assert.ok(section("B6.18").includes(`"${a}"`));
+  for (const a of [HIGH_ACTION, LOW_ACTION, "High risk (stage III–IV)", "Lower risk (stage 0–II)"]) assert.ok(section("B6.18").includes(`"${a}"`));
+});
+
+test("clinical owner decisions on PR 16 are on the cards word for word", () => {
+  const card = id => CARDS.find(c => c.id === id);
+  const row = (id, first) => card(id).table.rows.find(r => r[0] === first);
+  assert.equal(row("sydney_dmi", "II")[2], "Clip closure (muscle injury cannot be excluded)");
+  assert.equal(row("erefs", "Exudates")[1], "0 none; 1 mild (10% or less of the surface); 2 severe (>10% of the surface)");
+  assert.equal(CUTOFF_NOTE, "No validated cut-off; higher scores mean more active disease. Use to compare over time; histology (15 or more eosinophils per high-power field) is still required.");
+  assert.deepEqual(card("bismuth_corlette").references.map(r => r.url),
+    ["https://pubmed.ncbi.nlm.nih.gov/1079096/", "https://pubmed.ncbi.nlm.nih.gov/1309988/"]);
+  assert.equal(row("siewert", "II")[2], "Staged as esophageal cancer (AJCC 8th edition: epicenter within 2 cm of the gastroesophageal junction). Surgical approach decided by the multidisciplinary team.");
+  assert.equal(row("siewert", "III")[2], "Staged as gastric cancer");
+  assert.equal(row("jnet", "1")[4], "Diminutive (5 mm or less) rectosigmoid hyperplastic polyps can be left in place only with a high-confidence optical diagnosis; resect sessile serrated lesions.");
+  assert.match(row("kudo", "VI")[2], /en bloc resection; high-grade VI may indicate deep invasion, so consider surgery$/);
+  assert.match(row("kudo", "VN")[2], /surgery$/);
+  assert.match(section("B6.3"), /^### B6\.3 .*\(id: prague; calculator\)/);
 });

@@ -6,13 +6,14 @@ import { INTEGER_NOTE } from "../../js/num.js";
 export const FEATURES = [
   ["edema", "Edema", [[0, "Absent"], [1, "Present"]]],
   ["rings", "Rings", [[0, "None"], [1, "Mild (subtle ridges)"], [2, "Moderate (distinct rings, standard scope passes)"], [3, "Severe (scope does not pass)"]]],
-  ["exudates", "Exudates", [[0, "None"], [1, "Mild (<10% of surface)"], [2, "Severe (>10% of surface)"]]],
+  ["exudates", "Exudates", [[0, "None"], [1, "Mild (10% or less of the surface)"], [2, "Severe (>10% of the surface)"]]],
   ["furrows", "Furrows", [[0, "None"], [1, "Mild"], [2, "Severe"]]],
   ["stricture", "Stricture", [[0, "Absent"], [1, "Present"]]]
 ];
 export const REGIONS = [["p", "Proximal esophagus"], ["d", "Distal esophagus"]];
 export const MINOR_NOTE = "Minor features, not scored: crepe-paper mucosa, narrow-caliber esophagus.";
 export const USE_NOTE = "Score before biopsies; use the score to follow response to treatment.";
+export const CUTOFF_NOTE = "No validated cut-off; higher scores mean more active disease. Use to compare over time; histology (15 or more eosinophils per high-power field) is still required.";
 
 export default {
   id: "erefs",
@@ -37,13 +38,13 @@ export default {
   },
   interpret(r) {
     return { band: `Proximal ${r.proximal}, distal ${r.distal}, total ${r.score}`, level: "neutral",
-      notes: [MINOR_NOTE, USE_NOTE],
+      notes: [MINOR_NOTE, USE_NOTE, CUTOFF_NOTE],
       copy: `EREFS ${r.score} (proximal ${r.proximal}, distal ${r.distal})` };
   },
   table: { columns: ["Feature", "Grades"], rows: [
     ["Edema", "0 absent; 1 present"],
     ["Rings", "0 none; 1 mild (subtle ridges); 2 moderate (distinct rings, standard scope passes); 3 severe (scope does not pass)"],
-    ["Exudates", "0 none; 1 mild (<10% of surface); 2 severe (>10% of surface)"],
+    ["Exudates", "0 none; 1 mild (10% or less of the surface); 2 severe (>10% of the surface)"],
     ["Furrows", "0 none; 1 mild; 2 severe"],
     ["Stricture", "0 absent; 1 present"]
   ] },

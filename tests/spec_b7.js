@@ -77,14 +77,18 @@ export function weightTable() {
 // with calculator names and dose names still as written in SPEC (`calcNames`, `doseNames`).
 export function parseAlgorithm(num) {
   const { heading, body } = section(num);
-  const page = { ...headingInfo(heading), kind: "algorithm", weight: null, entries: {}, entryWords: {}, blocks: [], related: [] };
+  const page = { ...headingInfo(heading), kind: "algorithm", weight: null, entries: {}, entryFocus: {}, entryWords: {}, blocks: [], related: [] };
   let table = null, tableTitle = null, current = null;
   for (const line of body.split("\n")) {
     if (!line.startsWith("|")) table = null;
     if (!line.trim()) continue;
     let m;
     if ((m = line.match(/^Bedside algorithm \(B7\.0\)\. Weight field: (yes|no)\.$/))) { page.weight = m[1] === "yes"; continue; }
-    if ((m = line.match(/^Entry point (\w+): (.+?) \(.*\)\.$/))) { page.entries[m[1]] = parseAnswers(m[2]); continue; }
+    if ((m = line.match(/^Entry point (\w+): (.+?)(?:; opens at (\w+))? \(.*\)\.$/))) {
+      page.entries[m[1]] = parseAnswers(m[2]);
+      if (m[3]) page.entryFocus[m[1]] = m[3];
+      continue;
+    }
     if ((m = line.match(/^Search words that open the (\w+) pathway: (.*)\.$/))) { page.entryWords[m[1]] = m[2].split(", "); continue; }
     if (line === "Algorithm:") { current = null; continue; }
     if ((m = line.match(/^Sources?: (.*)$/))) { page.blocks.push({ type: "source", text: m[1] }); current = null; continue; }

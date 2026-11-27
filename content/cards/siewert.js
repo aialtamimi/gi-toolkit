@@ -15,12 +15,12 @@ export default {
   ],
   "category": "endoscopy",
   "kind": "card",
-  "use": "Type I is treated as esophageal cancer, type III as gastric cancer, type II per staging and multidisciplinary team.",
+  "use": "Type I is treated as esophageal cancer; type II is staged as esophageal cancer, with the surgical approach decided by the multidisciplinary team; type III is staged as gastric cancer.",
   "table": {
     "columns": [
       "Type",
       "Tumor center",
-      "Treated as"
+      "Staging and treatment"
     ],
     "rows": [
       [
@@ -31,12 +31,12 @@ export default {
       [
         "II",
         "1 cm above to 2 cm below the gastroesophageal junction",
-        "Per staging and multidisciplinary team"
+        "Staged as esophageal cancer (AJCC 8th edition: epicenter within 2 cm of the gastroesophageal junction). Surgical approach decided by the multidisciplinary team."
       ],
       [
         "III",
         "2–5 cm below the gastroesophageal junction",
-        "Gastric cancer"
+        "Staged as gastric cancer"
       ]
     ]
   },

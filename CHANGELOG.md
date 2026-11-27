@@ -11,6 +11,15 @@ Fourteen new classification cards (SPEC.md B6.9 to B6.22), three of them calcula
 - BBPS (B6.1): note on screen "Total 0–9. Adequate preparation: 2 or more in every segment (total 6 or more). Inadequate: repeat colonoscopy within 1 year."
 - Iatrogenic perforation (B7.18): P3 colon item "After colonic EMR: deep mural injury by the Sydney classification (B6.10)." and a Related link to the Sydney card. Upper GI bleeding (B7.1) D4: the OV/GOV/IGV line cites Sarin (B6.14) with a link.
 - Tests: B8.6 vectors for EREFS, Spigelman and every OLGA/OLGIM matrix cell; every new card's table, clinical use, notes, links and PubMed PMIDs against SPEC.md; every search alias.
+- Clinical owner decisions on the review (SPEC.md B6.3, B6.9 to B6.12, B6.14, B6.16, B6.18, B6.21, B7.0, B7.1, B8.8 and B9 updated in the same change):
+  - Sydney type II: "Clip closure (muscle injury cannot be excluded)".
+  - EREFS exudates: mild "10% or less of the surface", severe ">10% of the surface". New note: "No validated cut-off; higher scores mean more active disease. Use to compare over time; histology (15 or more eosinophils per high-power field) is still required."
+  - OLGA and OLGIM bands: "High risk (stage III–IV)" and "Lower risk (stage 0–II)".
+  - Bismuth-Corlette: second source Bismuth H et al. Ann Surg 1992 (PMID 1309988), types IIIa and IIIb.
+  - Siewert II: "Staged as esophageal cancer (AJCC 8th edition: epicenter within 2 cm of the gastroesophageal junction). Surgical approach decided by the multidisciplinary team." Siewert III: "Staged as gastric cancer".
+  - Sarin links straight to the "Bleeding source?" decision (D4) of the upper GI bleeding page with the variceal pathway chosen (new entry point `source`, "opens at D4").
+  - JNET type 1: "Diminutive (5 mm or less) rectosigmoid hyperplastic polyps can be left in place only with a high-confidence optical diagnosis; resect sessile serrated lesions." Kudo VI: "en bloc resection; high-grade VI may indicate deep invasion, so consider surgery".
+  - Prague heading marked as a calculator.
 
 ## 0.9.0 (2026-11-27)
 

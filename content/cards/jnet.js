@@ -31,7 +31,7 @@ export default {
         "Invisible",
         "Regular dark or white spots, like normal mucosa",
         "Hyperplastic polyp or sessile serrated lesion",
-        "Resect sessile serrated lesions; small rectosigmoid hyperplastic polyps can be left"
+        "Diminutive (5 mm or less) rectosigmoid hyperplastic polyps can be left in place only with a high-confidence optical diagnosis; resect sessile serrated lesions."
       ],
       [
         "2A",
