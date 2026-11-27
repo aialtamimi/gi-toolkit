@@ -51,7 +51,6 @@ import zargar from "../content/cards/zargar.js";
 import bristol from "../content/cards/bristol.js";
 import lyon2 from "../content/cards/lyon2.js";
 import em_ugib from "../content/emergencies/em_ugib.js";
-import em_variceal from "../content/emergencies/em_variceal.js";
 import em_lgib from "../content/emergencies/em_lgib.js";
 import em_antithrombotic from "../content/emergencies/em_antithrombotic.js";
 import em_asuc from "../content/emergencies/em_asuc.js";
@@ -89,8 +88,8 @@ export const CALCULATORS = [
 
 // Phase 3: B6 reference cards (in SPEC order) and B7 emergency pages (in the B7.19 index order).
 export const CARDS = [bbps, la_grade, prague, paris, nice, zargar, bristol, lyon2];
-// Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1); em_variceal is a redirect entry
-// that keeps its name in the index and in search and opens that page at the variceal pathway.
+// Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1): its search words open that page
+// at the variceal pathway (page.entryWords), and old em_variceal links redirect there (REDIRECTS).
 export const EMERGENCIES = [
   em_ugib, em_lgib, em_antithrombotic, em_asuc, em_toxic_megacolon, em_alf, em_aah, em_sbp, em_hrs, em_he, em_pancreatitis, em_cholangitis, em_foreign_body, em_caustic, em_acpo, em_volvulus, em_perforation
 ];
@@ -98,7 +97,7 @@ export const EMERGENCIES = [
 // Emergency page names and order from SPEC.md B7.19, used for the home index and for
 // links from calculators before the pages exist.
 export const EMERGENCY_INDEX = [
-  ["em_ugib", "Upper GI bleeding"], ["em_variceal", "Variceal bleeding"], ["em_lgib", "Lower GI bleeding"],
+  ["em_ugib", "Upper GI bleeding"], ["em_lgib", "Lower GI bleeding"],
   ["em_antithrombotic", "Anticoagulants in GI bleeding"], ["em_asuc", "Acute severe UC"], ["em_toxic_megacolon", "Toxic megacolon"],
   ["em_alf", "Acute liver failure"], ["em_aah", "Alcohol-associated hepatitis"], ["em_sbp", "SBP"], ["em_hrs", "HRS-AKI"],
   ["em_he", "Hepatic encephalopathy"], ["em_pancreatitis", "Acute pancreatitis"], ["em_cholangitis", "Cholangitis"],
@@ -106,8 +105,11 @@ export const EMERGENCY_INDEX = [
   ["em_volvulus", "Volvulus"], ["em_perforation", "Perforation"]
 ].map(([id, name]) => ({ id, name }));
 
-// Index and search entries without a page of their own: { id, name, short, aliases, redirect: { page, entry } }.
-export const REDIRECTS = [em_variceal];
+// Old ids without a page, index entry or search result (SPEC.md B7.2). Links, favorites and recent items
+// that still point to them open the page and entry point named here.
+export const REDIRECTS = [
+  { id: "em_variceal", name: "Acute variceal bleeding", short: "Variceal bleeding", category: "emergencies", redirect: { page: "em_ugib", entry: "variceal" } }
+];
 
 // Route for any calculator, card or emergency page.
 export function hrefFor(id) {
@@ -133,10 +135,10 @@ export function search(query) {
   const q = norm(query);
   if (!q) return [];
   const words = q.split(" ");
-  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES, ...REDIRECTS];
+  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES];
   const scored = [];
   for (const item of all) {
-    const hay = [item.name, item.short || "", item.id.replace(/_/g, " "), ...(item.aliases || []), ...(item.tags || [])].map(norm);
+    const hay = [item.name, item.short || "", item.id.replace(/_/g, " "), ...(item.aliases || []), ...(item.tags || []), ...entryWords(item)].map(norm);
     const joined = hay.join(" | ");
     if (!words.every(w => joined.includes(w))) continue;
     let s = 0;
@@ -146,4 +148,16 @@ export function search(query) {
     scored.push({ item, s });
   }
   return scored.sort((a, b) => b.s - a.s || a.item.name.localeCompare(b.item.name)).map(x => x.item);
+}
+
+const entryWords = item => Object.values(item.entryWords || {}).flat();
+
+// Link for a search result: when the query is the start of one of a page's entry-point search words
+// (for example "varices" or "terl" on the upper GI bleeding page), open the page at that entry point.
+export function searchHref(item, query) {
+  const q = norm(query);
+  for (const [entry, words] of Object.entries(item.entryWords || {})) {
+    if (q && words.some(w => norm(w).startsWith(q))) return `${hrefFor(item.id)}/${entry}`;
+  }
+  return hrefFor(item.id);
 }

@@ -18,6 +18,7 @@ export default {
   "kind": "algorithm",
   "weight": true,
   "entries": {},
+  "entryWords": {},
   "blocks": [
     {
       "type": "redflags",
@@ -41,7 +42,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "decision",
@@ -56,7 +57,7 @@ export default {
         "ascites"
       ],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "PMN 250/mm³ or more",
@@ -96,7 +97,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -116,7 +117,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -135,7 +136,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -162,7 +163,9 @@ export default {
         "albumin_day1",
         "albumin_day3"
       ],
-      "why": "Albumin reduced renal failure and in-hospital death (Sort, NEJM 1999)."
+      "why": [
+        "Albumin reduced renal failure and in-hospital death (Sort, NEJM 1999)."
+      ]
     },
     {
       "type": "step",
@@ -184,7 +187,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -207,7 +210,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "section",

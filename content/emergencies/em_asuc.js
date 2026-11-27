@@ -19,6 +19,7 @@ export default {
   "kind": "algorithm",
   "weight": true,
   "entries": {},
+  "entryWords": {},
   "blocks": [
     {
       "type": "redflags",
@@ -51,7 +52,9 @@ export default {
         "truelove_witts"
       ],
       "doses": [],
-      "why": "Venous thromboembolism risk is markedly higher during IBD flares (Grainge, Lancet 2010)."
+      "why": [
+        "Venous thromboembolism risk is markedly higher during IBD flares (Grainge, Lancet 2010)."
+      ]
     },
     {
       "type": "decision",
@@ -66,7 +69,7 @@ export default {
         "asuc_day3"
       ],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "Yes",
@@ -100,7 +103,9 @@ export default {
         "infliximab_10",
         "ciclosporin"
       ],
-      "why": "Infliximab and ciclosporin have similar efficacy as rescue (CYSIF, Lancet 2012; CONSTRUCT, Lancet Gastroenterol Hepatol 2016)."
+      "why": [
+        "Infliximab and ciclosporin have similar efficacy as rescue (CYSIF, Lancet 2012; CONSTRUCT, Lancet Gastroenterol Hepatol 2016)."
+      ]
     },
     {
       "type": "step",
@@ -119,7 +124,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "decision",
@@ -135,7 +140,7 @@ export default {
       "items": [],
       "calcs": [],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "Yes",
@@ -163,7 +168,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -181,7 +186,9 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": "Delayed colectomy increases complications and mortality (Randall, Br J Surg 2010)."
+      "why": [
+        "Delayed colectomy increases complications and mortality (Randall, Br J Surg 2010)."
+      ]
     },
     {
       "type": "section",

@@ -24,6 +24,16 @@ export default {
       "D1": "Yes"
     }
   },
+  "entryWords": {
+    "variceal": [
+      "variceal bleeding",
+      "varices",
+      "esophageal varices",
+      "terlipressin",
+      "TIPS",
+      "band ligation"
+    ]
+  },
   "blocks": [
     {
       "type": "redflags",
@@ -46,14 +56,18 @@ export default {
         "GBS (B2.1) and AIMS65 (B2.2). GBS 0–1 with no other concern: outpatient management can be considered.",
         "Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.",
         "Hold antithrombotics per B7.4.",
-        "IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation)."
+        "IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation).",
+        "Start high-dose IV proton pump inhibitor now: pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h infusion until endoscopy. Do not delay endoscopy for it."
       ],
       "calcs": [
         "gbs",
         "aims65"
       ],
       "doses": [],
-      "why": "Restrictive transfusion lowered mortality (Villanueva, NEJM 2013)."
+      "why": [
+        "Restrictive transfusion lowered mortality (Villanueva, NEJM 2013).",
+        "Reduces high-risk stigmata and need for endoscopic therapy, but not mortality, rebleeding or surgery (Sreedharan, Cochrane 2010; ESGE 2021)."
+      ]
     },
     {
       "type": "decision",
@@ -67,7 +81,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "Yes",
@@ -102,7 +116,9 @@ export default {
       "doses": [
         "terlipressin"
       ],
-      "why": "Antibiotic prophylaxis reduces infection, rebleeding and death (Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VII). Over-transfusion raises portal pressure."
+      "why": [
+        "Antibiotic prophylaxis reduces infection, rebleeding and death (Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VII). Over-transfusion raises portal pressure."
+      ]
     },
     {
       "type": "step",
@@ -122,7 +138,28 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
+    },
+    {
+      "type": "step",
+      "id": "V3",
+      "chip": "After endoscopy",
+      "title": "Variceal: after endoscopy",
+      "when": [
+        [
+          "D1",
+          "Yes"
+        ]
+      ],
+      "items": [
+        "Continue vasoactive drug for 2–5 days.",
+        "Continue ceftriaxone, up to 7 days in total.",
+        "Stop the proton pump inhibitor unless there is another indication.",
+        "Lactulose to prevent hepatic encephalopathy."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": []
     },
     {
       "type": "decision",
@@ -142,7 +179,7 @@ export default {
         "child_pugh"
       ],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "Yes",
@@ -156,7 +193,7 @@ export default {
     },
     {
       "type": "step",
-      "id": "V3",
+      "id": "V4",
       "chip": "Within 72 h",
       "title": "Pre-emptive TIPS",
       "when": [
@@ -170,11 +207,13 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": "Pre-emptive TIPS improved survival in high-risk patients (Garcia-Pagan, NEJM 2010)."
+      "why": [
+        "Pre-emptive TIPS improved survival in high-risk patients (Garcia-Pagan, NEJM 2010)."
+      ]
     },
     {
       "type": "step",
-      "id": "V4",
+      "id": "V5",
       "chip": "Days 2–5",
       "title": "Continue vasoactive drug",
       "when": [
@@ -188,11 +227,11 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
-      "id": "V5",
+      "id": "V6",
       "chip": "If failure",
       "title": "Persistent bleeding or early rebleeding",
       "when": [
@@ -207,11 +246,11 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
-      "id": "V6",
+      "id": "V7",
       "chip": "Before discharge",
       "title": "Variceal: before discharge",
       "when": [
@@ -223,12 +262,11 @@ export default {
       "items": [
         "Start non-selective beta-blocker (carvedilol or propranolol) when vasoactive drug stops.",
         "Repeat band ligation every 1–4 weeks until eradication.",
-        "Lactulose to prevent hepatic encephalopathy.",
-        "Stop the proton pump inhibitor after endoscopy unless there is another indication."
+        "After eradication: endoscopy at 3–6 months, then every 6–12 months (AASLD 2017)."
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -242,12 +280,13 @@ export default {
         ]
       ],
       "items": [
-        "High-dose IV proton pump inhibitor may be started.",
         "Upper endoscopy within 24 hours of presentation after resuscitation (ACG 2021, ESGE 2021)."
       ],
       "calcs": [],
       "doses": [],
-      "why": "Endoscopy within 6 h did not lower mortality, even with GBS 12 or more (Lau, NEJM 2020)."
+      "why": [
+        "Endoscopy within 6 h did not lower mortality, even with GBS 12 or more (Lau, NEJM 2020)."
+      ]
     },
     {
       "type": "step",
@@ -270,7 +309,7 @@ export default {
         "forrest"
       ],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "decision",
@@ -288,7 +327,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "High-risk stigmata",
@@ -312,11 +351,11 @@ export default {
         ]
       ],
       "items": [
-        "Pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h for 72 hours (or 40 mg IV twice daily), then twice daily orally to day 14, then once daily."
+        "High-risk stigmata (endoscopic therapy done, or Forrest IIb): continue the infusion for 72 hours after endoscopy (or 40 mg IV twice daily), then oral twice daily to day 14, then once daily."
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -330,15 +369,33 @@ export default {
         ]
       ],
       "items": [
-        "Oral proton pump inhibitor once daily, early feeding, consider discharge."
+        "Low-risk stigmata: stop the infusion; oral proton pump inhibitor once daily; early feeding; consider discharge."
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
       "id": "N5",
+      "chip": "After endoscopy",
+      "title": "Non-variceal: second-look endoscopy",
+      "when": [
+        [
+          "D1",
+          "No"
+        ]
+      ],
+      "items": [
+        "No routine second-look endoscopy; repeat only if rebleeding (ESGE 2021, ACG 2021)."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": []
+    },
+    {
+      "type": "step",
+      "id": "N6",
       "chip": "If rebleeding",
       "title": "Non-variceal: rebleeding",
       "when": [
@@ -352,11 +409,11 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
-      "id": "N6",
+      "id": "N7",
       "chip": "Discharge",
       "title": "Non-variceal: discharge",
       "when": [
@@ -372,7 +429,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "section",
@@ -397,6 +454,11 @@ export default {
           "First drugs",
           "Vasoactive drug + ceftriaxone",
           "Proton pump inhibitor"
+        ],
+        [
+          "Proton pump inhibitor",
+          "Start before endoscopy; stop after unless another indication",
+          "Start before endoscopy; 72 h infusion if high-risk stigmata"
         ],
         [
           "Endoscopic therapy",
@@ -455,10 +517,12 @@ export default {
     "west_haven"
   ],
   "references": [
-    ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021"),
-    ref("Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021"),
+    ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021. PMID 33929377", "https://pubmed.ncbi.nlm.nih.gov/33929377/"),
+    ref("Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021. PMID 33567467", "https://pubmed.ncbi.nlm.nih.gov/33567467/"),
+    ref("Sreedharan A et al. Proton pump inhibitor treatment initiated prior to endoscopic diagnosis in upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010. PMID 20614440", "https://pubmed.ncbi.nlm.nih.gov/20614440/"),
     ref("de Franchis R et al. Baveno VII: renewing consensus in portal hypertension. J Hepatol 2022"),
     ref("Gralnek IM et al. ESGE variceal guideline 2022", "https://pubmed.ncbi.nlm.nih.gov/36174643"),
+    ref("Garcia-Tsao G et al. Portal hypertensive bleeding in cirrhosis: risk stratification, diagnosis, and management: 2016 practice guidance by the American Association for the Study of Liver Diseases. Hepatology 2017. PMID 27786365", "https://pubmed.ncbi.nlm.nih.gov/27786365/"),
     ref("HALT-IT Trial Collaborators. Effects of a high-dose 24-h infusion of tranexamic acid on death and thromboembolic events in patients with acute gastrointestinal bleeding (HALT-IT). Lancet 2020. PMID 32563378", "https://pubmed.ncbi.nlm.nih.gov/32563378/"),
     ref("Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020. PMID 32242355", "https://pubmed.ncbi.nlm.nih.gov/32242355/"),
     ref("Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013. PMID 23281973", "https://pubmed.ncbi.nlm.nih.gov/23281973/"),

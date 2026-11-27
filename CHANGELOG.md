@@ -2,6 +2,17 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.6.2 (2026-11-27)
+
+Upper GI bleeding page, clinical owner changes (SPEC.md B7.0, B7.1, B7.2, B7.19, B8.8 and B9 updated in the same change):
+- Step 1 "First hour, all patients" now starts the high-dose IV proton pump inhibitor (pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h until endoscopy; do not delay endoscopy for it), with a second why line (Sreedharan, Cochrane 2010; ESGE 2021). "High-dose IV proton pump inhibitor may be started" is removed from the non-variceal step. Steps can now carry more than one why line.
+- Variceal pathway: new step "Variceal: after endoscopy" before the pre-emptive TIPS decision (continue vasoactive drug 2–5 days; continue ceftriaxone, up to 7 days in total; stop the proton pump inhibitor unless another indication; lactulose). Lactulose and stopping the proton pump inhibitor moved there from "Before discharge", which adds "After eradication: endoscopy at 3–6 months, then every 6–12 months (AASLD 2017)."
+- Non-variceal pathway: high-risk stigmata continue the infusion for 72 hours after endoscopy (or 40 mg IV twice daily), then oral twice daily to day 14, then once daily; low-risk stigmata stop the infusion, oral once daily, early feeding, consider discharge; new step "No routine second-look endoscopy; repeat only if rebleeding (ESGE 2021, ACG 2021)". Rebleeding and discharge steps unchanged.
+- Key differences table: new "Proton pump inhibitor" row.
+- "Variceal bleeding" removed from the emergency list (17 entries). Its search words (variceal bleeding, varices, esophageal varices, terlipressin, TIPS, band ligation) belong to the upper GI bleeding page and open it at the variceal pathway; terlipressin also lists the HRS-AKI page. Old links, favorites and recent items pointing to em\_variceal redirect to the variceal pathway. `content/emergencies/em_variceal.js` removed (service worker updated).
+- Step ids renumbered on this page (V3 to V7, N5 to N7); B8.8 vectors updated.
+- Exact PubMed links: ESGE 2021 (PMID 33567467) and ACG 2021 (PMID 33929377), also in the GBS and Forrest calculators; new sources Sreedharan, Cochrane 2010 (PMID 20614440) and Garcia-Tsao, AASLD 2017 (PMID 27786365).
+
 ## 0.6.1 (2026-11-27)
 
 Clinical owner follow-up on the bedside algorithm pages (SPEC.md B7.0, B7.9, B7.12, B8.9 and B9 updated in the same change):

@@ -1,8 +1,9 @@
 // SPEC.md B7 emergency pages: every block checked verbatim against SPEC.md, plus order, links and search.
 // Classic pages use the B7 template; bedside algorithm pages use the B7.0 format (tests/spec_b7.js parses both).
 import { test } from "node:test";
+import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
-import { EMERGENCIES, EMERGENCY_INDEX, REDIRECTS, findItem, search, hrefFor } from "../js/registry.js";
+import { EMERGENCIES, EMERGENCY_INDEX, REDIRECTS, findItem, search, hrefFor, searchHref } from "../js/registry.js";
 import { SPEC_REFS, tokenize } from "../js/pages.js";
 import { DOSES } from "../js/doses.js";
 import { SPEC, CALC_NAMES, isAlgorithm, parseClassic, parseAlgorithm } from "./spec_b7.js";
@@ -18,13 +19,14 @@ test("five bedside algorithm pages: B7.1, B7.5, B7.9, B7.12, B7.13", () => {
   assert.deepEqual(EMERGENCIES.filter(p => p.kind === "algorithm").map(p => p.spec), ALGORITHM_NUMS);
 });
 
-test("18 index entries in the B7.19 order with the B7.19 names, on 17 pages plus the variceal entry", () => {
+test("17 index entries in the B7.19 order with the B7.19 names, one per page; no variceal entry", () => {
   const order = SPEC.match(/in this order: (.*)\.\n/)[1].split(",").map(s => s.trim());
-  assert.equal(EMERGENCY_INDEX.length, 18);
+  assert.equal(EMERGENCY_INDEX.length, 17);
+  assert.ok(!order.includes("Variceal bleeding"));
   assert.deepEqual(EMERGENCY_INDEX.map(e => e.name), order);
   assert.deepEqual(EMERGENCY_INDEX.map(e => findItem(e.id).short), order);
   assert.equal(EMERGENCIES.length, 17);
-  assert.deepEqual(EMERGENCIES.map(p => p.id), EMERGENCY_INDEX.map(e => e.id).filter(id => id !== "em_variceal"));
+  assert.deepEqual(EMERGENCIES.map(p => p.id), EMERGENCY_INDEX.map(e => e.id));
   assert.deepEqual([...EMERGENCIES.map(p => p.id)].sort(), ALL.map(p => p.id).sort());
 });
 
@@ -62,6 +64,7 @@ for (const spec of ALGORITHMS) {
     assert.equal(page.kind, "algorithm");
     assert.equal(page.weight, spec.weight);
     assert.deepEqual(page.entries, spec.entries);
+    assert.deepEqual(page.entryWords || {}, spec.entryWords);
     assert.deepEqual(sortKeys(withNames(page)), sortKeys(spec.blocks));
   });
 
@@ -123,18 +126,38 @@ for (const spec of ALGORITHMS) {
   });
 }
 
-test("variceal bleeding (B7.2) opens the upper GI bleeding page at the variceal pathway", () => {
-  assert.match(SPEC, /### B7\.2 Acute variceal bleeding \(id: em\\_variceal\)\n\nMerged into B7\.1\./);
+test("variceal bleeding (B7.2): no page or index entry; its search words open the upper GI bleeding page at the variceal pathway", () => {
+  assert.match(SPEC, /### B7\.2 Acute variceal bleeding \(id: em\\_variceal\)\n\nMerged into B7\.1; no page and no emergency index entry of its own\./);
+  const ugib = findItem("em_ugib");
+  const words = ["variceal bleeding", "varices", "esophageal varices", "terlipressin", "TIPS", "band ligation"];
+  assert.deepEqual(ugib.entryWords, { variceal: words });
+  assert.deepEqual(ugib.entries.variceal, { D1: "Yes" });
+  assert.ok(!EMERGENCY_INDEX.some(e => e.id === "em_variceal"));
+  assert.ok(!EMERGENCIES.some(p => p.id === "em_variceal"));
+  for (const q of [...words, "Variceal bleeding", "Varices", "terli", "band lig"]) {
+    const found = search(q);
+    // Terlipressin is also a search word of the HRS-AKI page, so both pages are listed for it.
+    if (!/^terli/i.test(q)) assert.equal(found[0].id, "em_ugib", q);
+    assert.ok(found.includes(ugib), q);
+    assert.ok(!found.some(i => i.id === "em_variceal"), `${q}: old variceal entry in search`);
+    assert.equal(searchHref(ugib, q), "#/emergency/em_ugib/variceal", q);
+  }
+  assert.deepEqual(search("terlipressin").map(i => i.id).sort(), ["em_hrs", "em_ugib"]);
+  // General words open the page at the top.
+  for (const q of ["upper GI bleeding", "hematemesis", "melena"]) {
+    assert.ok(search(q).includes(ugib), q);
+    assert.equal(searchHref(ugib, q), "#/emergency/em_ugib", q);
+  }
+  assert.equal(searchHref(ugib, "bleeding"), "#/emergency/em_ugib");
+});
+
+test("old links to the variceal page redirect to the variceal pathway (favorites, recent items, #/emergency/em_variceal)", () => {
   const v = findItem("em_variceal");
   assert.deepEqual(REDIRECTS, [v]);
   assert.deepEqual(v.redirect, { page: "em_ugib", entry: "variceal" });
-  assert.equal(v.short, "Variceal bleeding");
   assert.equal(hrefFor("em_variceal"), "#/emergency/em_ugib/variceal");
-  assert.deepEqual(findItem("em_ugib").entries.variceal, { D1: "Yes" });
-  for (const q of ["Variceal bleeding", "variceal bleeding", "Acute variceal bleeding", "varices"]) {
-    assert.equal(search(q)[0].id, "em_variceal", q);
-    assert.equal(hrefFor(search(q)[0].id), "#/emergency/em_ugib/variceal", q);
-  }
+  const app = readFileSync(new URL("../js/app.js", import.meta.url), "utf8");
+  assert.match(app, /const redirect = REDIRECTS\.find\(r => r\.id === id\);\n  if \(redirect\) \{ location\.replace\(hrefFor\(id\)\); return; \}/);
 });
 
 test("related calculators match the SPEC \"Related:\" line, in order, and exist", () => {

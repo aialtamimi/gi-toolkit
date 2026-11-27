@@ -72,8 +72,8 @@ export default {
   },
   references: [
     ref("Blatchford O et al. Lancet 2000 (points table)", "https://pmc.ncbi.nlm.nih.gov/articles/PMC5299211/table/tab2d"),
-    ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021"),
-    ref("Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021"),
+    ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021. PMID 33929377", "https://pubmed.ncbi.nlm.nih.gov/33929377/"),
+    ref("Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021. PMID 33567467", "https://pubmed.ncbi.nlm.nih.gov/33567467/"),
     ref("Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020. PMID 32242355", "https://pubmed.ncbi.nlm.nih.gov/32242355/")
   ]
 };
