@@ -2,6 +2,14 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.12.0 (2026-11-27)
+
+Pilot: original illustrations for the Forrest classification (SPEC.md B1.3 and B2.5 updated).
+- Six SVG schematics drawn for this app (img/forrest/forrest-ia.svg to forrest-iii.svg): the same top-down round ulcer crater in every image, pink gastric mucosa, slightly raised reddish rim, pale yellow-white fibrin base; Ia arterial jet with droplets, Ib blood trickling over the rim, IIa raised red-purple dome, IIb dark red-maroon clot, IIc flat brown-black spots, III clean base. Each has its own light rounded background (same colours in light and dark mode) and is about 2 KB.
+- A 56 px thumbnail at the left of each class option; the selected class shows the image 240 px wide with the caption "Forrest [class]: [finding]. Schematic, not to scale." Alt text on every image. Also shown where Forrest is built into the upper GI bleeding page.
+- The images are precached by the service worker (works offline); the precache test now covers img/.
+- New tests: the 6 images exist, are under 20 KB, are precached, have the SPEC alt text and caption, and share the same viewBox, background and crater with no external content.
+
 ## 0.11.0 (2026-11-27)
 
 New Motility category and card moves (SPEC.md B1.1, B1.6, B6, B8.10, B9 and new Part B10).

@@ -1,7 +1,7 @@
 // Service worker: versioned cache, cache-first (SPEC.md B1.7).
 // When adding or removing an app file, update PRECACHE and bump CACHE_VERSION
 // (tests/sw.test.js checks that every app file is listed).
-const CACHE_VERSION = "0.11.0";
+const CACHE_VERSION = "0.12.0";
 const CACHE_NAME = `gi-toolkit-v${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -108,6 +108,12 @@ const PRECACHE = [
   "./content/emergencies/em_toxic_megacolon.js",
   "./content/emergencies/em_ugib.js",
   "./content/emergencies/em_volvulus.js",
+  "./img/forrest/forrest-ia.svg",
+  "./img/forrest/forrest-ib.svg",
+  "./img/forrest/forrest-iia.svg",
+  "./img/forrest/forrest-iib.svg",
+  "./img/forrest/forrest-iic.svg",
+  "./img/forrest/forrest-iii.svg",
   "./icons/apple-touch-icon.png",
   "./icons/icon-192.png",
   "./icons/icon-512.png",

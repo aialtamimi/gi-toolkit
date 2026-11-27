@@ -2,12 +2,12 @@
 import { ref } from "../../refs.js";
 
 export const ROWS = [
-  { cls: "Ia", finding: "Active spurting", risk: "55% (active bleeding, Ia and Ib combined)", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
-  { cls: "Ib", finding: "Active oozing", risk: "55% (combined with Ia)", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
-  { cls: "IIa", finding: "Non-bleeding visible vessel", risk: "43%", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
-  { cls: "IIb", finding: "Adherent clot", risk: "22%", action: "Consider clot removal and treat the underlying stigma; high-dose proton pump inhibitor (PPI)" },
-  { cls: "IIc", finding: "Flat pigmented spot", risk: "10%", action: "No endoscopic therapy; standard proton pump inhibitor (PPI)" },
-  { cls: "III", finding: "Clean base", risk: "5%", action: "No endoscopic therapy; standard proton pump inhibitor (PPI); early feeding and discharge if otherwise stable" }
+  { cls: "Ia", image: "img/forrest/forrest-ia.svg", alt: "Schematic of a round ulcer with a red arterial jet spurting from one point in the base, with droplets.", finding: "Active spurting", risk: "55% (active bleeding, Ia and Ib combined)", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
+  { cls: "Ib", image: "img/forrest/forrest-ib.svg", alt: "Schematic of a round ulcer with red blood oozing from the base and trickling over the rim, without a jet.", finding: "Active oozing", risk: "55% (combined with Ia)", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
+  { cls: "IIa", image: "img/forrest/forrest-iia.svg", alt: "Schematic of a round ulcer with a raised red-purple dome (non-bleeding visible vessel) in the base, without blood.", finding: "Non-bleeding visible vessel", risk: "43%", action: "Endoscopic therapy, then high-dose proton pump inhibitor (PPI)" },
+  { cls: "IIb", image: "img/forrest/forrest-iib.svg", alt: "Schematic of a round ulcer with an irregular dark red-maroon clot covering part of the base.", finding: "Adherent clot", risk: "22%", action: "Consider clot removal and treat the underlying stigma; high-dose proton pump inhibitor (PPI)" },
+  { cls: "IIc", image: "img/forrest/forrest-iic.svg", alt: "Schematic of a round ulcer with two flat brown-black spots on the base, nothing raised.", finding: "Flat pigmented spot", risk: "10%", action: "No endoscopic therapy; standard proton pump inhibitor (PPI)" },
+  { cls: "III", image: "img/forrest/forrest-iii.svg", alt: "Schematic of a round ulcer with a clean pale yellow-white fibrin base.", finding: "Clean base", risk: "5%", action: "No endoscopic therapy; standard proton pump inhibitor (PPI); early feeding and discharge if otherwise stable" }
 ];
 
 export default {
@@ -20,7 +20,7 @@ export default {
   use: "Peptic ulcer stigmata at endoscopy. Tap a class to see rebleeding risk and action.",
   inputs: [
     { id: "cls", label: "Forrest class", type: "radio", style: "rows",
-      options: ROWS.map(r => ({ label: `${r.cls}: ${r.finding}`, value: r.cls })) }
+      options: ROWS.map(r => ({ label: `${r.cls}: ${r.finding}`, value: r.cls, image: { src: r.image, alt: r.alt } })) }
   ],
   compute(v) {
     const row = ROWS.find(r => r.cls === v.cls);
@@ -30,6 +30,7 @@ export default {
   interpret(r) {
     return {
       band: `Forrest ${r.row.cls}`, level: "neutral",
+      figure: { src: r.row.image, alt: r.row.alt, caption: `Forrest ${r.row.cls}: ${r.row.finding}. Schematic, not to scale.` },
       text: `Rebleeding risk without endoscopic therapy: ${r.row.risk}`,
       action: r.row.action,
       notes: ["High-dose PPI after endoscopic hemostasis: continuous or intermittent high dose for 3 days, then twice daily to complete 2 weeks, then once daily (ACG 2021)."],
