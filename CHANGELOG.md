@@ -2,6 +2,29 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.6.0 (2026-11-26)
+
+Five emergency pages are now interactive bedside algorithms (SPEC.md B7.0): upper GI bleeding, acute severe ulcerative colitis, spontaneous bacterial peritonitis, acute pancreatitis and acute cholangitis. Every line, dose and source of the earlier pages is kept, reorganized into the new layout; a test checks each earlier line is still on its page.
+
+- Layout: red flags box (red border) at the top; weight field (kg); Recognize; step cards with timeline chips (for example 0–1 h, Day 3); decision steps with answer buttons that show and highlight the chosen path; "Show full algorithm" shows every step and marks steps off the chosen path or not yet decided; "Clear answers". Then Avoid, tables, Doses, related calculators and sources.
+- Built-in calculators inside the steps, rendered by the existing engine and collapsed, with the current result and band on the collapsed bar: GBS, AIMS65, Child-Pugh, Forrest; Truelove and Witts, day-3 Oxford and Lindgren; ascitic fluid analysis; modified Marshall (in the red flags box), revised Atlanta, BISAP, SIRS, modified CTSI; TG18.
+- Weight-based doses calculate automatically from the weight field, in the steps, in a list under the weight field and under the matching Doses row: terlipressin by weight band, infliximab 5 and 10 mg/kg, ciclosporin 2 mg/kg/day, albumin 1.5 g/kg and 1 g/kg in grams and mL of 20% albumin, lactated Ringer's 1.5 mL/kg/h and 10 mL/kg bolus, and the urine output target. The weight and the answers are kept in memory for that page only and never stored (Build Rule 4).
+- "Why" lines in small italic under key steps, naming the trial or guideline (Villanueva NEJM 2013, Garcia-Pagan NEJM 2010, Lau NEJM 2020, HALT-IT Lancet 2020, CYSIF Lancet 2012, CONSTRUCT Lancet Gastroenterol Hepatol 2016, ASGE 2021, Sort NEJM 1999, WATERFALL NEJM 2022, APEC Lancet 2020, PONCHO Lancet 2015, POINTER NEJM 2021). The new trials are added to each page's sources and to SPEC.md B9.
+- Upper GI bleeding: non-variceal and variceal bleeding are one page, with a "Key differences" table. "Variceal bleeding" stays in the emergency index and in search and opens this page at the variceal pathway (`#/emergency/em_ugib/variceal`); the old `#/emergency/em_variceal` link, favorites and recent items redirect there.
+- SPEC.md: new B7.0 (algorithm template and weight-based dose table); B7.1, B7.2, B7.5, B7.9, B7.12 and B7.13 rewritten in the B7.0 format; B1.1, B1.6 and B7.19 updated; new test vectors B8.7 (weight-based doses) and B8.8 (every decision path).
+- Tests: every algorithm block is compared with SPEC.md; every B8.7 dose and B8.8 path is a unit test; the weight is checked never to reach storage.
+- Engine: a calculator can be embedded in a page (one column, no sticky result bar, result reported to the page).
+- New files `js/algorithm.js` and `js/doses.js` (precached).
+- Clinical owner decisions on the review (SPEC.md B7.0, B7.1, B7.5, B7.9, B8.7, B8.8, new B8.9 and B9 updated in the same change):
+  - Upper GI bleeding: high-risk stigmata = Forrest Ia, Ib, IIa, IIb; low-risk = IIc, III, shown on the two buttons. Terlipressin has one doses row by weight (the old "2 mg, adjust by weight" row is removed). Shock index reads "heart rate/systolic BP".
+  - Weight outside 20–350 kg shows "Enter weight between 20 and 350 kg". Cholangitis keeps no weight field.
+  - Acute severe UC: either Oxford or Lindgren positive means rescue therapy. Day 5–7 is now a decision on the rescue path only ("Responding to rescue therapy?": Yes, continue rescue therapy and plan maintenance; No, colectomy). The corticosteroid path adds "Deterioration at any time: urgent surgical review and reassess for rescue therapy." Oral prednisolone 40 mg once daily, then taper by 5 mg per week, added to the step and the doses table.
+  - SBP: new answer "PMN <250/mm³, culture negative or pending": SBP unlikely, no SBP treatment, look for another cause of deterioration, act on the culture result. "Systolic BP" is written in full on all five pages; SBP only means spontaneous bacterial peritonitis.
+  - Albumin shown in grams and in mL of 20% (1 g = 5 mL) and 25% (1 g = 4 mL) albumin. The urine output line is labelled "Target, not a dose".
+  - Sources added to why lines: Chavez-Tapia, Cochrane 2010 and Baveno VII (antibiotics in variceal bleeding); Grainge, Lancet 2010 (venous thromboembolism in IBD flares); Randall, Br J Surg 2010 (delayed colectomy).
+  - Built-in calculators never choose an answer; their result outlines the matching answer as "Suggested" (Child-Pugh 10–13, Forrest class, day-3 Oxford or Lindgren, PMN ≥250/mm³ or 2 Runyon criteria, TG18 grade). Rules in SPEC.md B7.0, vectors in B8.9.
+  - Exact PubMed links (with PMID in the citation) replace search links for Villanueva, Garcia-Pagan, Lau, HALT-IT, CYSIF, CONSTRUCT, Sort, WATERFALL, APEC, PONCHO, POINTER, Chavez-Tapia, Grainge and Randall, wherever they are cited (including the GBS calculator).
+
 ## 0.5.0 (2026-11-26)
 
 Clinical owner changes:

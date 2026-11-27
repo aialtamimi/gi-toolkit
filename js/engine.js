@@ -110,6 +110,9 @@ export function linkTo(target, label) {
   return h("span", { class: "btn btn-link disabled", "aria-disabled": "true" }, label, " ", (planned ? "(coming in a later update)" : "(not available)"));
 }
 
+// opts.embedded: rendered inside a bedside algorithm step (SPEC.md B7.0): one column, no sticky result bar.
+// opts.onResult(out | null) is called after every update; opts.hideLinks lists page ids not to link to
+// (the page the calculator is embedded in).
 export function renderCalculator(root, def, opts = {}) {
   const raw = {};
   const units = {};
@@ -135,8 +138,8 @@ export function renderCalculator(root, def, opts = {}) {
   const resetBtn = h("button", { type: "button", class: "btn btn-secondary", onclick: () => opts.onReset && opts.onReset() }, "Clear inputs");
   form.append(h("div", { class: "form-actions" }, resetBtn));
 
-  const card = h("div", { class: "result-card", id: "result", "aria-live": "polite" });
-  const bar = h("button", { type: "button", class: "sticky-bar", onclick: () => card.scrollIntoView({ behavior: "smooth", block: "start" }) });
+  const card = h("div", { class: "result-card", id: opts.embedded ? null : "result", "aria-live": "polite" });
+  const bar = opts.embedded ? null : h("button", { type: "button", class: "sticky-bar", onclick: () => card.scrollIntoView({ behavior: "smooth", block: "start" }) });
 
   const tableBlock = def.table ? renderTable(def.table) : null;
 
@@ -148,10 +151,10 @@ export function renderCalculator(root, def, opts = {}) {
       r.searchLink ? h("span", { class: "muted" }, " (PubMed search)") : null)))
   );
 
-  root.append(
-    h("div", { class: "calc-grid" },
+  appendAll(root,
+    h("div", { class: opts.embedded ? "calc-grid embedded" : "calc-grid" },
       h("div", { class: "col-inputs" }, form),
-      h("div", { class: "col-result" }, card, ...Object.values(groupEls), tableBlock, info)
+      appendAll(h("div", { class: "col-result" }), card, ...Object.values(groupEls), tableBlock, info)
     ),
     bar
   );
@@ -179,12 +182,13 @@ export function renderCalculator(root, def, opts = {}) {
       k.hidden = !any;
     });
     card.replaceChildren();
-    bar.replaceChildren();
+    if (bar) bar.replaceChildren();
     if (c.errors.length || c.missing.length) {
       const msg = c.errors.length ? "Check highlighted inputs." : `To calculate, enter: ${c.missing.join(", ")}.`;
       card.append(h("p", { class: "result-pending" }, msg));
-      bar.append(h("span", { class: "bar-pending" }, c.errors.length ? "Check inputs" : `${c.missing.length} input${c.missing.length === 1 ? "" : "s"} to go`));
+      if (bar) bar.append(h("span", { class: "bar-pending" }, c.errors.length ? "Check inputs" : `${c.missing.length} input${c.missing.length === 1 ? "" : "s"} to go`));
       if (tableBlock) highlightRow(tableBlock, null);
+      if (opts.onResult) opts.onResult(null);
       return;
     }
     let out;
@@ -192,11 +196,13 @@ export function renderCalculator(root, def, opts = {}) {
     catch (e) {
       card.append(h("p", { class: "result-pending" }, "Unable to calculate with these values."));
       console.error(e);
+      if (opts.onResult) opts.onResult(null);
       return;
     }
-    renderResult(card, def, out.result, out.interp);
-    const shown = Array.isArray(out.result.display) ? out.result.display.join(" · ") : out.result.display;
-    bar.append(
+    renderResult(card, def, out.result, out.interp, { hideLinks: opts.hideLinks });
+    if (opts.onResult) opts.onResult(out);
+    const shown = resultText(out.result);
+    if (bar) bar.append(
       h("span", { class: "bar-value" }, `${out.result.label}: ${shown}`),
       h("span", { class: `badge ${LEVEL_CLASS[out.interp.level] || "lvl-neutral"}` }, out.interp.band)
     );
@@ -289,7 +295,14 @@ function renderInput(def, inp, idx, raw, units, update) {
   throw new Error(`Unknown input type ${inp.type}`);
 }
 
-export function renderResult(card, def, r, it) {
+// One-line result value, as shown in the sticky bar and on a collapsed embedded calculator.
+export function resultText(r) {
+  return Array.isArray(r.display) ? r.display.join(" · ") : r.display;
+}
+
+export const levelClass = level => LEVEL_CLASS[level] || "lvl-neutral";
+
+export function renderResult(card, def, r, it, opts = {}) {
   const lvl = LEVEL_CLASS[it.level] || "lvl-neutral";
   card.append(
     h("div", { class: "result-head" },
@@ -309,7 +322,8 @@ export function renderResult(card, def, r, it) {
       h("h3", { class: "section-title" }, s.title, s.muted ? h("span", { class: "muted" }, " (greyed out: exam unreliable)") : null),
       h("ul", {}, s.lines.map(l => h("li", {}, l)))));
   }
-  if (it.links && it.links.length) card.append(h("div", { class: "links" }, it.links.map(l => linkTo(l.target, l.label))));
+  const links = (it.links || []).filter(l => !(opts.hideLinks || []).includes(l.target));
+  if (links.length) card.append(h("div", { class: "links" }, links.map(l => linkTo(l.target, l.label))));
   for (const n of it.notes || []) card.append(h("p", { class: "note" }, n));
   if (r.breakdown && r.breakdown.length) {
     const hasPts = r.breakdown.some(b => b.points !== undefined);

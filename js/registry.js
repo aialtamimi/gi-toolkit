@@ -89,8 +89,10 @@ export const CALCULATORS = [
 
 // Phase 3: B6 reference cards (in SPEC order) and B7 emergency pages (in the B7.19 index order).
 export const CARDS = [bbps, la_grade, prague, paris, nice, zargar, bristol, lyon2];
+// Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1); em_variceal is a redirect entry
+// that keeps its name in the index and in search and opens that page at the variceal pathway.
 export const EMERGENCIES = [
-  em_ugib, em_variceal, em_lgib, em_antithrombotic, em_asuc, em_toxic_megacolon, em_alf, em_aah, em_sbp, em_hrs, em_he, em_pancreatitis, em_cholangitis, em_foreign_body, em_caustic, em_acpo, em_volvulus, em_perforation
+  em_ugib, em_lgib, em_antithrombotic, em_asuc, em_toxic_megacolon, em_alf, em_aah, em_sbp, em_hrs, em_he, em_pancreatitis, em_cholangitis, em_foreign_body, em_caustic, em_acpo, em_volvulus, em_perforation
 ];
 
 // Emergency page names and order from SPEC.md B7.19, used for the home index and for
@@ -104,15 +106,20 @@ export const EMERGENCY_INDEX = [
   ["em_volvulus", "Volvulus"], ["em_perforation", "Perforation"]
 ].map(([id, name]) => ({ id, name }));
 
+// Index and search entries without a page of their own: { id, name, short, aliases, redirect: { page, entry } }.
+export const REDIRECTS = [em_variceal];
+
 // Route for any calculator, card or emergency page.
 export function hrefFor(id) {
+  const r = REDIRECTS.find(x => x.id === id);
+  if (r) return `#/emergency/${r.redirect.page}/${r.redirect.entry}`;
   if (id.startsWith("em_")) return `#/emergency/${id}`;
   if (CARDS.some(c => c.id === id)) return `#/card/${id}`;
   return `#/calc/${id}`;
 }
 
 export function findItem(id) {
-  return CALCULATORS.find(c => c.id === id) || CARDS.find(c => c.id === id) || EMERGENCIES.find(c => c.id === id) || null;
+  return CALCULATORS.find(c => c.id === id) || CARDS.find(c => c.id === id) || EMERGENCIES.find(c => c.id === id) || REDIRECTS.find(c => c.id === id) || null;
 }
 
 export function itemsInCategory(cat) {
@@ -126,7 +133,7 @@ export function search(query) {
   const q = norm(query);
   if (!q) return [];
   const words = q.split(" ");
-  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES];
+  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES, ...REDIRECTS];
   const scored = [];
   for (const item of all) {
     const hay = [item.name, item.short || "", item.id.replace(/_/g, " "), ...(item.aliases || []), ...(item.tags || [])].map(norm);

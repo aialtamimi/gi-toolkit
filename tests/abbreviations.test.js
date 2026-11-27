@@ -4,6 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { CALCULATORS, CARDS, EMERGENCIES } from "../js/registry.js";
 import { calc } from "./helpers.js";
+import { pageText } from "../js/algorithm.js";
 
 export const DRUG_CLASSES = {
   PPI: "proton pump inhibitor",
@@ -16,6 +17,7 @@ export const DRUG_CLASSES = {
 
 // Text of a page in the order it is shown.
 function emergencyText(p) {
+  if (p.kind === "algorithm") return pageText(p);
   return p.blocks.map(b => b.type === "table" ? [...b.columns, ...b.rows.flat()].join(" | ") : `${b.title || ""} ${b.text}`).join("\n");
 }
 function cardText(c) {
