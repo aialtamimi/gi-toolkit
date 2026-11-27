@@ -54,7 +54,8 @@ export default {
       "items": [
         "Two large-bore cannulas; crystalloid resuscitation; bloods: CBC, INR, urea, creatinine, liver tests, crossmatch.",
         "GBS (B2.1) and AIMS65 (B2.2). GBS 0–1 with no other concern: outpatient management can be considered.",
-        "Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.",
+        "Non-variceal: transfuse at Hb <7 g/dL, target 7–9 g/dL (8 g/dL threshold in cardiovascular disease).",
+        "Suspected variceal: target 7–8 g/dL, individualized (Baveno VIII).",
         "Hold antithrombotics per B7.4.",
         "IV erythromycin 250 mg 30–90 minutes before endoscopy if no contraindication (QT prolongation).",
         "Start high-dose IV proton pump inhibitor now: pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h infusion until endoscopy. Do not delay endoscopy for it."
@@ -110,7 +111,7 @@ export default {
         "Transfusion target Hb 7–8 g/dL, individualized for cardiovascular disease, age, hemodynamics and ongoing bleeding.",
         "Vasoactive drug as soon as possible, for 2–5 days or until TIPS; monitor sodium on terlipressin.",
         "Antibiotic prophylaxis at presentation with a third-generation cephalosporin (ceftriaxone 1 g IV every 24 hours, up to 7 days); duration individualized (Child-Pugh A: shorter course or none).",
-        "Lactulose.",
+        "Lactulose to prevent or treat overt hepatic encephalopathy; continue during admission.",
         "Early oral nutrition.",
         "No routine fresh frozen plasma, platelets or fibrinogen (platelets or fibrinogen only if bleeding is not controlled); no recombinant factor VIIa or tranexamic acid.",
         "Hold anticoagulants until bleeding is controlled.",
@@ -205,7 +206,7 @@ export default {
       "items": [
         "Gastric varices GOV2 or IGV1: cyanoacrylate injection.",
         "Acute: cyanoacrylate injection, or EUS-guided coil plus cyanoacrylate in experienced centres.",
-        "Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh C <14.",
+        "Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh score <14 (Child-Pugh A, B, or C up to 13).",
         "If TIPS is contraindicated: transvenous obliteration, endoscopic (including EUS) or surgical options after multidisciplinary discussion."
       ],
       "calcs": [],
@@ -226,8 +227,7 @@ export default {
       "items": [
         "Continue vasoactive drug for 2–5 days.",
         "Continue ceftriaxone, up to 7 days in total.",
-        "Stop the proton pump inhibitor unless there is another indication.",
-        "Lactulose to prevent hepatic encephalopathy."
+        "Stop the proton pump inhibitor unless there is another indication."
       ],
       "calcs": [],
       "doses": [],

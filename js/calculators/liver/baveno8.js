@@ -11,13 +11,15 @@ export const ETIOLOGIES = [
 
 export const TEXT = {
   cacldOut: "cACLD ruled out; negligible 3-year risk of decompensation.",
-  psvd: "LSM <10 kPa with clinical or imaging signs of portal hypertension: suspect vascular liver disease (porto-sinusoidal vascular disorder, PSVD).",
+  psvd: "LSM <10 kPa with clinical or imaging signs of portal hypertension: suspect vascular liver disease (portosinusoidal vascular disorder, PSVD).",
   suggestive: "Suggestive of cACLD.",
   highly: "Highly suggestive of cACLD.",
   repeatFasting: "Repeat fasting LSM to confirm.",
   csphIn: "CSPH ruled in.",
   csphOut: "CSPH ruled out; repeat LSM in 12 months.",
   indeterminate: "CSPH indeterminate: repeat non-invasive tests in 12 months or add SSM.",
+  discordant: "Discordant results: rule-out (LSM 15 or less and platelets 150 or more) and SSM >55 kPa both met. Consider HVPG or specialist review.",
+  other: "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG.",
   obese: "Obese MASLD: the LSM rule for CSPH does not apply; use ANTICIPATE-NASH or NICER (probability 75% or more), not built in.",
   treat: "Start a non-selective beta-blocker, preferably carvedilol.",
   endoAlways: "Screening endoscopy only if not eligible for carvedilol or a non-selective beta-blocker; patients on these drugs do not need screening endoscopy.",
@@ -28,22 +30,24 @@ export const TEXT = {
   stages: "Stages of cirrhosis (Baveno VIII): compensated without or with CSPH; decompensated (overt ascites, variceal bleeding, overt HE grade 2 or more); further decompensation; recompensation (etiology cured, controlled or suppressed; no ascites off diuretics; no overt HE off prophylaxis; no variceal rebleeding; for 6 months or more; Child-Pugh A5/A6)."
 };
 
-// v: { lsm, etiology, plt?, ssm?, obese?, eligible? ("yes" | "no") }
+// v: { lsm, etiology, plt?, ssm?, obese?, signs?, eligible? ("yes" | "no") }
+// Rule-out and SSM >55 kPa both met: "discordant" (clinical owner decision): no CSPH conclusion, no treatment line.
 export function baveno8(v) {
   const obeseMasld = v.etiology === "masld" && !!v.obese;
   const lsmRuleApplies = ["viral", "alcohol"].includes(v.etiology) || (v.etiology === "masld" && !obeseMasld);
   const inByLsm = lsmRuleApplies && v.lsm >= 25;
   const inBySsm = isNum(v.ssm) && v.ssm > 55;
   const outRule = isNum(v.plt) && v.lsm <= 15 && v.plt >= 150;
-  const csph = inByLsm || inBySsm ? "in" : outRule ? "out" : "indeterminate";
+  const csph = outRule && inBySsm ? "discordant" : inByLsm || inBySsm ? "in" : outRule ? "out" : "indeterminate";
+  const otherHigh = v.etiology === "other" && v.lsm >= 25;
   const cacld = v.lsm < 10 ? "out" : v.lsm <= 15 ? "suggestive" : "highly";
   const avoidable = (isNum(v.plt) && v.lsm < 20 && v.plt >= 150) || (isNum(v.ssm) && v.ssm < 40);
   const reached = [25, 20, 15, 10].find(t => v.lsm >= t) || null;
-  return { csph, cacld, inByLsm, inBySsm, outRule, obeseMasld, lsmRuleApplies, avoidable, reached };
+  return { csph, cacld, inByLsm, inBySsm, outRule, obeseMasld, lsmRuleApplies, otherHigh, avoidable, reached, psvd: v.lsm < 10 && !!v.signs };
 }
 
-const BAND = { in: "CSPH ruled in", out: "CSPH ruled out", indeterminate: "CSPH indeterminate" };
-const LEVEL = { in: "high", out: "low", indeterminate: "intermediate" };
+const BAND = { in: "CSPH ruled in", out: "CSPH ruled out", indeterminate: "CSPH indeterminate", discordant: "Discordant results" };
+const LEVEL = { in: "high", out: "low", indeterminate: "intermediate", discordant: "intermediate" };
 const CACLD_TEXT = { out: TEXT.cacldOut, suggestive: TEXT.suggestive, highly: TEXT.highly };
 
 export default {
@@ -59,6 +63,7 @@ export default {
     { id: "obese", label: "BMI 30 or more", type: "checkbox", showIf: v => v.etiology === "masld" },
     { id: "plt", label: "Platelets", type: "number", analyte: "platelets", base: "si", min: 0, max: 2000, optional: true },
     { id: "ssm", label: "Spleen stiffness SSM (100 Hz VCTE)", type: "number", unit: "kPa", min: 1, max: 100, optional: true },
+    { id: "signs", label: "Clinical or imaging signs of portal hypertension (varices, collaterals, splenomegaly, ascites)", type: "checkbox" },
     { id: "eligible", label: "Eligible for carvedilol or a non-selective beta-blocker", type: "radio", optional: true,
       options: [{ label: "Yes", value: "yes" }, { label: "No", value: "no" }] }
   ],
@@ -76,9 +81,10 @@ export default {
   },
   interpret(r) {
     const cacldLines = [CACLD_TEXT[r.cacld]];
-    if (r.cacld === "out") cacldLines.push(TEXT.psvd); else cacldLines.push(TEXT.repeatFasting);
-    const csphLines = [{ in: TEXT.csphIn, out: TEXT.csphOut, indeterminate: TEXT.indeterminate }[r.csph]];
+    if (r.cacld === "out") { if (r.psvd) cacldLines.push(TEXT.psvd); } else cacldLines.push(TEXT.repeatFasting);
+    const csphLines = [{ in: TEXT.csphIn, out: TEXT.csphOut, indeterminate: TEXT.indeterminate, discordant: TEXT.discordant }[r.csph]];
     if (r.obeseMasld) csphLines.push(TEXT.obese);
+    if (r.otherHigh) csphLines.push(TEXT.other);
     const endo = [TEXT.endoAlways];
     if (r.avoidable) endo.push(TEXT.endoAvoid);
     else if (r.eligible === "no") endo.push(TEXT.endoNeeded);

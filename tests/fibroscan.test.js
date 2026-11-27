@@ -1,7 +1,7 @@
 // SPEC.md B8.3 FibroScan (B3.20) test vectors
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import fs, { fibrosisStage, steatosisGrade, baveno, OBESE_LINE, ALCOHOL_NOTE, IQR_WARNING, VALID_WARNING, FLARE_WARNING, CONFOUNDER_WARNING } from "../js/calculators/liver/fibroscan.js";
+import fs, { fibrosisStage, steatosisGrade, baveno, OBESE_LINE, OTHER_LINE, ALCOHOL_NOTE, IQR_WARNING, VALID_WARNING, FLARE_WARNING, CONFOUNDER_WARNING } from "../js/calculators/liver/fibroscan.js";
 import { calc } from "./helpers.js";
 import { evaluate } from "../js/engine.js";
 
@@ -96,7 +96,8 @@ test("FibroScan: steatosis and Baveno VIII cACLD boundaries", () => {
 
 test("FibroScan Baveno VIII: CSPH ruled in at 25 kPa only for hepatitis B, hepatitis C, alcohol-related and non-obese MASLD", () => {
   for (const d of ["hbv", "hcv", "alcohol", "masld"]) assert.equal(baveno(25, d).text, "cACLD highly suggestive; CSPH ruled in (Baveno VIII)", d);
-  assert.equal(baveno(27, "other").text, "cACLD highly suggestive");
+  assert.equal(baveno(27, "other").text, `cACLD highly suggestive; ${OTHER_LINE}`);
+  assert.equal(baveno(24.9, "other").text, "cACLD highly suggestive");
   assert.equal(baveno(30, "masld", true).text, `cACLD highly suggestive; ${OBESE_LINE}`);
   assert.equal(OBESE_LINE, "LSM rule for CSPH not applicable in obese MASLD (Baveno VIII)");
   for (const lsm of [25, 30, 50, 75]) assert.ok(!baveno(lsm, "masld", true).text.includes("CSPH ruled in"), String(lsm));
@@ -111,9 +112,10 @@ test("FibroScan: a Baveno VIII line is shown under the result for every disease,
   assert.ok(calc(fs, { disease: "other", lsm: 12 }).interp.links.some(l => l.target === "baveno8"));
 });
 
-test("FibroScan B8.3: other/mixed 27 kPa → cACLD highly suggestive, no CSPH ruled in", () => {
+test("FibroScan B8.3: other/mixed 27 kPa → cACLD highly suggestive with the validation line, no CSPH ruled in", () => {
   const { result, interp } = calc(fs, { disease: "other", lsm: 27 });
-  assert.deepEqual(result.display, ["Baveno VIII: cACLD highly suggestive"]);
+  assert.deepEqual(result.display, ["Baveno VIII: cACLD highly suggestive; LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG"]);
+  assert.ok(!result.display[0].includes("CSPH ruled in"));
   assert.equal(interp.level, "high");
   assert.deepEqual(calc(fs, { disease: "other", lsm: 9.9 }).result.display, ["Baveno VIII: cACLD ruled out"]);
 });

@@ -55,7 +55,7 @@ export const SUGGESTIONS = [
   { page: "em_ugib", decision: "D2", calc: "child_pugh",
     rule: ({ result }) => {
       if (result.score >= 10 && result.score <= 13) return { answers: ["Yes"] };
-      if (result.score >= 14 && result.score <= 15) return { answers: ["No"], note: "Pre-emptive TIPS not recommended (Child-Pugh >13)" };
+      if (result.score >= 14 && result.score <= 15) return { answers: ["No"], note: "Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory." };
       return { answers: [] };
     } },
   { page: "em_ugib", decision: "D3", calc: "forrest",

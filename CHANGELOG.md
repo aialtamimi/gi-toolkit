@@ -12,6 +12,12 @@ Update from Baveno VII to Baveno VIII (Baveno VIII Faculty. J Hepatol 2026;85:99
 - SBP (B7.9): stop secondary prophylaxis on recompensation; data insufficient for rifaximin as secondary prophylaxis.
 - Hepatic encephalopathy (B7.11): recurrent or persistent HE despite optimal therapy: shunt embolization, transplant evaluation, L-ornithine L-aspartate.
 - Tests for every rule, path and test vector (B8.3, B8.8), the old-id redirect, and a check that "Baveno VII" appears nowhere in the app or SPEC.md.
+- Clinical owner decisions on the review (SPEC.md B3.19, B3.20, B7.0, B7.1, B7.10, B8.3 and B8.9 updated in the same change):
+  - Other etiology with LSM 25 kPa or more (calculator and FibroScan Other/mixed): "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG."
+  - Rule-out and SSM >55 kPa both met: "Discordant results: … Consider HVPG or specialist review." No CSPH conclusion and no treatment line.
+  - New tick box "Clinical or imaging signs of portal hypertension (varices, collaterals, splenomegaly, ascites)"; the PSVD line shows only with LSM <10 kPa and the box ticked. Spelled "portosinusoidal vascular disorder (PSVD)".
+  - Upper GI bleeding step 1 shows both transfusion targets (non-variceal 7–9 g/dL; suspected variceal 7–8 g/dL, Baveno VIII). Lactulose once, before endoscopy: "to prevent or treat overt hepatic encephalopathy; continue during admission". GOV2 or IGV1 TIPS: "Child-Pugh score <14 (Child-Pugh A, B, or C up to 13)". Child-Pugh 14–15 note: "Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory."
+  - HRS-AKI terlipressin dose row: continuous infusion labelled "Preferred", IV bolus "Alternative".
 
 ## 0.8.1 (2026-11-27)
 

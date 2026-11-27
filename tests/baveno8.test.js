@@ -56,14 +56,14 @@ test("B8.3: LSM 18, platelets 160, SSM 35 → indeterminate; screening endoscopy
 
 // ---------- every rule in B3.19 ----------
 
-test("cACLD by LSM: <10 ruled out with the PSVD line; 10–15 suggestive; >15 highly suggestive; ≥10 repeat fasting LSM", () => {
+test("cACLD by LSM: <10 ruled out; 10–15 suggestive; >15 highly suggestive; ≥10 repeat fasting LSM", () => {
   const c = lsm => run({ lsm, etiology: "viral" }).interp;
-  assert.deepEqual(lines(c(9.9), "cACLD"), [TEXT.cacldOut, TEXT.psvd]);
+  assert.deepEqual(lines(c(9.9), "cACLD"), [TEXT.cacldOut]);
   assert.deepEqual(lines(c(10), "cACLD"), [TEXT.suggestive, TEXT.repeatFasting]);
   assert.deepEqual(lines(c(15), "cACLD"), [TEXT.suggestive, TEXT.repeatFasting]);
   assert.deepEqual(lines(c(15.1), "cACLD"), [TEXT.highly, TEXT.repeatFasting]);
   assert.equal(TEXT.cacldOut, "cACLD ruled out; negligible 3-year risk of decompensation.");
-  assert.equal(TEXT.psvd, "LSM <10 kPa with clinical or imaging signs of portal hypertension: suspect vascular liver disease (porto-sinusoidal vascular disorder, PSVD).");
+  assert.equal(TEXT.psvd, "LSM <10 kPa with clinical or imaging signs of portal hypertension: suspect vascular liver disease (portosinusoidal vascular disorder, PSVD).");
   assert.equal(TEXT.repeatFasting, "Repeat fasting LSM to confirm.");
 });
 
@@ -94,9 +94,40 @@ test("B8.3: CSPH ruled out needs LSM ≤15 and platelets ≥150 (15/150 out; 15.
   assert.equal(run({ lsm: 12, etiology: "viral" }).interp.band, "CSPH indeterminate");
 });
 
-test("B8.3: ruled in takes precedence over ruled out (LSM 12, platelets 160, SSM 56 → ruled in; SSM 55 → ruled out)", () => {
-  assert.equal(run({ lsm: 12, plt: 160, ssm: 56, etiology: "viral" }).interp.band, "CSPH ruled in");
+test("B8.3: rule-out and SSM >55 both met → discordant results, no CSPH conclusion and no treatment line; SSM 55 → ruled out", () => {
+  for (const etiology of ALL) {
+    const { result, interp } = run({ lsm: 12, plt: 160, ssm: 56, etiology });
+    assert.equal(result.csph, "discordant", etiology);
+    assert.equal(interp.band, "Discordant results");
+    assert.deepEqual(lines(interp, "Discordant results"), [TEXT.discordant]);
+    assert.equal(interp.action, undefined);
+    assert.ok(!JSON.stringify(interp).includes("CSPH ruled"), "no CSPH conclusion");
+    assert.ok(!JSON.stringify(interp).includes(TEXT.treat), "no treatment line");
+  }
+  assert.equal(TEXT.discordant, "Discordant results: rule-out (LSM 15 or less and platelets 150 or more) and SSM >55 kPa both met. Consider HVPG or specialist review.");
   assert.equal(run({ lsm: 12, plt: 160, ssm: 55, etiology: "viral" }).interp.band, "CSPH ruled out");
+  // SSM >55 without the rule-out: ruled in.
+  assert.equal(run({ lsm: 15.1, plt: 160, ssm: 56, etiology: "viral" }).interp.band, "CSPH ruled in");
+  assert.equal(run({ lsm: 12, plt: 149, ssm: 56, etiology: "viral" }).interp.band, "CSPH ruled in");
+});
+
+test("PSVD line only when LSM <10 kPa and the signs-of-portal-hypertension box is ticked", () => {
+  const c = raw => lines(run({ etiology: "viral", ...raw }).interp, "cACLD");
+  assert.deepEqual(c({ lsm: 9.9 }), [TEXT.cacldOut]);
+  assert.deepEqual(c({ lsm: 9.9, signs: true }), [TEXT.cacldOut, TEXT.psvd]);
+  assert.deepEqual(c({ lsm: 10, signs: true }), [TEXT.suggestive, TEXT.repeatFasting]);
+  assert.equal(bav.inputs.find(i => i.id === "signs").label, "Clinical or imaging signs of portal hypertension (varices, collaterals, splenomegaly, ascites)");
+});
+
+test("other etiology with LSM 25 kPa or more: indeterminate with the validation line; not shown below 25 or for other etiologies", () => {
+  const { interp } = run({ lsm: 27, etiology: "other" });
+  assert.equal(interp.band, "CSPH indeterminate");
+  assert.deepEqual(lines(interp, "CSPH indeterminate"), [TEXT.indeterminate, TEXT.other]);
+  assert.equal(TEXT.other, "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG.");
+  assert.deepEqual(lines(run({ lsm: 24.9, etiology: "other" }).interp, "CSPH indeterminate"), [TEXT.indeterminate]);
+  assert.ok(!JSON.stringify(run({ lsm: 27, etiology: "viral" }).interp).includes(TEXT.other));
+  // SSM >55 still rules in for other etiology, with the line.
+  assert.deepEqual(lines(run({ lsm: 27, ssm: 60, etiology: "other" }).interp, "CSPH ruled in"), [TEXT.csphIn, TEXT.other]);
 });
 
 test("B8.3: screening endoscopy avoidable at LSM <20 and platelets ≥150 (Baveno VI criteria) or SSM <40", () => {
@@ -173,4 +204,12 @@ test("'Baveno VII' appears nowhere in the app or SPEC.md (Baveno VI kept where c
   const hits = files.filter(f => /Baveno VII(?!I)/.test(readFileSync(f, "utf8"))).map(f => f.slice(ROOT.length));
   assert.deepEqual(hits, []);
   assert.ok(/Baveno VI criteria/.test(readFileSync(join(ROOT, "js/calculators/liver/baveno8.js"), "utf8")));
+});
+
+test("PSVD is spelled 'portosinusoidal vascular disorder' everywhere (Baveno VIII)", () => {
+  const ROOT = new URL("..", import.meta.url).pathname;
+  const walk = d => readdirSync(d).flatMap(f => { const p = join(d, f); return statSync(p).isDirectory() ? walk(p) : [p]; });
+  const files = ["js", "content"].flatMap(d => walk(join(ROOT, d))).concat([join(ROOT, "SPEC.md")]);
+  assert.deepEqual(files.filter(f => /porto-sinusoidal/i.test(readFileSync(f, "utf8"))).map(f => f.slice(ROOT.length)), []);
+  assert.ok(readFileSync(join(ROOT, "SPEC.md"), "utf8").includes("portosinusoidal vascular disorder, PSVD"));
 });

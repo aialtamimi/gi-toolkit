@@ -147,7 +147,9 @@ const CARRIED = {
   em_ugib: [
     "hematemesis, coffee-ground vomit, melena; shock index (heart rate/systolic BP) >1 = high risk.",
     "two large-bore cannulas", "crystalloid resuscitation", "GBS (B2.1)",
-    "Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.",
+    // Transfusion line split into non-variceal and suspected variceal targets in version 0.9.0 (clinical owner).
+    "Non-variceal: transfuse at Hb <7 g/dL, target 7–9 g/dL (8 g/dL threshold in cardiovascular disease).",
+    "Suspected variceal: target 7–8 g/dL, individualized (Baveno VIII).",
     "Hold antithrombotics per B7.4.",
     "upper endoscopy within 24 hours of presentation after resuscitation (ACG 2021, ESGE 2021)",
     // Erythromycin timing changed to 30–90 minutes in version 0.9.0 (Baveno VIII; clinical owner).
@@ -475,7 +477,7 @@ test("pre-emptive TIPS suggestion: Child-Pugh 10–13 Yes; 14–15 No with the n
   const run = score => suggestions(p, "D2", { child_pugh: { result: { score } } });
   for (const sc of [5, 7, 8, 9]) assert.deepEqual(run(sc), { answers: [], notes: [] }, String(sc));
   for (const sc of [10, 13]) assert.deepEqual(run(sc), { answers: ["Yes"], notes: [] }, String(sc));
-  for (const sc of [14, 15]) assert.deepEqual(run(sc), { answers: ["No"], notes: ["Pre-emptive TIPS not recommended (Child-Pugh >13)"] }, String(sc));
+  for (const sc of [14, 15]) assert.deepEqual(run(sc), { answers: ["No"], notes: ["Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory."] }, String(sc));
   // Version 0.9.0 (Baveno VIII): salvage TIPS is considered in every patient with refractory bleeding.
   assert.ok(pageText(p).includes("Consider salvage TIPS in every patient with refractory bleeding, regardless of age, Child-Pugh or MELD, case by case."));
   assert.ok(!pageText(p).includes("Salvage TIPS is not recommended"));
@@ -528,13 +530,15 @@ test("variceal pathway: after-endoscopy step before the pre-emptive TIPS decisio
   const v3 = steps(p).find(s => s.id === "V3");
   assert.equal(v3.chip, "After endoscopy");
   assert.deepEqual(v3.when, [["D1", "Yes"]]);
+  // Version 0.9.0: lactulose moved to before endoscopy (V1), once.
   assert.deepEqual(v3.items, ["Continue vasoactive drug for 2–5 days.", "Continue ceftriaxone, up to 7 days in total.",
-    "Stop the proton pump inhibitor unless there is another indication.", "Lactulose to prevent hepatic encephalopathy."]);
+    "Stop the proton pump inhibitor unless there is another indication."]);
   const v7 = steps(p).find(s => s.id === "V7");
   assert.ok(v7.items.includes("After eradication: endoscopy at 3–6 months, then every 6–12 months (AASLD 2017)."));
   assert.ok(v7.items.includes("Carvedilol (preferred over propranolol or nadolol) when the vasoactive drug stops, plus band ligation every 2–4 weeks until eradication."));
-  // Lactulose and stopping the proton pump inhibitor appear once, in the after-endoscopy step.
-  assert.equal(pageText(p).split("Lactulose to prevent hepatic encephalopathy.").length - 1, 1);
+  // Lactulose appears once, before endoscopy.
+  assert.equal(pageText(p).split("Lactulose").length - 1, 1);
+  assert.ok(steps(p).find(s => s.id === "V1").items.includes("Lactulose to prevent or treat overt hepatic encephalopathy; continue during admission."));
   const d2 = steps(p).find(s => s.id === "D2");
   assert.deepEqual(d2.options.map(o => o.value), ["Yes", "No"]);
 });
@@ -783,7 +787,7 @@ test("variceal pathway (Baveno VIII): before endoscopy", () => {
     "Transfusion target Hb 7–8 g/dL, individualized for cardiovascular disease, age, hemodynamics and ongoing bleeding.",
     "Vasoactive drug as soon as possible, for 2–5 days or until TIPS; monitor sodium on terlipressin.",
     "Antibiotic prophylaxis at presentation with a third-generation cephalosporin (ceftriaxone 1 g IV every 24 hours, up to 7 days); duration individualized (Child-Pugh A: shorter course or none).",
-    "Lactulose.",
+    "Lactulose to prevent or treat overt hepatic encephalopathy; continue during admission.",
     "Early oral nutrition.",
     "No routine fresh frozen plasma, platelets or fibrinogen (platelets or fibrinogen only if bleeding is not controlled); no recombinant factor VIIa or tranexamic acid.",
     "Hold anticoagulants until bleeding is controlled.",
@@ -803,7 +807,7 @@ test("variceal pathway (Baveno VIII): endoscopy within 12 h, CT or MRI in every 
   assert.deepEqual(steps(p).find(s => s.id === "V9").items, [
     "Gastric varices GOV2 or IGV1: cyanoacrylate injection.",
     "Acute: cyanoacrylate injection, or EUS-guided coil plus cyanoacrylate in experienced centres.",
-    "Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh C <14.",
+    "Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh score <14 (Child-Pugh A, B, or C up to 13).",
     "If TIPS is contraindicated: transvenous obliteration, endoscopic (including EUS) or surgical options after multidisciplinary discussion."]);
 });
 
@@ -820,7 +824,7 @@ test("variceal pathway (Baveno VIII): pre-emptive TIPS for OV or GOV1 only, crit
   assert.deepEqual(steps(p).find(s => s.id === "V5").items, ["Continue the vasoactive drug for 2–5 days; a shorter course (even 24 hours) can be considered after successful hemostasis if carvedilol or a non-selective beta-blocker is then started."]);
   const cp = score => suggestions(p, "D2", { child_pugh: { result: { score } } });
   assert.deepEqual(cp(12), { answers: ["Yes"], notes: [] });
-  assert.deepEqual(cp(14), { answers: ["No"], notes: ["Pre-emptive TIPS not recommended (Child-Pugh >13)"] });
+  assert.deepEqual(cp(14), { answers: ["No"], notes: ["Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory."] });
   // GOV2 or IGV1: no pre-emptive TIPS decision (TIPS is the definitive treatment in V9).
   assert.ok(!shownSteps(p, { D1: "Yes", D4: "GOV2 or IGV1" }).includes("D2"));
 });
@@ -853,7 +857,7 @@ test("HRS-AKI: terlipressin preferably by continuous infusion, starting 2–3 mg
   const p = page("em_hrs");
   assert.ok(steps(p).find(s => s.id === "R2").items.includes("Terlipressin preferably by continuous infusion, starting 2–3 mg/24 hours (Baveno VIII); escalation and stop rules as below."));
   const row = p.blocks.find(b => b.type === "table" && b.columns[1] === "Dose").rows.find(r => r[0] === "Terlipressin");
-  assert.equal(row[1], "Preferably continuous infusion, starting 2–3 mg/24 hours (Baveno VIII), or IV bolus 1–2 mg every 6 hours; if creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day");
+  assert.equal(row[1], "Preferred: continuous infusion, starting 2–3 mg/24 hours (Baveno VIII). Alternative: IV bolus 1–2 mg every 6 hours. If creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day");
   assert.ok(steps(p).find(s => s.id === "R4").items.some(i => i.startsWith("Stop vasoconstrictor when: creatinine returns to within 0.3 mg/dL of baseline")));
 });
 
@@ -876,4 +880,12 @@ test("Baveno VIII is cited with its exact PubMed link on the upper GI bleeding, 
     assert.ok(r.citation.endsWith("PMID 42624290"), id);
   }
   assert.ok(SPEC_B9().includes("(PMID 42624290)](https://pubmed.ncbi.nlm.nih.gov/42624290/)"));
+});
+
+test("upper GI bleeding step 1 shows both transfusion targets: non-variceal and suspected variceal (Baveno VIII)", () => {
+  const items = steps(page("em_ugib")).find(s => s.id === "U1").items;
+  const i = items.indexOf("Non-variceal: transfuse at Hb <7 g/dL, target 7–9 g/dL (8 g/dL threshold in cardiovascular disease).");
+  assert.ok(i >= 0);
+  assert.equal(items[i + 1], "Suspected variceal: target 7–8 g/dL, individualized (Baveno VIII).");
+  assert.ok(!items.some(t => t.startsWith("Transfuse at Hb <7 g/dL (target 7–9)")));
 });

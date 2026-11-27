@@ -162,7 +162,7 @@ export default {
       "rows": [
         [
           "Terlipressin",
-          "Preferably continuous infusion, starting 2–3 mg/24 hours (Baveno VIII), or IV bolus 1–2 mg every 6 hours; if creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day"
+          "Preferred: continuous infusion, starting 2–3 mg/24 hours (Baveno VIII). Alternative: IV bolus 1–2 mg every 6 hours. If creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day"
         ],
         [
           "Albumin 20–25%",

@@ -48,6 +48,7 @@ export function steatosisGrade(cap) {
 // 25 kPa or more only for hepatitis B, hepatitis C, alcohol-related, and MASLD without BMI ≥30. Obese MASLD never
 // shows CSPH ruled in from LSM; Other/mixed is not covered by the LSM rule.
 export const OBESE_LINE = "LSM rule for CSPH not applicable in obese MASLD (Baveno VIII)";
+export const OTHER_LINE = "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG";
 export function baveno(lsm, disease, obese = false) {
   let text, level;
   if (lsm < 10) { text = "cACLD ruled out"; level = "low"; }
@@ -57,6 +58,7 @@ export function baveno(lsm, disease, obese = false) {
   const lsmRule = ["hbv", "hcv", "alcohol"].includes(disease) || (disease === "masld" && !obeseMasld);
   if (lsm >= 25 && lsmRule) text += "; CSPH ruled in (Baveno VIII)";
   else if (lsm >= 25 && obeseMasld) text += `; ${OBESE_LINE}`;
+  else if (lsm >= 25 && disease === "other") text += `; ${OTHER_LINE}`;
   return { text, level };
 }
 

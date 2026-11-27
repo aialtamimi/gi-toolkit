@@ -17,7 +17,7 @@ const REWORDED = {};
 // Table rows changed later by a clinical owner decision: the row must still exist (same first cell) and its new
 // text must contain the listed phrase.
 const OWNER_CHANGED_ROWS = {
-  em_hrs: { Terlipressin: "Preferably continuous infusion, starting 2–3 mg/24 hours (Baveno VIII)" }  // version 0.9.0
+  em_hrs: { Terlipressin: "Preferred: continuous infusion, starting 2–3 mg/24 hours (Baveno VIII)" }  // version 0.9.0
 };
 
 const norm = s => s.toLowerCase().replace(/\s+/g, " ").trim();

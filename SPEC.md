@@ -560,17 +560,20 @@ Result text if met: "Meets King's College criteria: poor prognosis without trans
 
 Source: [Baveno VIII Faculty. Baveno VIII - Advancing consensus in portal hypertension. J Hepatol 2026;85:993-1018 (PMID 42624290)](https://pubmed.ncbi.nlm.nih.gov/42624290/). The old id baveno7 (the previous Baveno calculator) opens this calculator, so saved links, favorites and recent items keep working.
 
-Inputs: liver stiffness LSM (VCTE, kPa); etiology (viral, alcohol, MASLD, other); platelets (×10⁹/L, optional); spleen stiffness SSM (100 Hz VCTE, kPa, optional); BMI 30 or more (tick box, shown for MASLD); eligible for carvedilol or a non-selective beta-blocker (yes or no, optional).
+Inputs: liver stiffness LSM (VCTE, kPa); etiology (viral, alcohol, MASLD, other); platelets (×10⁹/L, optional); spleen stiffness SSM (100 Hz VCTE, kPa, optional); BMI 30 or more (tick box, shown for MASLD); clinical or imaging signs of portal hypertension (varices, collaterals, splenomegaly, ascites) (tick box); eligible for carvedilol or a non-selective beta-blocker (yes or no, optional).
 
 | Part | Rule | Shown |
 | --- | --- | --- |
-| cACLD | LSM <10 kPa | "cACLD ruled out; negligible 3-year risk of decompensation." and "LSM <10 kPa with clinical or imaging signs of portal hypertension: suspect vascular liver disease (porto-sinusoidal vascular disorder, PSVD)." |
+| cACLD | LSM <10 kPa | "cACLD ruled out; negligible 3-year risk of decompensation." |
+| cACLD | LSM <10 kPa and the signs-of-portal-hypertension box ticked | "LSM <10 kPa with clinical or imaging signs of portal hypertension: suspect vascular liver disease (portosinusoidal vascular disorder, PSVD)." |
 | cACLD | LSM 10–15 kPa | "Suggestive of cACLD." |
 | cACLD | LSM >15 kPa | "Highly suggestive of cACLD." |
 | cACLD | LSM ≥10 kPa | "Repeat fasting LSM to confirm." |
-| CSPH ruled in | LSM ≥25 kPa with viral, alcohol, or MASLD without BMI ≥30; or SSM >55 kPa (any etiology) | "CSPH ruled in." Ruled in takes precedence over ruled out |
-| CSPH ruled out | LSM ≤15 kPa and platelets ≥150, when not ruled in | "CSPH ruled out; repeat LSM in 12 months." |
-| CSPH indeterminate | Neither | "CSPH indeterminate: repeat non-invasive tests in 12 months or add SSM." |
+| CSPH ruled in | LSM ≥25 kPa with viral, alcohol, or MASLD without BMI ≥30; or SSM >55 kPa (any etiology); and the rule-out is not met | "CSPH ruled in." |
+| CSPH ruled out | LSM ≤15 kPa and platelets ≥150, and SSM not >55 kPa | "CSPH ruled out; repeat LSM in 12 months." |
+| Discordant results | LSM ≤15 kPa and platelets ≥150, and SSM >55 kPa | "Discordant results: rule-out (LSM 15 or less and platelets 150 or more) and SSM >55 kPa both met. Consider HVPG or specialist review." No CSPH conclusion and no treatment line |
+| CSPH indeterminate | None of the above | "CSPH indeterminate: repeat non-invasive tests in 12 months or add SSM." |
+| Other etiology | Other, LSM ≥25 kPa | "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG." |
 | Obese MASLD | MASLD with BMI ≥30 | "Obese MASLD: the LSM rule for CSPH does not apply; use ANTICIPATE-NASH or NICER (probability 75% or more), not built in." |
 | Treatment | CSPH ruled in | "Start a non-selective beta-blocker, preferably carvedilol." |
 | Screening endoscopy | Always | "Screening endoscopy only if not eligible for carvedilol or a non-selective beta-blocker; patients on these drugs do not need screening endoscopy." |
@@ -578,7 +581,7 @@ Inputs: liver stiffness LSM (VCTE, kPa); etiology (viral, alcohol, MASLD, other)
 | Screening endoscopy | Eligible = no, and the line above does not apply | "Not eligible: screening endoscopy. No varices: repeat upper endoscopy in 2 years (active etiology) or 3 years (etiology removed or suppressed)." |
 | Rule of five | Always | "Rule of five: LSM 10, 15, 20, 25 kPa = progressively higher risk of decompensation and liver-related death." plus the highest of 10, 15, 20, 25 kPa reached ("This LSM: ≥15 kPa"), or "This LSM: below 10 kPa" |
 
-Band: CSPH ruled in (high), CSPH ruled out (low) or CSPH indeterminate (intermediate). Display: "LSM X kPa: [cACLD text]" and the band.
+Band: CSPH ruled in (high), CSPH ruled out (low), CSPH indeterminate (intermediate) or Discordant results (intermediate). Display: "LSM X kPa: [cACLD text]" and the band.
 
 Notes always shown: "Repeat non-invasive tests every 12 months in cACLD; the most recent value guides decisions." and "Stages of cirrhosis (Baveno VIII): compensated without or with CSPH; decompensated (overt ascites, variceal bleeding, overt HE grade 2 or more); further decompensation; recompensation (etiology cured, controlled or suppressed; no ascites off diuretics; no overt HE off prophylaxis; no variceal rebleeding; for 6 months or more; Child-Pugh A5/A6)."
 
@@ -606,7 +609,7 @@ The result appears as soon as disease and kPa are entered; it does not wait for 
 
 Alcohol-related note: "Higher AST or bilirubin raises stiffness; repeat after abstinence."
 
-**Baveno VIII.** The portal hypertension line follows the Baveno VIII rules (B3.19) for the inputs FibroScan has. For Other/mixed this is the result: <10 kPa cACLD ruled out; 10–15 suggestive; >15 highly suggestive. CSPH ruled in at 25 kPa or more only for hepatitis B, hepatitis C, alcohol-related, and MASLD without BMI ≥30: "CSPH ruled in (Baveno VIII)". MASLD has a "BMI 30 or more" tick box: obese MASLD never shows "CSPH ruled in" from LSM; at 25 kPa or more it shows "LSM rule for CSPH not applicable in obese MASLD (Baveno VIII)". Other/mixed never shows CSPH ruled in from LSM. CSPH ruled out needs platelets and spleen stiffness needs its own input: the result links to the Baveno VIII calculator (B3.19). For all diseases, show one small Baveno VIII line under the result.
+**Baveno VIII.** The portal hypertension line follows the Baveno VIII rules (B3.19) for the inputs FibroScan has. For Other/mixed this is the result: <10 kPa cACLD ruled out; 10–15 suggestive; >15 highly suggestive. CSPH ruled in at 25 kPa or more only for hepatitis B, hepatitis C, alcohol-related, and MASLD without BMI ≥30: "CSPH ruled in (Baveno VIII)". MASLD has a "BMI 30 or more" tick box: obese MASLD never shows "CSPH ruled in" from LSM; at 25 kPa or more it shows "LSM rule for CSPH not applicable in obese MASLD (Baveno VIII)". Other/mixed never shows CSPH ruled in from LSM; at 25 kPa or more it shows "LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG." CSPH ruled out needs platelets and spleen stiffness needs its own input: the result links to the Baveno VIII calculator (B3.19). For all diseases, show one small Baveno VIII line under the result.
 
 **Steatosis grade from CAP (all diseases).** Source: Karlas, J Hepatol 2017.
 
@@ -1120,7 +1123,7 @@ Suggested answers. When a built-in calculator on the page has a result, the matc
 
 | Page | Decision | Calculator | Suggested answer |
 | --- | --- | --- | --- |
-| B7.1 | D2 Pre-emptive TIPS criteria met? | Child-Pugh | Yes when the score is 10–13; No when the score is 14–15, with the note "Pre-emptive TIPS not recommended (Child-Pugh >13)"; none otherwise (the other criteria are not in the calculator) |
+| B7.1 | D2 Pre-emptive TIPS criteria met? | Child-Pugh | Yes when the score is 10–13; No when the score is 14–15, with the note "Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory."; none otherwise (the other criteria are not in the calculator) |
 | B7.1 | D3 High-risk or low-risk stigmata? | Forrest | High-risk stigmata for Ia, Ib, IIa, IIb; Low-risk stigmata for IIc, III |
 | B7.5 | D1 Day-3 criteria positive? | Day-3 Oxford | Yes when Oxford or Lindgren is positive; No when both are negative |
 | B7.9 | D1 Ascitic fluid result? | Ascitic fluid analysis | Runyon criteria or polymicrobial culture when PMN ≥250/mm³ and 2 or more Runyon criteria are met (then only this answer); PMN 250/mm³ or more when PMN ≥250/mm³ with fewer than 2 Runyon criteria met; none otherwise, including PMN <250/mm³ (culture is not in the calculator) |
@@ -1148,7 +1151,8 @@ Algorithm:
 - **U1 · 0–1 h · First hour, all patients**
   - Two large-bore cannulas; crystalloid resuscitation; bloods: CBC, INR, urea, creatinine, liver tests, crossmatch.
   - GBS (B2.1) and AIMS65 (B2.2). GBS 0–1 with no other concern: outpatient management can be considered.
-  - Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.
+  - Non-variceal: transfuse at Hb <7 g/dL, target 7–9 g/dL (8 g/dL threshold in cardiovascular disease).
+  - Suspected variceal: target 7–8 g/dL, individualized (Baveno VIII).
   - Hold antithrombotics per B7.4.
   - IV erythromycin 250 mg 30–90 minutes before endoscopy if no contraindication (QT prolongation).
   - Start high-dose IV proton pump inhibitor now: pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h infusion until endoscopy. Do not delay endoscopy for it.
@@ -1166,7 +1170,7 @@ Algorithm:
   - Transfusion target Hb 7–8 g/dL, individualized for cardiovascular disease, age, hemodynamics and ongoing bleeding.
   - Vasoactive drug as soon as possible, for 2–5 days or until TIPS; monitor sodium on terlipressin.
   - Antibiotic prophylaxis at presentation with a third-generation cephalosporin (ceftriaxone 1 g IV every 24 hours, up to 7 days); duration individualized (Child-Pugh A: shorter course or none).
-  - Lactulose.
+  - Lactulose to prevent or treat overt hepatic encephalopathy; continue during admission.
   - Early oral nutrition.
   - No routine fresh frozen plasma, platelets or fibrinogen (platelets or fibrinogen only if bleeding is not controlled); no recombinant factor VIIa or tranexamic acid.
   - Hold anticoagulants until bleeding is controlled.
@@ -1187,13 +1191,12 @@ Algorithm:
 - **V9 · At endoscopy, then within 24–72 h · Gastric varices GOV2 or IGV1** (shown when D4 = GOV2 or IGV1)
   - Gastric varices GOV2 or IGV1: cyanoacrylate injection.
   - Acute: cyanoacrylate injection, or EUS-guided coil plus cyanoacrylate in experienced centres.
-  - Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh C <14.
+  - Definitive: TIPS with or without variceal embolization as soon as possible (<24–72 hours) if Child-Pugh score <14 (Child-Pugh A, B, or C up to 13).
   - If TIPS is contraindicated: transvenous obliteration, endoscopic (including EUS) or surgical options after multidisciplinary discussion.
 - **V3 · After endoscopy · Variceal: after endoscopy** (shown when D1 = Yes)
   - Continue vasoactive drug for 2–5 days.
   - Continue ceftriaxone, up to 7 days in total.
   - Stop the proton pump inhibitor unless there is another indication.
-  - Lactulose to prevent hepatic encephalopathy.
 - **D2 · After endoscopy · Pre-emptive TIPS criteria met?** (shown when D4 = OV or GOV1)
   - Child-Pugh C 10–13, or Child-Pugh B >7 with active bleeding at endoscopy, or HVPG 20 mmHg or more.
   - Also consider: age <75, creatinine <3 mg/dL, no heart failure.
@@ -1641,7 +1644,7 @@ Algorithm:
 
 | Drug | Dose |
 | --- | --- |
-| Terlipressin | Preferably continuous infusion, starting 2–3 mg/24 hours (Baveno VIII), or IV bolus 1–2 mg every 6 hours; if creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day |
+| Terlipressin | Preferred: continuous infusion, starting 2–3 mg/24 hours (Baveno VIII). Alternative: IV bolus 1–2 mg every 6 hours. If creatinine has not fallen by 25%, increase by at least 2 mg/day every 24 hours up to 12 mg/day |
 | Albumin 20–25% | 20–40 g/day, adjusted daily to volume status |
 | Norepinephrine | 0.5 mg/h IV, increase by 0.5 mg/h every 4 hours up to 3 mg/h to raise MAP (ICU, central line) |
 | Albumin 20–25%, fluid challenge if volume status is unclear | 1–1.5 g/kg |
@@ -2128,10 +2131,10 @@ Every result below was computed with an independent reference implementation of 
 | Baveno VIII | LSM 18 kPa, SSM 60 kPa, any etiology | CSPH ruled in |
 | Baveno VIII | LSM 18 kPa, platelets 160, SSM 35 kPa, any etiology | CSPH indeterminate; screening endoscopy can be avoided if not eligible for a non-selective beta-blocker |
 | Baveno VIII | LSM 27 kPa, MASLD without BMI ≥30 | CSPH ruled in |
-| Baveno VIII | LSM 27 kPa, other etiology, no platelets or SSM | CSPH indeterminate |
-| Baveno VIII | LSM 9.9 kPa, platelets 200 | cACLD ruled out (PSVD line shown); CSPH ruled out |
+| Baveno VIII | LSM 27 kPa, other etiology, no platelets or SSM | CSPH indeterminate, with the other-etiology line |
+| Baveno VIII | LSM 9.9 kPa, platelets 200 | cACLD ruled out; CSPH ruled out; PSVD line only with the signs-of-portal-hypertension box ticked |
 | Baveno VIII | LSM 15 kPa, platelets 150 | CSPH ruled out; LSM 15.1 kPa, platelets 150: indeterminate |
-| Baveno VIII | LSM 12 kPa, platelets 160, SSM 56 kPa | CSPH ruled in (ruled in takes precedence); SSM 55 kPa: ruled out |
+| Baveno VIII | LSM 12 kPa, platelets 160, SSM 56 kPa | Discordant results (no CSPH conclusion, no treatment line); SSM 55 kPa: ruled out |
 | Baveno VIII | LSM 19.9 kPa, platelets 150, not eligible | Screening endoscopy can be avoided; LSM 20 kPa, platelets 150, not eligible: screening endoscopy |
 | Baveno VIII | LSM 22 kPa, SSM 39.9 kPa | Screening endoscopy can be avoided; SSM 40 kPa: not |
 | Old id baveno7 | Link #/calc/baveno7 | Opens the Baveno VIII calculator |
@@ -2146,7 +2149,7 @@ FibroScan (B3.20) test vectors:
 | Hepatitis B, 10.0 kPa | F3 |
 | Alcohol-related, 16 kPa | F3 |
 | Other, 12 kPa | cACLD suggestive |
-| Other, 27 kPa | cACLD highly suggestive (no CSPH ruled in from LSM for Other/mixed) |
+| Other, 27 kPa | cACLD highly suggestive; LSM 25 kPa or more suggests CSPH, but this rule is validated only in viral, alcohol and non-obese MASLD; confirm with SSM or HVPG |
 | Other, 9.9 kPa | cACLD ruled out |
 | Hepatitis B, 25 kPa | F4; Baveno VIII: cACLD highly suggestive; CSPH ruled in (Baveno VIII) |
 | MASLD, 25 kPa | F4; CSPH ruled in (Baveno VIII) |
@@ -2393,8 +2396,8 @@ Calculator inputs are in the calculator's own units. "none" = no answer suggeste
 | --- | --- | --- | --- | --- | --- |
 | em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.0, ascites moderate to severe, encephalopathy none | Yes | none |
 | em\_ugib | D2 | Child-Pugh | bilirubin 1.5 mg/dL, albumin 3.6 g/dL, INR 1.2, ascites none, encephalopathy none | none | none |
-| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 1–2 | No | Pre-emptive TIPS not recommended (Child-Pugh >13) |
-| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 3–4 | No | Pre-emptive TIPS not recommended (Child-Pugh >13) |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 1–2 | No | Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory. |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy grade 3–4 | No | Pre-emptive TIPS criteria not met (Child-Pugh >13). Salvage TIPS can still be considered if bleeding is refractory. |
 | em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.5, ascites moderate to severe, encephalopathy none | Yes | none |
 | em\_ugib | D3 | Forrest | IIb | High-risk stigmata | none |
 | em\_ugib | D3 | Forrest | IIc | Low-risk stigmata | none |
