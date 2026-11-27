@@ -102,7 +102,7 @@ export const EMERGENCIES = [
 export const EMERGENCY_INDEX = [
   ["em_ugib", "Upper GI bleeding"], ["em_lgib", "Lower GI bleeding"],
   ["em_antithrombotic", "Anticoagulants in GI bleeding"], ["em_asuc", "Acute severe UC"], ["em_toxic_megacolon", "Toxic megacolon"],
-  ["em_alf", "Acute liver failure"], ["em_aclf", "ACLF"], ["em_aah", "Alcohol-associated hepatitis"], ["em_sbp", "SBP"], ["em_hrs", "HRS-AKI"],
+  ["em_alf", "Acute liver failure"], ["em_aclf", "Acute-on-chronic liver failure (ACLF)"], ["em_aah", "Alcohol-associated hepatitis"], ["em_sbp", "SBP"], ["em_hrs", "HRS-AKI"],
   ["em_he", "Hepatic encephalopathy"], ["em_pancreatitis", "Acute pancreatitis"], ["em_cholangitis", "Cholangitis"],
   ["em_foreign_body", "Foreign body"], ["em_caustic", "Caustic ingestion"], ["em_acpo", "Ogilvie syndrome"],
   ["em_volvulus", "Volvulus"], ["em_perforation", "Perforation"]

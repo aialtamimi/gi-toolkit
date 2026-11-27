@@ -1,6 +1,6 @@
 // SPEC.md B3.21 CLIF-C OF and CLIF-C ACLF score
 import { ref } from "../../refs.js";
-import { fmt, isNum, roundHalfUp } from "../../num.js";
+import { fmt, isNum } from "../../num.js";
 
 // Converted lab values can carry floating-point noise (205.2 µmol/L ÷ 17.1 = 11.999999999999998 mg/dL);
 // compare cutoffs on the value trimmed to 12 significant digits so exact equivalents score correctly.
@@ -24,7 +24,14 @@ export function organScores(v) {
 
 export const clifCAclf = (of, age, wbc) => 10 * (0.33 * of + 0.04 * age + 0.63 * Math.log(wbc) - 2);
 
+// Organ failures by the EASL-CLIF definitions (B3.17), counted from the CLIF-C OF inputs: every organ scoring 3,
+// plus kidney failure from creatinine ≥2 mg/dL (kidney score 2 or 3).
+export function organFailures(scores) {
+  return Object.keys(scores).filter(k => (k === "Kidney" ? scores[k] >= 2 : scores[k] === 3));
+}
+
 const ACTION = "After 3–7 days of full organ support, with 4 or more organ failures or a score above 70 and no transplant option: discuss withdrawal of organ support and palliative care with the family (B7.20).";
+const NOTE_ABOVE_70 = "A score of 70 or more after 48 h of ICU support was associated with 100% 28-day mortality in one ICU cohort (Engelmann, Crit Care 2018).";
 const LINK = { label: "Acute-on-chronic liver failure emergency page", target: "em_aclf" };
 
 export default {
@@ -59,21 +66,25 @@ export default {
     }
     const of = Object.values(scores).reduce((a, b) => a + b, 0);
     const raw = clifCAclf(of, v.age, v.wbc);
-    const score = roundHalfUp(raw, 0);
-    return { score, of, raw, organs: scores,
-      display: [`CLIF-C ACLF ${fmt(raw, 0)}`, `CLIF-C OF ${of}`], label: "CLIF-C",
+    const failed = organFailures(scores);
+    return { score: raw, of, raw, organs: scores, failed, failures: failed.length,
+      display: [`CLIF-C ACLF ${fmt(raw, 1)}`, `CLIF-C OF ${of}`, `Organ failures: ${failed.length}`], label: "CLIF-C",
       breakdown: [...Object.entries(scores).map(([k, p]) => ({ item: k, points: p })),
         { item: "CLIF-C OF (sum, 6–18)", points: of },
-        { item: "CLIF-C ACLF unrounded = 10 × (0.33 × OF + 0.04 × age + 0.63 × ln WBC − 2)", value: fmt(raw, 2) }],
-      rounding: "CLIF-C ACLF shown as a whole number (round half up); the >70 cutoff uses the whole number shown." };
+        { item: "CLIF-C ACLF = 10 × (0.33 × OF + 0.04 × age + 0.63 × ln WBC − 2)", value: fmt(raw, 1) },
+        { item: "Organ failures (EASL-CLIF definitions)", value: failed.length ? `${failed.length}: ${failed.join(", ")}` : "0" }],
+      rounding: "CLIF-C ACLF shown to 1 decimal place (round half up); the >70 cutoff uses the unrounded value." };
   },
   interpret(r) {
     if (r.missing) return { band: `Enter the missing items: ${r.missing.join("; ")}`, level: "neutral", links: [LINK],
       copy: "CLIF-C ACLF incomplete" };
-    const high = r.score > 70;
-    return { band: high ? "CLIF-C ACLF above 70" : "CLIF-C ACLF 70 or less", level: high ? "high" : "neutral",
-      action: high ? ACTION : undefined, links: [LINK],
-      copy: `CLIF-C ACLF ${r.score} (CLIF-C OF ${r.of}), ${high ? "above 70" : "70 or less"}` };
+    const high = r.raw > 70;
+    const many = r.failures >= 4;
+    return { band: high ? "CLIF-C ACLF above 70" : "CLIF-C ACLF 70 or less", level: high || many ? "high" : "neutral",
+      text: `Organ failures (EASL-CLIF): ${r.failures}${r.failures ? ` (${r.failed.join(", ").toLowerCase()})` : ""}.`,
+      action: high || many ? ACTION : undefined, notes: high ? [NOTE_ABOVE_70] : [], links: [LINK],
+      copy: `CLIF-C ACLF ${fmt(r.raw, 1)} (CLIF-C OF ${r.of}, ${r.failures} organ failure${r.failures === 1 ? "" : "s"}), ${high ? "above 70" : "70 or less"}` };
   },
-  references: [ref("Jalan R et al. Development and validation of a prognostic score to predict mortality in patients with acute-on-chronic liver failure (CLIF-C ACLF). J Hepatol 2014. PMID 24950482", "https://pubmed.ncbi.nlm.nih.gov/24950482/")]
+  references: [ref("Jalan R et al. Development and validation of a prognostic score to predict mortality in patients with acute-on-chronic liver failure (CLIF-C ACLF). J Hepatol 2014. PMID 24950482", "https://pubmed.ncbi.nlm.nih.gov/24950482/"),
+    ref("Engelmann C et al. Validation of CLIF-C ACLF score to define a threshold for futility of intensive care support for patients with acute-on-chronic liver failure. Crit Care 2018. PMID 30305132", "https://pubmed.ncbi.nlm.nih.gov/30305132/")]
 };

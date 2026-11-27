@@ -6,7 +6,7 @@ export default {
   "id": "em_aclf",
   "spec": "B7.20",
   "name": "Acute-on-chronic liver failure",
-  "short": "ACLF",
+  "short": "Acute-on-chronic liver failure (ACLF)",
   "aliases": [
     "acute-on-chronic liver failure",
     "acute on chronic liver failure",
@@ -133,9 +133,9 @@ export default {
       "when": [],
       "items": [
         "Circulation: albumin or balanced crystalloids for initial fluids (albumin if large volumes plus vasopressors); norepinephrine first line; target MAP 65 mmHg or more; terlipressin or vasopressin as second line; hydrocortisone 200 mg/day (50 mg IV every 6 hours) if norepinephrine >0.25 µg/kg/min, maximum 10 days. No dopamine.",
-        "Kidney: manage as HRS-AKI (B7.10). Terlipressin: higher risk of respiratory failure in ACLF grade 3 or volume overload (CONFIRM, NEJM 2021). Renal replacement therapy if potassium >6.5 mmol/L, pH <7.2, refractory fluid overload or anuria; continuous, 25–30 mL/kg/h.",
+        "Kidney: manage as HRS-AKI (B7.10). Terlipressin: higher risk of respiratory failure in ACLF grade 3 or volume overload (CONFIRM, NEJM 2021). Renal replacement therapy if potassium >6.5 mmol/L, pH <7.2, refractory fluid overload or anuria; continuous, effluent dose 25–30 mL/kg/h.",
         "Brain: manage HE (B7.11); grade 3–4: intubate to protect the airway.",
-        "Respiration: high-flow nasal oxygen over non-invasive ventilation for hypoxemic failure; lung-protective ventilation (6 mL/kg); SpO2 target 92–100%.",
+        "Respiration: high-flow nasal oxygen over non-invasive ventilation for hypoxemic failure; lung-protective ventilation (6 mL/kg predicted body weight); SpO2 target 92–100%.",
         "Coagulation: no prophylactic correction of INR or platelets; if bleeding, guide products by viscoelastic tests; venous thromboembolism prophylaxis (low-molecular-weight heparin or mechanical, by coagulopathy).",
         "Nutrition: oral first, then enteral (nasojejunal preferred), parenteral only if enteral fails; energy 30–35 kcal/kg/day; protein 1.2–1.5 g/kg/day, no protein restriction; IV glucose 2–3 g/kg/day if fasting >12 hours; watch for refeeding syndrome."
       ],
@@ -170,7 +170,7 @@ export default {
       "title": "After 3–7 days of full organ support: 4 or more organ failures or CLIF-C ACLF >70, and no transplant option?",
       "when": [],
       "items": [
-        "CLIF-C ACLF score (B3.21)."
+        "CLIF-C ACLF score (B3.21); it also counts organ failures by the EASL-CLIF definitions from the same inputs."
       ],
       "calcs": [
         "clif_c_aclf"
@@ -244,7 +244,7 @@ export default {
         ],
         [
           "Continuous renal replacement therapy",
-          "25–30 mL/kg/h"
+          "Effluent dose 25–30 mL/kg/h"
         ],
         [
           "Energy (target, not a dose)",
@@ -275,6 +275,7 @@ export default {
     ref("Gustot T et al. Clinical course of acute-on-chronic liver failure syndrome and effects on prognosis. Hepatology 2015. PMID 25877702", "https://pubmed.ncbi.nlm.nih.gov/25877702/"),
     ref("Artru F et al. Liver transplantation in the most severely ill cirrhotic patients: a multicenter study in acute-on-chronic liver failure grade 3. J Hepatol 2017. PMID 28645736", "https://pubmed.ncbi.nlm.nih.gov/28645736/"),
     ref("Engelmann C et al. Granulocyte-colony stimulating factor to treat acute-on-chronic liver failure: a multicenter randomized trial (GRAFT). J Hepatol 2021. PMID 34364917", "https://pubmed.ncbi.nlm.nih.gov/34364917/"),
-    ref("Wong F et al. Terlipressin plus albumin for the treatment of type 1 hepatorenal syndrome (CONFIRM). NEJM 2021. PMID 33657294", "https://pubmed.ncbi.nlm.nih.gov/33657294/")
+    ref("Wong F et al. Terlipressin plus albumin for the treatment of type 1 hepatorenal syndrome (CONFIRM). NEJM 2021. PMID 33657294", "https://pubmed.ncbi.nlm.nih.gov/33657294/"),
+    ref("Engelmann C et al. Validation of CLIF-C ACLF score to define a threshold for futility of intensive care support for patients with acute-on-chronic liver failure. Crit Care 2018. PMID 30305132", "https://pubmed.ncbi.nlm.nih.gov/30305132/")
   ]
 };

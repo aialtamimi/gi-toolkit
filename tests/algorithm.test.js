@@ -377,6 +377,8 @@ const SUGGESTION_INPUTS = {
   "grade 3": { grade: "3" }, "grade 4": { grade: "4" }, "grade 2": { grade: "2" }, "minimal": { grade: "Minimal" },
   "bilirubin 13 mg/dL, creatinine 4 mg/dL, HE grade 3–4, INR 2.6, vasopressors, PaO2/FiO2 400, age 60, WBC 20 ×10⁹/L": { bili: 13, cr: 4, he: "3-4", inr: 2.6, vaso: true, pf: 400, age: 60, wbc: 20 },
   "bilirubin 7 mg/dL, creatinine 2.5 mg/dL, HE grade 1–2, INR 2.2, MAP 65 mmHg, PaO2/FiO2 250, age 50, WBC 10 ×10⁹/L": { bili: 7, cr: 2.5, he: "1-2", inr: 2.2, map: 65, pf: 250, age: 50, wbc: 10 },
+  "bilirubin 13 mg/dL, creatinine 2.5 mg/dL, HE grade 3–4, INR 2.6, MAP 75 mmHg, PaO2/FiO2 400, age 40, WBC 5 ×10⁹/L": { bili: 13, cr: 2.5, he: "3-4", inr: 2.6, map: 75, pf: 400, age: 40, wbc: 5 },
+  "bilirubin 13 mg/dL, creatinine 2.5 mg/dL, HE grade 3–4, INR 2.2, MAP 75 mmHg, PaO2/FiO2 400, age 40, WBC 5 ×10⁹/L": { bili: 13, cr: 2.5, he: "3-4", inr: 2.2, map: 75, pf: 400, age: 40, wbc: 5 },
   // Zargar is a table card: the "input" is the tapped row.
   "grade 0": { row: "0" }, "grade 2a": { row: "2a" }, "grade 2b": { row: "2b" }, "grade 3a": { row: "3a" }, "grade 3b": { row: "3b" }
 };
@@ -712,25 +714,33 @@ test("ACLF page: in the index after acute liver failure, and found by 'ACLF' and
   const { EMERGENCY_INDEX, search } = await import("../js/registry.js");
   const ids = EMERGENCY_INDEX.map(e => e.id);
   assert.equal(ids[ids.indexOf("em_alf") + 1], "em_aclf");
-  assert.equal(EMERGENCY_INDEX.find(e => e.id === "em_aclf").name, "ACLF");
+  assert.equal(EMERGENCY_INDEX.find(e => e.id === "em_aclf").name, "Acute-on-chronic liver failure (ACLF)");
   for (const q of ["ACLF", "acute-on-chronic liver failure", "Acute-on-chronic liver failure", "acute on chronic"]) {
     assert.ok(search(q).some(i => i.id === "em_aclf"), q);
   }
   assert.equal(search("acute-on-chronic liver failure")[0].id, "em_aclf");
 });
 
-test("ACLF page: built-in ACLF grade and CLIF-C ACLF; CLIF-C ACLF above 70 suggests Yes only", () => {
+test("ACLF page: Yes is suggested when the unrounded CLIF-C ACLF is above 70 or there are 4 or more organ failures", () => {
   const p = page("em_aclf");
   assert.deepEqual(p.blocks.flatMap(b => b.calcs || []), ["aclf", "clif_c_aclf"]);
-  const run = score => suggestedAnswers(p, "D2", { clif_c_aclf: { result: { score } } });
+  const run = (raw, failures = 0) => suggestedAnswers(p, "D2", { clif_c_aclf: { result: { raw, score: raw, failures } } });
   assert.deepEqual(run(70), []);
-  assert.deepEqual(run(71), ["Yes"]);
+  assert.deepEqual(run(70.4), ["Yes"]);
+  assert.deepEqual(run(70.04), ["Yes"]);
   assert.deepEqual(run(54), []);
+  assert.deepEqual(run(54, 3), []);
+  assert.deepEqual(run(54, 4), ["Yes"]);
   assert.deepEqual(run(null), []);
+  // Incomplete calculator: no score, no failures counted.
+  assert.deepEqual(suggestedAnswers(p, "D2", { clif_c_aclf: { result: { score: null, missing: ["INR"] } } }), []);
 });
 
 test("ACLF page: weight-based CRRT dose and nutrition targets; tidal volume is not calculated", () => {
-  assert.equal(doseLine("aclf_crrt", 80), "Continuous renal replacement therapy 25–30 mL/kg/h: 2000–2400 mL/h");
+  assert.equal(doseLine("aclf_crrt", 80), "Continuous renal replacement therapy, effluent dose 25–30 mL/kg/h: 2000–2400 mL/h");
+  const a5 = steps(page("em_aclf")).find(s => s.id === "A5").items;
+  assert.ok(a5.some(i => i.includes("lung-protective ventilation (6 mL/kg predicted body weight)")));
+  assert.ok(a5.some(i => i.includes("continuous, effluent dose 25–30 mL/kg/h")));
   for (const id of ["aclf_energy", "aclf_protein", "aclf_glucose"]) assert.ok(doseLine(id, 80).startsWith("Target, not a dose. "), id);
   assert.ok(!DOSES.some(d => d.page === "em_aclf" && /mL\/kg\b(?!\/h)/.test(d.label)), "no tidal volume dose");
   const rows = Object.fromEntries(page("em_aclf").blocks.find(b => b.type === "table" && b.columns[1] === "Dose").rows);
@@ -740,7 +750,7 @@ test("ACLF page: weight-based CRRT dose and nutrition targets; tidal volume is n
 test("ACLF page: references link to their exact PubMed record", () => {
   const expect = { "European Association for the Study of the Liver. EASL Clinical Practice Guidelines on acute-on-chronic": "37364789",
     "Bajaj JS": "35006099", "Moreau R": "23474284", "Jalan R": "24950482", "Gustot T": "25877702", "Artru F": "28645736",
-    "Engelmann C": "34364917", "Wong F": "33657294" };
+    "Engelmann C et al. Granulocyte": "34364917", "Wong F": "33657294", "Engelmann C et al. Validation of CLIF-C ACLF": "30305132" };
   const refs = page("em_aclf").references;
   for (const [start, pmid] of Object.entries(expect)) {
     const r = refs.find(r => r.citation.startsWith(start));

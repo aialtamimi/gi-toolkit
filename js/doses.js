@@ -65,7 +65,7 @@ export const DOSES = [
   { id: "protein_target", name: "protein target", page: "em_he", row: null,
     tag: "Target, not a dose", label: "Protein 1.2–1.5 g/kg/day", value: w => `${amount(1.2 * w)}–${amount(1.5 * w)} g/day` },
   { id: "aclf_crrt", name: "continuous renal replacement therapy", page: "em_aclf", row: "Continuous renal replacement therapy",
-    label: "Continuous renal replacement therapy 25–30 mL/kg/h", value: w => `${amount(25 * w)}–${amount(30 * w)} mL/h` },
+    label: "Continuous renal replacement therapy, effluent dose 25–30 mL/kg/h", value: w => `${amount(25 * w)}–${amount(30 * w)} mL/h` },
   { id: "aclf_energy", name: "energy target", page: "em_aclf", row: "Energy (target, not a dose)",
     tag: "Target, not a dose", label: "Energy 30–35 kcal/kg/day", value: w => `${amount(30 * w)}–${amount(35 * w)} kcal/day` },
   { id: "aclf_protein", name: "protein target ACLF", page: "em_aclf", row: "Protein (target, not a dose)",

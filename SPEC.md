@@ -540,7 +540,7 @@ For acutely decompensated cirrhosis. Source: Moreau, Gastroenterology 2013 (CANO
 | 2 | Two organ failures | 32.0% |
 | 3 | Three or more organ failures | 76.7% |
 
-Every result links to the acute-on-chronic liver failure page (B7.20). Prognosis in ACLF: CLIF-C ACLF score (B3.21).
+ACLF grade 1–3 links to the acute-on-chronic liver failure page (B7.20); "No ACLF" has no link. Prognosis in ACLF: CLIF-C ACLF score (B3.21).
 
 ### B3.18 King's College criteria (id: kings)
 
@@ -617,7 +617,7 @@ Footer note: "Use the XL probe when the M probe fails or the skin-to-liver capsu
 
 ### B3.21 CLIF-C OF and CLIF-C ACLF score (id: clif\_c\_aclf)
 
-For patients with ACLF (B3.17); built into the acute-on-chronic liver failure page (B7.20). Source: [Jalan R et al. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/).
+For patients with ACLF (B3.17); built into the acute-on-chronic liver failure page (B7.20). Source: [Jalan R et al. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/); note from [Engelmann C et al. Crit Care 2018 (PMID 30305132)](https://pubmed.ncbi.nlm.nih.gov/30305132/).
 
 CLIF-C OF: each organ scores 1 to 3; total 6–18. Bilirubin and creatinine cutoffs are given in mg/dL only, so µmol/L entries are converted (B1.5).
 
@@ -636,12 +636,17 @@ Inputs: renal replacement therapy scores kidney 3 without a creatinine; vasopres
 \text{CLIF-C ACLF} = 10 \times \left[0.33 \times \text{CLIF-C OF} + 0.04 \times \text{age (years)} + 0.63 \times \ln(\text{WBC}, 10^9/\text{L}) - 2\right]
 ```
 
-Shown as a whole number (round half up). The >70 cutoff is applied to the whole number shown.
+Shown to 1 decimal place (round half up). The >70 cutoff uses the unrounded value (70.4 shows 70.4 and is above 70).
 
-| Score | Band | Action text |
+Organ failures are counted from the same inputs by the EASL-CLIF failure definitions (B3.17): liver bilirubin ≥12 mg/dL; kidney creatinine ≥2 mg/dL or renal replacement therapy; brain HE grade 3–4 (or intubated for HE); coagulation INR ≥2.5; circulation vasopressors; respiration PaO2/FiO2 ≤200, SpO2/FiO2 ≤214, or mechanical ventilation not for HE. The result shows the count and the failed organs.
+
+| Result | Band | Action text |
 | --- | --- | --- |
-| ≤70 | CLIF-C ACLF 70 or less | (none) |
-| >70 | CLIF-C ACLF above 70 | After 3–7 days of full organ support, with 4 or more organ failures or a score above 70 and no transplant option: discuss withdrawal of organ support and palliative care with the family (B7.20). |
+| Score ≤70 and fewer than 4 organ failures | CLIF-C ACLF 70 or less | (none) |
+| Score ≤70 and 4 or more organ failures | CLIF-C ACLF 70 or less | After 3–7 days of full organ support, with 4 or more organ failures or a score above 70 and no transplant option: discuss withdrawal of organ support and palliative care with the family (B7.20). |
+| Score >70 | CLIF-C ACLF above 70 | Same action text |
+
+No mortality bands. With a score above 70, show the note: "A score of 70 or more after 48 h of ICU support was associated with 100% 28-day mortality in one ICU cohort (Engelmann, Crit Care 2018)."
 
 Every result links to the acute-on-chronic liver failure page (B7.20).
 
@@ -1091,7 +1096,7 @@ Weight-based doses. W = weight in kg as entered. Calculated values are shown to 
 | albumin challenge 1 g/kg | B7.10, Albumin 20–25%, fluid challenge if volume status is unclear | 1 × W g; 20%: mL = g × 5; 25%: mL = g × 4 | Albumin challenge, 1 g/kg: [W] g = [5 × W] mL of 20% albumin or [4 × W] mL of 25% albumin |
 | albumin challenge 1.5 g/kg | B7.10, Albumin 20–25%, fluid challenge if volume status is unclear | 1.5 × W g; 20%: mL = g × 5; 25%: mL = g × 4 | Albumin challenge, 1.5 g/kg: [1.5 × W] g = [7.5 × W] mL of 20% albumin or [6 × W] mL of 25% albumin |
 | protein target | B7.11, none (step E8) | 1.2 × W to 1.5 × W g/day | Target, not a dose. Protein 1.2–1.5 g/kg/day: [1.2 × W]–[1.5 × W] g/day |
-| continuous renal replacement therapy | B7.20, Continuous renal replacement therapy | 25 × W to 30 × W mL/h | Continuous renal replacement therapy 25–30 mL/kg/h: [25 × W]–[30 × W] mL/h |
+| continuous renal replacement therapy | B7.20, Continuous renal replacement therapy | 25 × W to 30 × W mL/h | Continuous renal replacement therapy, effluent dose 25–30 mL/kg/h: [25 × W]–[30 × W] mL/h |
 | energy target | B7.20, Energy (target, not a dose) | 30 × W to 35 × W kcal/day | Target, not a dose. Energy 30–35 kcal/kg/day: [30 × W]–[35 × W] kcal/day |
 | protein target ACLF | B7.20, Protein (target, not a dose) | 1.2 × W to 1.5 × W g/day | Target, not a dose. Protein 1.2–1.5 g/kg/day: [1.2 × W]–[1.5 × W] g/day |
 | IV glucose target | B7.20, IV glucose (target, not a dose) | 2 × W to 3 × W g/day | Target, not a dose. IV glucose 2–3 g/kg/day if fasting >12 hours: [2 × W]–[3 × W] g/day |
@@ -1109,7 +1114,7 @@ Suggested answers. When a built-in calculator on the page has a result, the matc
 | B7.7 | D2 King's College criteria met? | King's College criteria | Yes when the criteria are met; none otherwise (its inputs are optional, so "not met" can mean incomplete data) |
 | B7.8 | D2 Lille 0.45 or more? | Lille | Yes when Lille ≥0.45; No when <0.45 |
 | B7.11 | D1 Grade 3–4? | West Haven | Yes for grade 3 or 4; No for minimal, grade 1 or grade 2 |
-| B7.20 | D2 After 3–7 days of full organ support: 4 or more organ failures or CLIF-C ACLF >70, and no transplant option? | CLIF-C ACLF | Yes when the score shown is above 70 (clinical owner decision; the clinician still judges the other conditions); none otherwise |
+| B7.20 | D2 After 3–7 days of full organ support: 4 or more organ failures or CLIF-C ACLF >70, and no transplant option? | CLIF-C ACLF | Yes when the unrounded score is above 70 or there are 4 or more organ failures (EASL-CLIF definitions from the CLIF-C OF inputs); none otherwise. The clinician still judges the days of support and the transplant option |
 | B7.15 | D2 Zargar grade? | Zargar | 0–2a for grade 0, 1 or 2a; 2b–3a for grade 2b or 3a; 3b for grade 3b; Grade 4 (perforation) for grade 4 |
 
 ### B7.1 Upper GI bleeding: non-variceal and variceal (id: em\_ugib)
@@ -1951,9 +1956,9 @@ Algorithm:
 
 ### B7.19 Index of emergency pages
 
-The home screen lists all 18 pages under "Emergencies" with a red label, in this order: Upper GI bleeding, Lower GI bleeding, Anticoagulants in GI bleeding, Acute severe UC, Toxic megacolon, Acute liver failure, ACLF, Alcohol-associated hepatitis, SBP, HRS-AKI, Hepatic encephalopathy, Acute pancreatitis, Cholangitis, Foreign body, Caustic ingestion, Ogilvie syndrome, Volvulus, Perforation.
+The home screen lists all 18 pages under "Emergencies" with a red label, in this order: Upper GI bleeding, Lower GI bleeding, Anticoagulants in GI bleeding, Acute severe UC, Toxic megacolon, Acute liver failure, Acute-on-chronic liver failure (ACLF), Alcohol-associated hepatitis, SBP, HRS-AKI, Hepatic encephalopathy, Acute pancreatitis, Cholangitis, Foreign body, Caustic ingestion, Ogilvie syndrome, Volvulus, Perforation.
 
-Variceal bleeding has no page or index entry of its own: its search words open the upper GI bleeding page (B7.1) at the variceal pathway (B7.2). The index lists 18 entries; ACLF (B7.20) follows Acute liver failure. Searching "ACLF" or "acute-on-chronic liver failure" finds the ACLF page.
+Variceal bleeding has no page or index entry of its own: its search words open the upper GI bleeding page (B7.1) at the variceal pathway (B7.2). The index lists 18 entries; Acute-on-chronic liver failure (ACLF), B7.20, follows Acute liver failure. Searching "ACLF" or "acute-on-chronic liver failure" finds the ACLF page.
 
 ### B7.20 Acute-on-chronic liver failure (id: em\_aclf)
 
@@ -1986,9 +1991,9 @@ Algorithm:
   - Autoimmune hepatitis: corticosteroids; transplant assessment if bilirubin or MELD-Na has not improved after 7 days.
 - **A5 · 0–72 h · Organ support, by failing organ**
   - Circulation: albumin or balanced crystalloids for initial fluids (albumin if large volumes plus vasopressors); norepinephrine first line; target MAP 65 mmHg or more; terlipressin or vasopressin as second line; hydrocortisone 200 mg/day (50 mg IV every 6 hours) if norepinephrine >0.25 µg/kg/min, maximum 10 days. No dopamine.
-  - Kidney: manage as HRS-AKI (B7.10). Terlipressin: higher risk of respiratory failure in ACLF grade 3 or volume overload (CONFIRM, NEJM 2021). Renal replacement therapy if potassium >6.5 mmol/L, pH <7.2, refractory fluid overload or anuria; continuous, 25–30 mL/kg/h.
+  - Kidney: manage as HRS-AKI (B7.10). Terlipressin: higher risk of respiratory failure in ACLF grade 3 or volume overload (CONFIRM, NEJM 2021). Renal replacement therapy if potassium >6.5 mmol/L, pH <7.2, refractory fluid overload or anuria; continuous, effluent dose 25–30 mL/kg/h.
   - Brain: manage HE (B7.11); grade 3–4: intubate to protect the airway.
-  - Respiration: high-flow nasal oxygen over non-invasive ventilation for hypoxemic failure; lung-protective ventilation (6 mL/kg); SpO2 target 92–100%.
+  - Respiration: high-flow nasal oxygen over non-invasive ventilation for hypoxemic failure; lung-protective ventilation (6 mL/kg predicted body weight); SpO2 target 92–100%.
   - Coagulation: no prophylactic correction of INR or platelets; if bleeding, guide products by viscoelastic tests; venous thromboembolism prophylaxis (low-molecular-weight heparin or mechanical, by coagulopathy).
   - Nutrition: oral first, then enteral (nasojejunal preferred), parenteral only if enteral fails; energy 30–35 kcal/kg/day; protein 1.2–1.5 g/kg/day, no protein restriction; IV glucose 2–3 g/kg/day if fasting >12 hours; watch for refeeding syndrome.
   - Weight-based: continuous renal replacement therapy, energy target, protein target ACLF, IV glucose target.
@@ -1996,7 +2001,7 @@ Algorithm:
   - Refer early to a transplant center, especially ACLF grade 2–3.
   - Why: Transplant in ACLF grade 3 gave good survival in selected patients (Artru, J Hepatol 2017).
 - **D2 · Day 3–7 · After 3–7 days of full organ support: 4 or more organ failures or CLIF-C ACLF >70, and no transplant option?**
-  - CLIF-C ACLF score (B3.21).
+  - CLIF-C ACLF score (B3.21); it also counts organ failures by the EASL-CLIF definitions from the same inputs.
   - Calculators: CLIF-C ACLF.
   - Answer Yes: discuss withdrawal of organ support and palliative care.
   - Answer No: continue full support and transplant evaluation.
@@ -2010,7 +2015,7 @@ Algorithm:
 | Drug | Dose |
 | --- | --- |
 | Hydrocortisone (septic shock, norepinephrine >0.25 µg/kg/min) | 50 mg IV every 6 hours (200 mg/day), maximum 10 days |
-| Continuous renal replacement therapy | 25–30 mL/kg/h |
+| Continuous renal replacement therapy | Effluent dose 25–30 mL/kg/h |
 | Energy (target, not a dose) | 30–35 kcal/kg/day |
 | Protein (target, not a dose) | 1.2–1.5 g/kg/day, no protein restriction |
 | IV glucose (target, not a dose) | 2–3 g/kg/day if fasting >12 hours |
@@ -2097,12 +2102,12 @@ Unit rule (B1.5) test vectors for B2 and B3:
 | Child-Pugh | Bilirubin 34 µmol/L (entered in µmol/L) | Bilirubin 2 points |
 | Lille | Creatinine 115 µmol/L (entered in µmol/L) | Renal insufficiency 0 |
 | King's (acetaminophen) | Creatinine 3.4 mg/dL (entered in mg/dL) | Creatinine criterion not met |
-| CLIF-C ACLF | Bilirubin 7 mg/dL, creatinine 2.5 mg/dL, HE grade 1–2, INR 2.2, MAP 65 mmHg, PaO2/FiO2 250, age 50, WBC 10 ×10⁹/L | CLIF-C OF 12; CLIF-C ACLF 54 (unrounded 54.11); 70 or less |
-| CLIF-C ACLF | Bilirubin 13 mg/dL, creatinine 4 mg/dL, HE grade 3–4, INR 2.6, vasopressors, PaO2/FiO2 400, age 60, WBC 20 ×10⁹/L | CLIF-C OF 16; CLIF-C ACLF 76 (unrounded 75.67); above 70 |
-| CLIF-C ACLF | Bilirubin 1 mg/dL, creatinine 1 mg/dL, no HE, INR 1.2, MAP 80 mmHg, SpO2/FiO2 400, age 50, WBC 10 ×10⁹/L | CLIF-C OF 6; CLIF-C ACLF 34 |
-| CLIF-C ACLF | Bilirubin 205.2 µmol/L, creatinine 176.8 µmol/L, no HE, INR 2.0, MAP 70 mmHg, SpO2/FiO2 357, age 50, WBC 10 ×10⁹/L | Liver 3, kidney 2, brain 1, coagulation 2, circulation 1, respiration 2: CLIF-C OF 11 |
-| CLIF-C ACLF | Bilirubin 102.6 µmol/L, renal replacement therapy, intubated for HE, INR 2.5, MAP 69 mmHg, SpO2/FiO2 214, age 50, WBC 10 ×10⁹/L | Liver 2, kidney 3, brain 3, coagulation 3, circulation 2, respiration 3: CLIF-C OF 16 |
-| CLIF-C ACLF | Bilirubin 1 mg/dL, creatinine 1 mg/dL, no HE, INR 1.2, MAP 80 mmHg, PaO2/FiO2 300, SpO2/FiO2 400, mechanical ventilation not for HE, age 50, WBC 10 ×10⁹/L | Respiration 3 (ventilation): CLIF-C OF 8 |
+| CLIF-C ACLF | Bilirubin 7 mg/dL, creatinine 2.5 mg/dL, HE grade 1–2, INR 2.2, MAP 65 mmHg, PaO2/FiO2 250, age 50, WBC 10 ×10⁹/L | CLIF-C OF 12; CLIF-C ACLF 54.1; 70 or less; 1 organ failure (kidney) |
+| CLIF-C ACLF | Bilirubin 13 mg/dL, creatinine 4 mg/dL, HE grade 3–4, INR 2.6, vasopressors, PaO2/FiO2 400, age 60, WBC 20 ×10⁹/L | CLIF-C OF 16; CLIF-C ACLF 75.7; above 70; 5 organ failures |
+| CLIF-C ACLF | Bilirubin 1 mg/dL, creatinine 1 mg/dL, no HE, INR 1.2, MAP 80 mmHg, SpO2/FiO2 400, age 50, WBC 10 ×10⁹/L | CLIF-C OF 6; CLIF-C ACLF 34.3; 0 organ failures |
+| CLIF-C ACLF | Bilirubin 205.2 µmol/L, creatinine 176.8 µmol/L, no HE, INR 2.0, MAP 70 mmHg, SpO2/FiO2 357, age 50, WBC 10 ×10⁹/L | Liver 3, kidney 2, brain 1, coagulation 2, circulation 1, respiration 2: CLIF-C OF 11; 2 organ failures (liver, kidney) |
+| CLIF-C ACLF | Bilirubin 102.6 µmol/L, renal replacement therapy, intubated for HE, INR 2.5, MAP 69 mmHg, SpO2/FiO2 214, age 50, WBC 10 ×10⁹/L | Liver 2, kidney 3, brain 3, coagulation 3, circulation 2, respiration 3: CLIF-C OF 16; 4 organ failures (kidney, brain, coagulation, respiration) |
+| CLIF-C ACLF | Bilirubin 1 mg/dL, creatinine 1 mg/dL, no HE, INR 1.2, MAP 80 mmHg, PaO2/FiO2 300, SpO2/FiO2 400, mechanical ventilation not for HE, age 50, WBC 10 ×10⁹/L | Respiration 3 (ventilation): CLIF-C OF 8; 1 organ failure (respiration) |
 
 ### B8.4 Pancreatobiliary
 
@@ -2191,8 +2196,8 @@ Weight entries outside 20–350 kg, or blank, show no calculated dose; entries o
 | albumin challenge 1.5 g/kg | 72.5 | Albumin challenge, 1.5 g/kg: 108.8 g = 543.8 mL of 20% albumin or 435 mL of 25% albumin |
 | protein target | 72.5 | Target, not a dose. Protein 1.2–1.5 g/kg/day: 87–108.8 g/day |
 | protein target | 60 | Target, not a dose. Protein 1.2–1.5 g/kg/day: 72–90 g/day |
-| continuous renal replacement therapy | 72.5 | Continuous renal replacement therapy 25–30 mL/kg/h: 1812.5–2175 mL/h |
-| continuous renal replacement therapy | 60 | Continuous renal replacement therapy 25–30 mL/kg/h: 1500–1800 mL/h |
+| continuous renal replacement therapy | 72.5 | Continuous renal replacement therapy, effluent dose 25–30 mL/kg/h: 1812.5–2175 mL/h |
+| continuous renal replacement therapy | 60 | Continuous renal replacement therapy, effluent dose 25–30 mL/kg/h: 1500–1800 mL/h |
 | energy target | 72.5 | Target, not a dose. Energy 30–35 kcal/kg/day: 2175–2537.5 kcal/day |
 | protein target ACLF | 72.5 | Target, not a dose. Protein 1.2–1.5 g/kg/day: 87–108.8 g/day |
 | IV glucose target | 72.5 | Target, not a dose. IV glucose 2–3 g/kg/day if fasting >12 hours: 145–217.5 g/day |
@@ -2349,6 +2354,8 @@ Calculator inputs are in the calculator's own units. "none" = no answer suggeste
 | em\_he | D1 | West Haven | minimal | No | none |
 | em\_aclf | D2 | CLIF-C ACLF | bilirubin 13 mg/dL, creatinine 4 mg/dL, HE grade 3–4, INR 2.6, vasopressors, PaO2/FiO2 400, age 60, WBC 20 ×10⁹/L | Yes | none |
 | em\_aclf | D2 | CLIF-C ACLF | bilirubin 7 mg/dL, creatinine 2.5 mg/dL, HE grade 1–2, INR 2.2, MAP 65 mmHg, PaO2/FiO2 250, age 50, WBC 10 ×10⁹/L | none | none |
+| em\_aclf | D2 | CLIF-C ACLF | bilirubin 13 mg/dL, creatinine 2.5 mg/dL, HE grade 3–4, INR 2.6, MAP 75 mmHg, PaO2/FiO2 400, age 40, WBC 5 ×10⁹/L | Yes | none |
+| em\_aclf | D2 | CLIF-C ACLF | bilirubin 13 mg/dL, creatinine 2.5 mg/dL, HE grade 3–4, INR 2.2, MAP 75 mmHg, PaO2/FiO2 400, age 40, WBC 5 ×10⁹/L | none | none |
 | em\_caustic | D2 | Zargar | grade 0 | 0–2a | none |
 | em\_caustic | D2 | Zargar | grade 2a | 0–2a | none |
 | em\_caustic | D2 | Zargar | grade 2b | 2b–3a | none |
@@ -2397,6 +2404,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Bedside algorithm trials and sources (B7.0) | Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013 (PMID 23281973); Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010 (PMID 20573925); Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020 (PMID 32242355); HALT-IT Trial Collaborators. Lancet 2020 (PMID 32563378); Chavez-Tapia NC et al. Antibiotic prophylaxis for cirrhotic patients with upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010 (PMID 20824832); Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012 (PMID 23063316); Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016 (PMID 27595142); Grainge MJ et al. Venous thromboembolism during active disease and remission in inflammatory bowel disease: a cohort study. Lancet 2010 (PMID 20149425); Randall J et al. Delayed surgery for acute severe colitis is associated with increased risk of postoperative complications. Br J Surg 2010 (PMID 20101648); Sort P et al. NEJM 1999 (PMID 10432325); de-Madaria E et al. Aggressive or moderate fluid resuscitation in acute pancreatitis (WATERFALL). NEJM 2022;387:989-1000 (PMID 36103415); Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020 (PMID 32682482); da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015 (PMID 26460661); Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021 (PMID 34614330). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
 | Spontaneous bacterial peritonitis (B7.9) | [EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018 (PMID 29653741)](https://pubmed.ncbi.nlm.nih.gov/29653741/); [Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021 (PMID 33942342)](https://pubmed.ncbi.nlm.nih.gov/33942342/) |
 | Emergency page sources (B7.3 to B7.18) | [Sengupta N et al. ACG guideline 2023 (PMID 36735555)](https://pubmed.ncbi.nlm.nih.gov/36735555/); [Abraham NS et al. ACG-CAG guideline 2022 (PMID 35297395)](https://pubmed.ncbi.nlm.nih.gov/35297395/); [Gralnek IM et al. ESGE 2021 (PMID 33567467)](https://pubmed.ncbi.nlm.nih.gov/33567467/); [Sung JJ et al. Ann Intern Med 2010 (PMID 19949136)](https://pubmed.ncbi.nlm.nih.gov/19949136/); [McDonald LC et al. IDSA/SHEA C. difficile guideline. Clin Infect Dis 2018 (PMID 29462280)](https://pubmed.ncbi.nlm.nih.gov/29462280/); [Randall J et al. Br J Surg 2010 (PMID 20101648)](https://pubmed.ncbi.nlm.nih.gov/20101648/); [Lee WM et al. Gastroenterology 2009 (PMID 19524577)](https://pubmed.ncbi.nlm.nih.gov/19524577/); [EASL acute liver failure guideline. J Hepatol 2017 (PMID 28417882)](https://pubmed.ncbi.nlm.nih.gov/28417882/); [Thursz MR et al. STOPAH. NEJM 2015 (PMID 25901427)](https://pubmed.ncbi.nlm.nih.gov/25901427/); [Louvet A et al. Lille model. Hepatology 2007 (PMID 17518367)](https://pubmed.ncbi.nlm.nih.gov/17518367/); [Arab JP et al. J Hepatol 2021 (PMID 34166722)](https://pubmed.ncbi.nlm.nih.gov/34166722/); [Nadim MK et al. ICA-ADQI. J Hepatol 2024 (PMID 38527522)](https://pubmed.ncbi.nlm.nih.gov/38527522/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Vilstrup H et al. AASLD-EASL. Hepatology 2014 (PMID 25042402)](https://pubmed.ncbi.nlm.nih.gov/25042402/); [Bass NM et al. NEJM 2010 (PMID 20335583)](https://pubmed.ncbi.nlm.nih.gov/20335583/); [Birk M et al. ESGE. Endoscopy 2016 (PMID 26862844)](https://pubmed.ncbi.nlm.nih.gov/26862844/); [Zargar SA et al. Gastrointest Endosc 1991 (PMID 2032601)](https://pubmed.ncbi.nlm.nih.gov/2032601/); [Ponec RJ et al. NEJM 1999 (PMID 10403850)](https://pubmed.ncbi.nlm.nih.gov/10403850/); [Sgouros SN et al. Gut 2006 (PMID 16306137)](https://pubmed.ncbi.nlm.nih.gov/16306137/); [Hirota WK et al. ASGE guideline: the role of endoscopy in the surveillance of premalignant conditions of the upper GI tract. Gastrointest Endosc 2006 (PMID 16564854)](https://pubmed.ncbi.nlm.nih.gov/16564854/) |
-| Acute-on-chronic liver failure (B3.17, B3.21, B7.20) | [EASL Clinical Practice Guidelines on acute-on-chronic liver failure. J Hepatol 2023 (PMID 37364789)](https://pubmed.ncbi.nlm.nih.gov/37364789/); [Bajaj JS et al. ACG Clinical Guideline: acute-on-chronic liver failure. Am J Gastroenterol 2022 (PMID 35006099)](https://pubmed.ncbi.nlm.nih.gov/35006099/); [Moreau R et al. CANONIC. Gastroenterology 2013 (PMID 23474284)](https://pubmed.ncbi.nlm.nih.gov/23474284/); [Jalan R et al. CLIF-C ACLF score. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/); [Gustot T et al. Clinical course of ACLF. Hepatology 2015 (PMID 25877702)](https://pubmed.ncbi.nlm.nih.gov/25877702/); [Artru F et al. Transplant in ACLF grade 3. J Hepatol 2017 (PMID 28645736)](https://pubmed.ncbi.nlm.nih.gov/28645736/); [Engelmann C et al. GRAFT. J Hepatol 2021 (PMID 34364917)](https://pubmed.ncbi.nlm.nih.gov/34364917/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/) |
+| Acute-on-chronic liver failure (B3.17, B3.21, B7.20) | [EASL Clinical Practice Guidelines on acute-on-chronic liver failure. J Hepatol 2023 (PMID 37364789)](https://pubmed.ncbi.nlm.nih.gov/37364789/); [Bajaj JS et al. ACG Clinical Guideline: acute-on-chronic liver failure. Am J Gastroenterol 2022 (PMID 35006099)](https://pubmed.ncbi.nlm.nih.gov/35006099/); [Moreau R et al. CANONIC. Gastroenterology 2013 (PMID 23474284)](https://pubmed.ncbi.nlm.nih.gov/23474284/); [Jalan R et al. CLIF-C ACLF score. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/); [Gustot T et al. Clinical course of ACLF. Hepatology 2015 (PMID 25877702)](https://pubmed.ncbi.nlm.nih.gov/25877702/); [Artru F et al. Transplant in ACLF grade 3. J Hepatol 2017 (PMID 28645736)](https://pubmed.ncbi.nlm.nih.gov/28645736/); [Engelmann C et al. GRAFT. J Hepatol 2021 (PMID 34364917)](https://pubmed.ncbi.nlm.nih.gov/34364917/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Engelmann C et al. CLIF-C ACLF futility threshold. Crit Care 2018 (PMID 30305132)](https://pubmed.ncbi.nlm.nih.gov/30305132/) |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

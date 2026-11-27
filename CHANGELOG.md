@@ -12,6 +12,12 @@ All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 - New calculator B3.21 CLIF-C OF and CLIF-C ACLF score (`clif_c_aclf`, Liver; 45 calculators). Six organs scored 1–3, CLIF-C ACLF = 10 × (0.33 × OF + 0.04 × age + 0.63 × ln WBC − 2), shown as a whole number; band above 70 or 70 or less. Bilirubin and creatinine in SI are converted to mg/dL; converted values are compared after trimming floating-point noise so exact SI equivalents of a cutoff score correctly.
 - ACLF grade (B3.17): every result links to the new page; CANONIC citation now links to PubMed (PMID 23474284).
 - SPEC.md: B1.1, B3 intro, B3.17, new B3.21, B7 intro, B7.0 (dose and suggestion tables), B7.19, new B7.20, B8.3, B8.7, B8.8, B8.9 and B9. B7.19 now correctly says 18 pages.
+- Clinical owner decisions on the review (SPEC.md B3.17, B3.21, B7.0, B7.19, B7.20, B8.3, B8.7, B8.9 and B9 updated in the same change):
+  - CLIF-C ACLF counts organ failures from its inputs by the EASL-CLIF definitions and shows the count and organs. The day 3–7 decision suggests "Yes" when the score is above 70 or there are 4 or more organ failures; the transplant option stays with the clinician.
+  - The score is shown to 1 decimal place and the >70 cutoff uses the unrounded value (70.4 is above 70). No mortality bands; above 70 the result shows the Engelmann, Crit Care 2018 note (PMID 30305132), also added to the sources.
+  - "6 mL/kg predicted body weight" (text only) and "effluent dose 25–30 mL/kg/h" on the page, the doses table and the calculated line.
+  - Emergency index name: "Acute-on-chronic liver failure (ACLF)", after Acute liver failure.
+  - The ACLF grade calculator links to the page for ACLF grade 1–3 only.
 
 ## 0.7.0 (2026-11-27)
 
