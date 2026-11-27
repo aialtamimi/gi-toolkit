@@ -196,6 +196,11 @@ main { padding: 12px 14px calc(84px + var(--safe-bottom)); max-width: 1100px; ma
 .radio-label input { width: 22px; height: 22px; flex: none; accent-color: var(--primary); }
 .radio-label:has(input:checked), .check-label:has(input:checked) { border-color: var(--primary); background: var(--selected-bg); }
 .radio-text { flex: 1; }
+/* Schematic thumbnails and result figures (SPEC.md B2.5): the SVGs carry their own light background, so they look the same in both themes. */
+.opt-img { width: 56px; height: 42px; flex: none; display: block; }
+.result-figure { margin: 10px 0; }
+.result-figure img { display: block; width: 100%; max-width: 240px; height: auto; }
+.result-figure figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
 .radio-label input:focus-visible, .check-label input:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
 .form-actions { display: flex; gap: 8px; margin-top: 4px; }
 
