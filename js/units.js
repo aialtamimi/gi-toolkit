@@ -2,6 +2,7 @@
 // Each analyte has an SI unit and a conventional unit. Calculator inputs declare which
 // system the original formula uses ("base"); the engine converts the entered value to
 // that base before compute() is called.
+import { tidy } from "./num.js";
 
 export const ANALYTES = {
   bilirubin:  { name: "Bilirubin",  si: "µmol/L", conv: "mg/dL", siToConv: v => v / 17.1, convToSi: v => v * 17.1 },
@@ -17,13 +18,19 @@ export const ANALYTES = {
   protein:    { name: "Total protein", si: "g/L", conv: "g/dL", siToConv: v => v / 10, convToSi: v => v * 10 }
 };
 
+// Converted values are rounded to 12 significant digits. Without this, floating-point arithmetic leaves
+// exact equivalents just below a cutoff (205.2 µmol/L ÷ 17.1 = 11.999999999999998 mg/dL instead of 12), so an
+// SI entry at the SI equivalent of a cutoff could miss the criterion. Twelve significant digits removes that
+// noise (about 1e-15) while keeping full precision for small values, so formulas are unaffected.
+// Tests: tests/unit_cutoffs.test.js.
+
 // Convert `value` entered in `fromSystem` ("si" | "conv") to `toSystem`.
 export function convert(analyte, value, fromSystem, toSystem) {
   const a = ANALYTES[analyte];
   if (!a) throw new Error(`Unknown analyte ${analyte}`);
   if (value === null || value === undefined || Number.isNaN(value)) return value;
   if (fromSystem === toSystem) return value;
-  return fromSystem === "si" ? a.siToConv(value) : a.convToSi(value);
+  return tidy(fromSystem === "si" ? a.siToConv(value) : a.convToSi(value));
 }
 
 export function unitLabel(analyte, system) {

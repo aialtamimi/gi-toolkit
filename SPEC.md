@@ -151,6 +151,8 @@ Saudi laboratories report SI units, so SI is the default; every lab field has a 
 
 Cutoffs written in both units: where a criterion or band gives a cutoff in both units (for example "albumin <3.0 g/dL (<30 g/L)" or "bilirubin ≥2 mg/dL (≥34 µmol/L)"), compare the value in the unit the user entered with the cutoff written for that unit, without converting. This applies to every calculator (B2 to B5). Where only one unit is given, and for formulas, convert the entry to that unit.
 
+Exact equivalents: a converted value is rounded to 12 significant digits before any comparison, so an entry that is the exact equivalent of a cutoff counts as the cutoff (205.2 µmol/L bilirubin = 12 mg/dL, not 11.999999999999998). Values derived from lab entries and compared with a cutoff (SAAG) are rounded the same way. Every cutoff of every calculator with a unit toggle is tested at its exact equivalent in the other unit (B8.1); cutoffs with no exact equivalent (a repeating decimal, for example urea 6.5 mmol/L in BUN) and identity conversions (platelets, WBC) are listed in the test.
+
 | Analyte | SI unit | Conventional unit | Conversion |
 | --- | --- | --- | --- |
 | Bilirubin | µmol/L | mg/dL | mg/dL = µmol/L ÷ 17.1 |
@@ -2033,6 +2035,11 @@ Every result below was computed with an independent reference implementation of 
 | Bilirubin 34.2 µmol/L | 2.00 mg/dL |
 | Creatinine 106 µmol/L | 1.20 mg/dL |
 | BUN 25 mg/dL | Urea 8.93 mmol/L |
+| Bilirubin 205.2 µmol/L | 12 mg/dL exactly (ACLF grade: liver failure, bilirubin ≥12 mg/dL) |
+| Bilirubin 102.6 µmol/L | 6 mg/dL exactly (CLIF-C OF liver 2 points) |
+| Creatinine 132.6 µmol/L | 1.5 mg/dL exactly (ACLF grade: kidney dysfunction, creatinine 1.5–1.9 mg/dL) |
+| Creatinine 309.4 µmol/L | 3.5 mg/dL exactly (CLIF-C OF kidney 3 points) |
+| Serum albumin 33 g/L, ascitic albumin 22 g/L (or 3.3 and 2.2 g/dL) | SAAG 1.1 g/dL exactly: portal hypertension |
 
 ### B8.2 GI bleeding
 

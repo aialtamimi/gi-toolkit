@@ -2,6 +2,14 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.8.1 (2026-11-27)
+
+Fix: lab values entered in SI units could fall just below a cutoff because of floating-point conversion (SPEC.md B1.5 and B8.1 updated in the same change).
+- Converted values are now rounded to 12 significant digits before any comparison (`js/units.js`, helper `tidy` in `js/num.js`), so an exact equivalent counts as the cutoff: 205.2 µmol/L bilirubin = 12 mg/dL, 132.6 µmol/L creatinine = 1.5 mg/dL.
+- Cases that were wrong before the fix: ACLF grade at bilirubin 205.2 µmol/L (liver failure missed) and creatinine 132.6 µmol/L (kidney dysfunction missed); CLIF-C OF at 102.6 and 205.2 µmol/L bilirubin and 309.4 µmol/L creatinine (protected in 0.8.0 by a local workaround, now removed).
+- SAAG: the difference of the two albumins is rounded the same way, so 3.3 − 2.2 g/dL (or 33 − 22 g/L) gives 1.1 and counts as portal hypertension. This was wrong in either unit.
+- New `tests/unit_cutoffs.test.js`: every cutoff of every calculator with a unit toggle, at its exact equivalent in the other unit, gives the same result as the entry in the formula's unit; cutoffs written in both units are checked as written; a coverage test lists every converted input as tested, an identity conversion (platelets, WBC) or a cutoff with no exact equivalent (a repeating decimal). Removing the fix makes these tests fail.
+
 ## 0.8.0 (2026-11-27)
 
 - New emergency page B7.20 Acute-on-chronic liver failure (`em_aclf`), bedside algorithm design (B7.0), listed as "ACLF" after Acute liver failure in the emergency index (18 entries). Search "ACLF" or "acute-on-chronic liver failure" finds it.
