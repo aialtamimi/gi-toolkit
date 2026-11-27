@@ -52,6 +52,20 @@ import nice from "../content/cards/nice.js";
 import zargar from "../content/cards/zargar.js";
 import bristol from "../content/cards/bristol.js";
 import lyon2 from "../content/cards/lyon2.js";
+import erefs from "../content/cards/erefs.js";
+import sydney_dmi from "../content/cards/sydney_dmi.js";
+import jnet from "../content/cards/jnet.js";
+import kudo from "../content/cards/kudo.js";
+import haggitt_kikuchi from "../content/cards/haggitt_kikuchi.js";
+import sarin from "../content/cards/sarin.js";
+import hill from "../content/cards/hill.js";
+import siewert from "../content/cards/siewert.js";
+import spigelman from "../content/cards/spigelman.js";
+import olga from "../content/cards/olga.js";
+import marsh from "../content/cards/marsh.js";
+import goligher from "../content/cards/goligher.js";
+import bismuth_corlette from "../content/cards/bismuth_corlette.js";
+import strasberg from "../content/cards/strasberg.js";
 import em_ugib from "../content/emergencies/em_ugib.js";
 import em_lgib from "../content/emergencies/em_lgib.js";
 import em_antithrombotic from "../content/emergencies/em_antithrombotic.js";
@@ -90,7 +104,10 @@ export const CALCULATORS = [
 ];
 
 // Phase 3: B6 reference cards (in SPEC order) and B7 emergency pages (in the B7.19 index order).
-export const CARDS = [bbps, la_grade, prague, paris, nice, zargar, bristol, lyon2];
+export const CARDS = [
+  bbps, la_grade, prague, paris, nice, zargar, bristol, lyon2,
+  erefs, sydney_dmi, jnet, kudo, haggitt_kikuchi, sarin, hill, siewert, spigelman, olga, marsh, goligher, bismuth_corlette, strasberg
+];
 // Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1): its search words open that page
 // at the variceal pathway (page.entryWords), and old em_variceal links redirect there (REDIRECTS).
 export const EMERGENCIES = [

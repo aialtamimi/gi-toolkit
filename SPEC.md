@@ -84,7 +84,7 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 
 ### B1.1 Scope
 
-- 45 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 18 emergency pages (B7), all in the emergency index; every emergency page is an interactive bedside algorithm (B7.0).
+- 45 calculators and selectable cards (B2 to B5), 22 classification reference cards (B6; five are calculators), and 18 emergency pages (B7), all in the emergency index; every emergency page is an interactive bedside algorithm (B7.0).
 - Everything works offline after the first load.
 - English interface only; no language option.
 
@@ -965,7 +965,7 @@ Result: "Criteria met" when A, at least 3 of B and at least 1 of C are ticked (b
 
 ## Part B6: Endoscopy and luminal classifications
 
-Eight reference cards. Each card: title, table, the user can tap a row to highlight it and copy "Classification: grade", one-line clinical use, and the source.
+Twenty-two reference cards (five of them calculators: BBPS, Prague, EREFS, Spigelman, OLGA and OLGIM). Each table card: title, table, the user can tap a row to highlight it and copy "Classification: grade", one-line clinical use, notes, links to related items, and the source. Every card added from B6.9 cites its source with an exact PubMed link.
 
 ### B6.1 Boston Bowel Preparation Scale (id: bbps; calculator)
 
@@ -978,7 +978,7 @@ Score each segment (right, transverse, left) after cleaning. Source: Lai, Gastro
 | 2 | Minor residual staining, small fragments of stool and/or opaque liquid, but mucosa well seen |
 | 3 | Entire mucosa well seen; no residual staining, stool or opaque liquid |
 
-Total 0–9. Adequate preparation: total ≥6 with every segment ≥2. If inadequate: "Repeat colonoscopy within 1 year (US Multi-Society Task Force)."
+Total 0–9. Adequate preparation: total ≥6 with every segment ≥2. If inadequate: "Repeat colonoscopy within 1 year (US Multi-Society Task Force)." Note shown on the screen: "Total 0–9. Adequate preparation: 2 or more in every segment (total 6 or more). Inadequate: repeat colonoscopy within 1 year."
 
 ### B6.2 Los Angeles classification of erosive esophagitis (id: la\_grade)
 
@@ -1017,8 +1017,13 @@ Sources: [ACG 2022 Table 5](https://pmc.ncbi.nlm.nih.gov/articles/PMC10259184/ta
 | 0-IIb | Flat |
 | 0-IIc | Slightly depressed |
 | 0-III | Excavated (ulcer) |
+| Mixed types | Combinations, for example 0-IIa+IIc |
+| LST-G homogeneous | Laterally spreading tumor, granular, homogeneous |
+| LST-G nodular mixed | Laterally spreading tumor, granular, nodular mixed |
+| LST-NG flat elevated | Laterally spreading tumor, non-granular, flat elevated |
+| LST-NG pseudodepressed | Laterally spreading tumor, non-granular, pseudodepressed |
 
-Source: Paris workshop, Gastrointest Endosc 2003. Note: "Depressed (0-IIc) components carry a higher risk of submucosal invasion."
+Source: Paris workshop, Gastrointest Endosc 2003. Note: "Depressed (0-IIc) components carry a higher risk of submucosal invasion." Note: "LST-NG pseudodepressed and LST-G nodular mixed carry the highest risk of submucosal invasion: en bloc resection."
 
 ### B6.5 NICE classification for colorectal polyps (narrow-band imaging) (id: nice)
 
@@ -1070,6 +1075,217 @@ Source: [Gyawali, Gut 2024 (Lyon 2.0)](https://pmc.ncbi.nlm.nih.gov/articles/PMC
 | Against GERD | Normal endoscopy (supportive only) | AET <4% on every day of the study, with <40 reflux episodes per day |
 
 Adjunctive evidence: reflux episodes >80 per day supports GERD; mean nocturnal baseline impedance (MNBI) <1500 Ω supports GERD and >2500 Ω argues against it. Note: "Prolonged wireless pH monitoring off PPI is preferred for unproven GERD."
+
+### B6.9 EREFS, endoscopic reference score for eosinophilic esophagitis (id: erefs; calculator)
+
+Source: [Hirano I et al. Gut 2013 (PMID 22619364)](https://pubmed.ncbi.nlm.nih.gov/22619364/). Score the proximal and the distal esophagus separately; each region 0–9, total 0–18.
+
+| Feature | Grades |
+| --- | --- |
+| Edema | 0 absent; 1 present |
+| Rings | 0 none; 1 mild (subtle ridges); 2 moderate (distinct rings, standard scope passes); 3 severe (scope does not pass) |
+| Exudates | 0 none; 1 mild (<10% of surface); 2 severe (>10% of surface) |
+| Furrows | 0 none; 1 mild; 2 severe |
+| Stricture | 0 absent; 1 present |
+
+Result: proximal score, distal score and total (no bands). Note: "Minor features, not scored: crepe-paper mucosa, narrow-caliber esophagus." Note: "Score before biopsies; use the score to follow response to treatment."
+
+### B6.10 Sydney classification of deep mural injury after EMR (id: sydney\_dmi)
+
+Source: [Burgess NG et al. Gut 2017 (PMID 27464708)](https://pubmed.ncbi.nlm.nih.gov/27464708/).
+
+| Type | Finding | Management |
+| --- | --- | --- |
+| 0 | Normal blue-mat submucosa | No closure needed |
+| I | Muscularis propria visible, not injured | No closure needed |
+| II | Focal loss of the submucosal plane; muscle injury cannot be excluded | Consider clip closure |
+| III | Muscle injured (target sign on the specimen or mirror target in the defect) | Close promptly with through-the-scope or over-the-scope clips |
+| IV | Hole within a white cautery ring, no contamination | Close promptly with through-the-scope or over-the-scope clips; antibiotics, admission and surgical review |
+| V | Hole with contamination | Close promptly with through-the-scope or over-the-scope clips; antibiotics, admission and surgical review |
+
+Clinical use: "Types III–V need prompt clip closure; types IV–V also need antibiotics, admission and surgical review." Links: Iatrogenic endoscopic perforation (em\_perforation).
+
+### B6.11 JNET classification (narrow-band imaging with magnification) (id: jnet)
+
+Source: [Sano Y et al. Dig Endosc 2016 (PMID 26927367)](https://pubmed.ncbi.nlm.nih.gov/26927367/).
+
+| Type | Vessel pattern | Surface pattern | Likely histology | Action |
+| --- | --- | --- | --- | --- |
+| 1 | Invisible | Regular dark or white spots, like normal mucosa | Hyperplastic polyp or sessile serrated lesion | Resect sessile serrated lesions; small rectosigmoid hyperplastic polyps can be left |
+| 2A | Regular caliber and distribution (meshed or spiral) | Regular tubular, branched or papillary | Low-grade intramucosal neoplasia | Endoscopic resection |
+| 2B | Variable caliber, irregular distribution | Irregular or obscure | High-grade intramucosal neoplasia or shallow submucosal invasive cancer | En bloc resection; add magnifying chromoendoscopy (pit pattern) |
+| 3 | Loose vessel areas, interruption of thick vessels | Amorphous areas | Deep submucosal invasive cancer | Surgery |
+
+Clinical use: "Type 2B needs en bloc resection and pit pattern assessment; type 3 suggests deep submucosal invasion: surgery." Links: NICE (nice), Kudo pit pattern (kudo).
+
+### B6.12 Kudo pit pattern classification (id: kudo)
+
+Source: [Kudo S et al. Gastrointest Endosc 1996 (PMID 8836710)](https://pubmed.ncbi.nlm.nih.gov/8836710/).
+
+| Type | Pit pattern | Likely histology and action |
+| --- | --- | --- |
+| I | Round | Normal |
+| II | Stellar or papillary | Hyperplastic |
+| IIIS | Small tubular or round | Depressed adenoma or early cancer |
+| IIIL | Large tubular or roundish | Adenoma |
+| IV | Branch-like or gyrus-like | Adenoma, often villous |
+| VI | Irregular | High-grade dysplasia or superficial submucosal cancer: en bloc resection |
+| VN | Non-structural | Deep submucosal invasion: surgery |
+
+Clinical use: "Type VI needs en bloc resection; type VN suggests deep submucosal invasion: surgery."
+
+### B6.13 Malignant colorectal polyp: Haggitt and Kikuchi levels (id: haggitt\_kikuchi)
+
+Sources: [Haggitt RC et al. Gastroenterology 1985 (PMID 4007423)](https://pubmed.ncbi.nlm.nih.gov/4007423/); [Kikuchi R et al. Dis Colon Rectum 1995 (PMID 7497841)](https://pubmed.ncbi.nlm.nih.gov/7497841/); [Hashiguchi Y et al. JSCCR guidelines 2019. Int J Clin Oncol 2020 (PMID 31203527)](https://pubmed.ncbi.nlm.nih.gov/31203527/).
+
+| Level | Polyp type | Depth of invasion |
+| --- | --- | --- |
+| Haggitt 0 | Pedunculated | Intramucosal |
+| Haggitt 1 | Pedunculated | Head |
+| Haggitt 2 | Pedunculated | Neck |
+| Haggitt 3 | Pedunculated | Stalk |
+| Haggitt 4 | Pedunculated or sessile | Submucosa below the stalk; all invasive sessile cancers are level 4 |
+| Kikuchi sm1 | Sessile | Upper third of the submucosa |
+| Kikuchi sm2 | Sessile | Middle third of the submucosa |
+| Kikuchi sm3 | Sessile | Lower third of the submucosa |
+
+Clinical use: "Lymph node risk rises with Haggitt level 4 and Kikuchi sm2–sm3." Note: "Endoscopic resection is curative when: submucosal invasion <1000 µm, well or moderately differentiated (or papillary), no lymphovascular invasion, tumor budding grade 1, negative vertical margin (JSCCR 2019); otherwise discuss surgery."
+
+### B6.14 Sarin classification of gastric varices (id: sarin)
+
+Source: [Sarin SK et al. Hepatology 1992 (PMID 1446890)](https://pubmed.ncbi.nlm.nih.gov/1446890/).
+
+| Type | Location |
+| --- | --- |
+| GOV1 | Esophageal varices extending along the lesser curve |
+| GOV2 | Esophageal varices extending toward the fundus |
+| IGV1 | Isolated gastric varices in the fundus |
+| IGV2 | Isolated gastric varices elsewhere (body, antrum, pylorus, duodenum) |
+
+Clinical use: "Treatment depends on the type: see the bleeding source decision in variceal bleeding (B7.1)." Links: Variceal bleeding (em\_variceal).
+
+### B6.15 Hill grade of the gastroesophageal flap valve (id: hill)
+
+Source: [Hill LD et al. Gastrointest Endosc 1996 (PMID 8934159)](https://pubmed.ncbi.nlm.nih.gov/8934159/). Retroflexed view.
+
+| Grade | Appearance |
+| --- | --- |
+| I | Prominent ridge closely approximated to the scope |
+| II | Ridge present; opens with respiration and closes promptly |
+| III | Ridge barely present, often not closing around the scope |
+| IV | No ridge; junction wide open; hiatal hernia always present |
+
+Clinical use: "Grades III–IV are associated with GERD." Links: Lyon Consensus 2.0 (lyon2).
+
+### B6.16 Siewert classification of adenocarcinoma of the gastroesophageal junction (id: siewert)
+
+Source: [Siewert JR, Stein HJ. Br J Surg 1998 (PMID 9823902)](https://pubmed.ncbi.nlm.nih.gov/9823902/).
+
+| Type | Tumor center | Treated as |
+| --- | --- | --- |
+| I | 1–5 cm above the gastroesophageal junction | Esophageal cancer |
+| II | 1 cm above to 2 cm below the gastroesophageal junction | Per staging and multidisciplinary team |
+| III | 2–5 cm below the gastroesophageal junction | Gastric cancer |
+
+Clinical use: "Type I is treated as esophageal cancer, type III as gastric cancer, type II per staging and multidisciplinary team."
+
+### B6.17 Spigelman classification of duodenal polyposis, modified (id: spigelman; calculator)
+
+Sources: [Spigelman AD et al. Lancet 1989 (PMID 2571019)](https://pubmed.ncbi.nlm.nih.gov/2571019/); [Syngal S et al. ACG guideline 2015 (PMID 25645574)](https://pubmed.ncbi.nlm.nih.gov/25645574/).
+
+| Item | 1 point | 2 points | 3 points |
+| --- | --- | --- | --- |
+| Number of polyps | 1–4 | 5–20 | >20 |
+| Polyp size | 1–4 mm | 5–10 mm | >10 mm |
+| Histology | Tubular | Tubulovillous | Villous |
+| Dysplasia | Low-grade |  | High-grade |
+
+No polyps = stage 0. Points: stage I 1–4, II 5–6, III 7–8, IV 9–12.
+
+| Stage | Surveillance (ACG 2015) |
+| --- | --- |
+| 0 | Every 4 years |
+| I | Every 2–3 years |
+| II | Every 1–3 years |
+| III | Every 6–12 months |
+| IV | Expert surveillance every 3–6 months and surgical evaluation |
+
+Note: "Assess the ampulla with a side-viewing scope."
+
+### B6.18 OLGA and OLGIM gastritis staging (id: olga; calculator)
+
+Sources: [Rugge M et al. Gut 2007 (PMID 17142647)](https://pubmed.ncbi.nlm.nih.gov/17142647/); [Capelle LG et al. Gastrointest Endosc 2010 (PMID 20381801)](https://pubmed.ncbi.nlm.nih.gov/20381801/); [Dinis-Ribeiro M et al. MAPS III. Endoscopy 2025 (PMID 40112834)](https://pubmed.ncbi.nlm.nih.gov/40112834/).
+
+Choose atrophy (OLGA) or intestinal metaplasia (OLGIM); score the antrum (including the incisura) and the corpus each none, mild, moderate or severe.
+
+| Antrum \ Corpus | None | Mild | Moderate | Severe |
+| --- | --- | --- | --- | --- |
+| None | 0 | I | II | II |
+| Mild | I | I | II | III |
+| Moderate | II | II | III | IV |
+| Severe | III | III | IV | IV |
+
+Stage III–IV: band "High risk"; action "H. pylori eradication and high-quality endoscopy every 3 years (MAPS III)." Stage 0–II: band "Lower risk"; action "Eradicate H. pylori; no routine surveillance unless other risk factors (first-degree family history, incomplete intestinal metaplasia, persistent H. pylori): individualize."
+
+### B6.19 Marsh-Oberhuber classification of celiac disease (id: marsh)
+
+Source: [Oberhuber G et al. Eur J Gastroenterol Hepatol 1999 (PMID 10524652)](https://pubmed.ncbi.nlm.nih.gov/10524652/).
+
+| Type | Histology |
+| --- | --- |
+| 0 | Normal |
+| 1 | Increased intraepithelial lymphocytes (>25 per 100 enterocytes; Oberhuber originally used >40), normal villi |
+| 2 | Increased intraepithelial lymphocytes plus crypt hyperplasia |
+| 3a | Partial villous atrophy |
+| 3b | Subtotal villous atrophy |
+| 3c | Total villous atrophy |
+
+Clinical use: "Marsh 3 is typical of celiac disease; Marsh 1–2 is non-specific. Interpret with tTG-IgA on a gluten-containing diet."
+
+### B6.20 Goligher classification of internal hemorrhoids (id: goligher)
+
+Source: [Hawkins AT et al. ASCRS clinical practice guidelines. Dis Colon Rectum 2024 (PMID 38294832)](https://pubmed.ncbi.nlm.nih.gov/38294832/).
+
+| Grade | Finding | Management (ASCRS 2024) |
+| --- | --- | --- |
+| I | Bleeding, no prolapse | Fiber, fluids, office procedures such as rubber band ligation |
+| II | Prolapse that reduces spontaneously | Fiber, fluids, office procedures such as rubber band ligation |
+| III | Prolapse that needs manual reduction | Rubber band ligation or surgery |
+| IV | Irreducible prolapse | Hemorrhoidectomy |
+
+Clinical use: "Grade IV, or failed office treatment: hemorrhoidectomy."
+
+### B6.21 Bismuth-Corlette classification of hilar biliary strictures (id: bismuth\_corlette)
+
+Source: [Bismuth H, Corlette MB. Surg Gynecol Obstet 1975 (PMID 1079096)](https://pubmed.ncbi.nlm.nih.gov/1079096/).
+
+| Type | Level |
+| --- | --- |
+| I | Below the confluence |
+| II | At the confluence |
+| IIIa | Extends to the right hepatic duct |
+| IIIb | Extends to the left hepatic duct |
+| IV | Both sides, or multifocal |
+
+Clinical use: "Guides drainage and surgery: plan with MRCP before ERCP; types III–IV at an expert centre."
+
+### B6.22 Strasberg classification of bile duct injury (id: strasberg)
+
+Source: [Strasberg SM et al. J Am Coll Surg 1995 (PMID 8000648)](https://pubmed.ncbi.nlm.nih.gov/8000648/).
+
+| Type | Injury |
+| --- | --- |
+| A | Cystic duct or liver-bed duct leak |
+| B | Occluded aberrant right hepatic duct |
+| C | Transected aberrant right hepatic duct (leak) |
+| D | Lateral injury to a major duct |
+| E1 | Transection >2 cm from the confluence |
+| E2 | Transection <2 cm from the confluence |
+| E3 | At the confluence, confluence preserved |
+| E4 | Confluence destroyed |
+| E5 | Aberrant right duct plus common hepatic duct |
+
+Clinical use: "A and small D: usually ERCP (stent with or without sphincterotomy); B, C, larger D and E: hepatobiliary surgical centre."
 
 ## Part B7: GI emergency pages
 
@@ -1182,7 +1398,7 @@ Algorithm:
   - Endoscopy within 12 hours (as soon as possible if unstable).
   - Contrast CT or MRI of the abdomen in every variceal bleed (portal vein thrombosis, HCC, collaterals).
 - **D4 · At endoscopy · Bleeding source?** (shown when D1 = Yes)
-  - OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices.
+  - OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices (Sarin, B6.14).
   - Answer OV or GOV1: band ligation.
   - Answer GOV2 or IGV1: cyanoacrylate, then TIPS.
 - **V8 · At endoscopy · Esophageal varices or GOV1** (shown when D4 = OV or GOV1)
@@ -1994,9 +2210,12 @@ Algorithm:
   - Esophagus: clips or over-the-scope clip; covered stent or endoscopic vacuum therapy for larger defects.
   - ERCP: duodenal wall (scope) perforation: endoscopic closure or surgery; periampullary: biliary and/or pancreatic stent; guidewire or retroperitoneal air only: conservative.
   - Colon: clips or over-the-scope clip.
+  - After colonic EMR: deep mural injury by the Sydney classification (B6.10).
 - **P4 · Then · Leak and surgery**
   - CT to assess the leak; surgery if endoscopic closure fails, the defect is large, or peritonitis or sepsis develops.
 - **Avoid:** delaying surgical review; air insufflation.
+
+Related: Sydney deep mural injury.
 
 ### B7.19 Index of emergency pages
 
@@ -2215,6 +2434,22 @@ Unit rule (B1.5) test vectors for B2 and B3:
 | BBPS | Right 2, transverse 3, left 2 | 7, adequate |
 | BBPS | Right 3, transverse 3, left 1 | 7, inadequate (a segment <2) |
 | Prague | C 2 cm, M 5 cm | "C2M5"; surveillance every 3 years (ACG and ESGE) |
+| EREFS | Proximal: edema 1, rings 1, exudates 0, furrows 1, stricture 0; distal: edema 1, rings 2, exudates 1, furrows 2, stricture 0 | Proximal 3, distal 6, total 9 |
+| EREFS | Every feature at its maximum in both regions | Proximal 9, distal 9, total 18 |
+| EREFS | Every feature 0 in both regions | Proximal 0, distal 0, total 0 |
+| Spigelman | No polyps | Stage 0; surveillance every 4 years |
+| Spigelman | 1–4 polyps, 1–4 mm, tubular, low-grade dysplasia | 4 points, stage I; every 2–3 years |
+| Spigelman | 5–20 polyps, 5–10 mm, tubular, low-grade dysplasia | 6 points, stage II; every 1–3 years |
+| Spigelman | 5–20 polyps, 5–10 mm, tubulovillous, low-grade dysplasia | 7 points, stage III; every 6–12 months |
+| Spigelman | 5–20 polyps, 1–4 mm, tubular, high-grade dysplasia | 7 points, stage III; every 6–12 months |
+| Spigelman | >20 polyps, >10 mm, villous, high-grade dysplasia | 12 points, stage IV; expert surveillance every 3–6 months and surgical evaluation |
+| Spigelman | >20 polyps, 5–10 mm, tubulovillous, low-grade dysplasia | 8 points, stage III |
+| Spigelman | >20 polyps, >10 mm, tubulovillous, low-grade dysplasia | 9 points, stage IV |
+| OLGA | Antrum moderate, corpus mild | Stage II, lower risk |
+| OLGA | Antrum mild, corpus severe | Stage III, high risk |
+| OLGIM | Antrum severe, corpus moderate | Stage IV, high risk |
+| OLGA | Antrum none, corpus none | Stage 0, lower risk |
+| OLGA and OLGIM | Every cell of the matrix | The stage in the B6.18 matrix |
 
 ### B8.7 Weight-based doses (B7.0)
 
@@ -2474,5 +2709,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Spontaneous bacterial peritonitis (B7.9) | [EASL Clinical Practice Guidelines for the management of patients with decompensated cirrhosis. J Hepatol 2018 (PMID 29653741)](https://pubmed.ncbi.nlm.nih.gov/29653741/); [Biggins SW et al. AASLD practice guidance on diagnosis, evaluation and management of ascites, spontaneous bacterial peritonitis and hepatorenal syndrome. Hepatology 2021 (PMID 33942342)](https://pubmed.ncbi.nlm.nih.gov/33942342/) |
 | Emergency page sources (B7.3 to B7.18) | [Sengupta N et al. ACG guideline 2023 (PMID 36735555)](https://pubmed.ncbi.nlm.nih.gov/36735555/); [Abraham NS et al. ACG-CAG guideline 2022 (PMID 35297395)](https://pubmed.ncbi.nlm.nih.gov/35297395/); [Gralnek IM et al. ESGE 2021 (PMID 33567467)](https://pubmed.ncbi.nlm.nih.gov/33567467/); [Sung JJ et al. Ann Intern Med 2010 (PMID 19949136)](https://pubmed.ncbi.nlm.nih.gov/19949136/); [McDonald LC et al. IDSA/SHEA C. difficile guideline. Clin Infect Dis 2018 (PMID 29462280)](https://pubmed.ncbi.nlm.nih.gov/29462280/); [Randall J et al. Br J Surg 2010 (PMID 20101648)](https://pubmed.ncbi.nlm.nih.gov/20101648/); [Lee WM et al. Gastroenterology 2009 (PMID 19524577)](https://pubmed.ncbi.nlm.nih.gov/19524577/); [EASL acute liver failure guideline. J Hepatol 2017 (PMID 28417882)](https://pubmed.ncbi.nlm.nih.gov/28417882/); [Thursz MR et al. STOPAH. NEJM 2015 (PMID 25901427)](https://pubmed.ncbi.nlm.nih.gov/25901427/); [Louvet A et al. Lille model. Hepatology 2007 (PMID 17518367)](https://pubmed.ncbi.nlm.nih.gov/17518367/); [Arab JP et al. J Hepatol 2021 (PMID 34166722)](https://pubmed.ncbi.nlm.nih.gov/34166722/); [Nadim MK et al. ICA-ADQI. J Hepatol 2024 (PMID 38527522)](https://pubmed.ncbi.nlm.nih.gov/38527522/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Vilstrup H et al. AASLD-EASL. Hepatology 2014 (PMID 25042402)](https://pubmed.ncbi.nlm.nih.gov/25042402/); [Bass NM et al. NEJM 2010 (PMID 20335583)](https://pubmed.ncbi.nlm.nih.gov/20335583/); [Birk M et al. ESGE. Endoscopy 2016 (PMID 26862844)](https://pubmed.ncbi.nlm.nih.gov/26862844/); [Zargar SA et al. Gastrointest Endosc 1991 (PMID 2032601)](https://pubmed.ncbi.nlm.nih.gov/2032601/); [Ponec RJ et al. NEJM 1999 (PMID 10403850)](https://pubmed.ncbi.nlm.nih.gov/10403850/); [Sgouros SN et al. Gut 2006 (PMID 16306137)](https://pubmed.ncbi.nlm.nih.gov/16306137/); [Hirota WK et al. ASGE guideline: the role of endoscopy in the surveillance of premalignant conditions of the upper GI tract. Gastrointest Endosc 2006 (PMID 16564854)](https://pubmed.ncbi.nlm.nih.gov/16564854/) |
 | Acute-on-chronic liver failure (B3.17, B3.21, B7.20) | [EASL Clinical Practice Guidelines on acute-on-chronic liver failure. J Hepatol 2023 (PMID 37364789)](https://pubmed.ncbi.nlm.nih.gov/37364789/); [Bajaj JS et al. ACG Clinical Guideline: acute-on-chronic liver failure. Am J Gastroenterol 2022 (PMID 35006099)](https://pubmed.ncbi.nlm.nih.gov/35006099/); [Moreau R et al. CANONIC. Gastroenterology 2013 (PMID 23474284)](https://pubmed.ncbi.nlm.nih.gov/23474284/); [Jalan R et al. CLIF-C ACLF score. J Hepatol 2014 (PMID 24950482)](https://pubmed.ncbi.nlm.nih.gov/24950482/); [Gustot T et al. Clinical course of ACLF. Hepatology 2015 (PMID 25877702)](https://pubmed.ncbi.nlm.nih.gov/25877702/); [Artru F et al. Transplant in ACLF grade 3. J Hepatol 2017 (PMID 28645736)](https://pubmed.ncbi.nlm.nih.gov/28645736/); [Engelmann C et al. GRAFT. J Hepatol 2021 (PMID 34364917)](https://pubmed.ncbi.nlm.nih.gov/34364917/); [Wong F et al. CONFIRM. NEJM 2021 (PMID 33657294)](https://pubmed.ncbi.nlm.nih.gov/33657294/); [Engelmann C et al. CLIF-C ACLF futility threshold. Crit Care 2018 (PMID 30305132)](https://pubmed.ncbi.nlm.nih.gov/30305132/) |
+| Classification cards (B6.9 to B6.22) | Hirano 2013 (PMID 22619364); Burgess 2017 (PMID 27464708); Sano 2016 (PMID 26927367); Kudo 1996 (PMID 8836710); Haggitt 1985 (PMID 4007423); Kikuchi 1995 (PMID 7497841); Hashiguchi, JSCCR 2019, Int J Clin Oncol 2020 (PMID 31203527); Sarin 1992 (PMID 1446890); Hill 1996 (PMID 8934159); Siewert 1998 (PMID 9823902); Spigelman 1989 (PMID 2571019); Syngal, ACG 2015 (PMID 25645574); Rugge 2007 (PMID 17142647); Capelle 2010 (PMID 20381801); Dinis-Ribeiro, MAPS III 2025 (PMID 40112834); Oberhuber 1999 (PMID 10524652); Hawkins, ASCRS 2024 (PMID 38294832); Bismuth 1975 (PMID 1079096); Strasberg 1995 (PMID 8000648). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

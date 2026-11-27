@@ -2,10 +2,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { CARDS, search, hrefFor } from "../js/registry.js";
+import { CARDS, EMERGENCIES, search, hrefFor, findItem } from "../js/registry.js";
 import bbps, { INADEQUATE_ACTION } from "../content/cards/bbps.js";
 import prague, { intervalRow, DYSPLASIA_NOTE } from "../content/cards/prague.js";
 import nice, { SPEC_TABLE } from "../content/cards/nice.js";
+import erefs, { MINOR_NOTE, USE_NOTE } from "../content/cards/erefs.js";
+import spigelman, { SURVEILLANCE, AMPULLA_NOTE } from "../content/cards/spigelman.js";
+import olga, { GRADES, MATRIX, HIGH_ACTION, LOW_ACTION } from "../content/cards/olga.js";
+import { SPEC_REFS } from "../js/pages.js";
 import { calc } from "./helpers.js";
 
 const SPEC = readFileSync(new URL("../SPEC.md", import.meta.url), "utf8");
@@ -77,9 +81,15 @@ test("Prague: C greater than M is flagged, not interpreted", () => {
 
 // ---------- every card against SPEC.md ----------
 
-const SPEC_NUM = { bbps: "B6.1", la_grade: "B6.2", prague: "B6.3", paris: "B6.4", nice: "B6.5", zargar: "B6.6", bristol: "B6.7", lyon2: "B6.8" };
+const SPEC_NUM = { bbps: "B6.1", la_grade: "B6.2", prague: "B6.3", paris: "B6.4", nice: "B6.5", zargar: "B6.6", bristol: "B6.7", lyon2: "B6.8",
+  erefs: "B6.9", sydney_dmi: "B6.10", jnet: "B6.11", kudo: "B6.12", haggitt_kikuchi: "B6.13", sarin: "B6.14", hill: "B6.15", siewert: "B6.16",
+  spigelman: "B6.17", olga: "B6.18", marsh: "B6.19", goligher: "B6.20", bismuth_corlette: "B6.21", strasberg: "B6.22" };
+const CALCULATOR_CARDS = ["bbps", "prague", "erefs", "spigelman", "olga"];
 
-test("all eight B6 cards are registered in SPEC order", () => {
+test("all 22 B6 cards are registered in SPEC order; five are calculators", () => {
+  assert.equal(CARDS.length, 22);
+  assert.deepEqual(CARDS.filter(c => c.inputs).map(c => c.id), CALCULATOR_CARDS);
+  for (const c of CARDS) assert.equal(/; calculator\)$/.test(section(c.spec).split("\n")[0]), ["bbps", "erefs", "spigelman", "olga"].includes(c.id), c.id);
   assert.deepEqual(CARDS.map(c => c.id), Object.keys(SPEC_NUM));
   for (const c of CARDS) {
     assert.equal(c.spec, SPEC_NUM[c.id]);
@@ -121,7 +131,10 @@ test("table cards copy 'Classification: grade'", () => {
   const copies = Object.fromEntries(CARDS.filter(c => c.kind === "card").map(c => [c.id, c.copy(c.table.rows[2])]));
   assert.deepEqual(copies, {
     la_grade: "LA classification: grade C", paris: "Paris: 0-Is", nice: "NICE: Type 3", zargar: "Zargar: grade 2a",
-    bristol: "Bristol stool form: type 3", lyon2: "Lyon 2.0: Against GERD"
+    bristol: "Bristol stool form: type 3", lyon2: "Lyon 2.0: Against GERD",
+    sydney_dmi: "Sydney deep mural injury: type II", jnet: "JNET: Type 2B", kudo: "Kudo pit pattern: IIIS",
+    haggitt_kikuchi: "Malignant polyp: Haggitt 2", sarin: "Sarin: IGV1", hill: "Hill grade III", siewert: "Siewert type III",
+    marsh: "Marsh-Oberhuber: 2", goligher: "Goligher grade III", bismuth_corlette: "Bismuth-Corlette type IIIa", strasberg: "Strasberg type C"
   });
 });
 
@@ -135,4 +148,177 @@ test("every card is reachable from search by name and short name", () => {
     assert.ok(search(c.name).includes(c), c.name);
     assert.ok(search(c.short).includes(c), c.short);
   }
+});
+
+// ---------- cards added in 0.10.0 (B6.9 to B6.22) ----------
+
+const NEW_CARDS = CARDS.filter(c => Number(c.spec.split(".")[1]) >= 9);
+
+test("B6.9 to B6.22: every reference is an exact PubMed link, and the PMIDs match SPEC.md", () => {
+  assert.equal(NEW_CARDS.length, 14);
+  for (const c of NEW_CARDS) {
+    const specPmids = [...section(c.spec).matchAll(/\(PMID (\d+)\)\]\(https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/(\d+)\/\)/g)].map(m => {
+      assert.equal(m[1], m[2], `${c.id}: PMID and link differ in SPEC`);
+      return m[1];
+    });
+    assert.ok(specPmids.length, `${c.id}: no PubMed source in SPEC`);
+    const pmids = c.references.map(r => {
+      const m = r.url.match(/^https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/(\d+)\/$/);
+      assert.ok(m, `${c.id}: ${r.url} is not an exact PubMed link`);
+      assert.ok(r.citation.endsWith(`PMID ${m[1]}`), `${c.id}: citation does not end with its PMID`);
+      return m[1];
+    });
+    assert.deepEqual(pmids, specPmids, c.id);
+  }
+});
+
+test("B6.9 to B6.22: every search alias finds its card", () => {
+  for (const c of NEW_CARDS) {
+    assert.ok(c.aliases.length >= 4, c.id);
+    for (const a of c.aliases) assert.ok(search(a).includes(c), `${c.id}: "${a}"`);
+  }
+  const top = q => search(q)[0].id;
+  assert.equal(top("EoE"), "erefs");
+  assert.equal(top("deep mural injury"), "sydney_dmi");
+  assert.equal(top("pit pattern"), "kudo");
+  assert.equal(top("malignant polyp"), "haggitt_kikuchi");
+  assert.equal(top("GOV2"), "sarin");
+  assert.equal(top("flap valve"), "hill");
+  assert.equal(top("FAP"), "spigelman");
+  assert.equal(top("OLGIM"), "olga");
+  assert.equal(top("celiac disease"), "marsh");
+  assert.equal(top("hemorrhoids"), "goligher");
+  assert.equal(top("Klatskin tumor"), "bismuth_corlette");
+  assert.equal(top("bile duct injury"), "strasberg");
+  assert.equal(top("LST"), "paris");
+});
+
+test("table cards: SPEC 'Links:' lines are the card links, and every link opens an existing item", () => {
+  for (const c of CARDS.filter(c => c.kind === "card" && Number(c.spec.split(".")[1]) >= 9)) {
+    const m = section(c.spec).match(/Links: (.+?)\.?$/m);
+    const specLinks = m ? [...m[1].matchAll(/([^,(]+?) \(([a-z0-9_\\]+)\)/g)].map(x => ({ label: x[1].trim(), target: x[2].replace(/\\_/g, "_") })) : [];
+    assert.deepEqual(c.links || [], specLinks, c.id);
+  }
+  for (const c of CARDS) for (const l of c.links || []) assert.ok(findItem(l.target), `${c.id} → ${l.target}`);
+  const targets = id => CARDS.find(c => c.id === id).links.map(l => l.target);
+  assert.deepEqual(targets("sydney_dmi"), ["em_perforation"]);
+  assert.deepEqual(targets("jnet"), ["nice", "kudo"]);
+  assert.deepEqual(targets("sarin"), ["em_variceal"]);
+  assert.equal(hrefFor("em_variceal"), "#/emergency/em_ugib/variceal");
+  assert.deepEqual(targets("hill"), ["lyon2"]);
+});
+
+test("perforation page links to the Sydney card (P3 and Related); the UGIB bleeding-source decision cites Sarin", () => {
+  const perf = EMERGENCIES.find(p => p.id === "em_perforation");
+  assert.deepEqual(perf.related, ["sydney_dmi"]);
+  const p3 = perf.blocks.find(b => b.id === "P3");
+  assert.ok(p3.items.includes("After colonic EMR: deep mural injury by the Sydney classification (B6.10)."));
+  const ugib = EMERGENCIES.find(p => p.id === "em_ugib");
+  const d4 = ugib.blocks.find(b => b.id === "D4");
+  assert.ok(d4.items.includes("OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices (Sarin, B6.14)."));
+  assert.equal(SPEC_REFS["B6.10"], "sydney_dmi");
+  assert.equal(SPEC_REFS["B6.14"], "sarin");
+});
+
+test("Paris: mixed types and LST rows, and the en bloc note", () => {
+  const paris = CARDS.find(c => c.id === "paris");
+  assert.deepEqual(paris.table.rows.slice(7).map(r => r[0]),
+    ["Mixed types", "LST-G homogeneous", "LST-G nodular mixed", "LST-NG flat elevated", "LST-NG pseudodepressed"]);
+  assert.deepEqual(paris.notes, ["LST-NG pseudodepressed and LST-G nodular mixed carry the highest risk of submucosal invasion: en bloc resection."]);
+  assert.equal(paris.copy(paris.table.rows[11]), "Paris: LST-NG pseudodepressed");
+});
+
+test("BBPS: note on the screen is SPEC text", () => {
+  assert.equal(bbps.notes, "Total 0–9. Adequate preparation: 2 or more in every segment (total 6 or more). Inadequate: repeat colonoscopy within 1 year.");
+  assert.ok(section("B6.1").includes(`Note shown on the screen: "${bbps.notes}"`));
+});
+
+// B8.6 vectors for the new calculator cards
+
+const erefsInput = (p, d) => Object.fromEntries(["edema", "rings", "exudates", "furrows", "stricture"]
+  .flatMap((f, i) => [[`p_${f}`, p[i]], [`d_${f}`, d[i]]]));
+
+test("EREFS: proximal 1,1,0,1,0 and distal 1,2,1,2,0 → proximal 3, distal 6, total 9", () => {
+  const { result, interp } = calc(erefs, erefsInput([1, 1, 0, 1, 0], [1, 2, 1, 2, 0]));
+  assert.deepEqual([result.proximal, result.distal, result.score], [3, 6, 9]);
+  assert.equal(interp.band, "Proximal 3, distal 6, total 9");
+  assert.equal(result.breakdown.length, 10);
+  assert.deepEqual(interp.notes, [MINOR_NOTE, USE_NOTE]);
+  for (const n of interp.notes) assert.ok(section("B6.9").includes(`Note: "${n}"`));
+  assert.equal(interp.action, undefined);
+});
+
+test("EREFS: every feature at its maximum → 9, 9, 18; every feature 0 → 0, 0, 0", () => {
+  const max = calc(erefs, erefsInput([1, 3, 2, 2, 1], [1, 3, 2, 2, 1])).result;
+  assert.deepEqual([max.proximal, max.distal, max.score], [9, 9, 18]);
+  const zero = calc(erefs, erefsInput([0, 0, 0, 0, 0], [0, 0, 0, 0, 0])).result;
+  assert.deepEqual([zero.proximal, zero.distal, zero.score], [0, 0, 0]);
+});
+
+test("EREFS: input options are the SPEC grades", () => {
+  const spec = Object.fromEntries(erefs.table.rows);
+  for (const inp of erefs.inputs.filter(i => i.id)) {
+    const feature = inp.label;
+    const grades = spec[feature].split("; ");
+    assert.deepEqual(inp.options.map(o => o.value), grades.map((_, i) => i), inp.id);
+    grades.forEach((g, i) => assert.equal(g.replace(/^\d+ /, "").toLowerCase(), inp.options[i].label.replace(/^\d+: /, "").toLowerCase(), inp.id));
+  }
+});
+
+const SPIG = { "1–4": 1, "5–20": 2, ">20": 3 };
+const spig = (n, size, hist, dys) => calc(spigelman, { number: SPIG[n], size: { "1–4 mm": 1, "5–10 mm": 2, ">10 mm": 3 }[size],
+  histology: { tubular: 1, tubulovillous: 2, villous: 3 }[hist], dysplasia: { low: 1, high: 3 }[dys] });
+
+test("Spigelman: B8.6 vectors", () => {
+  const none = calc(spigelman, { number: 0 });
+  assert.equal(none.interp.band, "Stage 0");
+  assert.equal(none.interp.action, "Surveillance (ACG 2015): Every 4 years.");
+  const cases = [
+    [["1–4", "1–4 mm", "tubular", "low"], 4, "I", "Every 2–3 years"],
+    [["5–20", "5–10 mm", "tubular", "low"], 6, "II", "Every 1–3 years"],
+    [["5–20", "5–10 mm", "tubulovillous", "low"], 7, "III", "Every 6–12 months"],
+    [["5–20", "1–4 mm", "tubular", "high"], 7, "III", "Every 6–12 months"],
+    [[">20", ">10 mm", "villous", "high"], 12, "IV", "Expert surveillance every 3–6 months and surgical evaluation"],
+    [[">20", "5–10 mm", "tubulovillous", "low"], 8, "III", "Every 6–12 months"],
+    [[">20", ">10 mm", "tubulovillous", "low"], 9, "IV", "Expert surveillance every 3–6 months and surgical evaluation"]
+  ];
+  for (const [args, points, stage, interval] of cases) {
+    const { result, interp } = spig(...args);
+    assert.equal(result.score, points, args.join(", "));
+    assert.equal(interp.band, `Stage ${stage}`, args.join(", "));
+    assert.equal(interp.action, `Surveillance (ACG 2015): ${interval}.`);
+    assert.deepEqual(interp.notes, [AMPULLA_NOTE]);
+  }
+});
+
+test("Spigelman: no polyps hides the other items; stage table and note are SPEC text", () => {
+  const out = calc(spigelman, { number: 0 });
+  assert.deepEqual(out.missing, []);
+  assert.deepEqual(tables(section("B6.17"))[1].rows, Object.entries(SURVEILLANCE).sort((a, b) => (a[0] === "0" ? -1 : b[0] === "0" ? 1 : 0)));
+  assert.ok(section("B6.17").includes(`Note: "${AMPULLA_NOTE}"`));
+  assert.ok(section("B6.17").includes(spigelman.use));
+});
+
+test("OLGA and OLGIM: B8.6 vectors", () => {
+  const run = (system, antrum, corpus) => calc(olga, { system, antrum, corpus });
+  let o = run("olga", "moderate", "mild");
+  assert.equal(o.result.display, "OLGA stage II"); assert.equal(o.interp.band, "Lower risk"); assert.equal(o.interp.action, LOW_ACTION);
+  o = run("olga", "mild", "severe");
+  assert.equal(o.result.display, "OLGA stage III"); assert.equal(o.interp.band, "High risk"); assert.equal(o.interp.action, HIGH_ACTION);
+  o = run("olgim", "severe", "moderate");
+  assert.equal(o.result.display, "OLGIM stage IV"); assert.equal(o.interp.band, "High risk");
+  o = run("olga", "none", "none");
+  assert.equal(o.result.display, "OLGA stage 0"); assert.equal(o.interp.band, "Lower risk");
+});
+
+test("OLGA and OLGIM: every matrix cell gives the stage in the SPEC.md B6.18 matrix", () => {
+  const m = tables(section("B6.18"))[0];
+  assert.equal(m.rows.length, 4);
+  for (const system of ["olga", "olgim"]) GRADES.forEach((antrum, i) => GRADES.forEach((corpus, j) => {
+    const { result, interp } = calc(olga, { system, antrum, corpus });
+    assert.equal(result.stage, m.rows[i][j + 1], `${system} ${antrum}/${corpus}`);
+    assert.equal(result.stage, MATRIX[i][j]);
+    assert.equal(interp.band, ["III", "IV"].includes(result.stage) ? "High risk" : "Lower risk");
+  }));
+  for (const a of [HIGH_ACTION, LOW_ACTION]) assert.ok(section("B6.18").includes(`"${a}"`));
 });

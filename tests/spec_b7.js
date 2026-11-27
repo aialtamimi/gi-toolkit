@@ -11,7 +11,8 @@ export const CALC_NAMES = {
   UCEIS: "uceis", Mayo: "mayo_uc", "King's College criteria": "kings", MELD: "meld_na", Maddrey: "maddrey", GAHS: "gahs",
   ABIC: "abic", Lille: "lille", "Ascitic fluid analysis": "ascites", "ACLF grade": "aclf", BISAP: "bisap", Ranson: "ranson",
   "Glasgow-Imrie": "glasgow_imrie", SIRS: "sirs", Marshall: "marshall", "Revised Atlanta": "atlanta", "modified CTSI": "mctsi",
-  "TG18 cholangitis": "tg18_cholangitis", "ASGE choledocholithiasis risk": "asge_cbd", Zargar: "zargar", "Jalan criteria": "jalan", "CLIF-C ACLF": "clif_c_aclf"
+  "TG18 cholangitis": "tg18_cholangitis", "ASGE choledocholithiasis risk": "asge_cbd", Zargar: "zargar", "Jalan criteria": "jalan", "CLIF-C ACLF": "clif_c_aclf",
+  "Sydney deep mural injury": "sydney_dmi"
 };
 
 export function section(num) {

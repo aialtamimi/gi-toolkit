@@ -157,7 +157,7 @@ export default {
         ]
       ],
       "items": [
-        "OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices."
+        "OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices (Sarin, B6.14)."
       ],
       "calcs": [],
       "doses": [],
