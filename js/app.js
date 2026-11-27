@@ -1,5 +1,5 @@
 // Router, home, search, favorites, settings (SPEC.md B1.3, B1.6).
-import { CATEGORIES, CALCULATORS, CARDS, EMERGENCIES, EMERGENCY_INDEX, REDIRECTS, findItem, hrefFor, itemsInCategory, search } from "./registry.js";
+import { CATEGORIES, CALCULATORS, CARDS, EMERGENCIES, EMERGENCY_INDEX, REDIRECTS, findItem, hrefFor, itemsInCategory, search, searchHref } from "./registry.js";
 import { renderCard, renderEmergency } from "./pages.js";
 import { renderCalculator, h } from "./engine.js";
 import { store } from "./storage.js";
@@ -30,18 +30,18 @@ function appFooter() {
     h("p", {}, h("a", { href: "#/about" }, "About"), " · ", h("a", { href: "#/settings" }, "Settings")));
 }
 
-function itemLink(item) {
+function itemLink(item, href) {
   const isEm = item.id.startsWith("em_");
   const fav = store.isFavorite(item.id);
-  return h("li", {}, h("a", { class: "item-link", href: hrefFor(item.id) },
+  return h("li", {}, h("a", { class: "item-link", href: href || hrefFor(item.id) },
     isEm ? h("span", { class: "em-label" }, "Emergency") : null,
     h("span", { class: "item-name" }, item.name),
     item.short && item.short !== item.name ? h("span", { class: "item-short" }, item.short) : null,
     fav ? h("span", { class: "star", role: "img", "aria-label": "Favorite" }, "★") : null));
 }
 
-function itemList(items) {
-  return h("ul", { class: "item-list" }, items.map(itemLink));
+function itemList(items, hrefOf) {
+  return h("ul", { class: "item-list" }, items.map(item => itemLink(item, hrefOf && hrefOf(item))));
 }
 
 // ---------- screens ----------
@@ -58,7 +58,7 @@ function home() {
     sections.hidden = !!q;
     if (!q) return;
     const found = search(q);
-    results.append(found.length ? itemList(found) : h("p", { class: "muted" }, "No match."));
+    results.append(found.length ? itemList(found, item => searchHref(item, q)) : h("p", { class: "muted" }, "No match."));
   }
 
   const favs = store.favorites().map(findItem).filter(Boolean);

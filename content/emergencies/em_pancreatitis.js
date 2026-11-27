@@ -18,6 +18,7 @@ export default {
   "kind": "algorithm",
   "weight": true,
   "entries": {},
+  "entryWords": {},
   "blocks": [
     {
       "type": "source",
@@ -59,7 +60,9 @@ export default {
         "ringer_infusion",
         "ringer_bolus"
       ],
-      "why": "Aggressive fluids caused more fluid overload without benefit (WATERFALL, NEJM 2022)."
+      "why": [
+        "Aggressive fluids caused more fluid overload without benefit (WATERFALL, NEJM 2022)."
+      ]
     },
     {
       "type": "step",
@@ -79,7 +82,7 @@ export default {
       "doses": [
         "urine_output"
       ],
-      "why": null
+      "why": []
     },
     {
       "type": "decision",
@@ -92,7 +95,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "Yes",
@@ -120,7 +123,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -138,7 +141,9 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": "Urgent ERCP without cholangitis gave no benefit (APEC, Lancet 2020)."
+      "why": [
+        "Urgent ERCP without cholangitis gave no benefit (APEC, Lancet 2020)."
+      ]
     },
     {
       "type": "step",
@@ -152,7 +157,9 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": "Fewer recurrent gallstone complications (PONCHO, Lancet 2015)."
+      "why": [
+        "Fewer recurrent gallstone complications (PONCHO, Lancet 2015)."
+      ]
     },
     {
       "type": "step",
@@ -168,7 +175,9 @@ export default {
         "mctsi"
       ],
       "doses": [],
-      "why": "Postponed drainage was not worse and needed fewer interventions (POINTER, NEJM 2021)."
+      "why": [
+        "Postponed drainage was not worse and needed fewer interventions (POINTER, NEJM 2021)."
+      ]
     },
     {
       "type": "section",

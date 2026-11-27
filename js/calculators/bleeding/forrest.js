@@ -42,6 +42,6 @@ export default {
   },
   references: [
     ref("Laine L, Peterson WL. Bleeding peptic ulcer. NEJM 1994"),
-    ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021")
+    ref("Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021. PMID 33929377", "https://pubmed.ncbi.nlm.nih.gov/33929377/")
   ]
 };

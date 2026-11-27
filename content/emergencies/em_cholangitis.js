@@ -18,6 +18,7 @@ export default {
   "kind": "algorithm",
   "weight": false,
   "entries": {},
+  "entryWords": {},
   "blocks": [
     {
       "type": "redflags",
@@ -45,7 +46,7 @@ export default {
         "tg18_cholangitis"
       ],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "decision",
@@ -58,7 +59,9 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": "ERCP within 48 h is associated with better outcomes (ASGE 2021).",
+      "why": [
+        "ERCP within 48 h is associated with better outcomes (ASGE 2021)."
+      ],
       "options": [
         {
           "value": "Grade III",
@@ -90,7 +93,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -108,7 +111,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -126,7 +129,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "decision",
@@ -137,7 +140,7 @@ export default {
       "items": [],
       "calcs": [],
       "doses": [],
-      "why": null,
+      "why": [],
       "options": [
         {
           "value": "Stable",
@@ -165,7 +168,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -183,7 +186,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -196,7 +199,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -209,7 +212,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "step",
@@ -222,7 +225,7 @@ export default {
       ],
       "calcs": [],
       "doses": [],
-      "why": null
+      "why": []
     },
     {
       "type": "section",

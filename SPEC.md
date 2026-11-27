@@ -84,7 +84,7 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 
 ### B1.1 Scope
 
-- 43 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 17 emergency pages (B7) listed as 18 emergency index entries; five emergency pages are interactive bedside algorithms (B7.0).
+- 43 calculators and selectable cards (B2 to B5), 8 classification reference cards (B6), and 17 emergency pages (B7), all in the emergency index; five emergency pages are interactive bedside algorithms (B7.0).
 - Everything works offline after the first load.
 - English interface only; no language option.
 
@@ -1007,7 +1007,7 @@ Adjunctive evidence: reflux episodes >80 per day supports GERD; mean nocturnal b
 
 ## Part B7: GI emergency pages
 
-Eighteen entries in the emergency index (B7.19), on seventeen pages: variceal bleeding (B7.2) is now part of the upper GI bleeding page (B7.1). Twelve pages use the classic template so they can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Five pages (B7.1, B7.5, B7.9, B7.12 and B7.13) are interactive bedside algorithms (B7.0). Drug doses are adult doses.
+Seventeen emergency pages, all listed in the emergency index (B7.19). Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1) and has no page or index entry of its own. Twelve pages use the classic template so they can be read in 30 seconds: **Recognize**, **Do now**, **Within hours**, **Then**, **Avoid**, **Doses** (table), **Related calculators** (buttons), **Sources**. Five pages (B7.1, B7.5, B7.9, B7.12 and B7.13) are interactive bedside algorithms (B7.0). Drug doses are adult doses.
 
 ### B7.0 Bedside algorithm pages
 
@@ -1024,7 +1024,7 @@ Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-varic
 | Why | One short line in small italic under key steps, naming the trial or guideline |
 | After the algorithm | Avoid, other tables, Doses (adult doses; weight-based rows show the calculated dose under the written dose), Related calculators, Sources |
 
-Format of the algorithm in B7.1, B7.5, B7.9, B7.12 and B7.13: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (the why line) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps.
+Format of the algorithm in B7.1, B7.5, B7.9, B7.12 and B7.13: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (a why line; a step can have more than one, shown in order) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps. A line "Search words that open the X pathway: ..." lists search words that open the page at entry point X.
 
 Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of albumin is calculated from the unrounded grams (20% albumin: 1 g = 5 mL; 25% albumin: 1 g = 4 mL). The urine output line is a target, not a dose, and is labelled so. B7.13 has no weight-based dose, so it has no weight field. Test vectors: B8.7.
 
@@ -1054,7 +1054,9 @@ Suggested answers. When a built-in calculator on the page has a result, the matc
 
 Bedside algorithm (B7.0). Weight field: yes.
 
-Entry point variceal: D1 = Yes (opened by the index entry and search result "Variceal bleeding", B7.2).
+Entry point variceal: D1 = Yes (opened by the search words below and by old links to the variceal page, B7.2).
+
+Search words that open the variceal pathway: variceal bleeding, varices, esophageal varices, terlipressin, TIPS, band ligation.
 
 - **Red flags:** shock (systolic BP <90 mmHg or shock index >1), ongoing hematemesis, altered consciousness, Hb drop >2 g/dL: ICU or HDU, protect the airway.
 - **Recognize:** hematemesis, coffee-ground vomit, melena; shock index (heart rate/systolic BP) >1 = high risk. Variceal bleeding: upper GI bleeding in known or suspected cirrhosis or portal hypertension.
@@ -1067,8 +1069,10 @@ Algorithm:
   - Transfuse at Hb <7 g/dL (target 7–9); use 8 g/dL threshold in cardiovascular disease.
   - Hold antithrombotics per B7.4.
   - IV erythromycin 250 mg 30–120 minutes before endoscopy if no contraindication (QT prolongation).
+  - Start high-dose IV proton pump inhibitor now: pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h infusion until endoscopy. Do not delay endoscopy for it.
   - Calculators: GBS, AIMS65.
   - Why: Restrictive transfusion lowered mortality (Villanueva, NEJM 2013).
+  - Why: Reduces high-risk stigmata and need for endoscopic therapy, but not mortality, rebleeding or surgery (Sreedharan, Cochrane 2010; ESGE 2021).
 - **D1 · 0–1 h · Known or suspected cirrhosis or portal hypertension?**
   - Clues: stigmata of chronic liver disease, ascites, known varices, low platelets, splenomegaly.
   - If uncertain, start the variceal pathway until endoscopy shows otherwise.
@@ -1087,26 +1091,29 @@ Algorithm:
   - Endoscopy within 12 hours.
   - Esophageal varices: band ligation.
   - Gastric varices GOV2 or IGV1: cyanoacrylate injection.
+- **V3 · After endoscopy · Variceal: after endoscopy** (shown when D1 = Yes)
+  - Continue vasoactive drug for 2–5 days.
+  - Continue ceftriaxone, up to 7 days in total.
+  - Stop the proton pump inhibitor unless there is another indication.
+  - Lactulose to prevent hepatic encephalopathy.
 - **D2 · After endoscopy · Pre-emptive TIPS criteria met?** (shown when D1 = Yes)
   - Child-Pugh C 10–13, or Child-Pugh B >7 with active bleeding at endoscopy, or HVPG >20 mmHg.
   - Calculators: Child-Pugh.
   - Answer Yes: pre-emptive TIPS.
   - Answer No: continue vasoactive drug.
-- **V3 · Within 72 h · Pre-emptive TIPS** (shown when D2 = Yes)
+- **V4 · Within 72 h · Pre-emptive TIPS** (shown when D2 = Yes)
   - Pre-emptive TIPS within 72 hours (ideally 24).
   - Why: Pre-emptive TIPS improved survival in high-risk patients (Garcia-Pagan, NEJM 2010).
-- **V4 · Days 2–5 · Continue vasoactive drug** (shown when D2 = No)
+- **V5 · Days 2–5 · Continue vasoactive drug** (shown when D2 = No)
   - Continue the vasoactive drug for 2–5 days.
-- **V5 · If failure · Persistent bleeding or early rebleeding** (shown when D1 = Yes)
+- **V6 · If failure · Persistent bleeding or early rebleeding** (shown when D1 = Yes)
   - Refractory bleeding (persistent bleeding or early rebleeding): balloon tamponade or esophageal stent as bridge to rescue TIPS.
   - Salvage TIPS is not recommended if Child-Pugh >13.
-- **V6 · Before discharge · Variceal: before discharge** (shown when D1 = Yes)
+- **V7 · Before discharge · Variceal: before discharge** (shown when D1 = Yes)
   - Start non-selective beta-blocker (carvedilol or propranolol) when vasoactive drug stops.
   - Repeat band ligation every 1–4 weeks until eradication.
-  - Lactulose to prevent hepatic encephalopathy.
-  - Stop the proton pump inhibitor after endoscopy unless there is another indication.
+  - After eradication: endoscopy at 3–6 months, then every 6–12 months (AASLD 2017).
 - **N1 · Before endoscopy · Non-variceal: before endoscopy** (shown when D1 = No)
-  - High-dose IV proton pump inhibitor may be started.
   - Upper endoscopy within 24 hours of presentation after resuscitation (ACG 2021, ESGE 2021).
   - Why: Endoscopy within 6 h did not lower mortality, even with GBS 12 or more (Lau, NEJM 2020).
 - **N2 · Within 24 h · Non-variceal: endoscopic therapy by Forrest class** (shown when D1 = No)
@@ -1120,12 +1127,14 @@ Algorithm:
   - Answer High-risk stigmata: Forrest Ia, Ib, IIa, IIb; high-dose IV proton pump inhibitor.
   - Answer Low-risk stigmata: Forrest IIc, III; oral proton pump inhibitor.
 - **N3 · 72 h, then to day 14 · High-risk stigmata** (shown when D3 = High-risk stigmata)
-  - Pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h for 72 hours (or 40 mg IV twice daily), then twice daily orally to day 14, then once daily.
+  - High-risk stigmata (endoscopic therapy done, or Forrest IIb): continue the infusion for 72 hours after endoscopy (or 40 mg IV twice daily), then oral twice daily to day 14, then once daily.
 - **N4 · After endoscopy · Low-risk stigmata** (shown when D3 = Low-risk stigmata)
-  - Oral proton pump inhibitor once daily, early feeding, consider discharge.
-- **N5 · If rebleeding · Non-variceal: rebleeding** (shown when D1 = No)
+  - Low-risk stigmata: stop the infusion; oral proton pump inhibitor once daily; early feeding; consider discharge.
+- **N5 · After endoscopy · Non-variceal: second-look endoscopy** (shown when D1 = No)
+  - No routine second-look endoscopy; repeat only if rebleeding (ESGE 2021, ACG 2021).
+- **N6 · If rebleeding · Non-variceal: rebleeding** (shown when D1 = No)
   - Repeat endoscopy (over-the-scope clip for recurrent ulcer bleeding); if it fails, transcatheter arterial embolization, then surgery.
-- **N6 · Discharge · Non-variceal: discharge** (shown when D1 = No)
+- **N7 · Discharge · Non-variceal: discharge** (shown when D1 = No)
   - Test for H. pylori and treat; repeat the test later if negative during the bleed.
   - Avoid non-steroidal anti-inflammatory drugs (NSAIDs).
   - Restart aspirin for secondary prevention as soon as hemostasis is secured (B7.4).
@@ -1138,6 +1147,7 @@ Algorithm:
 | --- | --- | --- |
 | Endoscopy timing | Within 12 hours | Within 24 hours |
 | First drugs | Vasoactive drug + ceftriaxone | Proton pump inhibitor |
+| Proton pump inhibitor | Start before endoscopy; stop after unless another indication | Start before endoscopy; 72 h infusion if high-risk stigmata |
 | Endoscopic therapy | Band ligation or cyanoacrylate | Forrest-based therapy |
 | Follow-up | Beta-blocker, ligation, TIPS | H. pylori, aspirin restart |
 
@@ -1154,7 +1164,7 @@ Related: GBS, AIMS65, Rockall, Forrest, Child-Pugh, MELD 3.0, West Haven.
 
 ### B7.2 Acute variceal bleeding (id: em\_variceal)
 
-Merged into B7.1. The index entry and the search result "Variceal bleeding" open the upper GI bleeding page (B7.1) at the variceal pathway, with D1 answered Yes. Every line, dose and source of the earlier variceal page is kept on B7.1.
+Merged into B7.1; no page and no emergency index entry of its own. The search words variceal bleeding, varices, esophageal varices, terlipressin, TIPS and band ligation (B7.1) open the upper GI bleeding page at the variceal pathway, with D1 answered Yes. Old links, favorites and recent items that point to em\_variceal redirect there. Every line, dose and source of the earlier variceal page is kept on B7.1.
 
 ### B7.3 Acute lower GI bleeding (id: em\_lgib)
 
@@ -1522,9 +1532,9 @@ Source: [Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic pe
 
 ### B7.19 Index of emergency pages
 
-The home screen lists all 18 pages under "Emergencies" with a red label, in this order: Upper GI bleeding, Variceal bleeding, Lower GI bleeding, Anticoagulants in GI bleeding, Acute severe UC, Toxic megacolon, Acute liver failure, Alcohol-associated hepatitis, SBP, HRS-AKI, Hepatic encephalopathy, Acute pancreatitis, Cholangitis, Foreign body, Caustic ingestion, Ogilvie syndrome, Volvulus, Perforation.
+The home screen lists all 18 pages under "Emergencies" with a red label, in this order: Upper GI bleeding, Lower GI bleeding, Anticoagulants in GI bleeding, Acute severe UC, Toxic megacolon, Acute liver failure, Alcohol-associated hepatitis, SBP, HRS-AKI, Hepatic encephalopathy, Acute pancreatitis, Cholangitis, Foreign body, Caustic ingestion, Ogilvie syndrome, Volvulus, Perforation.
 
-Variceal bleeding has no page of its own: its index entry and search result open the upper GI bleeding page (B7.1) at the variceal pathway (B7.2). The index lists 18 entries.
+Variceal bleeding has no page or index entry of its own: its search words open the upper GI bleeding page (B7.1) at the variceal pathway (B7.2). The index lists 17 entries.
 
 ## Part B8: Test vectors
 
@@ -1679,14 +1689,14 @@ Steps shown in the normal view for each set of answers (several answers separate
 | Page | Answers | Steps shown |
 | --- | --- | --- |
 | em\_ugib | none | U1, D1 |
-| em\_ugib | D1 = Yes | U1, D1, V1, V2, D2, V5, V6 |
-| em\_ugib | D1 = Yes; D2 = Yes | U1, D1, V1, V2, D2, V3, V5, V6 |
-| em\_ugib | D1 = Yes; D2 = No | U1, D1, V1, V2, D2, V4, V5, V6 |
-| em\_ugib | D1 = No | U1, D1, N1, N2, D3, N5, N6 |
-| em\_ugib | D1 = No; D3 = High-risk stigmata | U1, D1, N1, N2, D3, N3, N5, N6 |
-| em\_ugib | D1 = No; D3 = Low-risk stigmata | U1, D1, N1, N2, D3, N4, N5, N6 |
-| em\_ugib | D1 = No; D2 = Yes | U1, D1, N1, N2, D3, N5, N6 |
-| em\_ugib | entry point variceal | U1, D1, V1, V2, D2, V5, V6 |
+| em\_ugib | D1 = Yes | U1, D1, V1, V2, V3, D2, V6, V7 |
+| em\_ugib | D1 = Yes; D2 = Yes | U1, D1, V1, V2, V3, D2, V4, V6, V7 |
+| em\_ugib | D1 = Yes; D2 = No | U1, D1, V1, V2, V3, D2, V5, V6, V7 |
+| em\_ugib | D1 = No | U1, D1, N1, N2, D3, N5, N6, N7 |
+| em\_ugib | D1 = No; D3 = High-risk stigmata | U1, D1, N1, N2, D3, N3, N5, N6, N7 |
+| em\_ugib | D1 = No; D3 = Low-risk stigmata | U1, D1, N1, N2, D3, N4, N5, N6, N7 |
+| em\_ugib | D1 = No; D2 = Yes | U1, D1, N1, N2, D3, N5, N6, N7 |
+| em\_ugib | entry point variceal | U1, D1, V1, V2, V3, D2, V6, V7 |
 | em\_asuc | none | A1, D1 |
 | em\_asuc | D1 = Yes | A1, D1, A2, D2 |
 | em\_asuc | D1 = Yes; D2 = Yes | A1, D1, A2, D2, A4 |
@@ -1713,8 +1723,8 @@ Steps shown in the normal view for each set of answers (several answers separate
 
 | Page | Answers | On path | Off path | Not yet decided |
 | --- | --- | --- | --- | --- |
-| em\_ugib | D1 = Yes | V1, V2, D2, V5, V6 | N1, N2, D3, N3, N4, N5, N6 | V3, V4 |
-| em\_ugib | none | none | none | V1, V2, D2, V3, V4, V5, V6, N1, N2, D3, N3, N4, N5, N6 |
+| em\_ugib | D1 = Yes | V1, V2, V3, D2, V6, V7 | N1, N2, D3, N3, N4, N5, N6, N7 | V4, V5 |
+| em\_ugib | none | none | none | V1, V2, V3, D2, V4, V5, V6, V7, N1, N2, D3, N3, N4, N5, N6, N7 |
 | em\_sbp | D1 = Runyon criteria or polymicrobial culture | S4 | S2, S3, S5, S6, S7 | none |
 | em\_asuc | D1 = No | A3 | A2, D2, A4, A5 | none |
 
@@ -1748,13 +1758,13 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 
 | Topic | Source |
 | --- | --- |
-| Upper GI bleeding | Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021; Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021 |
+| Upper GI bleeding | [Laine L et al. ACG Clinical Guideline: Upper GI and Ulcer Bleeding. Am J Gastroenterol 2021 (PMID 33929377)](https://pubmed.ncbi.nlm.nih.gov/33929377/); [Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021 (PMID 33567467)](https://pubmed.ncbi.nlm.nih.gov/33567467/); [Sreedharan A et al. Proton pump inhibitor treatment initiated prior to endoscopic diagnosis in upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010 (PMID 20614440)](https://pubmed.ncbi.nlm.nih.gov/20614440/) |
 | GBS points | [Blatchford O et al. Lancet 2000 (table)](https://pmc.ncbi.nlm.nih.gov/articles/PMC5299211/table/tab2d) |
 | Rockall | [Rockall TA et al. Gut 1996 (table)](https://pmc.ncbi.nlm.nih.gov/articles/PMC4753192/table/T1) |
 | AIMS65 | Saltzman JR et al. Gastrointest Endosc 2011 |
 | Lower GI bleeding and Oakland threshold | [Sengupta N et al. ACG guideline 2023](https://gastroenterology.acponline.org/archives/2023/03/24/2.htm); Oakland K et al. Lancet Gastroenterol Hepatol 2017 |
 | Antithrombotics in GI bleeding | [Abraham NS et al. ACG-CAG guideline 2022](https://gastroenterology.acponline.org/archives/2022/03/25/1.htm) |
-| Variceal bleeding | de Franchis R et al. Baveno VII, J Hepatol 2022; [Gralnek IM et al. ESGE variceal guideline 2022](https://pubmed.ncbi.nlm.nih.gov/36174643) |
+| Variceal bleeding | de Franchis R et al. Baveno VII, J Hepatol 2022; [Gralnek IM et al. ESGE variceal guideline 2022](https://pubmed.ncbi.nlm.nih.gov/36174643); [Garcia-Tsao G et al. Portal hypertensive bleeding in cirrhosis: risk stratification, diagnosis, and management: 2016 practice guidance by the AASLD. Hepatology 2017 (PMID 27786365)](https://pubmed.ncbi.nlm.nih.gov/27786365/) |
 | MELD 3.0 | [Kim WR et al. Gastroenterology 2021; OPTN](https://optn.transplant.hrsa.gov/media/uq4bmlan/liver_meld_peld_1a_1b_presentation_winter-2022-pc.pdf) |
 | HRS-AKI | [Nadim MK et al. ICA-ADQI consensus. J Hepatol 2024](https://pmc.ncbi.nlm.nih.gov/articles/PMC11193657) |
 | ACLF | Moreau R et al. CANONIC. Gastroenterology 2013 |

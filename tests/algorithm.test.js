@@ -272,7 +272,7 @@ test("terlipressin has one doses row, by weight (decision 3)", () => {
 
 test("every why line names a trial or guideline, or states the reason in one short line", () => {
   for (const p of EMERGENCIES.filter(p => p.kind === "algorithm")) {
-    for (const b of p.blocks) if (b.why) assert.ok(b.why.length <= 200 && /\.$/.test(b.why), `${p.id}: ${b.why}`);
+    for (const b of p.blocks) for (const w of [].concat(b.why || [])) assert.ok(w.length <= 200 && /\.$/.test(w), `${p.id}: ${w}`);
   }
 });
 
@@ -341,7 +341,7 @@ test("oral prednisolone 40 mg once daily, then taper by 5 mg per week, in the st
 });
 
 test("why lines name their sources (decision 12)", () => {
-  const why = (pid, sid) => steps(page(pid)).find(s => s.id === sid).why;
+  const why = (pid, sid) => steps(page(pid)).find(s => s.id === sid).why.join(" ");
   assert.ok(why("em_ugib", "V1").includes("(Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VII)"));
   assert.ok(why("em_asuc", "A1").endsWith("(Grainge, Lancet 2010)."));
   assert.ok(why("em_asuc", "A5").endsWith("(Randall, Br J Surg 2010)."));
@@ -485,4 +485,72 @@ test("acute pancreatitis: modified Marshall in the red flags box and in step P2,
   const a = ids("redflags"), b = ids("P2");
   assert.equal(new Set([...a, ...b]).size, a.length + b.length);
   assert.equal(fieldId(marshall, marshall.inputs.find(i => i.id), undefined), `f-marshall-${marshall.inputs.find(i => i.id).id}`);
+});
+
+// ---------- upper GI bleeding follow-up (version 0.6.2) ----------
+
+test("upper GI bleeding step 1 starts the high-dose IV proton pump inhibitor, with its own why line", () => {
+  const u1 = steps(page("em_ugib")).find(s => s.id === "U1");
+  assert.ok(u1.items.includes("Start high-dose IV proton pump inhibitor now: pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h infusion until endoscopy. Do not delay endoscopy for it."));
+  assert.deepEqual(u1.why, [
+    "Restrictive transfusion lowered mortality (Villanueva, NEJM 2013).",
+    "Reduces high-risk stigmata and need for endoscopic therapy, but not mortality, rebleeding or surgery (Sreedharan, Cochrane 2010; ESGE 2021)."]);
+  assert.ok(!pageText(page("em_ugib")).includes("may be started"));
+  assert.ok(!steps(page("em_ugib")).find(s => s.id === "N1").items.some(i => /proton pump inhibitor/.test(i)));
+});
+
+test("variceal pathway: after-endoscopy step before the pre-emptive TIPS decision; surveillance before discharge", () => {
+  const p = page("em_ugib");
+  const ids = steps(p).map(s => s.id);
+  assert.ok(ids.indexOf("V2") < ids.indexOf("V3") && ids.indexOf("V3") < ids.indexOf("D2"));
+  const v3 = steps(p).find(s => s.id === "V3");
+  assert.equal(v3.chip, "After endoscopy");
+  assert.deepEqual(v3.when, [["D1", "Yes"]]);
+  assert.deepEqual(v3.items, ["Continue vasoactive drug for 2–5 days.", "Continue ceftriaxone, up to 7 days in total.",
+    "Stop the proton pump inhibitor unless there is another indication.", "Lactulose to prevent hepatic encephalopathy."]);
+  const v7 = steps(p).find(s => s.id === "V7");
+  assert.ok(v7.items.includes("After eradication: endoscopy at 3–6 months, then every 6–12 months (AASLD 2017)."));
+  assert.ok(v7.items.includes("Start non-selective beta-blocker (carvedilol or propranolol) when vasoactive drug stops."));
+  // Lactulose and stopping the proton pump inhibitor appear once, in the after-endoscopy step.
+  assert.equal(pageText(p).split("Lactulose to prevent hepatic encephalopathy.").length - 1, 1);
+  const d2 = steps(p).find(s => s.id === "D2");
+  assert.deepEqual(d2.options.map(o => o.value), ["Yes", "No"]);
+});
+
+test("non-variceal pathway: proton pump inhibitor by stigmata, and no routine second-look endoscopy", () => {
+  const p = page("em_ugib");
+  assert.deepEqual(steps(p).find(s => s.id === "N3").items, ["High-risk stigmata (endoscopic therapy done, or Forrest IIb): continue the infusion for 72 hours after endoscopy (or 40 mg IV twice daily), then oral twice daily to day 14, then once daily."]);
+  assert.deepEqual(steps(p).find(s => s.id === "N4").items, ["Low-risk stigmata: stop the infusion; oral proton pump inhibitor once daily; early feeding; consider discharge."]);
+  const n5 = steps(p).find(s => s.id === "N5");
+  assert.deepEqual(n5.when, [["D1", "No"]]);
+  assert.deepEqual(n5.items, ["No routine second-look endoscopy; repeat only if rebleeding (ESGE 2021, ACG 2021)."]);
+  assert.ok(steps(p).find(s => s.id === "N6").items[0].startsWith("Repeat endoscopy (over-the-scope clip"));
+  assert.ok(steps(p).find(s => s.id === "N7").items[0].startsWith("Test for H. pylori and treat"));
+});
+
+test("key differences table has the proton pump inhibitor row", () => {
+  const t = page("em_ugib").blocks.find(b => b.type === "table" && b.title === "Key differences");
+  assert.deepEqual(t.rows.find(r => r[0] === "Proton pump inhibitor"),
+    ["Proton pump inhibitor", "Start before endoscopy; stop after unless another indication", "Start before endoscopy; 72 h infusion if high-risk stigmata"]);
+});
+
+test("upper GI bleeding guidelines and the new sources link to their exact PubMed record", () => {
+  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES].flatMap(x => x.references || []);
+  const expect = {
+    "Gralnek IM et al. ESGE NVUGIH": "33567467",
+    "Laine L et al. ACG Clinical Guideline": "33929377",
+    "Sreedharan A": "20614440",
+    "Garcia-Tsao G": "27786365"
+  };
+  for (const [start, pmid] of Object.entries(expect)) {
+    const refs = all.filter(r => r.citation.startsWith(start));
+    assert.ok(refs.length > 0, start);
+    for (const r of refs) {
+      assert.equal(r.url, `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`, start);
+      assert.ok(r.citation.includes(`PMID ${pmid}`), start);
+    }
+    assert.ok(SPEC_B9().includes(`(PMID ${pmid})](https://pubmed.ncbi.nlm.nih.gov/${pmid}/)`), `B9 ${start}`);
+  }
+  const ugib = page("em_ugib").references.map(r => r.citation);
+  assert.ok(ugib.some(c => c.startsWith("Sreedharan A")) && ugib.some(c => c.startsWith("Garcia-Tsao G")));
 });

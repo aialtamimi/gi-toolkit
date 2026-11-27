@@ -75,7 +75,7 @@ export function weightTable() {
 // with calculator names and dose names still as written in SPEC (`calcNames`, `doseNames`).
 export function parseAlgorithm(num) {
   const { heading, body } = section(num);
-  const page = { ...headingInfo(heading), kind: "algorithm", weight: null, entries: {}, blocks: [], related: [] };
+  const page = { ...headingInfo(heading), kind: "algorithm", weight: null, entries: {}, entryWords: {}, blocks: [], related: [] };
   let table = null, tableTitle = null, current = null;
   for (const line of body.split("\n")) {
     if (!line.startsWith("|")) table = null;
@@ -83,6 +83,7 @@ export function parseAlgorithm(num) {
     let m;
     if ((m = line.match(/^Bedside algorithm \(B7\.0\)\. Weight field: (yes|no)\.$/))) { page.weight = m[1] === "yes"; continue; }
     if ((m = line.match(/^Entry point (\w+): (.+?) \(.*\)\.$/))) { page.entries[m[1]] = parseAnswers(m[2]); continue; }
+    if ((m = line.match(/^Search words that open the (\w+) pathway: (.*)\.$/))) { page.entryWords[m[1]] = m[2].split(", "); continue; }
     if (line === "Algorithm:") { current = null; continue; }
     if ((m = line.match(/^Sources?: (.*)$/))) { page.blocks.push({ type: "source", text: m[1] }); current = null; continue; }
     if ((m = line.match(/^Related: (.*)\.$/))) { page.related = m[1].split(",").map(s => s.trim()); continue; }
@@ -99,7 +100,7 @@ export function parseAlgorithm(num) {
     }
     if ((m = line.match(/^- \*\*(\w+) · (.+?) · (.+?)\*\*(?: \(shown when (.+)\))?$/))) {
       current = { type: "step", id: m[1], chip: m[2], title: m[3], when: m[4] ? parseAnswers(m[4], true) : [],
-        items: [], calcNames: [], doseNames: [], why: null };
+        items: [], calcNames: [], doseNames: [], why: [] };
       page.blocks.push(current);
       continue;
     }
@@ -114,7 +115,7 @@ export function parseAlgorithm(num) {
       let n;
       if ((n = t.match(/^Calculators: (.*)\.$/))) current.calcNames = n[1].split(", ");
       else if ((n = t.match(/^Weight-based: (.*)\.$/))) current.doseNames = n[1].split(", ");
-      else if ((n = t.match(/^Why: (.*)$/))) current.why = n[1];
+      else if ((n = t.match(/^Why: (.*)$/))) { if (Array.isArray(current.why)) current.why.push(n[1]); else current.why = n[1]; }
       else if ((n = t.match(/^Answer (.+?): (.*)$/))) {
         current.type = "decision";
         (current.options ||= []).push({ value: n[1], text: n[2] });

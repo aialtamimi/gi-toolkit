@@ -94,8 +94,9 @@ export function renderCard(root, card, opts = {}) {
 
 const isDosesTable = b => b.columns[1] === "Dose";
 
-function whyLine(text) {
-  return text ? h("p", { class: "why" }, h("span", { class: "why-tag" }, "Why: "), richText(text)) : null;
+// One why line per entry; steps carry a list, sections a single line.
+function whyLine(why) {
+  return [].concat(why || []).map(text => h("p", { class: "why" }, h("span", { class: "why-tag" }, "Why: "), richText(text)));
 }
 
 function classicBlock(b) {

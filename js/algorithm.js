@@ -43,8 +43,8 @@ export function entryAnswers(page, entry) {
 export function pageText(page) {
   return page.blocks.map(b => {
     if (b.type === "table") return [b.title || "", ...b.columns, ...b.rows.flat()].join(" | ");
-    if (isStep(b)) return [b.chip, b.title, ...b.items, ...(b.options || []).map(o => `${o.value}: ${o.text}`), b.why || ""].join("\n");
-    return [b.title || "", b.text, b.why || ""].join(" ");
+    if (isStep(b)) return [b.chip, b.title, ...b.items, ...(b.options || []).map(o => `${o.value}: ${o.text}`), ...[].concat(b.why || [])].join("\n");
+    return [b.title || "", b.text, ...[].concat(b.why || [])].join(" ");
   }).join("\n");
 }
 
