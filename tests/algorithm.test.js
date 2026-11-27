@@ -325,7 +325,9 @@ test("systolic BP is written in full; SBP only means spontaneous bacterial perit
 
 test("urine output line is labelled \"Target, not a dose\" (decision 9)", () => {
   assert.ok(doseLine("urine_output", 70).startsWith("Target, not a dose. "));
-  for (const d of DOSES.filter(d => d.id !== "urine_output")) assert.ok(!d.tag, d.id);
+  assert.ok(doseLine("protein_target", 70).startsWith("Target, not a dose. "));
+  assert.deepEqual(DOSES.filter(d => d.tag).map(d => d.id), ["urine_output", "protein_target"]);
+  for (const d of DOSES.filter(d => d.tag)) assert.equal(d.tag, "Target, not a dose");
 });
 
 test("albumin is shown in grams and mL of 20% and 25% albumin (decision 10)", () => {
@@ -365,8 +367,18 @@ const SUGGESTION_INPUTS = {
   "WBC 300/mm³, neutrophils 50%, total protein 1.5 g/dL, glucose 40 mg/dL": { wbc: 300, neut: 50, aprot: 1.5, aglu: 40 },
   "temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 50": { temp: 38.5, wbc: 15, bili: 3, dilatation: true, age: 50 },
   "temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 80": { temp: 38.5, wbc: 15, bili: 3, dilatation: true, age: 80 },
-  "temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors": { temp: 38.5, wbc: 8, bili: 0.8, age: 80, odCv: true }
+  "temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors": { temp: 38.5, wbc: 8, bili: 0.8, age: 80, odCv: true },
+  "age 35, female, heart rate 75/min, systolic BP 125 mmHg, hemoglobin 140 g/L": { age: 35, sex: "F", hr: 75, sbp: 125, hb: 140 },
+  "age 35, female, heart rate 75/min, systolic BP 125 mmHg, hemoglobin 140 g/L, blood on rectal exam": { age: 35, sex: "F", hr: 75, sbp: 125, hb: 140, dre: true },
+  "acetaminophen, arterial pH 7.2": { type: "apap", ph: 7.2 },
+  "acetaminophen, arterial pH 7.35": { type: "apap", ph: 7.35 },
+  "age 50, albumin 25 g/L, bilirubin day 0 300 µmol/L, day 7 280 µmol/L, creatinine 1.0 mg/dL, PT 20 s": { age: 50, alb: 25, bili0: 300, bili7: 280, cr: 1.0, pt: 20 },
+  "age 50, albumin 30 g/L, bilirubin day 0 300 µmol/L, day 7 150 µmol/L, creatinine 1.0 mg/dL, PT 15 s": { age: 50, alb: 30, bili0: 300, bili7: 150, cr: 1.0, pt: 15 },
+  "grade 3": { grade: "3" }, "grade 4": { grade: "4" }, "grade 2": { grade: "2" }, "minimal": { grade: "Minimal" },
+  // Zargar is a table card: the "input" is the tapped row.
+  "grade 0": { row: "0" }, "grade 2a": { row: "2a" }, "grade 2b": { row: "2b" }, "grade 3a": { row: "3a" }, "grade 3b": { row: "3b" }
 };
+SUGGESTION_INPUTS["grade 4"] = { grade: "4", row: "4" };
 
 const suggestionRows = suggestionVectors();
 
@@ -385,7 +397,8 @@ for (const v of suggestionRows) {
     assert.ok(raw, `no raw inputs for "${v.inputs}"`);
     const id = CALC_NAMES[v.calc];
     const def = [...CALCULATORS, ...CARDS].find(c => c.id === id);
-    const out = calc(def, raw);
+    const out = def.inputs ? calc(def, raw) : { result: { row: def.table.rows.find(r => r[0] === raw.row) }, interp: null };
+    assert.ok(out.result.row || def.inputs, `no table row "${raw.row}"`);
     const p = page(v.page);
     const sug = suggestions(p, v.decision, { [id]: { result: out.result, interp: out.interp } });
     const got = sug.answers;
@@ -553,4 +566,62 @@ test("upper GI bleeding guidelines and the new sources link to their exact PubMe
   }
   const ugib = page("em_ugib").references.map(r => r.citation);
   assert.ok(ugib.some(c => c.startsWith("Sreedharan A")) && ugib.some(c => c.startsWith("Garcia-Tsao G")));
+});
+
+// ---------- twelve pages converted in version 0.7.0 ----------
+
+test("version 0.7.0 sources link to their exact PubMed record, with the PMID at the end of the citation", () => {
+  const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES].flatMap(x => x.references || []);
+  const expect = {
+    "Sengupta N": "36735555", "Abraham NS": "35297395", "Gralnek IM et al. ESGE NVUGIH": "33567467", "Sung JJ": "19949136",
+    "McDonald LC": "29462280", "Randall J": "20101648", "Lee WM et al. Intravenous N-acetylcysteine": "19524577",
+    "European Association for the Study of the Liver. EASL Clinical Practical Guidelines on the management of acute": "28417882",
+    "Thursz MR": "25901427", "Louvet A": "17518367", "Arab JP": "34166722", "Nadim MK": "38527522", "Wong F": "33657294",
+    "Vilstrup H": "25042402", "Bass NM": "20335583", "Birk M": "26862844", "Zargar SA": "2032601", "Ponec RJ": "10403850",
+    "Sgouros SN": "16306137"
+  };
+  for (const [start, pmid] of Object.entries(expect)) {
+    const refs = all.filter(r => r.citation.startsWith(start));
+    assert.ok(refs.length > 0, start);
+    for (const r of refs) {
+      assert.equal(r.url, `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`, start);
+      assert.ok(r.citation.endsWith(`PMID ${pmid}`), `${start}: PMID not at the end`);
+    }
+    assert.ok(SPEC_B9().includes(`(PMID ${pmid})](https://pubmed.ncbi.nlm.nih.gov/${pmid}/)`), `B9 ${start}`);
+  }
+});
+
+test("weight field on exactly the pages with a weight-based dose", () => {
+  const withWeight = EMERGENCIES.filter(p => p.weight).map(p => p.id).sort();
+  assert.deepEqual(withWeight, ["em_alf", "em_antithrombotic", "em_asuc", "em_he", "em_hrs", "em_pancreatitis", "em_sbp", "em_ugib"]);
+  for (const p of EMERGENCIES) assert.equal(p.weight, DOSES.some(d => d.page === p.id), p.id);
+});
+
+test("prothrombin complex concentrate never exceeds its cap; N-acetylcysteine has no cap but shows the local-protocol note", () => {
+  for (const w of [20, 60, 99.9, 100, 100.1, 142.9, 143, 350]) {
+    for (const [id, perKg, max] of [["pcc_inr2", 25, 2500], ["pcc_inr4", 35, 3500], ["pcc_inr6", 50, 5000]]) {
+      const units = Number(DOSES.find(d => d.id === id).value(w).split(" ")[0]);
+      assert.equal(units, Math.min(Math.round(perKg * w * 10) / 10, max), `${id} ${w} kg`);
+      assert.equal(/\(maximum\)$/.test(doseLine(id, w)), perKg * w > max, `${id} ${w} kg maximum label`);
+    }
+  }
+  assert.equal(doseLine("nac_150", 150), "N-acetylcysteine 150 mg/kg over 1 hour: 22500 mg");
+  const f2 = steps(page("em_alf")).find(s => s.id === "F2");
+  assert.ok(f2.items.includes("Many protocols cap the dosing weight at 100–110 kg; follow local protocol."));
+});
+
+test("no page uses SBP for blood pressure, or an abbreviated drug name (polyethylene glycol 3350, prothrombin complex concentrate)", () => {
+  for (const p of EMERGENCIES) {
+    const text = pageText(p);
+    assert.ok(!/SBP\s*[<>≤≥]|\/SBP|SBP\)/.test(text), `${p.id}: SBP used for blood pressure`);
+    if (p.id !== "em_sbp") assert.ok(!/\bSBP\b/.test(text), `${p.id}: SBP on a page other than SBP`);
+    assert.ok(!/\bPEG\b/.test(text), `${p.id}: PEG`);
+  }
+});
+
+test("Zargar is built into the caustic page as its B6 table card, unchanged", () => {
+  const z = findItem("zargar");
+  assert.equal(z.inputs, undefined);
+  assert.equal(z.table.rows.length, 7);
+  assert.deepEqual(steps(page("em_caustic")).find(s => s.id === "D2").calcs, ["zargar"]);
 });

@@ -7,9 +7,9 @@ const PHASE1 = ["gbs", "aims65", "rockall", "oakland", "forrest",
   "child_pugh", "meld_na", "meld3", "maddrey", "lille", "gahs", "abic", "fib4", "apri", "nfs", "albi",
   "ascites", "r_factor", "aih_simplified", "leipzig", "west_haven", "aclf", "kings", "baveno7", "fibroscan"];
 const PHASE2 = ["bisap", "ranson", "glasgow_imrie", "sirs", "marshall", "atlanta", "mctsi", "tg18_cholangitis", "asge_cbd",
-  "truelove_witts", "asuc_day3", "mayo_uc", "uceis", "hbi", "cdai", "ses_cd", "rutgeerts", "montreal"];
+  "truelove_witts", "asuc_day3", "mayo_uc", "uceis", "hbi", "cdai", "ses_cd", "rutgeerts", "montreal", "jalan"];
 
-test("registry contains every B2, B3, B4 and B5 calculator", () => {
+test("registry contains every B2, B3, B4 and B5 calculator (B5.10 Jalan included)", () => {
   assert.deepEqual(CALCULATORS.map(c => c.id).sort(), [...PHASE1, ...PHASE2].sort());
 });
 
@@ -58,6 +58,6 @@ test("footer and About page show the designer credit", async () => {
 test("all pages reachable from search (B1.9 Phase 3): every calculator, card and emergency page", async () => {
   const { CARDS, EMERGENCIES } = await import("../js/registry.js");
   const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES];
-  assert.equal(all.length, 43 + 8 + 17);
+  assert.equal(all.length, 44 + 8 + 17);
   for (const item of all) assert.ok(search(item.name).includes(item), item.name);
 });

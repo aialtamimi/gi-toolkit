@@ -21,5 +21,5 @@ export default {
   ] },
   copy: row => `Zargar: grade ${row[0]}`,
   links: [{ label: "Caustic ingestion emergency page", target: "em_caustic" }],
-  references: [ref("Zargar SA et al. The role of fiberoptic endoscopy in the management of corrosive ingestion and modified endoscopic classification of burns. Gastrointest Endosc 1991")]
+  references: [ref("Zargar SA et al. The role of fiberoptic endoscopy in the management of corrosive ingestion and modified endoscopic classification of burns. Gastrointest Endosc 1991. PMID 2032601", "https://pubmed.ncbi.nlm.nih.gov/2032601/")]
 };

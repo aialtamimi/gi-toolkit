@@ -9,10 +9,10 @@ export const NO_SOURCE_TEXT = "No source is listed in SPEC.md for this page yet.
 // SPEC section numbers used as cross-references in emergency page text, mapped to the item they name.
 export const SPEC_REFS = {
   "B2.1": "gbs", "B2.2": "aims65", "B2.4": "oakland", "B2.5": "forrest",
-  "B3.5": "lille", "B3.12": "ascites", "B3.16": "west_haven", "B3.18": "kings",
+  "B3.5": "lille", "B3.12": "ascites", "B3.16": "west_haven", "B3.17": "aclf", "B3.18": "kings",
   "B4.5": "marshall", "B4.6": "atlanta", "B4.8": "tg18_cholangitis",
-  "B5.1": "truelove_witts", "B5.2": "asuc_day3",
-  "B6.6": "zargar", "B7.4": "em_antithrombotic", "B7.6": "em_toxic_megacolon", "B7.13": "em_cholangitis"
+  "B5.1": "truelove_witts", "B5.2": "asuc_day3", "B5.10": "jalan",
+  "B6.6": "zargar", "B7.4": "em_antithrombotic", "B7.5": "em_asuc", "B7.6": "em_toxic_megacolon", "B7.13": "em_cholangitis"
 };
 
 // Splits text into plain strings, markdown links [label](https://...) and SPEC cross-references.
@@ -78,6 +78,7 @@ export function renderCard(root, card, opts = {}) {
     tr.querySelector(".row-select").setAttribute("aria-pressed", "true");
     preview.textContent = card.copy(card.table.rows[i]);
     copyBtn.disabled = false;
+    if (opts.onSelect) opts.onSelect(card.table.rows[i]);
   };
   tbl = table(card.table, { tap: select });
   appendAll(root,
@@ -85,7 +86,8 @@ export function renderCard(root, card, opts = {}) {
     h("div", { class: "copy-row card-copy", "aria-live": "polite" }, copyBtn, preview),
     h("p", { class: "card-use" }, card.use),
     ...(card.notes || []).map(n => h("p", { class: "note" }, n)),
-    card.links && card.links.length ? h("div", { class: "links" }, card.links.map(l => linkTo(l.target, l.label))) : null,
+    (card.links || []).filter(l => !(opts.hideLinks || []).includes(l.target)).length
+      ? h("div", { class: "links" }, card.links.filter(l => !(opts.hideLinks || []).includes(l.target)).map(l => linkTo(l.target, l.label))) : null,
     h("h3", {}, "Source"),
     refList(card.references));
 }
@@ -182,11 +184,14 @@ export function renderAlgorithm(root, page, opts = {}) {
       if (!out) { status.className = "embed-status muted"; status.replaceChildren("Not calculated"); return; }
       status.className = `embed-status badge ${levelClass(out.interp.level)}`;
       const value = resultText(out.result);
-      status.replaceChildren(value && value !== "—" ? `${value} · ${out.interp.band}` : out.interp.band);
+      status.replaceChildren(value && value !== "—" && value !== out.interp.band ? `${value} · ${out.interp.band}` : out.interp.band);
     };
     const mount = () => {
       body.replaceChildren();
-      renderCalculator(body, def, { embedded: true, idPrefix: `${page.id}-${where}`, hideLinks: [page.id], onReset: mount, onResult });
+      if (def.inputs) renderCalculator(body, def, { embedded: true, idPrefix: `${page.id}-${where}`, hideLinks: [page.id], onReset: mount, onResult });
+      // A B6 table card (for example Zargar): tapping a row reports it as the result.
+      else renderCard(body, def, { hideLinks: [page.id],
+        onSelect: row => onResult({ result: { row, display: def.copy(row) }, interp: { band: def.copy(row), level: "neutral" } }) });
     };
     mount();
     return h("details", { class: "embed-calc" },
@@ -280,9 +285,13 @@ export function renderAlgorithm(root, page, opts = {}) {
   }
 
   // ----- assemble in SPEC order -----
+  // The weight field goes right after the red flags box, or, on a page without one, before the first block
+  // that is not a source line.
   const out = [];
   let list = null;
+  let weightShown = !page.weight;
   for (const b of page.blocks) {
+    if (!weightShown && b.type !== "source" && b.type !== "redflags") { out.push(weightPanel()); weightShown = true; }
     if (isStep(b)) {
       if (!list) { list = h("ol", { class: "algo-steps" }); out.push(toolbar, list); }
       list.append(stepCard(b));
@@ -291,7 +300,7 @@ export function renderAlgorithm(root, page, opts = {}) {
     if (b.type === "redflags") {
       out.push(h("section", { class: "red-flags", "aria-label": "Red flags" },
         h("h3", {}, "Red flags"), h("p", {}, richText(b.text)), (b.calcs || []).map(c => embedCalc(c, "redflags"))));
-      if (page.weight) out.push(weightPanel());
+      if (!weightShown) { out.push(weightPanel()); weightShown = true; }
       continue;
     }
     if (b.type === "table" && isDosesTable(b)) { out.push(dosesTable(b)); continue; }

@@ -44,7 +44,7 @@ export default {
   },
   references: [
     ref("Oakland K et al. Lancet Gastroenterol Hepatol 2017"),
-    ref("Sengupta N et al. ACG guideline 2023 (lower GI bleeding)", "https://gastroenterology.acponline.org/archives/2023/03/24/2.htm"),
+    ref("Sengupta N et al. ACG guideline 2023 (lower GI bleeding). PMID 36735555", "https://pubmed.ncbi.nlm.nih.gov/36735555/"),
     ref("Oakland K et al. BSG guideline: diagnosis and management of acute lower gastrointestinal bleeding. Gut 2019")
   ]
 };

@@ -14,9 +14,11 @@ const CLASSIC = NUMS.filter(n => !isAlgorithm(n)).map(parseClassic);
 const ALGORITHMS = ALGORITHM_NUMS.map(parseAlgorithm);
 const ALL = [...CLASSIC, ...ALGORITHMS];
 
-test("five bedside algorithm pages: B7.1, B7.5, B7.9, B7.12, B7.13", () => {
-  assert.deepEqual(ALGORITHM_NUMS, ["B7.1", "B7.5", "B7.9", "B7.12", "B7.13"]);
+test("every emergency page is a bedside algorithm (B7.0); no classic pages remain", () => {
+  assert.equal(ALGORITHM_NUMS.length, 17);
+  assert.deepEqual(CLASSIC, []);
   assert.deepEqual(EMERGENCIES.filter(p => p.kind === "algorithm").map(p => p.spec), ALGORITHM_NUMS);
+  assert.equal(EMERGENCIES.length, ALGORITHM_NUMS.length);
 });
 
 test("17 index entries in the B7.19 order with the B7.19 names, one per page; no variceal entry", () => {
@@ -68,16 +70,17 @@ for (const spec of ALGORITHMS) {
     assert.deepEqual(sortKeys(withNames(page)), sortKeys(spec.blocks));
   });
 
-  test(`${spec.id}: layout follows B7.0 (red flags first, then Recognize, steps, Avoid, tables)`, () => {
+  test(`${spec.id}: layout follows B7.0 (sources, red flags, Recognize, steps, Avoid, then notes and tables)`, () => {
     const page = EMERGENCIES.find(p => p.id === spec.id);
-    const types = page.blocks.filter(b => b.type !== "source").map(b => b.type === "decision" ? "step" : b.type === "section" ? b.title : b.type);
-    assert.equal(types[0], "redflags");
-    assert.equal(types[1], "Recognize");
-    const firstStep = types.indexOf("step"), lastStep = types.lastIndexOf("step");
-    assert.equal(firstStep, 2);
-    assert.ok(types.slice(firstStep, lastStep + 1).every(t => t === "step"), "steps are contiguous");
-    assert.equal(types[lastStep + 1], "Avoid");
-    assert.ok(types.slice(lastStep + 2).every(t => t === "table"));
+    const kind = b => b.type === "decision" ? "step" : b.type === "section" ? (b.title.startsWith("Recognize") ? "Recognize" : b.title) : b.type;
+    const order = ["source", "redflags", "Recognize", "step", "Avoid", "after"];
+    const rank = k => order.indexOf(["note", "table"].includes(k) ? "after" : k);
+    const ranks = page.blocks.map(b => rank(kind(b)));
+    assert.ok(ranks.every(r => r >= 0), `unexpected block: ${page.blocks.map(kind).join(", ")}`);
+    assert.deepEqual(ranks, [...ranks].sort((a, b) => a - b), `out of order: ${page.blocks.map(kind).join(", ")}`);
+    assert.ok(ranks.includes(rank("step")), "no steps");
+    // Every page has red flags, except the anticoagulants page, which has none in SPEC.md (listed as an ambiguity).
+    if (page.id !== "em_antithrombotic") assert.ok(ranks.includes(rank("redflags")), "no red flags box");
   });
 
   test(`${spec.id}: decisions, answers and "shown when" references are consistent`, () => {
@@ -110,9 +113,9 @@ for (const spec of ALGORITHMS) {
   test(`${spec.id}: built-in calculators exist, at most once per block (each copy gets its own input ids)`, () => {
     const page = EMERGENCIES.find(p => p.id === spec.id);
     const ids = page.blocks.flatMap(b => b.calcs || []);
-    assert.ok(ids.length > 0);
     for (const b of page.blocks) if (b.calcs) assert.equal(new Set(b.calcs).size, b.calcs.length, `${b.id || b.type}: calculator listed twice`);
-    for (const id of ids) assert.ok(findItem(id) && findItem(id).inputs, `${id} is not a calculator`);
+    // A built-in calculator is a calculator (inputs) or a B6 table card that reports the tapped row.
+    for (const id of ids) assert.ok(findItem(id) && (findItem(id).inputs || (findItem(id).table && findItem(id).copy)), `${id} is not a calculator or table card`);
   });
 
   test(`${spec.id}: weight field only when the page has weight-based doses, and every dose is placed`, () => {

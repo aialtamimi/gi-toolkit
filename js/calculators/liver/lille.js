@@ -45,5 +45,5 @@ export default {
       copy: `Lille ${fmt(r.score, 3)}, non-responder` };
   },
   notes: "Renal insufficiency = 1 if creatinine >1.3 mg/dL (>115 µmol/L), else 0. The cutoff written for the unit entered is applied, with no conversion.",
-  references: [ref("Louvet A et al. The Lille model. Hepatology 2007")]
+  references: [ref("Louvet A et al. The Lille model. Hepatology 2007. PMID 17518367", "https://pubmed.ncbi.nlm.nih.gov/17518367/")]
 };
