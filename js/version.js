@@ -1,3 +1,3 @@
 // App version and designer credit (Build Rule 9).
-export const APP_VERSION = "0.7.0";
+export const APP_VERSION = "0.8.0";
 export const DESIGNER = "Designed by Dr. Abdulaziz Altamimi";

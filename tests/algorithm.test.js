@@ -326,7 +326,7 @@ test("systolic BP is written in full; SBP only means spontaneous bacterial perit
 test("urine output line is labelled \"Target, not a dose\" (decision 9)", () => {
   assert.ok(doseLine("urine_output", 70).startsWith("Target, not a dose. "));
   assert.ok(doseLine("protein_target", 70).startsWith("Target, not a dose. "));
-  assert.deepEqual(DOSES.filter(d => d.tag).map(d => d.id), ["urine_output", "protein_target"]);
+  assert.deepEqual(DOSES.filter(d => d.tag).map(d => d.id), ["urine_output", "protein_target", "aclf_energy", "aclf_protein", "aclf_glucose"]);
   for (const d of DOSES.filter(d => d.tag)) assert.equal(d.tag, "Target, not a dose");
 });
 
@@ -375,6 +375,8 @@ const SUGGESTION_INPUTS = {
   "age 50, albumin 25 g/L, bilirubin day 0 300 µmol/L, day 7 280 µmol/L, creatinine 1.0 mg/dL, PT 20 s": { age: 50, alb: 25, bili0: 300, bili7: 280, cr: 1.0, pt: 20 },
   "age 50, albumin 30 g/L, bilirubin day 0 300 µmol/L, day 7 150 µmol/L, creatinine 1.0 mg/dL, PT 15 s": { age: 50, alb: 30, bili0: 300, bili7: 150, cr: 1.0, pt: 15 },
   "grade 3": { grade: "3" }, "grade 4": { grade: "4" }, "grade 2": { grade: "2" }, "minimal": { grade: "Minimal" },
+  "bilirubin 13 mg/dL, creatinine 4 mg/dL, HE grade 3–4, INR 2.6, vasopressors, PaO2/FiO2 400, age 60, WBC 20 ×10⁹/L": { bili: 13, cr: 4, he: "3-4", inr: 2.6, vaso: true, pf: 400, age: 60, wbc: 20 },
+  "bilirubin 7 mg/dL, creatinine 2.5 mg/dL, HE grade 1–2, INR 2.2, MAP 65 mmHg, PaO2/FiO2 250, age 50, WBC 10 ×10⁹/L": { bili: 7, cr: 2.5, he: "1-2", inr: 2.2, map: 65, pf: 250, age: 50, wbc: 10 },
   // Zargar is a table card: the "input" is the tapped row.
   "grade 0": { row: "0" }, "grade 2a": { row: "2a" }, "grade 2b": { row: "2b" }, "grade 3a": { row: "3a" }, "grade 3b": { row: "3b" }
 };
@@ -593,7 +595,7 @@ test("version 0.7.0 sources link to their exact PubMed record, with the PMID at 
 
 test("weight field on exactly the pages with a weight-based dose", () => {
   const withWeight = EMERGENCIES.filter(p => p.weight).map(p => p.id).sort();
-  assert.deepEqual(withWeight, ["em_alf", "em_antithrombotic", "em_asuc", "em_he", "em_hrs", "em_pancreatitis", "em_sbp", "em_ugib"]);
+  assert.deepEqual(withWeight, ["em_aclf", "em_alf", "em_antithrombotic", "em_asuc", "em_he", "em_hrs", "em_pancreatitis", "em_sbp", "em_ugib"]);
   for (const p of EMERGENCIES) assert.equal(p.weight, DOSES.some(d => d.page === p.id), p.id);
 });
 
@@ -702,4 +704,49 @@ test("alcohol-associated hepatitis uses MELD or MELD-Na, not MELD 3.0 (decision 
 test("foreign body red flags give the destination (decision 11)", () => {
   assert.ok(page("em_foreign_body").blocks.find(b => b.type === "redflags").text.endsWith(
     "battery in the esophagus: emergent endoscopy (within 2 h, at most 6 h). Airway compromise: secure the airway first (ICU or anesthesia). Perforation signs: CT and surgical review."));
+});
+
+// ---------- acute-on-chronic liver failure page (B7.20, version 0.8.0) ----------
+
+test("ACLF page: in the index after acute liver failure, and found by 'ACLF' and 'acute-on-chronic liver failure'", async () => {
+  const { EMERGENCY_INDEX, search } = await import("../js/registry.js");
+  const ids = EMERGENCY_INDEX.map(e => e.id);
+  assert.equal(ids[ids.indexOf("em_alf") + 1], "em_aclf");
+  assert.equal(EMERGENCY_INDEX.find(e => e.id === "em_aclf").name, "ACLF");
+  for (const q of ["ACLF", "acute-on-chronic liver failure", "Acute-on-chronic liver failure", "acute on chronic"]) {
+    assert.ok(search(q).some(i => i.id === "em_aclf"), q);
+  }
+  assert.equal(search("acute-on-chronic liver failure")[0].id, "em_aclf");
+});
+
+test("ACLF page: built-in ACLF grade and CLIF-C ACLF; CLIF-C ACLF above 70 suggests Yes only", () => {
+  const p = page("em_aclf");
+  assert.deepEqual(p.blocks.flatMap(b => b.calcs || []), ["aclf", "clif_c_aclf"]);
+  const run = score => suggestedAnswers(p, "D2", { clif_c_aclf: { result: { score } } });
+  assert.deepEqual(run(70), []);
+  assert.deepEqual(run(71), ["Yes"]);
+  assert.deepEqual(run(54), []);
+  assert.deepEqual(run(null), []);
+});
+
+test("ACLF page: weight-based CRRT dose and nutrition targets; tidal volume is not calculated", () => {
+  assert.equal(doseLine("aclf_crrt", 80), "Continuous renal replacement therapy 25–30 mL/kg/h: 2000–2400 mL/h");
+  for (const id of ["aclf_energy", "aclf_protein", "aclf_glucose"]) assert.ok(doseLine(id, 80).startsWith("Target, not a dose. "), id);
+  assert.ok(!DOSES.some(d => d.page === "em_aclf" && /mL\/kg\b(?!\/h)/.test(d.label)), "no tidal volume dose");
+  const rows = Object.fromEntries(page("em_aclf").blocks.find(b => b.type === "table" && b.columns[1] === "Dose").rows);
+  assert.equal(rows["Hydrocortisone (septic shock, norepinephrine >0.25 µg/kg/min)"], "50 mg IV every 6 hours (200 mg/day), maximum 10 days");
+});
+
+test("ACLF page: references link to their exact PubMed record", () => {
+  const expect = { "European Association for the Study of the Liver. EASL Clinical Practice Guidelines on acute-on-chronic": "37364789",
+    "Bajaj JS": "35006099", "Moreau R": "23474284", "Jalan R": "24950482", "Gustot T": "25877702", "Artru F": "28645736",
+    "Engelmann C": "34364917", "Wong F": "33657294" };
+  const refs = page("em_aclf").references;
+  for (const [start, pmid] of Object.entries(expect)) {
+    const r = refs.find(r => r.citation.startsWith(start));
+    assert.ok(r, start);
+    assert.equal(r.url, `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`, start);
+    assert.ok(r.citation.endsWith(`PMID ${pmid}`), start);
+    assert.ok(SPEC_B9().includes(`(PMID ${pmid})](https://pubmed.ncbi.nlm.nih.gov/${pmid}/)`), `B9 ${start}`);
+  }
 });

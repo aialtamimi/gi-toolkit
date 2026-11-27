@@ -70,8 +70,10 @@ export default {
   interpret(r) {
     const band = r.grade === 0 ? "No ACLF" : `ACLF grade ${r.grade}`;
     return { band, level: "neutral", text: `${r.reason}. 28-day mortality: ${MORTALITY[r.grade]}.`,
+      // SPEC.md B3.17: every result links to the acute-on-chronic liver failure page (B7.20).
+      links: [{ label: "Acute-on-chronic liver failure emergency page", target: "em_aclf" }],
       copy: `${band} (${r.failed.length} organ failure${r.failed.length === 1 ? "" : "s"}${r.failed.length ? ": " + r.failed.join(", ").toLowerCase() : ""})` };
   },
   notes: "Failure definitions: liver bilirubin ≥12 mg/dL; kidney creatinine ≥2.0 mg/dL or renal replacement therapy; brain HE grade 3–4; coagulation INR ≥2.5; circulation vasopressors; respiration PaO2/FiO2 ≤200, or SpO2/FiO2 ≤214, or mechanical ventilation not for HE.",
-  references: [ref("Moreau R et al. Acute-on-chronic liver failure (CANONIC). Gastroenterology 2013")]
+  references: [ref("Moreau R et al. Acute-on-chronic liver failure (CANONIC). Gastroenterology 2013. PMID 23474284", "https://pubmed.ncbi.nlm.nih.gov/23474284/")]
 };

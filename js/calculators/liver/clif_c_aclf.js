@@ -1,0 +1,79 @@
+// SPEC.md B3.21 CLIF-C OF and CLIF-C ACLF score
+import { ref } from "../../refs.js";
+import { fmt, isNum, roundHalfUp } from "../../num.js";
+
+// Converted lab values can carry floating-point noise (205.2 µmol/L ÷ 17.1 = 11.999999999999998 mg/dL);
+// compare cutoffs on the value trimmed to 12 significant digits so exact equivalents score correctly.
+const clean = x => Number(x.toPrecision(12));
+
+export function organScores(v) {
+  const s = {}, missing = [];
+  if (isNum(v.bili)) { const b = clean(v.bili); s.Liver = b < 6 ? 1 : b < 12 ? 2 : 3; } else missing.push("Bilirubin");
+  if (v.rrt) s.Kidney = 3;
+  else if (isNum(v.cr)) { const c = clean(v.cr); s.Kidney = c < 2 ? 1 : c < 3.5 ? 2 : 3; } else missing.push("Creatinine (or renal replacement therapy)");
+  s.Brain = { none: 1, "1-2": 2, "3-4": 3 }[v.he];
+  if (isNum(v.inr)) s.Coagulation = v.inr < 2 ? 1 : v.inr < 2.5 ? 2 : 3; else missing.push("INR");
+  if (v.vaso) s.Circulation = 3;
+  else if (isNum(v.map)) s.Circulation = v.map >= 70 ? 1 : 2; else missing.push("MAP (or vasopressors)");
+  if (v.vent) s.Respiration = 3;
+  else if (isNum(v.pf)) s.Respiration = v.pf > 300 ? 1 : v.pf > 200 ? 2 : 3;
+  else if (isNum(v.sf)) s.Respiration = v.sf > 357 ? 1 : v.sf > 214 ? 2 : 3;
+  else missing.push("PaO2/FiO2 or SpO2/FiO2 (or mechanical ventilation not for HE)");
+  return { scores: s, missing };
+}
+
+export const clifCAclf = (of, age, wbc) => 10 * (0.33 * of + 0.04 * age + 0.63 * Math.log(wbc) - 2);
+
+const ACTION = "After 3–7 days of full organ support, with 4 or more organ failures or a score above 70 and no transplant option: discuss withdrawal of organ support and palliative care with the family (B7.20).";
+const LINK = { label: "Acute-on-chronic liver failure emergency page", target: "em_aclf" };
+
+export default {
+  id: "clif_c_aclf",
+  name: "CLIF-C OF and CLIF-C ACLF score",
+  short: "CLIF-C ACLF",
+  aliases: ["CLIF-C ACLF", "CLIF-C OF", "CLIF-C", "ACLF score", "acute-on-chronic liver failure", "ACLF prognosis"],
+  category: "liver",
+  use: "Prognosis in ACLF. CLIF-C OF (6–18) from six organs, then the CLIF-C ACLF score with age and WBC.",
+  inputs: [
+    { type: "heading", label: "CLIF-C OF" },
+    { id: "bili", label: "Bilirubin", type: "number", analyte: "bilirubin", base: "conv", min: 0, max: 100 },
+    { id: "cr", label: "Creatinine", type: "number", analyte: "creatinine", base: "conv", min: 0, max: 30, optional: true },
+    { id: "rrt", label: "Renal replacement therapy", type: "checkbox" },
+    { id: "he", label: "Hepatic encephalopathy (West Haven)", type: "radio", default: "none", options: [
+      { label: "None", value: "none" }, { label: "Grade 1–2", value: "1-2" }, { label: "Grade 3–4, or intubated for HE", value: "3-4" } ] },
+    { id: "inr", label: "INR", type: "number", unit: "", min: 0.5, max: 20 },
+    { id: "map", label: "Mean arterial pressure (MAP)", type: "number", unit: "mmHg", min: 0, max: 250, optional: true },
+    { id: "vaso", label: "Vasopressors", type: "checkbox" },
+    { id: "pf", label: "PaO2/FiO2", type: "number", unit: "", min: 0, max: 700, optional: true, help: "Used when entered; otherwise SpO2/FiO2." },
+    { id: "sf", label: "SpO2/FiO2", type: "number", unit: "", min: 0, max: 700, optional: true },
+    { id: "vent", label: "Mechanical ventilation not for HE", type: "checkbox" },
+    { type: "heading", label: "CLIF-C ACLF" },
+    { id: "age", label: "Age", type: "number", unit: "years", min: 1, max: 120 },
+    { id: "wbc", label: "WBC", type: "number", analyte: "wbc", base: "si", min: 0.1, max: 500 }
+  ],
+  compute(v) {
+    const { scores, missing } = organScores(v);
+    if (missing.length) {
+      return { score: null, missing, display: "—", label: "Enter the missing items",
+        breakdown: Object.entries(scores).map(([k, p]) => ({ item: k, points: p })), rounding: "Not calculated." };
+    }
+    const of = Object.values(scores).reduce((a, b) => a + b, 0);
+    const raw = clifCAclf(of, v.age, v.wbc);
+    const score = roundHalfUp(raw, 0);
+    return { score, of, raw, organs: scores,
+      display: [`CLIF-C ACLF ${fmt(raw, 0)}`, `CLIF-C OF ${of}`], label: "CLIF-C",
+      breakdown: [...Object.entries(scores).map(([k, p]) => ({ item: k, points: p })),
+        { item: "CLIF-C OF (sum, 6–18)", points: of },
+        { item: "CLIF-C ACLF unrounded = 10 × (0.33 × OF + 0.04 × age + 0.63 × ln WBC − 2)", value: fmt(raw, 2) }],
+      rounding: "CLIF-C ACLF shown as a whole number (round half up); the >70 cutoff uses the whole number shown." };
+  },
+  interpret(r) {
+    if (r.missing) return { band: `Enter the missing items: ${r.missing.join("; ")}`, level: "neutral", links: [LINK],
+      copy: "CLIF-C ACLF incomplete" };
+    const high = r.score > 70;
+    return { band: high ? "CLIF-C ACLF above 70" : "CLIF-C ACLF 70 or less", level: high ? "high" : "neutral",
+      action: high ? ACTION : undefined, links: [LINK],
+      copy: `CLIF-C ACLF ${r.score} (CLIF-C OF ${r.of}), ${high ? "above 70" : "70 or less"}` };
+  },
+  references: [ref("Jalan R et al. Development and validation of a prognostic score to predict mortality in patients with acute-on-chronic liver failure (CLIF-C ACLF). J Hepatol 2014. PMID 24950482", "https://pubmed.ncbi.nlm.nih.gov/24950482/")]
+};
