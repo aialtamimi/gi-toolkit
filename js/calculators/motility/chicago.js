@@ -7,10 +7,11 @@ export const NOTES = [
   "Study off opioids when possible."
 ];
 export const EGJOO_INCONCLUSIVE = "Inconclusive: obtain timed barium esophagram or FLIP, exclude mechanical obstruction and opioid effect.";
-export const ABSENT_NOTE = "If IRP is borderline or pressurization is present, consider achalasia type I with supportive testing.";
+export const ABSENT_NOTE = "If IRP is near the upper limit or there is pressurization, consider achalasia type I; confirm with timed barium esophagram or FLIP.";
 export const SYMPTOM_NOTE = "Clinically relevant only with obstructive symptoms.";
 export const IEM_INCONCLUSIVE = "Inconclusive: use supportive testing (contractile reserve on multiple rapid swallows, barium).";
-export const FALLTHROUGH_NOTE = "Supine IRP above the upper limit, but the criteria for EGJ outflow obstruction (upright IRP and intrabolus pressure) are not met.";
+export const FALLTHROUGH_NOTE = "Supine IRP elevated but EGJOO criteria not met; if symptomatic, consider supportive testing (timed barium esophagram or FLIP).";
+export const SUM_WARNING = "Check the swallow percentages: normal, failed, weak and fragmented add up to more than 100%.";
 
 const pct = (id, label) => ({ id, label, type: "number", unit: "%", min: 0, max: 100 });
 
@@ -19,11 +20,11 @@ export function classify(v) {
   const supineHigh = v.irp_supine > v.uln_supine;
   const uprightHigh = v.irp_upright > v.uln_upright;
   const ineffective = v.failed + v.weak + v.fragmented;
-  const noNormal = v.failed + v.weak + v.fragmented + v.premature + v.hyper >= 100;
   if (supineHigh) {
     if (v.failed === 100 && v.pep >= 20) return { rule: 1, band: "Achalasia type II" };
     if (v.failed === 100) return { rule: 2, band: "Achalasia type I" };
-    if (noNormal && v.premature >= 20) return { rule: 3, band: "Achalasia type III" };
+    // No normal peristalsis = normal (intact) swallows 0%, never inferred from the other percentages.
+    if (v.normal === 0 && v.premature >= 20) return { rule: 3, band: "Achalasia type III" };
     if (uprightHigh && v.ibp >= 20) {
       if (v.symptoms && v.supportive) return { rule: 4, band: "EGJ outflow obstruction, clinically relevant" };
       return { rule: 5, band: "EGJ outflow obstruction, inconclusive", action: EGJOO_INCONCLUSIVE };
@@ -62,6 +63,7 @@ export default {
     { id: "uln_supine", label: "IRP upper limit of normal, supine (default 15, Medtronic; edit for other systems)", type: "number", unit: "mmHg", min: 1, max: 100, default: 15 },
     { id: "uln_upright", label: "IRP upper limit of normal, upright (default 12, Medtronic; edit for other systems)", type: "number", unit: "mmHg", min: 1, max: 100, default: 12 },
     { type: "heading", label: "Swallows (% of swallows)" },
+    pct("normal", "Normal (intact) swallows"),
     pct("failed", "Failed swallows (DCI <100 mmHg·s·cm)"),
     pct("weak", "Weak swallows (DCI 100–450 mmHg·s·cm)"),
     pct("fragmented", "Fragmented swallows (break >5 cm, DCI >450 mmHg·s·cm)"),
@@ -76,9 +78,9 @@ export default {
   compute(v) {
     const c = classify(v);
     const ineffective = v.failed + v.weak + v.fragmented;
-    const noNormal = v.failed + v.weak + v.fragmented + v.premature + v.hyper >= 100;
+    const sumWarning = v.normal + v.failed + v.weak + v.fragmented > 100;
     const vs = (x, uln) => `${num(x)} mmHg (${x > uln ? "above" : "not above"} the upper limit ${num(uln)})`;
-    return { score: null, ...c, ineffective, display: c.band, label: "Chicago v4.0", rounding: "Values used as entered; no rounding.",
+    return { score: null, ...c, ineffective, sumWarning, display: c.band, label: "Chicago v4.0", rounding: "Values used as entered; no rounding.",
       breakdown: [
         { item: "Median IRP, supine", value: vs(v.irp_supine, v.uln_supine) },
         { item: "Median IRP, upright", value: vs(v.irp_upright, v.uln_upright) },
@@ -86,16 +88,16 @@ export default {
         { item: "Ineffective swallows (failed + weak + fragmented)", value: `${num(ineffective)}%` },
         { item: "Premature swallows", value: `${num(v.premature)}%` },
         { item: "Hypercontractile swallows", value: `${num(v.hyper)}%` },
+        { item: "Normal (intact) swallows", value: `${num(v.normal)}%` },
         { item: "Panesophageal pressurization", value: `${num(v.pep)}%` },
         { item: "Supine swallows with elevated intrabolus pressure", value: `${num(v.ibp)}%` },
-        { item: "Normal peristalsis", value: noNormal ? "Absent" : "Present" },
         { item: "Obstructive symptoms", value: v.symptoms ? "Yes" : "No" },
         { item: "Supportive test abnormal", value: v.supportive ? "Yes" : "No" },
         { item: "Rule applied (B10.1)", value: String(c.rule) }
       ] };
   },
   interpret(r) {
-    const notes = [...(r.fallthrough ? [FALLTHROUGH_NOTE] : []), ...NOTES];
+    const notes = [...(r.sumWarning ? [SUM_WARNING] : []), ...(r.fallthrough ? [FALLTHROUGH_NOTE] : []), ...NOTES];
     const level = r.rule === 13 ? "low" : "neutral";
     return { band: r.band, level, ...(r.action ? { action: r.action } : {}), notes, copy: `Chicago v4.0: ${r.band}` };
   },

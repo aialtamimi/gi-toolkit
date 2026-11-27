@@ -14,17 +14,19 @@ const CASES = [
   [{}, [], "No disorder of anorectal function"],
   [{ rair: "absent" }, ["Rectoanal areflexia (major)"], "Major disorder"],
   [{ resting: "low", squeeze: "low" }, ["Combined anal hypotension and hypocontractility (major)"], "Major disorder"],
-  [{ resting: "low" }, ["Anal hypotension with normal contractility (minor)"], "Minor disorder"],
-  [{ squeeze: "low" }, ["Anal normotension with hypocontractility (minor)"], "Minor disorder"],
+  [{ resting: "low" }, ["Anal hypotension with normal contractility (major)"], "Major disorder"],
+  [{ squeeze: "low" }, ["Anal normotension with hypocontractility (major)"], "Major disorder"],
   [{ resting: "high" }, ["Anal hypertension (minor)"], "Minor disorder"],
-  [{ resting: "high", squeeze: "low" }, ["Anal hypertension (minor)", "Anal hypocontractility (minor)"], "Minor disorder"],
+  [{ resting: "high", squeeze: "low" }, ["Anal hypertension (minor) with low squeeze pressure: not a named London pattern; report both findings."], "Minor disorder"],
   [{ expulsion: "abnormal", dyssynergia: true, propulsion: true }, ["Abnormal expulsion with dyssynergia and poor propulsion (minor)"], "Minor disorder"],
   [{ expulsion: "abnormal", dyssynergia: true }, ["Abnormal expulsion with dyssynergia (minor)"], "Minor disorder"],
   [{ expulsion: "abnormal", propulsion: true }, ["Abnormal expulsion with poor propulsion (minor)"], "Minor disorder"],
   [{ expulsion: "abnormal" }, ["Abnormal expulsion with a normal pushing pattern (inconclusive)"], "Inconclusive"],
-  [{ dyssynergia: true }, ["Normal expulsion with an abnormal pushing pattern (inconclusive)"], "Inconclusive"],
+  [{ dyssynergia: true }, ["Normal expulsion with dyssynergia (inconclusive)"], "Inconclusive"],
+  [{ propulsion: true }, ["Normal expulsion with poor propulsion (inconclusive)"], "Inconclusive"],
+  [{ dyssynergia: true, propulsion: true }, ["Normal expulsion with poor propulsion and dyssynergia (inconclusive)"], "Inconclusive"],
   [{ fcs: "above", dd: "above" }, ["Rectal hyposensitivity (major)"], "Major disorder"],
-  [{ mtv: "above" }, ["Borderline rectal hyposensitivity (minor)"], "Minor disorder"],
+  [{ mtv: "above" }, ["Borderline rectal hyposensitivity (inconclusive)"], "Inconclusive"],
   [{ mtv: "below" }, ["Rectal hypersensitivity (major)"], "Major disorder"],
   [{ rair: "absent", resting: "high", expulsion: "abnormal", dyssynergia: true },
     ["Rectoanal areflexia (major)", "Anal hypertension (minor)", "Abnormal expulsion with dyssynergia (minor)"], "Major disorder"]
@@ -54,11 +56,21 @@ test("London: both hyposensitivity and hypersensitivity are shown if both apply;
 
 test("London: every finding and label is in the SPEC B10.3 table", () => {
   const text = section("B10.3");
-  for (const [, expected] of CASES) for (const f of expected) {
-    const [, name, label] = f.match(/^(.+) \((major|minor|inconclusive)\)$/);
+  for (const [extra] of CASES) for (const { text: name, label } of run(extra).result.findings) {
     assert.ok(text.toLowerCase().includes(name.toLowerCase()), name);
     assert.ok(new RegExp(`${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[^|]*\\| ${label[0].toUpperCase()}${label.slice(1)}`, "i").test(text), `${name} label ${label}`);
   }
   for (const b of ["Major disorder", "Minor disorder", "Inconclusive", "No disorder of anorectal function"]) assert.ok(text.includes(`"${b}"`));
   assert.equal(london.references[0].url, "https://pubmed.ncbi.nlm.nih.gov/31407463/");
+});
+
+test("London: owner decisions (PR 17): single-component part 2 findings major; borderline hyposensitivity inconclusive, 'to be verified' only in SPEC", () => {
+  const text = section("B10.3");
+  assert.ok(text.includes("| 2 | Low resting pressure, normal squeeze: anal hypotension with normal contractility | Major |"));
+  assert.ok(text.includes("| 2 | Normal resting pressure, low squeeze: anal normotension with hypocontractility | Major |"));
+  assert.match(text, /borderline rectal hyposensitivity \| Inconclusive \(to be verified/);
+  const shown = found(run({ mtv: "above" }));
+  assert.deepEqual(shown, ["Borderline rectal hyposensitivity (inconclusive)"]);
+  assert.ok(!JSON.stringify(run({ mtv: "above" }).interp).includes("verified"));
+  assert.ok(text.includes('"Anal hypertension (minor) with low squeeze pressure: not a named London pattern; report both findings."'));
 });

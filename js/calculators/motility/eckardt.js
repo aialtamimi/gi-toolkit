@@ -38,7 +38,7 @@ export default {
   interpret(r) {
     if (!r.after) return { band: `Stage ${r.stage}`, level: "neutral", copy: `Eckardt ${r.score}, stage ${r.stage}` };
     const failure = r.score > 3;
-    const band = failure ? "Treatment failure (score >3)" : "No treatment failure (score 3 or less)";
+    const band = failure ? "Treatment failure (score >3)" : "Treatment success (score 3 or less)";
     return { band, level: failure ? "high" : "low", text: `Stage ${r.stage}.`, copy: `Eckardt ${r.score} after treatment, ${band.toLowerCase()}` };
   },
   table: { columns: ["Item", "0", "1", "2", "3"], rows: ITEMS.map(([, label, opts]) => [label, ...opts]) },

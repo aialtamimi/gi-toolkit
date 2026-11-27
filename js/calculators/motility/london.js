@@ -13,30 +13,30 @@ export function findings(v) {
   const out = [];
   if (v.rair === "absent") out.push(f(1, "Rectoanal areflexia", "major"));
   if (v.resting === "low" && v.squeeze === "low") out.push(f(2, "Combined anal hypotension and hypocontractility", "major"));
-  else if (v.resting === "low") out.push(f(2, "Anal hypotension with normal contractility", "minor"));
-  else if (v.resting === "normal" && v.squeeze === "low") out.push(f(2, "Anal normotension with hypocontractility", "minor"));
-  else if (v.resting === "high") {
-    out.push(f(2, "Anal hypertension", "minor"));
-    if (v.squeeze === "low") out.push(f(2, "Anal hypocontractility", "minor"));
-  }
-  const abnormalPattern = v.dyssynergia || v.propulsion;
+  else if (v.resting === "low") out.push(f(2, "Anal hypotension with normal contractility", "major"));
+  else if (v.resting === "normal" && v.squeeze === "low") out.push(f(2, "Anal normotension with hypocontractility", "major"));
+  else if (v.resting === "high" && v.squeeze === "low") {
+    out.push({ ...f(2, "Anal hypertension", "minor"), suffix: " with low squeeze pressure: not a named London pattern; report both findings." });
+  } else if (v.resting === "high") out.push(f(2, "Anal hypertension", "minor"));
   if (v.expulsion === "abnormal") {
     if (v.dyssynergia && v.propulsion) out.push(f(3, "Abnormal expulsion with dyssynergia and poor propulsion", "minor"));
     else if (v.dyssynergia) out.push(f(3, "Abnormal expulsion with dyssynergia", "minor"));
     else if (v.propulsion) out.push(f(3, "Abnormal expulsion with poor propulsion", "minor"));
     else out.push(f(3, "Abnormal expulsion with a normal pushing pattern", "inconclusive"));
-  } else if (abnormalPattern) out.push(f(3, "Normal expulsion with an abnormal pushing pattern", "inconclusive"));
+  } else if (v.dyssynergia && v.propulsion) out.push(f(3, "Normal expulsion with poor propulsion and dyssynergia", "inconclusive"));
+  else if (v.dyssynergia) out.push(f(3, "Normal expulsion with dyssynergia", "inconclusive"));
+  else if (v.propulsion) out.push(f(3, "Normal expulsion with poor propulsion", "inconclusive"));
   const above = SENSATIONS.filter(([id]) => v[id] === "above").length;
   const below = SENSATIONS.filter(([id]) => v[id] === "below").length;
   if (above >= 2) out.push(f(4, "Rectal hyposensitivity", "major"));
-  else if (above === 1) out.push(f(4, "Borderline rectal hyposensitivity", "minor"));
+  else if (above === 1) out.push(f(4, "Borderline rectal hyposensitivity", "inconclusive"));
   if (below >= 1) out.push(f(4, "Rectal hypersensitivity", "major"));
   return out;
 }
 
 const PARTS = ["Part 1: rectoanal reflexes", "Part 2: anal tone and contractility", "Part 3: rectoanal coordination", "Part 4: rectal sensation"];
 const BAND = { major: "Major disorder", minor: "Minor disorder", inconclusive: "Inconclusive" };
-export const fmt = x => `${x.text} (${x.label})`;
+export const fmt = x => `${x.text} (${x.label})${x.suffix || ""}`;
 
 export default {
   id: "london",

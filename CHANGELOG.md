@@ -12,6 +12,10 @@ New Motility category and card moves (SPEC.md B1.1, B1.6, B6, B8.10, B9 and new 
 - London classification of anorectal function (B10.3): checklist against the laboratory's own normal values; findings in parts 1–4 labelled major, minor or inconclusive; overall band.
 - Number inputs can carry a default value (used for the editable IRP upper limits). Long text values in a breakdown wrap so the result fits 320 px.
 - Tests: every B8.10 vector, every category rule, SPEC text of every band, action and note.
+- Clinical owner decisions on the review (SPEC.md B8.10, B10.1, B10.2 and B10.3 updated in the same change):
+  - Chicago: new "Normal (intact) swallows" field; achalasia type III needs 0% normal swallows and premature 20% or more (never inferred from the other percentages). Soft warning, without blocking, when normal + failed + weak + fragmented is more than 100%. Failed exactly 50% is ineffective esophageal motility; ineffective exactly 70% without 50% failed is inconclusive. New wording: "Supine IRP elevated but EGJOO criteria not met; if symptomatic, consider supportive testing (timed barium esophagram or FLIP)." and "If IRP is near the upper limit or there is pressurization, consider achalasia type I; confirm with timed barium esophagram or FLIP."
+  - Eckardt after treatment, 3 or less: "Treatment success (score 3 or less)".
+  - London: anal hypotension with normal contractility and anal normotension with hypocontractility are major; borderline rectal hyposensitivity is inconclusive (marked "to be verified" in SPEC.md only); high resting with low squeeze shows "Anal hypertension (minor) with low squeeze pressure: not a named London pattern; report both findings."; normal expulsion names the pattern (with dyssynergia, with poor propulsion, or with poor propulsion and dyssynergia).
 
 ## 0.10.0 (2026-11-27)
 

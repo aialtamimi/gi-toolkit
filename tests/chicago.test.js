@@ -1,12 +1,12 @@
 // SPEC.md B10.1 Chicago Classification v4.0; vectors from B8.10.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import chicago, { NOTES, EGJOO_INCONCLUSIVE, ABSENT_NOTE, SYMPTOM_NOTE, IEM_INCONCLUSIVE, FALLTHROUGH_NOTE } from "../js/calculators/motility/chicago.js";
+import chicago, { NOTES, EGJOO_INCONCLUSIVE, ABSENT_NOTE, SYMPTOM_NOTE, IEM_INCONCLUSIVE, FALLTHROUGH_NOTE, SUM_WARNING } from "../js/calculators/motility/chicago.js";
 import { evaluate } from "../js/engine.js";
 import { calc } from "./helpers.js";
 import { section, vectors } from "./motility_spec.js";
 
-const ZERO = { failed: 0, weak: 0, fragmented: 0, premature: 0, hyper: 0, pep: 0, ibp: 0 };
+const ZERO = { normal: 0, failed: 0, weak: 0, fragmented: 0, premature: 0, hyper: 0, pep: 0, ibp: 0 };
 // Default upper limits come from the inputs themselves (15 and 12 mmHg), as on the screen.
 const run = (irp_supine, irp_upright, extra = {}) => calc(chicago, { irp_supine, irp_upright, ...ZERO, ...extra });
 
@@ -16,7 +16,8 @@ const CASES = [
   [[30, 25, { failed: 100, pep: 20 }], "Achalasia type II"],
   [[30, 25, { failed: 100, pep: 19 }], "Achalasia type I"],
   [[28, 20, { failed: 30, weak: 20, fragmented: 10, premature: 40 }], "Achalasia type III"],
-  [[28, 20, { premature: 30, ibp: 30 }], "EGJ outflow obstruction, inconclusive"],
+  [[28, 20, { normal: 10, failed: 50, premature: 40 }], "Distal esophageal spasm pattern, inconclusive"],
+  [[28, 20, { normal: 70, premature: 30, ibp: 30 }], "EGJ outflow obstruction, inconclusive"],
   [[22, 18, { ibp: 25, symptoms: true, supportive: true }], "EGJ outflow obstruction, clinically relevant"],
   [[22, 18, { ibp: 25, symptoms: true }], "EGJ outflow obstruction, inconclusive"],
   [[22, 10, { ibp: 25 }], "Normal esophageal motility"],
@@ -31,7 +32,8 @@ const CASES = [
   [[10, 8, { failed: 20, weak: 40, fragmented: 20 }], "Ineffective esophageal motility"],
   [[10, 8, { failed: 20, weak: 50 }], "Ineffective esophageal motility, inconclusive"],
   [[10, 8, { weak: 50 }], "Ineffective esophageal motility, inconclusive"],
-  [[10, 8, { weak: 40 }], "Normal esophageal motility"]
+  [[10, 8, { weak: 40 }], "Normal esophageal motility"],
+  [[10, 8, { normal: 60, failed: 30, weak: 20 }], "Ineffective esophageal motility, inconclusive"]
 ];
 
 test("B8.10 Chicago: one test case per SPEC row, with the same expected band", () => {
@@ -62,12 +64,28 @@ test("Chicago: actions and notes per rule", () => {
 });
 
 test("Chicago: supine IRP above the limit without EGJOO criteria still classifies peristalsis", () => {
-  assert.equal(run(22, 10, { premature: 30, symptoms: true }).interp.band, "Distal esophageal spasm, clinically relevant");
+  assert.equal(run(22, 10, { normal: 70, premature: 30, symptoms: true }).interp.band, "Distal esophageal spasm, clinically relevant");
   assert.equal(run(22, 10, { failed: 60 }).interp.band, "Ineffective esophageal motility");
 });
 
-test("Chicago: premature 20% or more with normal peristalsis and IRP high is not type III", () => {
-  assert.equal(run(28, 10, { premature: 30 }).interp.band, "Distal esophageal spasm pattern, inconclusive");
+test("Chicago: type III needs 0% normal swallows; it is never inferred from the other percentages", () => {
+  assert.equal(run(28, 10, { normal: 70, premature: 30 }).interp.band, "Distal esophageal spasm pattern, inconclusive");
+  assert.equal(run(28, 10, { normal: 0, premature: 30 }).interp.band, "Achalasia type III");
+  // Other categories adding up to 100% do not make type III while normal swallows are reported.
+  assert.equal(run(28, 10, { normal: 5, failed: 40, weak: 20, premature: 40 }).interp.band, "Distal esophageal spasm pattern, inconclusive");
+});
+
+test("Chicago: soft warning when normal + failed + weak + fragmented >100%; the result is still shown", () => {
+  const o = run(10, 8, { normal: 60, failed: 30, weak: 20 });
+  assert.equal(o.interp.notes[0], SUM_WARNING);
+  assert.equal(o.interp.band, "Ineffective esophageal motility, inconclusive");
+  assert.ok(!run(10, 8, { normal: 50, failed: 30, weak: 20 }).interp.notes.includes(SUM_WARNING));
+});
+
+test("Chicago: failed exactly 50% is ineffective esophageal motility; ineffective exactly 70% without 50% failed is inconclusive", () => {
+  assert.equal(run(10, 8, { failed: 50 }).interp.band, "Ineffective esophageal motility");
+  assert.equal(run(10, 8, { failed: 49, weak: 21 }).interp.band, "Ineffective esophageal motility, inconclusive");
+  assert.equal(run(10, 8, { failed: 49, weak: 22 }).interp.band, "Ineffective esophageal motility");
 });
 
 test("Chicago: upper limits default to 15 and 12 mmHg and can be edited; IRP at the limit is not above it", () => {
@@ -84,7 +102,7 @@ test("Chicago: upper limits default to 15 and 12 mmHg and can be edited; IRP at 
 test("Chicago: every band, action and note is SPEC B10.1 text", () => {
   const text = section("B10.1");
   for (const [, band] of CASES) assert.ok(text.includes(`| ${band} |`), band);
-  for (const n of [...NOTES, EGJOO_INCONCLUSIVE, ABSENT_NOTE, SYMPTOM_NOTE, IEM_INCONCLUSIVE, FALLTHROUGH_NOTE]) assert.ok(text.includes(`"${n}"`), n);
+  for (const n of [...NOTES, EGJOO_INCONCLUSIVE, ABSENT_NOTE, SYMPTOM_NOTE, IEM_INCONCLUSIVE, FALLTHROUGH_NOTE, SUM_WARNING]) assert.ok(text.includes(`"${n}"`), n);
   assert.match(text, /\[Yadlapati R et al\. Neurogastroenterol Motil 2021 \(PMID 33373111\)\]\(https:\/\/pubmed\.ncbi\.nlm\.nih\.gov\/33373111\/\)/);
   assert.equal(chicago.references[0].url, "https://pubmed.ncbi.nlm.nih.gov/33373111/");
 });

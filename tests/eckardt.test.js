@@ -28,7 +28,7 @@ test("B8.10 Eckardt after treatment: 3 is not treatment failure, 4 is", () => {
   let o = run(2, 1, 0, 0, "after");
   assert.equal(o.result.score, 3);
   assert.equal(o.result.stage, "I");
-  assert.equal(o.interp.band, "No treatment failure (score 3 or less)");
+  assert.equal(o.interp.band, "Treatment success (score 3 or less)");
   o = run(2, 1, 1, 0, "after");
   assert.equal(o.result.score, 4);
   assert.equal(o.result.stage, "II");
@@ -38,7 +38,7 @@ test("B8.10 Eckardt after treatment: 3 is not treatment failure, 4 is", () => {
 test("Eckardt: table and bands are SPEC B10.2 text", () => {
   const text = section("B10.2");
   for (const row of eckardt.table.rows) assert.ok(text.includes(`| ${row.join(" | ")} |`), row[0]);
-  for (const b of ["Treatment failure (score >3)", "No treatment failure (score 3 or less)"]) assert.ok(text.includes(`"${b}"`));
+  for (const b of ["Treatment failure (score >3)", "Treatment success (score 3 or less)"]) assert.ok(text.includes(`"${b}"`));
   assert.equal(eckardt.references[0].url, "https://pubmed.ncbi.nlm.nih.gov/1451966/");
   assert.ok(text.includes("(PMID 1451966)](https://pubmed.ncbi.nlm.nih.gov/1451966/)"));
 });

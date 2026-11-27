@@ -2689,8 +2689,9 @@ Chicago inputs below use the default upper limits (supine 15, upright 12 mmHg) u
 | Chicago | IRP 30 supine, 25 upright; failed 100%; pressurization 40% | Achalasia type II |
 | Chicago | IRP 30 supine, 25 upright; failed 100%; pressurization 20% | Achalasia type II |
 | Chicago | IRP 30 supine, 25 upright; failed 100%; pressurization 19% | Achalasia type I |
-| Chicago | IRP 28 supine, 20 upright; failed 30%, weak 20%, fragmented 10%, premature 40% | Achalasia type III |
-| Chicago | IRP 28 supine, 20 upright; premature 30%; elevated intrabolus pressure 30% | EGJ outflow obstruction, inconclusive (normal peristalsis present, so not achalasia type III) |
+| Chicago | IRP 28 supine, 20 upright; normal 0%; failed 30%, weak 20%, fragmented 10%, premature 40% | Achalasia type III |
+| Chicago | IRP 28 supine, 20 upright; normal 10%; failed 50%, premature 40% | Distal esophageal spasm pattern, inconclusive (normal swallows present, so not achalasia type III; EGJOO criteria not met) |
+| Chicago | IRP 28 supine, 20 upright; normal 70%; premature 30%; elevated intrabolus pressure 30% | EGJ outflow obstruction, inconclusive (normal peristalsis present, so not achalasia type III) |
 | Chicago | IRP 22 supine, 18 upright; elevated intrabolus pressure 25%; symptoms; supportive test abnormal | EGJ outflow obstruction, clinically relevant |
 | Chicago | IRP 22 supine, 18 upright; elevated intrabolus pressure 25%; symptoms | EGJ outflow obstruction, inconclusive; action "Inconclusive: obtain timed barium esophagram or FLIP, exclude mechanical obstruction and opioid effect." |
 | Chicago | IRP 22 supine, 10 upright; elevated intrabolus pressure 25% | Normal esophageal motility, with the note that EGJ outflow obstruction criteria are not met |
@@ -2706,28 +2707,31 @@ Chicago inputs below use the default upper limits (supine 15, upright 12 mmHg) u
 | Chicago | IRP 10 supine, 8 upright; failed 20%, weak 50% (ineffective 70%) | Ineffective esophageal motility, inconclusive |
 | Chicago | IRP 10 supine, 8 upright; weak 50% (ineffective 50%) | Ineffective esophageal motility, inconclusive |
 | Chicago | IRP 10 supine, 8 upright; weak 40% (ineffective 40%) | Normal esophageal motility |
+| Chicago | IRP 10 supine, 8 upright; normal 60%, failed 30%, weak 20% (total 110%) | Ineffective esophageal motility, inconclusive, with the soft warning on the percentages |
 | Eckardt | Dysphagia 1, regurgitation 1, pain 0, weight loss 0; before treatment | 2, stage I |
 | Eckardt | 0, 1, 0, 0; before treatment | 1, stage 0 |
 | Eckardt | 2, 2, 0, 0; before treatment | 4, stage II |
 | Eckardt | 3, 2, 1, 0; before treatment | 6, stage II |
 | Eckardt | 3, 3, 1, 0; before treatment | 7, stage III |
 | Eckardt | 3, 3, 3, 3; before treatment | 12, stage III |
-| Eckardt | 2, 1, 0, 0; after treatment | 3, stage I; No treatment failure (score 3 or less) |
+| Eckardt | 2, 1, 0, 0; after treatment | 3, stage I; Treatment success (score 3 or less) |
 | Eckardt | 2, 1, 1, 0; after treatment | 4, stage II; Treatment failure (score >3) |
 | London | Everything normal (RAIR present, normal pressures, normal expulsion, no dyssynergia or poor propulsion, normal sensation) | No disorder of anorectal function |
 | London | RAIR absent, everything else normal | Rectoanal areflexia (major); band Major disorder |
 | London | Low resting and low squeeze | Combined anal hypotension and hypocontractility (major) |
-| London | Low resting, normal squeeze | Anal hypotension with normal contractility (minor); band Minor disorder |
-| London | Normal resting, low squeeze | Anal normotension with hypocontractility (minor) |
+| London | Low resting, normal squeeze | Anal hypotension with normal contractility (major); band Major disorder |
+| London | Normal resting, low squeeze | Anal normotension with hypocontractility (major) |
 | London | High resting, normal squeeze | Anal hypertension (minor) |
-| London | High resting, low squeeze | Anal hypertension (minor) and anal hypocontractility (minor) |
+| London | High resting, low squeeze | Anal hypertension (minor) with low squeeze pressure: not a named London pattern; report both findings. |
 | London | Abnormal expulsion, dyssynergia, poor propulsion | Abnormal expulsion with dyssynergia and poor propulsion (minor) |
 | London | Abnormal expulsion, dyssynergia only | Abnormal expulsion with dyssynergia (minor) |
 | London | Abnormal expulsion, poor propulsion only | Abnormal expulsion with poor propulsion (minor) |
 | London | Abnormal expulsion, normal pattern | Abnormal expulsion with a normal pushing pattern (inconclusive); band Inconclusive |
-| London | Normal expulsion, dyssynergia | Normal expulsion with an abnormal pushing pattern (inconclusive) |
+| London | Normal expulsion, dyssynergia | Normal expulsion with dyssynergia (inconclusive) |
+| London | Normal expulsion, poor propulsion | Normal expulsion with poor propulsion (inconclusive) |
+| London | Normal expulsion, dyssynergia and poor propulsion | Normal expulsion with poor propulsion and dyssynergia (inconclusive) |
 | London | First constant sensation and desire to defecate above upper limit | Rectal hyposensitivity (major) |
-| London | Maximum tolerated volume above upper limit only | Borderline rectal hyposensitivity (minor) |
+| London | Maximum tolerated volume above upper limit only | Borderline rectal hyposensitivity (inconclusive); band Inconclusive |
 | London | Maximum tolerated volume below lower limit | Rectal hypersensitivity (major) |
 | London | RAIR absent; high resting; abnormal expulsion with dyssynergia | Rectoanal areflexia (major), anal hypertension (minor), abnormal expulsion with dyssynergia (minor); band Major disorder |
 
@@ -2792,6 +2796,7 @@ Source: [Yadlapati R et al. Neurogastroenterol Motil 2021 (PMID 33373111)](https
 | Median IRP, upright | mmHg |
 | IRP upper limit of normal, supine | mmHg; default 15 (Medtronic), editable for other systems |
 | IRP upper limit of normal, upright | mmHg; default 12 (Medtronic), editable for other systems |
+| Normal (intact) swallows | % of swallows |
 | Failed swallows (DCI <100 mmHg·s·cm) | % of swallows |
 | Weak swallows (DCI 100–450 mmHg·s·cm) | % of swallows |
 | Fragmented swallows (break >5 cm, DCI >450 mmHg·s·cm) | % of swallows |
@@ -2802,7 +2807,7 @@ Source: [Yadlapati R et al. Neurogastroenterol Motil 2021 (PMID 33373111)](https
 | Obstructive symptoms (dysphagia and/or non-cardiac chest pain) | tick box |
 | Supportive test abnormal (timed barium esophagram or FLIP) | tick box |
 
-Definitions: IRP "above the upper limit" means greater than the upper limit of normal. Ineffective swallows = failed + weak + fragmented. No normal peristalsis = failed + weak + fragmented + premature + hypercontractile swallows add up to 100% or more.
+Definitions: IRP "above the upper limit" means greater than the upper limit of normal. Ineffective swallows = failed + weak + fragmented. No normal peristalsis = normal (intact) swallows 0%; it is never inferred from the other percentages. Soft warning (the result is still shown): if normal + failed + weak + fragmented is more than 100%, show the note "Check the swallow percentages: normal, failed, weak and fragmented add up to more than 100%."
 
 Rules, applied in this order; the first that applies gives the result.
 
@@ -2810,23 +2815,23 @@ Rules, applied in this order; the first that applies gives the result.
 | --- | --- | --- | --- |
 | 1 | Supine IRP above the upper limit; failed 100%; panesophageal pressurization 20% or more | Achalasia type II |  |
 | 2 | Supine IRP above the upper limit; failed 100%; panesophageal pressurization <20% | Achalasia type I |  |
-| 3 | Supine IRP above the upper limit; no normal peristalsis; premature 20% or more | Achalasia type III |  |
+| 3 | Supine IRP above the upper limit; normal (intact) swallows 0%; premature 20% or more | Achalasia type III |  |
 | 4 | Supine and upright IRP above the upper limit; elevated intrabolus pressure in 20% or more of supine swallows; obstructive symptoms and an abnormal supportive test | EGJ outflow obstruction, clinically relevant |  |
 | 5 | As rule 4, without obstructive symptoms or without an abnormal supportive test | EGJ outflow obstruction, inconclusive | "Inconclusive: obtain timed barium esophagram or FLIP, exclude mechanical obstruction and opioid effect." |
-| 6 | Failed 100% (IRP not above the upper limit) | Absent contractility | "If IRP is borderline or pressurization is present, consider achalasia type I with supportive testing." |
+| 6 | Failed 100% (IRP not above the upper limit) | Absent contractility | "If IRP is near the upper limit or there is pressurization, consider achalasia type I; confirm with timed barium esophagram or FLIP." |
 | 7 | Premature 20% or more, with obstructive symptoms | Distal esophageal spasm, clinically relevant |  |
 | 8 | Premature 20% or more, without obstructive symptoms | Distal esophageal spasm pattern, inconclusive | "Clinically relevant only with obstructive symptoms." |
 | 9 | Hypercontractile 20% or more, with obstructive symptoms | Hypercontractile esophagus, clinically relevant |  |
 | 10 | Hypercontractile 20% or more, without obstructive symptoms | Hypercontractile esophagus pattern, inconclusive | "Clinically relevant only with obstructive symptoms." |
-| 11 | Ineffective >70%, or failed 50% or more | Ineffective esophageal motility |  |
-| 12 | Ineffective 50–70% | Ineffective esophageal motility, inconclusive | "Inconclusive: use supportive testing (contractile reserve on multiple rapid swallows, barium)." |
+| 11 | Ineffective >70%, or failed 50% or more (failed exactly 50% is ineffective esophageal motility) | Ineffective esophageal motility |  |
+| 12 | Ineffective 50–70% (inclusive), failed <50% | Ineffective esophageal motility, inconclusive | "Inconclusive: use supportive testing (contractile reserve on multiple rapid swallows, barium)." |
 | 13 | None of the above | Normal esophageal motility |  |
 
-When the supine IRP is above the upper limit but rules 1 to 5 do not apply, rules 6 to 13 are applied and the result shows the note "Supine IRP above the upper limit, but the criteria for EGJ outflow obstruction (upright IRP and intrabolus pressure) are not met."
+When the supine IRP is above the upper limit but rules 1 to 5 do not apply, rules 6 to 13 are applied and the result shows the note "Supine IRP elevated but EGJOO criteria not met; if symptomatic, consider supportive testing (timed barium esophagram or FLIP)."
 
 Always shown: Note: "Requires the Chicago Classification v4.0 protocol (supine and upright swallows, provocative tests)." Note: "Exclude mechanical obstruction." Note: "Study off opioids when possible."
 
-Breakdown: supine and upright IRP against their upper limits, failed, ineffective, premature, hypercontractile, panesophageal pressurization, elevated intrabolus pressure, normal peristalsis present or absent, obstructive symptoms, supportive test.
+Breakdown: supine and upright IRP against their upper limits, failed, ineffective, premature, hypercontractile, normal (intact) swallows, panesophageal pressurization, elevated intrabolus pressure, obstructive symptoms, supportive test.
 
 ### B10.2 Eckardt score (id: eckardt)
 
@@ -2839,7 +2844,7 @@ Source: [Eckardt VF et al. Gastroenterology 1992 (PMID 1451966)](https://pubmed.
 | Retrosternal pain | None | Occasional | Daily | Every meal |
 | Weight loss | None | <5 kg | 5–10 kg | >10 kg |
 
-Total 0–12. Stage 0: 0–1; stage I: 2–3; stage II: 4–6; stage III: >6. A second input, "Timing", is before treatment or after treatment. Before treatment the band is the stage. After treatment: total >3, band "Treatment failure (score >3)"; total 3 or less, band "No treatment failure (score 3 or less)"; the stage is shown as well.
+Total 0–12. Stage 0: 0–1; stage I: 2–3; stage II: 4–6; stage III: >6. A second input, "Timing", is before treatment or after treatment. Before treatment the band is the stage. After treatment: total >3, band "Treatment failure (score >3)"; total 3 or less, band "Treatment success (score 3 or less)"; the stage is shown as well.
 
 ### B10.3 London classification of anorectal function (id: london)
 
@@ -2861,17 +2866,19 @@ Source: [Carrington EV et al. Neurogastroenterol Motil 2020 (PMID 31407463)](htt
 | --- | --- | --- |
 | 1 | RAIR absent: rectoanal areflexia | Major |
 | 2 | Low resting and low squeeze pressure: combined anal hypotension and hypocontractility | Major |
-| 2 | Low resting pressure, normal squeeze: anal hypotension with normal contractility | Minor |
-| 2 | Normal resting pressure, low squeeze: anal normotension with hypocontractility | Minor |
+| 2 | Low resting pressure, normal squeeze: anal hypotension with normal contractility | Major |
+| 2 | Normal resting pressure, low squeeze: anal normotension with hypocontractility | Major |
 | 2 | High resting pressure: anal hypertension | Minor |
-| 2 | High resting pressure and low squeeze: anal hypertension, and anal hypocontractility | Minor (each) |
+| 2 | High resting pressure and low squeeze: shown as "Anal hypertension (minor) with low squeeze pressure: not a named London pattern; report both findings." | Minor |
 | 3 | Abnormal expulsion with dyssynergia and poor propulsion: abnormal expulsion with dyssynergia and poor propulsion | Minor |
 | 3 | Abnormal expulsion with dyssynergia: abnormal expulsion with dyssynergia | Minor |
 | 3 | Abnormal expulsion with poor propulsion: abnormal expulsion with poor propulsion | Minor |
 | 3 | Abnormal expulsion with a normal pattern: abnormal expulsion with a normal pushing pattern | Inconclusive |
-| 3 | Normal expulsion with dyssynergia and/or poor propulsion: normal expulsion with an abnormal pushing pattern | Inconclusive |
+| 3 | Normal expulsion with dyssynergia: normal expulsion with dyssynergia | Inconclusive |
+| 3 | Normal expulsion with poor propulsion: normal expulsion with poor propulsion | Inconclusive |
+| 3 | Normal expulsion with dyssynergia and poor propulsion: normal expulsion with poor propulsion and dyssynergia | Inconclusive |
 | 4 | 2 or more thresholds above the upper limit: rectal hyposensitivity | Major |
-| 4 | 1 threshold above the upper limit: borderline rectal hyposensitivity | Minor |
+| 4 | 1 threshold above the upper limit: borderline rectal hyposensitivity | Inconclusive (to be verified; the app shows "inconclusive" only) |
 | 4 | 1 or more thresholds below the lower limit: rectal hypersensitivity | Major |
 
 Each finding is shown with its label in brackets, for example "Rectoanal areflexia (major)"; a part with no finding shows "Normal". Hyposensitivity and hypersensitivity findings are both shown if both apply. Band: "Major disorder" if any finding is major, otherwise "Minor disorder" if any is minor, otherwise "Inconclusive" if any is inconclusive, otherwise "No disorder of anorectal function".
