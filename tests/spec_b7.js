@@ -61,9 +61,10 @@ export function parseClassic(num) {
 // Dose names used in "Weight-based:" lines, from the B7.0 table.
 export function weightTable() {
   const { body } = section("B7.0");
-  const lines = body.split("\n").filter(l => l.startsWith("|"));
-  const start = lines.findIndex(l => cells(l)[0] === "Name");
-  return lines.slice(start + 2).map(l => {
+  const lines = body.split("\n");
+  const start = lines.findIndex(l => l.startsWith("|") && cells(l)[0] === "Name");
+  const end = lines.findIndex((l, i) => i > start && !l.startsWith("|"));
+  return lines.slice(start + 2, end < 0 ? undefined : end).map(l => {
     const [name, where, calculation, shownAs] = cells(l);
     const [page, row] = where.split(", ");
     return { name, page, row, calculation, shownAs };
@@ -156,4 +157,13 @@ export function pathVectors() {
   const shown = tables[0].slice(2).map(l => { const c = cells(l); return { page: c[0].replace(/\\_/g, "_"), ...answers(c[1]), shown: list(c[2]) }; });
   const marks = tables[1].slice(2).map(l => { const c = cells(l); return { page: c[0].replace(/\\_/g, "_"), ...answers(c[1]), on: list(c[2]), off: list(c[3]), pending: list(c[4]) }; });
   return { shown, marks };
+}
+
+// B8.9 rows: { page, decision, calc (SPEC name), inputs (text), suggested: [values] }.
+export function suggestionVectors() {
+  const { body } = section("B8.9");
+  return body.split("\n").filter(l => l.startsWith("|")).slice(2).map(l => {
+    const [page, decision, calc, inputs, suggested] = cells(l);
+    return { page: page.replace(/\\_/g, "_"), decision, calc, inputs, suggested: suggested === "none" ? [] : suggested.split("; ") };
+  });
 }

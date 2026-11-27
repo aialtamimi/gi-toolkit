@@ -201,10 +201,10 @@ export default {
   ],
   "references": [
     ref("Tenner S et al. ACG guideline: management of acute pancreatitis. Am J Gastroenterol 2024", "https://guidelinecentral.com/guideline/12896"),
-    ref("de-Madaria E et al. Aggressive or moderate fluid resuscitation in acute pancreatitis (WATERFALL). NEJM 2022"),
+    ref("de-Madaria E et al. Aggressive or moderate fluid resuscitation in acute pancreatitis (WATERFALL). NEJM 2022;387:989-1000. PMID 36103415", "https://pubmed.ncbi.nlm.nih.gov/36103415/"),
     ref("Banks PA et al. Classification of acute pancreatitis 2012: revision of the Atlanta classification. Gut 2013"),
-    ref("Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020"),
-    ref("da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015"),
-    ref("Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021")
+    ref("Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020. PMID 32682482", "https://pubmed.ncbi.nlm.nih.gov/32682482/"),
+    ref("da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015. PMID 26460661", "https://pubmed.ncbi.nlm.nih.gov/26460661/"),
+    ref("Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021. PMID 34614330", "https://pubmed.ncbi.nlm.nih.gov/34614330/")
   ]
 };

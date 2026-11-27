@@ -71,6 +71,10 @@ export default {
           "text": "repeat paracentesis."
         },
         {
+          "value": "PMN <250/mm³, culture negative or pending",
+          "text": "SBP unlikely."
+        },
+        {
           "value": "Runyon criteria or polymicrobial culture",
           "text": "suspect secondary peritonitis."
         }
@@ -97,6 +101,26 @@ export default {
     {
       "type": "step",
       "id": "S3",
+      "chip": "0–6 h",
+      "title": "SBP unlikely",
+      "when": [
+        [
+          "D1",
+          "PMN <250/mm³, culture negative or pending"
+        ]
+      ],
+      "items": [
+        "SBP unlikely: no SBP treatment.",
+        "Look for another cause of deterioration.",
+        "Act on the culture result when it returns."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": null
+    },
+    {
+      "type": "step",
+      "id": "S4",
       "chip": "Now",
       "title": "Suspected secondary peritonitis",
       "when": [
@@ -114,7 +138,7 @@ export default {
     },
     {
       "type": "step",
-      "id": "S4",
+      "id": "S5",
       "chip": "Within 6 h",
       "title": "Treat: antibiotics and albumin",
       "when": [
@@ -141,7 +165,7 @@ export default {
     },
     {
       "type": "step",
-      "id": "S5",
+      "id": "S6",
       "chip": "48 h",
       "title": "Check response",
       "when": [
@@ -163,7 +187,7 @@ export default {
     },
     {
       "type": "step",
-      "id": "S6",
+      "id": "S7",
       "chip": "Before discharge",
       "title": "Prevent recurrence",
       "when": [
@@ -187,7 +211,7 @@ export default {
     {
       "type": "section",
       "title": "Avoid",
-      "text": "large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI."
+      "text": "large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if systolic BP <90 mmHg, sodium <130 mmol/L or AKI."
     },
     {
       "type": "table",
@@ -224,6 +248,6 @@ export default {
     "meld_na"
   ],
   "references": [
-    ref("Sort P et al. Effect of intravenous albumin on renal impairment and mortality in patients with cirrhosis and spontaneous bacterial peritonitis. NEJM 1999")
+    ref("Sort P et al. Effect of intravenous albumin on renal impairment and mortality in patients with cirrhosis and spontaneous bacterial peritonitis. NEJM 1999. PMID 10432325", "https://pubmed.ncbi.nlm.nih.gov/10432325/")
   ]
 };

@@ -51,7 +51,7 @@ export default {
         "truelove_witts"
       ],
       "doses": [],
-      "why": "Venous thromboembolism risk is markedly higher during IBD flares."
+      "why": "Venous thromboembolism risk is markedly higher during IBD flares (Grainge, Lancet 2010)."
     },
     {
       "type": "decision",
@@ -114,7 +114,52 @@ export default {
         ]
       ],
       "items": [
-        "Continue IV corticosteroids; switch to oral prednisolone 40 mg once improving."
+        "Continue IV corticosteroids; switch to oral prednisolone 40 mg once daily once improving, then taper by 5 mg per week.",
+        "Deterioration at any time: urgent surgical review and reassess for rescue therapy."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": null
+    },
+    {
+      "type": "decision",
+      "id": "D2",
+      "chip": "Day 5–7",
+      "title": "Responding to rescue therapy?",
+      "when": [
+        [
+          "D1",
+          "Yes"
+        ]
+      ],
+      "items": [],
+      "calcs": [],
+      "doses": [],
+      "why": null,
+      "options": [
+        {
+          "value": "Yes",
+          "text": "continue rescue therapy and plan maintenance."
+        },
+        {
+          "value": "No",
+          "text": "colectomy."
+        }
+      ]
+    },
+    {
+      "type": "step",
+      "id": "A4",
+      "chip": "Day 5–7",
+      "title": "Continue rescue therapy",
+      "when": [
+        [
+          "D2",
+          "Yes"
+        ]
+      ],
+      "items": [
+        "Continue rescue therapy and plan maintenance."
       ],
       "calcs": [],
       "doses": [],
@@ -122,16 +167,21 @@ export default {
     },
     {
       "type": "step",
-      "id": "A4",
+      "id": "A5",
       "chip": "Day 5–7",
-      "title": "Colectomy if no response",
-      "when": [],
+      "title": "Colectomy",
+      "when": [
+        [
+          "D2",
+          "No"
+        ]
+      ],
       "items": [
         "No response to rescue within 5–7 days, or deterioration, toxic megacolon, perforation or massive bleeding: colectomy."
       ],
       "calcs": [],
       "doses": [],
-      "why": "Delayed colectomy increases complications and mortality."
+      "why": "Delayed colectomy increases complications and mortality (Randall, Br J Surg 2010)."
     },
     {
       "type": "section",
@@ -160,6 +210,10 @@ export default {
         [
           "Ciclosporin (rescue)",
           "2 mg/kg/day continuous IV infusion; monitor levels, blood pressure, renal function, magnesium"
+        ],
+        [
+          "Prednisolone (oral, once improving on IV corticosteroids)",
+          "40 mg orally once daily, then taper by 5 mg per week"
         ]
       ]
     }
@@ -173,7 +227,9 @@ export default {
   "references": [
     ref("Travis SP et al. Predicting outcome in severe ulcerative colitis. Gut 1996", "https://pubmed.ncbi.nlm.nih.gov/8984031/"),
     ref("Raine T et al. ECCO guidelines on therapeutics in ulcerative colitis. J Crohns Colitis 2022"),
-    ref("Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012"),
-    ref("Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016")
+    ref("Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012. PMID 23063316", "https://pubmed.ncbi.nlm.nih.gov/23063316/"),
+    ref("Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016. PMID 27595142", "https://pubmed.ncbi.nlm.nih.gov/27595142/"),
+    ref("Grainge MJ et al. Venous thromboembolism during active disease and remission in inflammatory bowel disease: a cohort study. Lancet 2010. PMID 20149425", "https://pubmed.ncbi.nlm.nih.gov/20149425/"),
+    ref("Randall J et al. Delayed surgery for acute severe colitis is associated with increased risk of postoperative complications. Br J Surg 2010. PMID 20101648", "https://pubmed.ncbi.nlm.nih.gov/20101648/")
   ]
 };

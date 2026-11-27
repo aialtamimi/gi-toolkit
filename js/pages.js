@@ -1,7 +1,7 @@
 // Renders classification reference cards (SPEC.md B6) and emergency pages (SPEC.md B7).
 import { h, renderCalculator, linkTo, copyText, appendAll, resultText, levelClass } from "./engine.js";
 import { findItem, hrefFor } from "./registry.js";
-import { stepStates, isShown, isStep, entryAnswers } from "./algorithm.js";
+import { stepStates, isShown, isStep, entryAnswers, suggestedAnswers } from "./algorithm.js";
 import { findDose, doseLine, parseWeight, DOSES, DOSE_ROUNDING } from "./doses.js";
 
 export const NO_SOURCE_TEXT = "No source is listed in SPEC.md for this page yet.";
@@ -134,6 +134,7 @@ export function renderAlgorithm(root, page, opts = {}) {
   const doseEls = [];
   const stepEls = {};
   const stepDefs = page.blocks.filter(isStep);
+  const outputs = {};   // latest result of each built-in calculator, for "Suggested" answers
 
   // ----- weight-based doses -----
   function doseItem(id) {
@@ -145,8 +146,10 @@ export function renderAlgorithm(root, page, opts = {}) {
   function updateDoses() {
     for (const { d, el } of doseEls) {
       const line = doseLine(d.id, weight);
-      el.replaceChildren(line || `${d.label}: enter weight (kg) at the top to calculate.`);
+      const text = line && d.tag ? line.slice(d.tag.length + 2) : line;
+      el.replaceChildren(...(line && d.tag ? [h("span", { class: "dose-tag" }, d.tag), " ", text] : [text || `${d.label}: enter weight (kg) at the top to calculate.`]));
       el.classList.toggle("dose-pending", !line);
+      el.classList.toggle("dose-target", !!d.tag);
     }
   }
   const pageDoseIds = [...new Set([...stepDefs.flatMap(s => s.doses), ...DOSES.filter(d => d.page === page.id).map(d => d.id)])];
@@ -172,6 +175,8 @@ export function renderAlgorithm(root, page, opts = {}) {
     const status = h("span", { class: "embed-status muted" }, "Not calculated");
     const body = h("div", { class: "embed-body" });
     const onResult = out => {
+      outputs[id] = out;
+      if (stepEls.ready) update();
       if (!out) { status.className = "embed-status muted"; status.replaceChildren("Not calculated"); return; }
       status.className = `embed-status badge ${levelClass(out.interp.level)}`;
       const value = resultText(out.result);
@@ -207,7 +212,8 @@ export function renderAlgorithm(root, page, opts = {}) {
     const isDecision = s.type === "decision";
     const answerBtns = isDecision ? s.options.map(o => {
       const b = h("button", { type: "button", class: "answer-btn", "aria-pressed": "false", onclick: () => choose(s, o.value) },
-        h("span", { class: "answer-value" }, o.value), h("span", { class: "answer-text" }, o.text.replace(/\.$/, "")));
+        h("span", { class: "answer-value" }, o.value), h("span", { class: "answer-text" }, o.text.replace(/\.$/, "")),
+        h("span", { class: "suggested-label", hidden: true }, "Suggested"));
       b.dataset.value = o.value;
       return b;
     }) : [];
@@ -237,7 +243,13 @@ export function renderAlgorithm(root, page, opts = {}) {
       card.classList.toggle("off-path", state === "off");
       card.classList.toggle("pending-path", state === "pending");
       if (tag) tag.querySelector(".path-state").textContent = state === "off" ? " · off the chosen path" : state === "pending" ? " · not yet decided" : "";
-      for (const b of answerBtns) b.setAttribute("aria-pressed", String(answers[s.id] === b.dataset.value));
+      const suggested = s.type === "decision" ? suggestedAnswers(page, s.id, outputs) : [];
+      for (const b of answerBtns) {
+        b.setAttribute("aria-pressed", String(answers[s.id] === b.dataset.value));
+        const sug = suggested.includes(b.dataset.value);
+        b.classList.toggle("suggested", sug);
+        b.querySelector(".suggested-label").hidden = !sug;
+      }
       if (hint) hint.hidden = answers[s.id] !== undefined || full;
     }
     fullBtn.setAttribute("aria-pressed", String(full));
@@ -280,6 +292,7 @@ export function renderAlgorithm(root, page, opts = {}) {
     out.push(classicBlock(b));
   }
   appendAll(root, ...out, ...pageEnd(page));
+  stepEls.ready = true;
   updateDoses();
   update();
 

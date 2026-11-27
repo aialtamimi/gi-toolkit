@@ -33,7 +33,7 @@ export default {
     {
       "type": "section",
       "title": "Recognize",
-      "text": "hematemesis, coffee-ground vomit, melena; shock index (HR/SBP) >1 = high risk. Variceal bleeding: upper GI bleeding in known or suspected cirrhosis or portal hypertension."
+      "text": "hematemesis, coffee-ground vomit, melena; shock index (heart rate/systolic BP) >1 = high risk. Variceal bleeding: upper GI bleeding in known or suspected cirrhosis or portal hypertension."
     },
     {
       "type": "step",
@@ -102,7 +102,7 @@ export default {
       "doses": [
         "terlipressin"
       ],
-      "why": "Antibiotic prophylaxis reduces infection, rebleeding and death. Over-transfusion raises portal pressure."
+      "why": "Antibiotic prophylaxis reduces infection, rebleeding and death (Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VII). Over-transfusion raises portal pressure."
     },
     {
       "type": "step",
@@ -283,18 +283,20 @@ export default {
           "No"
         ]
       ],
-      "items": [],
+      "items": [
+        "Forrest (B2.5): high-risk stigmata are Ia, Ib, IIa and IIb; low-risk stigmata are IIc and III."
+      ],
       "calcs": [],
       "doses": [],
       "why": null,
       "options": [
         {
           "value": "High-risk stigmata",
-          "text": "high-dose IV proton pump inhibitor."
+          "text": "Forrest Ia, Ib, IIa, IIb; high-dose IV proton pump inhibitor."
         },
         {
           "value": "Low-risk stigmata",
-          "text": "oral proton pump inhibitor."
+          "text": "Forrest IIc, III; oral proton pump inhibitor."
         }
       ]
     },
@@ -426,7 +428,7 @@ export default {
         ],
         [
           "Terlipressin",
-          "2 mg IV every 4 hours for the first 48 hours, then 1 mg every 4 hours (adjust by weight and local protocol). By weight, every 4 hours for 48 hours: <50 kg 1 mg; 50–70 kg 1.5 mg; >70 kg 2 mg; then 1 mg every 4 hours"
+          "IV every 4 hours for 48 hours (<50 kg: 1 mg; 50–70 kg: 1.5 mg; >70 kg: 2 mg), then 1 mg every 4 hours"
         ],
         [
           "Octreotide",
@@ -457,9 +459,10 @@ export default {
     ref("Gralnek IM et al. ESGE NVUGIH guideline update. Endoscopy 2021"),
     ref("de Franchis R et al. Baveno VII: renewing consensus in portal hypertension. J Hepatol 2022"),
     ref("Gralnek IM et al. ESGE variceal guideline 2022", "https://pubmed.ncbi.nlm.nih.gov/36174643"),
-    ref("HALT-IT Trial Collaborators. Effects of a high-dose 24-h infusion of tranexamic acid on death and thromboembolic events in patients with acute gastrointestinal bleeding (HALT-IT). Lancet 2020"),
-    ref("Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020"),
-    ref("Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013"),
-    ref("Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010")
+    ref("HALT-IT Trial Collaborators. Effects of a high-dose 24-h infusion of tranexamic acid on death and thromboembolic events in patients with acute gastrointestinal bleeding (HALT-IT). Lancet 2020. PMID 32563378", "https://pubmed.ncbi.nlm.nih.gov/32563378/"),
+    ref("Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020. PMID 32242355", "https://pubmed.ncbi.nlm.nih.gov/32242355/"),
+    ref("Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013. PMID 23281973", "https://pubmed.ncbi.nlm.nih.gov/23281973/"),
+    ref("Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010. PMID 20573925", "https://pubmed.ncbi.nlm.nih.gov/20573925/"),
+    ref("Chavez-Tapia NC et al. Antibiotic prophylaxis for cirrhotic patients with upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010. PMID 20824832", "https://pubmed.ncbi.nlm.nih.gov/20824832/")
   ]
 };

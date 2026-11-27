@@ -1016,9 +1016,9 @@ Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-varic
 | Part | What it shows |
 | --- | --- |
 | Red flags | Red-bordered box at the top: when to call ICU or surgery. It can hold a built-in calculator |
-| Weight | Weight (kg) field, on pages with weight-based doses. Weight-based doses calculate automatically. The weight is kept in memory for that page only and is never stored (Build Rule 4). Accepted entry 20–350 kg (input check only) |
+| Weight | Weight (kg) field, on pages with weight-based doses. Weight-based doses calculate automatically. The weight is kept in memory for that page only and is never stored (Build Rule 4). Accepted entry 20–350 kg; any other entry shows "Enter weight between 20 and 350 kg" and no dose |
 | Recognize | The Recognize line |
-| Algorithm | Step cards in time order, each with a timeline chip (for example 0 h, Day 3). Decision steps have answer buttons (Yes and No, or named answers); choosing one shows and highlights the steps of that path and hides the steps of the other answers. Steps without "shown when" are always shown; a step whose decision is hidden is hidden too. "Show full algorithm" shows every step and marks the steps that are off the chosen path. Answers are kept in memory for that page only |
+| Algorithm | Step cards in time order, each with a timeline chip (for example 0 h, Day 3). Decision steps have answer buttons (Yes and No, or named answers); choosing one shows and highlights the steps of that path and hides the steps of the other answers. Steps without "shown when" are always shown; a step whose decision is hidden is hidden too. "Show full algorithm" shows every step and marks the steps that are off the chosen path. Answers are kept in memory for that page only. Answers are always chosen by the clinician: a built-in calculator never chooses one, but its result can mark an answer "Suggested" (outline and label; table below) |
 | Built-in calculators | Inside the step, collapsed, rendered by the calculator engine (inputs with units, result, band, action, breakdown, reference); the collapsed bar shows the current result and band |
 | Weight-based lines | Inside the step: the calculated dose for the entered weight (table below) |
 | Why | One short line in small italic under key steps, naming the trial or guideline |
@@ -1026,7 +1026,7 @@ Five pages are interactive bedside algorithms: B7.1 upper GI bleeding (non-varic
 
 Format of the algorithm in B7.1, B7.5, B7.9, B7.12 and B7.13: each step is "**id · timeline chip · title**", followed by "(shown when D = answer)" if it belongs to a decision path (several answers are separated by semicolons). Indented lines are the step text, except "Calculators:" (built-in calculators), "Weight-based:" (calculated doses, by name from the table below), "Why:" (the why line) and "Answer X: text" (decision answer button X with its short description). Steps with answers are decision steps.
 
-Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of 20% albumin is calculated from the unrounded grams (1 g = 5 mL). B7.13 has no weight-based dose, so it has no weight field. Test vectors: B8.7.
+Weight-based doses. W = weight in kg as entered. Calculated values are shown to 1 decimal place (round half up), without a trailing ".0"; mL of albumin is calculated from the unrounded grams (20% albumin: 1 g = 5 mL; 25% albumin: 1 g = 4 mL). The urine output line is a target, not a dose, and is labelled so. B7.13 has no weight-based dose, so it has no weight field. Test vectors: B8.7.
 
 | Name | Page and doses row | Calculation | Shown as |
 | --- | --- | --- | --- |
@@ -1034,11 +1034,21 @@ Weight-based doses. W = weight in kg as entered. Calculated values are shown to 
 | infliximab 5 mg/kg | B7.5, Infliximab (rescue) | 5 × W mg | Infliximab 5 mg/kg: [5 × W] mg IV |
 | infliximab 10 mg/kg | B7.5, Infliximab (rescue) | 10 × W mg | Infliximab 10 mg/kg: [10 × W] mg IV |
 | ciclosporin | B7.5, Ciclosporin (rescue) | 2 × W mg/day | Ciclosporin 2 mg/kg/day: [2 × W] mg/day continuous IV infusion |
-| albumin day 1 | B7.9, Albumin 20–25% | 1.5 × W g; mL = g × 5 | Albumin day 1, 1.5 g/kg: [1.5 × W] g = [7.5 × W] mL of 20% albumin |
-| albumin day 3 | B7.9, Albumin 20–25% | 1 × W g; mL = g × 5 | Albumin day 3, 1 g/kg: [W] g = [5 × W] mL of 20% albumin |
+| albumin day 1 | B7.9, Albumin 20–25% | 1.5 × W g; 20%: mL = g × 5; 25%: mL = g × 4 | Albumin day 1, 1.5 g/kg: [1.5 × W] g = [7.5 × W] mL of 20% albumin or [6 × W] mL of 25% albumin |
+| albumin day 3 | B7.9, Albumin 20–25% | 1 × W g; 20%: mL = g × 5; 25%: mL = g × 4 | Albumin day 3, 1 g/kg: [W] g = [5 × W] mL of 20% albumin or [4 × W] mL of 25% albumin |
 | lactated Ringer's infusion | B7.12, Lactated Ringer's | 1.5 × W mL/h | Lactated Ringer's 1.5 mL/kg/h: [1.5 × W] mL/h |
 | lactated Ringer's bolus | B7.12, Lactated Ringer's | 10 × W mL | Lactated Ringer's bolus if hypovolemic, 10 mL/kg: [10 × W] mL |
-| urine output target | B7.12, none (step P2) | 0.5 × W mL/h | Urine output target >0.5 mL/kg/h: >[0.5 × W] mL/h |
+| urine output target | B7.12, none (step P2) | 0.5 × W mL/h | Target, not a dose. Urine output >0.5 mL/kg/h: >[0.5 × W] mL/h |
+
+Suggested answers. When a built-in calculator on the page has a result, the matching answer button gets a "Suggested" outline and label. The clinician must still tap it; no other answer is suggested. Test vectors: B8.9.
+
+| Page | Decision | Calculator | Suggested answer |
+| --- | --- | --- | --- |
+| B7.1 | D2 Pre-emptive TIPS criteria met? | Child-Pugh | Yes when the score is 10–13; none otherwise (the other criteria are not in the calculator) |
+| B7.1 | D3 High-risk or low-risk stigmata? | Forrest | High-risk stigmata for Ia, Ib, IIa, IIb; Low-risk stigmata for IIc, III |
+| B7.5 | D1 Day-3 criteria positive? | Day-3 Oxford | Yes when Oxford or Lindgren is positive; No when both are negative |
+| B7.9 | D1 Ascitic fluid result? | Ascitic fluid analysis | PMN 250/mm³ or more when PMN ≥250/mm³; Runyon criteria or polymicrobial culture when 2 or more Runyon criteria are met (both can be suggested); none otherwise (culture is not in the calculator) |
+| B7.13 | D1 TG18 severity grade? | TG18 cholangitis | The grade shown (Grade I, II or III) when the diagnosis is suspected or definite; none when criteria are not met |
 
 ### B7.1 Upper GI bleeding: non-variceal and variceal (id: em\_ugib)
 
@@ -1047,7 +1057,7 @@ Bedside algorithm (B7.0). Weight field: yes.
 Entry point variceal: D1 = Yes (opened by the index entry and search result "Variceal bleeding", B7.2).
 
 - **Red flags:** shock (systolic BP <90 mmHg or shock index >1), ongoing hematemesis, altered consciousness, Hb drop >2 g/dL: ICU or HDU, protect the airway.
-- **Recognize:** hematemesis, coffee-ground vomit, melena; shock index (HR/SBP) >1 = high risk. Variceal bleeding: upper GI bleeding in known or suspected cirrhosis or portal hypertension.
+- **Recognize:** hematemesis, coffee-ground vomit, melena; shock index (heart rate/systolic BP) >1 = high risk. Variceal bleeding: upper GI bleeding in known or suspected cirrhosis or portal hypertension.
 
 Algorithm:
 
@@ -1072,7 +1082,7 @@ Algorithm:
   - Do not give fresh frozen plasma or platelets to correct INR alone.
   - Erythromycin before endoscopy.
   - Weight-based: terlipressin.
-  - Why: Antibiotic prophylaxis reduces infection, rebleeding and death. Over-transfusion raises portal pressure.
+  - Why: Antibiotic prophylaxis reduces infection, rebleeding and death (Chavez-Tapia, Cochrane Database Syst Rev 2010; Baveno VII). Over-transfusion raises portal pressure.
 - **V2 · Within 12 h · Variceal: endoscopy** (shown when D1 = Yes)
   - Endoscopy within 12 hours.
   - Esophageal varices: band ligation.
@@ -1106,8 +1116,9 @@ Algorithm:
   - Hemostatic powder as temporary therapy for active bleeding.
   - Calculators: Forrest.
 - **D3 · After endoscopy · High-risk or low-risk stigmata?** (shown when D1 = No)
-  - Answer High-risk stigmata: high-dose IV proton pump inhibitor.
-  - Answer Low-risk stigmata: oral proton pump inhibitor.
+  - Forrest (B2.5): high-risk stigmata are Ia, Ib, IIa and IIb; low-risk stigmata are IIc and III.
+  - Answer High-risk stigmata: Forrest Ia, Ib, IIa, IIb; high-dose IV proton pump inhibitor.
+  - Answer Low-risk stigmata: Forrest IIc, III; oral proton pump inhibitor.
 - **N3 · 72 h, then to day 14 · High-risk stigmata** (shown when D3 = High-risk stigmata)
   - Pantoprazole or esomeprazole 80 mg IV bolus, then 8 mg/h for 72 hours (or 40 mg IV twice daily), then twice daily orally to day 14, then once daily.
 - **N4 · After endoscopy · Low-risk stigmata** (shown when D3 = Low-risk stigmata)
@@ -1134,7 +1145,7 @@ Algorithm:
 | --- | --- |
 | Erythromycin | 250 mg IV over 5–30 minutes, given 30–120 minutes before endoscopy |
 | Pantoprazole or esomeprazole, high dose | 80 mg IV bolus, then 8 mg/h infusion for 72 hours; or 40 mg IV twice daily as intermittent high dose |
-| Terlipressin | 2 mg IV every 4 hours for the first 48 hours, then 1 mg every 4 hours (adjust by weight and local protocol). By weight, every 4 hours for 48 hours: <50 kg 1 mg; 50–70 kg 1.5 mg; >70 kg 2 mg; then 1 mg every 4 hours |
+| Terlipressin | IV every 4 hours for 48 hours (<50 kg: 1 mg; 50–70 kg: 1.5 mg; >70 kg: 2 mg), then 1 mg every 4 hours |
 | Octreotide | 50 µg IV bolus, then 50 µg/h infusion for 2–5 days; bolus can be repeated in the first hour |
 | Somatostatin | 250 µg IV bolus, then 250–500 µg/h infusion |
 | Ceftriaxone | 1 g IV every 24 hours, maximum 7 days |
@@ -1190,7 +1201,7 @@ Algorithm:
   - Screen now for TB (IGRA, chest X-ray), hepatitis B, hepatitis C and HIV in case rescue therapy is needed.
   - Inform the colorectal surgeon; involve the surgeon early.
   - Calculators: Truelove and Witts.
-  - Why: Venous thromboembolism risk is markedly higher during IBD flares.
+  - Why: Venous thromboembolism risk is markedly higher during IBD flares (Grainge, Lancet 2010).
 - **D1 · Day 3 · Day-3 criteria positive (Oxford or Lindgren)?**
   - Oxford criteria (B5.2) on day 3 of IV corticosteroids.
   - Calculators: Day-3 Oxford.
@@ -1203,10 +1214,16 @@ Algorithm:
   - Weight-based: infliximab 5 mg/kg, infliximab 10 mg/kg, ciclosporin.
   - Why: Infliximab and ciclosporin have similar efficacy as rescue (CYSIF, Lancet 2012; CONSTRUCT, Lancet Gastroenterol Hepatol 2016).
 - **A3 · Day 3 onward · Continue IV corticosteroids** (shown when D1 = No)
-  - Continue IV corticosteroids; switch to oral prednisolone 40 mg once improving.
-- **A4 · Day 5–7 · Colectomy if no response**
+  - Continue IV corticosteroids; switch to oral prednisolone 40 mg once daily once improving, then taper by 5 mg per week.
+  - Deterioration at any time: urgent surgical review and reassess for rescue therapy.
+- **D2 · Day 5–7 · Responding to rescue therapy?** (shown when D1 = Yes)
+  - Answer Yes: continue rescue therapy and plan maintenance.
+  - Answer No: colectomy.
+- **A4 · Day 5–7 · Continue rescue therapy** (shown when D2 = Yes)
+  - Continue rescue therapy and plan maintenance.
+- **A5 · Day 5–7 · Colectomy** (shown when D2 = No)
   - No response to rescue within 5–7 days, or deterioration, toxic megacolon, perforation or massive bleeding: colectomy.
-  - Why: Delayed colectomy increases complications and mortality.
+  - Why: Delayed colectomy increases complications and mortality (Randall, Br J Surg 2010).
 - **Avoid:** non-steroidal anti-inflammatory drugs (NSAIDs), opioids, anticholinergics and antidiarrheals; delaying surgery in non-responders.
 
 | Drug | Dose |
@@ -1215,6 +1232,7 @@ Algorithm:
 | Hydrocortisone (alternative) | 100 mg IV every 6 hours |
 | Infliximab (rescue) | 5 mg/kg IV; accelerated or higher dosing (e.g., 10 mg/kg) may be considered in severe inflammation or low albumin |
 | Ciclosporin (rescue) | 2 mg/kg/day continuous IV infusion; monitor levels, blood pressure, renal function, magnesium |
+| Prednisolone (oral, once improving on IV corticosteroids) | 40 mg orally once daily, then taper by 5 mg per week |
 
 Related: Truelove and Witts, Day-3 Oxford, UCEIS, Mayo.
 
@@ -1267,23 +1285,28 @@ Algorithm:
   - Answer PMN 250/mm³ or more: treat as SBP.
   - Answer PMN <250/mm³, positive culture, symptomatic: treat.
   - Answer PMN <250/mm³, positive culture, asymptomatic: repeat paracentesis.
+  - Answer PMN <250/mm³, culture negative or pending: SBP unlikely.
   - Answer Runyon criteria or polymicrobial culture: suspect secondary peritonitis.
 - **S2 · 0–6 h · Repeat paracentesis** (shown when D1 = PMN <250/mm³, positive culture, asymptomatic)
   - PMN <250/mm³ with positive culture and no symptoms: repeat paracentesis.
-- **S3 · Now · Suspected secondary peritonitis** (shown when D1 = Runyon criteria or polymicrobial culture)
+- **S3 · 0–6 h · SBP unlikely** (shown when D1 = PMN <250/mm³, culture negative or pending)
+  - SBP unlikely: no SBP treatment.
+  - Look for another cause of deterioration.
+  - Act on the culture result when it returns.
+- **S4 · Now · Suspected secondary peritonitis** (shown when D1 = Runyon criteria or polymicrobial culture)
   - Runyon criteria or polymicrobial culture: suspect secondary peritonitis, urgent CT and surgical review.
-- **S4 · Within 6 h · Treat: antibiotics and albumin** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
+- **S5 · Within 6 h · Treat: antibiotics and albumin** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
   - Empirical antibiotics: community-acquired, cefotaxime 2 g IV every 8 hours (or ceftriaxone) for 5–7 days; nosocomial, recent antibiotics or sepsis, piperacillin-tazobactam or a carbapenem per local resistance.
   - IV albumin 1.5 g/kg within 6 hours of diagnosis (day 1) and 1 g/kg on day 3.
   - Stop diuretics and nephrotoxins; review non-selective beta-blockers if systolic BP <90 mmHg, sodium <130 mmol/L or AKI.
   - Weight-based: albumin day 1, albumin day 3.
   - Why: Albumin reduced renal failure and in-hospital death (Sort, NEJM 1999).
-- **S5 · 48 h · Check response** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
+- **S6 · 48 h · Check response** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
   - Repeat paracentesis if no clinical improvement; PMN fall <25% = treatment failure, broaden antibiotics and look for secondary peritonitis.
-- **S6 · Before discharge · Prevent recurrence** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
+- **S7 · Before discharge · Prevent recurrence** (shown when D1 = PMN 250/mm³ or more; D1 = PMN <250/mm³, positive culture, symptomatic)
   - Long-term secondary prophylaxis after the first episode: norfloxacin 400 mg daily, ciprofloxacin 500 mg daily, or trimethoprim-sulfamethoxazole.
   - Refer for liver transplant assessment.
-- **Avoid:** large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if SBP <90 mmHg, sodium <130 mmol/L or AKI.
+- **Avoid:** large-volume paracentesis during active SBP without albumin; non-steroidal anti-inflammatory drugs (NSAIDs); consider holding non-selective beta-blockers if systolic BP <90 mmHg, sodium <130 mmol/L or AKI.
 
 | Drug | Dose |
 | --- | --- |
@@ -1622,7 +1645,7 @@ Unit rule (B1.5) test vectors for B2 and B3:
 
 ### B8.7 Weight-based doses (B7.0)
 
-Weight entries outside 20–350 kg, or blank, show no calculated dose.
+Weight entries outside 20–350 kg, or blank, show no calculated dose; entries outside 20–350 kg show "Enter weight between 20 and 350 kg".
 
 | Name | Weight (kg) | Shown |
 | --- | --- | --- |
@@ -1634,16 +1657,17 @@ Weight entries outside 20–350 kg, or blank, show no calculated dose.
 | infliximab 5 mg/kg | 80 | Infliximab 5 mg/kg: 400 mg IV |
 | infliximab 10 mg/kg | 72.5 | Infliximab 10 mg/kg: 725 mg IV |
 | ciclosporin | 72.5 | Ciclosporin 2 mg/kg/day: 145 mg/day continuous IV infusion |
-| albumin day 1 | 72.5 | Albumin day 1, 1.5 g/kg: 108.8 g = 543.8 mL of 20% albumin |
-| albumin day 1 | 60 | Albumin day 1, 1.5 g/kg: 90 g = 450 mL of 20% albumin |
-| albumin day 3 | 72.5 | Albumin day 3, 1 g/kg: 72.5 g = 362.5 mL of 20% albumin |
+| albumin day 1 | 72.5 | Albumin day 1, 1.5 g/kg: 108.8 g = 543.8 mL of 20% albumin or 435 mL of 25% albumin |
+| albumin day 1 | 60 | Albumin day 1, 1.5 g/kg: 90 g = 450 mL of 20% albumin or 360 mL of 25% albumin |
+| albumin day 3 | 72.5 | Albumin day 3, 1 g/kg: 72.5 g = 362.5 mL of 20% albumin or 290 mL of 25% albumin |
 | lactated Ringer's infusion | 72.5 | Lactated Ringer's 1.5 mL/kg/h: 108.8 mL/h |
 | lactated Ringer's bolus | 72.5 | Lactated Ringer's bolus if hypovolemic, 10 mL/kg: 725 mL |
-| urine output target | 72.5 | Urine output target >0.5 mL/kg/h: >36.3 mL/h |
+| urine output target | 72.5 | Target, not a dose. Urine output >0.5 mL/kg/h: >36.3 mL/h |
 | infliximab 5 mg/kg | 19.9 | not calculated |
 | infliximab 5 mg/kg | 350.1 | not calculated |
-| albumin day 1 | 20 | Albumin day 1, 1.5 g/kg: 30 g = 150 mL of 20% albumin |
-| albumin day 3 | 350 | Albumin day 3, 1 g/kg: 350 g = 1750 mL of 20% albumin |
+| albumin day 1 | 20 | Albumin day 1, 1.5 g/kg: 30 g = 150 mL of 20% albumin or 120 mL of 25% albumin |
+| albumin day 3 | 350 | Albumin day 3, 1 g/kg: 350 g = 1750 mL of 20% albumin or 1400 mL of 25% albumin |
+| albumin day 1 | 73.3 | Albumin day 1, 1.5 g/kg: 110 g = 549.8 mL of 20% albumin or 439.8 mL of 25% albumin |
 
 ### B8.8 Bedside algorithm paths (B7.0)
 
@@ -1660,14 +1684,18 @@ Steps shown in the normal view for each set of answers (several answers separate
 | em\_ugib | D1 = No; D3 = Low-risk stigmata | U1, D1, N1, N2, D3, N4, N5, N6 |
 | em\_ugib | D1 = No; D2 = Yes | U1, D1, N1, N2, D3, N5, N6 |
 | em\_ugib | entry point variceal | U1, D1, V1, V2, D2, V5, V6 |
-| em\_asuc | none | A1, D1, A4 |
-| em\_asuc | D1 = Yes | A1, D1, A2, A4 |
-| em\_asuc | D1 = No | A1, D1, A3, A4 |
+| em\_asuc | none | A1, D1 |
+| em\_asuc | D1 = Yes | A1, D1, A2, D2 |
+| em\_asuc | D1 = Yes; D2 = Yes | A1, D1, A2, D2, A4 |
+| em\_asuc | D1 = Yes; D2 = No | A1, D1, A2, D2, A5 |
+| em\_asuc | D1 = No | A1, D1, A3 |
+| em\_asuc | D1 = No; D2 = No | A1, D1, A3 |
 | em\_sbp | none | S1, D1 |
-| em\_sbp | D1 = PMN 250/mm³ or more | S1, D1, S4, S5, S6 |
-| em\_sbp | D1 = PMN <250/mm³, positive culture, symptomatic | S1, D1, S4, S5, S6 |
+| em\_sbp | D1 = PMN 250/mm³ or more | S1, D1, S5, S6, S7 |
+| em\_sbp | D1 = PMN <250/mm³, positive culture, symptomatic | S1, D1, S5, S6, S7 |
 | em\_sbp | D1 = PMN <250/mm³, positive culture, asymptomatic | S1, D1, S2 |
-| em\_sbp | D1 = Runyon criteria or polymicrobial culture | S1, D1, S3 |
+| em\_sbp | D1 = PMN <250/mm³, culture negative or pending | S1, D1, S3 |
+| em\_sbp | D1 = Runyon criteria or polymicrobial culture | S1, D1, S4 |
 | em\_pancreatitis | none | P1, P2, D1, P5, P6 |
 | em\_pancreatitis | D1 = Yes | P1, P2, D1, P3, P5, P6 |
 | em\_pancreatitis | D1 = No | P1, P2, D1, P4, P5, P6 |
@@ -1684,7 +1712,27 @@ Steps shown in the normal view for each set of answers (several answers separate
 | --- | --- | --- | --- | --- |
 | em\_ugib | D1 = Yes | V1, V2, D2, V5, V6 | N1, N2, D3, N3, N4, N5, N6 | V3, V4 |
 | em\_ugib | none | none | none | V1, V2, D2, V3, V4, V5, V6, N1, N2, D3, N3, N4, N5, N6 |
-| em\_sbp | D1 = Runyon criteria or polymicrobial culture | S3 | S2, S4, S5, S6 | none |
+| em\_sbp | D1 = Runyon criteria or polymicrobial culture | S4 | S2, S3, S5, S6, S7 | none |
+| em\_asuc | D1 = No | A3 | A2, D2, A4, A5 | none |
+
+### B8.9 Suggested answers (B7.0)
+
+Calculator inputs are in the calculator's own units. "none" = no answer suggested.
+
+| Page | Decision | Calculator | Inputs | Suggested |
+| --- | --- | --- | --- | --- |
+| em\_ugib | D2 | Child-Pugh | bilirubin 3.5 mg/dL, albumin 2.5 g/dL, INR 2.0, ascites moderate to severe, encephalopathy none | Yes |
+| em\_ugib | D2 | Child-Pugh | bilirubin 1.5 mg/dL, albumin 3.6 g/dL, INR 1.2, ascites none, encephalopathy none | none |
+| em\_ugib | D3 | Forrest | IIb | High-risk stigmata |
+| em\_ugib | D3 | Forrest | IIc | Low-risk stigmata |
+| em\_asuc | D1 | Day-3 Oxford | stools 9, CRP 10 mg/L | Yes |
+| em\_asuc | D1 | Day-3 Oxford | stools 4, CRP 20 mg/L | No |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 500/mm³, neutrophils 60% | PMN 250/mm³ or more |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 300/mm³, neutrophils 50% | none |
+| em\_sbp | D1 | Ascitic fluid analysis | WBC 1000/mm³, neutrophils 90%, total protein 1.5 g/dL, glucose 40 mg/dL | PMN 250/mm³ or more; Runyon criteria or polymicrobial culture |
+| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 50 | Grade I |
+| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 15 ×10⁹/L, bilirubin 3 mg/dL, biliary dilatation, age 80 | Grade II |
+| em\_cholangitis | D1 | TG18 cholangitis | temperature 38.5 °C, WBC 8 ×10⁹/L, bilirubin 0.8 mg/dL, age 80, hypotension needing vasopressors | none |
 
 ## Part B9: References
 
@@ -1724,6 +1772,6 @@ Primary guidelines and papers behind Part B. Claude Code shows the relevant one 
 | Hepatic encephalopathy (HELP trial) | Rahimi RS et al. Lactulose vs polyethylene glycol 3350-electrolyte solution for treatment of overt hepatic encephalopathy: the HELP randomized clinical trial. JAMA Intern Med 2014;174(11):1727-33. doi:10.1001/jamainternmed.2014.4746 (PMID 25243839) |
 | Los Angeles classification | Lundell LR et al. Endoscopic assessment of oesophagitis: clinical and functional correlates and further validation of the Los Angeles classification. Gut 1999;45(2):172-80. doi:10.1136/gut.45.2.172 (PMID 10403727) |
 | Prague C and M criteria | Sharma P et al. The development and validation of an endoscopic grading system for Barrett's esophagus: the Prague C & M criteria. Gastroenterology 2006;131(5):1392-9. doi:10.1053/j.gastro.2006.08.032 (PMID 17101315) |
-| Bedside algorithm trials (B7.0) | Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013; Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010; Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012; Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016; Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020; da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015; Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021 |
+| Bedside algorithm trials and sources (B7.0) | Villanueva C et al. Transfusion strategies for acute upper gastrointestinal bleeding. NEJM 2013 (PMID 23281973); Garcia-Pagan JC et al. Early use of TIPS in patients with cirrhosis and variceal bleeding. NEJM 2010 (PMID 20573925); Lau JYW et al. Timing of endoscopy for acute upper gastrointestinal bleeding. NEJM 2020 (PMID 32242355); HALT-IT Trial Collaborators. Lancet 2020 (PMID 32563378); Chavez-Tapia NC et al. Antibiotic prophylaxis for cirrhotic patients with upper gastrointestinal bleeding. Cochrane Database Syst Rev 2010 (PMID 20824832); Laharie D et al. Ciclosporin versus infliximab in patients with severe ulcerative colitis refractory to intravenous steroids (CYSIF). Lancet 2012 (PMID 23063316); Williams JG et al. Infliximab versus ciclosporin for steroid-resistant acute severe ulcerative colitis (CONSTRUCT). Lancet Gastroenterol Hepatol 2016 (PMID 27595142); Grainge MJ et al. Venous thromboembolism during active disease and remission in inflammatory bowel disease: a cohort study. Lancet 2010 (PMID 20149425); Randall J et al. Delayed surgery for acute severe colitis is associated with increased risk of postoperative complications. Br J Surg 2010 (PMID 20101648); Sort P et al. NEJM 1999 (PMID 10432325); de-Madaria E et al. Aggressive or moderate fluid resuscitation in acute pancreatitis (WATERFALL). NEJM 2022;387:989-1000 (PMID 36103415); Schepers NJ et al. Urgent ERCP with sphincterotomy versus conservative treatment in predicted severe acute gallstone pancreatitis (APEC). Lancet 2020 (PMID 32682482); da Costa DW et al. Same-admission versus interval cholecystectomy for mild gallstone pancreatitis (PONCHO). Lancet 2015 (PMID 26460661); Boxhoorn L et al. Immediate versus postponed intervention for infected necrotizing pancreatitis (POINTER). NEJM 2021 (PMID 34614330). Each links to https://pubmed.ncbi.nlm.nih.gov/PMID/ |
 | Hosting | [GitHub Pages availability](https://GitHub.com/apps/github-pages) |
 | Claude Code on the web | [Claude Code docs: cloud sessions](https://code.claude.com/docs/en/web-quickstart.md) |

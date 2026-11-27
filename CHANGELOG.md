@@ -15,6 +15,15 @@ Five emergency pages are now interactive bedside algorithms (SPEC.md B7.0): uppe
 - Tests: every algorithm block is compared with SPEC.md; every B8.7 dose and B8.8 path is a unit test; the weight is checked never to reach storage.
 - Engine: a calculator can be embedded in a page (one column, no sticky result bar, result reported to the page).
 - New files `js/algorithm.js` and `js/doses.js` (precached).
+- Clinical owner decisions on the review (SPEC.md B7.0, B7.1, B7.5, B7.9, B8.7, B8.8, new B8.9 and B9 updated in the same change):
+  - Upper GI bleeding: high-risk stigmata = Forrest Ia, Ib, IIa, IIb; low-risk = IIc, III, shown on the two buttons. Terlipressin has one doses row by weight (the old "2 mg, adjust by weight" row is removed). Shock index reads "heart rate/systolic BP".
+  - Weight outside 20–350 kg shows "Enter weight between 20 and 350 kg". Cholangitis keeps no weight field.
+  - Acute severe UC: either Oxford or Lindgren positive means rescue therapy. Day 5–7 is now a decision on the rescue path only ("Responding to rescue therapy?": Yes, continue rescue therapy and plan maintenance; No, colectomy). The corticosteroid path adds "Deterioration at any time: urgent surgical review and reassess for rescue therapy." Oral prednisolone 40 mg once daily, then taper by 5 mg per week, added to the step and the doses table.
+  - SBP: new answer "PMN <250/mm³, culture negative or pending": SBP unlikely, no SBP treatment, look for another cause of deterioration, act on the culture result. "Systolic BP" is written in full on all five pages; SBP only means spontaneous bacterial peritonitis.
+  - Albumin shown in grams and in mL of 20% (1 g = 5 mL) and 25% (1 g = 4 mL) albumin. The urine output line is labelled "Target, not a dose".
+  - Sources added to why lines: Chavez-Tapia, Cochrane 2010 and Baveno VII (antibiotics in variceal bleeding); Grainge, Lancet 2010 (venous thromboembolism in IBD flares); Randall, Br J Surg 2010 (delayed colectomy).
+  - Built-in calculators never choose an answer; their result outlines the matching answer as "Suggested" (Child-Pugh 10–13, Forrest class, day-3 Oxford or Lindgren, PMN ≥250/mm³ or 2 Runyon criteria, TG18 grade). Rules in SPEC.md B7.0, vectors in B8.9.
+  - Exact PubMed links (with PMID in the citation) replace search links for Villanueva, Garcia-Pagan, Lau, HALT-IT, CYSIF, CONSTRUCT, Sort, WATERFALL, APEC, PONCHO, POINTER, Chavez-Tapia, Grainge and Randall, wherever they are cited (including the GBS calculator).
 
 ## 0.5.0 (2026-11-26)
 
