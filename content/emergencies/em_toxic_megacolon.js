@@ -52,7 +52,7 @@ export default {
       "title": "Treat the cause",
       "when": [],
       "items": [
-        "IBD: IV hydrocortisone 100 mg every 6 hours or methylprednisolone 60 mg/day (B7.5).",
+        "IBD: IV hydrocortisone 100 mg every 6 hours or methylprednisolone 60 mg IV every 24 hours (B7.5).",
         "C. difficile: vancomycin 500 mg orally or by nasogastric tube 4 times daily plus metronidazole 500 mg IV every 8 hours; add rectal vancomycin if ileus (IDSA/SHEA 2017).",
         "Correct potassium and magnesium."
       ],
@@ -138,11 +138,11 @@ export default {
         ],
         [
           "Methylprednisolone (IBD, alternative)",
-          "60 mg IV per day"
+          "60 mg IV every 24 hours"
         ],
         [
           "Vancomycin (C. difficile)",
-          "500 mg orally or by nasogastric tube 4 times daily; add rectal vancomycin if ileus"
+          "500 mg orally or by nasogastric tube 4 times daily (never IV for C. difficile); add rectal vancomycin if ileus"
         ],
         [
           "Metronidazole (C. difficile)",

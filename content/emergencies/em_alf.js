@@ -82,7 +82,7 @@ export default {
       ],
       "items": [
         "N-acetylcysteine 21-hour regimen; continue until INR improves.",
-        "Many protocols cap the dosing weight at 100–110 kg; follow local protocol."
+        "Dosing weight capped at 100 kg (US label); follow local protocol."
       ],
       "calcs": [],
       "doses": [
@@ -113,7 +113,7 @@ export default {
         "Wilson disease: urgent transplant listing, plasma exchange as bridge. Clue to Wilson disease: ALP to bilirubin ratio <4 and AST to ALT ratio >2.2.",
         "Budd-Chiari: anticoagulation, consider TIPS.",
         "Autoimmune: discuss corticosteroids with the transplant center.",
-        "Many protocols cap the N-acetylcysteine dosing weight at 100–110 kg; follow local protocol."
+        "Dosing weight capped at 100 kg (US label); follow local protocol."
       ],
       "calcs": [],
       "doses": [
@@ -130,7 +130,8 @@ export default {
       "title": "King's College criteria met?",
       "when": [],
       "items": [
-        "King's College criteria (B3.18)."
+        "King's College criteria (B3.18).",
+        "Not met may mean incomplete data; reassess at least daily."
       ],
       "calcs": [
         "kings"

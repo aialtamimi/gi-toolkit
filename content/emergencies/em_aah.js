@@ -59,7 +59,8 @@ export default {
       "title": "Severe (MELD >20 or Maddrey 32 or more) and no contraindication (uncontrolled infection, active GI bleeding)?",
       "when": [],
       "items": [
-        "MELD >51: steroids unlikely to help."
+        "MELD >51: steroids unlikely to help.",
+        "Use MELD or MELD-Na (B3.2), not MELD 3.0. Thresholds (>20; 21–51) come from studies using MELD."
       ],
       "calcs": [],
       "doses": [],

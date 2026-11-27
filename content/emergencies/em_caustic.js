@@ -130,6 +130,10 @@ export default {
         {
           "value": "3b",
           "text": "ICU, surgical evaluation."
+        },
+        {
+          "value": "Grade 4 (perforation)",
+          "text": "emergency surgery."
         }
       ]
     },
@@ -182,7 +186,8 @@ export default {
         ]
       ],
       "items": [
-        "ICU, surgical evaluation."
+        "ICU, surgical evaluation.",
+        "Monitor for perforation, enteral nutrition, stricture surveillance from about 3 weeks if no surgery."
       ],
       "calcs": [],
       "doses": [],
@@ -191,6 +196,24 @@ export default {
     {
       "type": "step",
       "id": "K7",
+      "chip": "Now",
+      "title": "Grade 4 (perforation)",
+      "when": [
+        [
+          "D2",
+          "Grade 4 (perforation)"
+        ]
+      ],
+      "items": [
+        "Grade 4 (perforation): emergency surgery."
+      ],
+      "calcs": [],
+      "doses": [],
+      "why": []
+    },
+    {
+      "type": "step",
+      "id": "K8",
       "chip": "Weeks to years",
       "title": "Then",
       "when": [],
@@ -212,6 +235,7 @@ export default {
     "zargar"
   ],
   "references": [
-    ref("Zargar SA et al. The role of fiberoptic endoscopy in the management of corrosive ingestion and modified endoscopic classification of burns. Gastrointest Endosc 1991. PMID 2032601", "https://pubmed.ncbi.nlm.nih.gov/2032601/")
+    ref("Zargar SA et al. The role of fiberoptic endoscopy in the management of corrosive ingestion and modified endoscopic classification of burns. Gastrointest Endosc 1991. PMID 2032601", "https://pubmed.ncbi.nlm.nih.gov/2032601/"),
+    ref("Hirota WK et al. ASGE guideline: the role of endoscopy in the surveillance of premalignant conditions of the upper GI tract. Gastrointest Endosc 2006. PMID 16564854", "https://pubmed.ncbi.nlm.nih.gov/16564854/")
   ]
 };

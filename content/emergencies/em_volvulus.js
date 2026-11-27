@@ -160,6 +160,6 @@ export default {
   ],
   "related": [],
   "references": [
-    ref("Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007. PMID 31791596", "https://doi.org/10.1016/j.gie.2019.09.007")
+    ref("Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007. PMID 31791596", "https://pubmed.ncbi.nlm.nih.gov/31791596/")
   ]
 };

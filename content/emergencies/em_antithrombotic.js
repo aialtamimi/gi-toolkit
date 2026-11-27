@@ -31,6 +31,11 @@ export default {
       "text": "[ACG-CAG 2022](https://gastroenterology.acponline.org/archives/2022/03/25/1.htm) and ACG 2023 lower GI bleeding guideline."
     },
     {
+      "type": "redflags",
+      "title": "Red flags",
+      "text": "hemodynamic instability despite resuscitation, ongoing transfusion need, or bleeding into a critical site (intracranial, airway): treat as life-threatening; ICU; reversal with hematology input."
+    },
+    {
       "type": "decision",
       "id": "D1",
       "chip": "0 h",
@@ -83,8 +88,9 @@ export default {
       "items": [
         "Life-threatening bleeding: reversal with hematology input.",
         "Warfarin: 4-factor prothrombin complex concentrate (PCC) by INR (INR 2 to <4: 25 units/kg, max 2500 units; INR 4–6: 35 units/kg, max 3500 units; INR >6: 50 units/kg, max 5000 units) plus vitamin K 10 mg slow IV (product label).",
+        "INR below 2: no label dose; discuss with hematology.",
         "Dabigatran: idarucizumab 5 g IV.",
-        "Apixaban or rivaroxaban: andexanet alfa where available, or 4-factor PCC."
+        "Apixaban or rivaroxaban: andexanet alfa where available, or 4-factor PCC; dose per product label or local protocol, with hematology."
       ],
       "calcs": [],
       "doses": [
@@ -156,7 +162,7 @@ export default {
       "rows": [
         [
           "4-factor prothrombin complex concentrate (warfarin, life-threatening bleeding)",
-          "By INR: INR 2 to <4: 25 units/kg, max 2500 units; INR 4–6: 35 units/kg, max 3500 units; INR >6: 50 units/kg, max 5000 units (product label)"
+          "By INR: INR 2 to <4: 25 units/kg, max 2500 units; INR 4–6: 35 units/kg, max 3500 units; INR >6: 50 units/kg, max 5000 units (product label). INR below 2: no label dose; discuss with hematology"
         ],
         [
           "Vitamin K (warfarin, life-threatening bleeding)",
@@ -165,6 +171,10 @@ export default {
         [
           "Idarucizumab (dabigatran, life-threatening bleeding)",
           "5 g IV"
+        ],
+        [
+          "Andexanet alfa or 4-factor prothrombin complex concentrate (apixaban or rivaroxaban, life-threatening bleeding)",
+          "Dose per product label or local protocol, with hematology"
         ]
       ]
     }

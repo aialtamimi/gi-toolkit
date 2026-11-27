@@ -128,6 +128,6 @@ export default {
   ],
   "related": [],
   "references": [
-    ref("Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191. PMID 32781470", "https://doi.org/10.1055/a-1222-3191")
+    ref("Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191. PMID 32781470", "https://pubmed.ncbi.nlm.nih.gov/32781470/")
   ]
 };

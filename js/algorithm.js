@@ -84,6 +84,7 @@ export const SUGGESTIONS = [
       if (["0", "1", "2a"].includes(g)) return { answers: ["0–2a"] };
       if (["2b", "3a"].includes(g)) return { answers: ["2b–3a"] };
       if (g === "3b") return { answers: ["3b"] };
+      if (g === "4") return { answers: ["Grade 4 (perforation)"] };
       return { answers: [] };
     } }
 ];

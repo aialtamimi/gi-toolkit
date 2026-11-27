@@ -29,7 +29,7 @@ export default {
     {
       "type": "redflags",
       "title": "Red flags",
-      "text": "cannot swallow saliva, drooling, airway compromise, perforation signs (fever, crepitus, chest pain, peritonitis), battery in the esophagus."
+      "text": "cannot swallow saliva, drooling, airway compromise, perforation signs (fever, crepitus, chest pain, peritonitis), battery in the esophagus: emergent endoscopy (within 2 h, at most 6 h). Airway compromise: secure the airway first (ICU or anesthesia). Perforation signs: CT and surgical review."
     },
     {
       "type": "step",

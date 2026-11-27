@@ -79,8 +79,7 @@ for (const spec of ALGORITHMS) {
     assert.ok(ranks.every(r => r >= 0), `unexpected block: ${page.blocks.map(kind).join(", ")}`);
     assert.deepEqual(ranks, [...ranks].sort((a, b) => a - b), `out of order: ${page.blocks.map(kind).join(", ")}`);
     assert.ok(ranks.includes(rank("step")), "no steps");
-    // Every page has red flags, except the anticoagulants page, which has none in SPEC.md (listed as an ambiguity).
-    if (page.id !== "em_antithrombotic") assert.ok(ranks.includes(rank("redflags")), "no red flags box");
+    assert.ok(ranks.includes(rank("redflags")), "no red flags box");
   });
 
   test(`${spec.id}: decisions, answers and "shown when" references are consistent`, () => {

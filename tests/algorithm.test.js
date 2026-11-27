@@ -597,7 +597,7 @@ test("weight field on exactly the pages with a weight-based dose", () => {
   for (const p of EMERGENCIES) assert.equal(p.weight, DOSES.some(d => d.page === p.id), p.id);
 });
 
-test("prothrombin complex concentrate never exceeds its cap; N-acetylcysteine has no cap but shows the local-protocol note", () => {
+test("prothrombin complex concentrate never exceeds its cap", () => {
   for (const w of [20, 60, 99.9, 100, 100.1, 142.9, 143, 350]) {
     for (const [id, perKg, max] of [["pcc_inr2", 25, 2500], ["pcc_inr4", 35, 3500], ["pcc_inr6", 50, 5000]]) {
       const units = Number(DOSES.find(d => d.id === id).value(w).split(" ")[0]);
@@ -605,9 +605,6 @@ test("prothrombin complex concentrate never exceeds its cap; N-acetylcysteine ha
       assert.equal(/\(maximum\)$/.test(doseLine(id, w)), perKg * w > max, `${id} ${w} kg maximum label`);
     }
   }
-  assert.equal(doseLine("nac_150", 150), "N-acetylcysteine 150 mg/kg over 1 hour: 22500 mg");
-  const f2 = steps(page("em_alf")).find(s => s.id === "F2");
-  assert.ok(f2.items.includes("Many protocols cap the dosing weight at 100–110 kg; follow local protocol."));
 });
 
 test("no page uses SBP for blood pressure, or an abbreviated drug name (polyethylene glycol 3350, prothrombin complex concentrate)", () => {
@@ -624,4 +621,85 @@ test("Zargar is built into the caustic page as its B6 table card, unchanged", ()
   assert.equal(z.inputs, undefined);
   assert.equal(z.table.rows.length, 7);
   assert.deepEqual(steps(page("em_caustic")).find(s => s.id === "D2").calcs, ["zargar"]);
+});
+
+// ---------- clinical owner decisions on PR 11 ----------
+
+test("anticoagulants: red flags box, INR below 2 line, and doses for DOAC reversal per label or local protocol (decisions 1–3)", () => {
+  const p = page("em_antithrombotic");
+  assert.equal(p.blocks.find(b => b.type === "redflags").text,
+    "hemodynamic instability despite resuscitation, ongoing transfusion need, or bleeding into a critical site (intracranial, airway): treat as life-threatening; ICU; reversal with hematology input.");
+  const t2 = steps(p).find(s => s.id === "T2");
+  assert.ok(t2.items.includes("INR below 2: no label dose; discuss with hematology."));
+  assert.ok(t2.items.includes("Apixaban or rivaroxaban: andexanet alfa where available, or 4-factor PCC; dose per product label or local protocol, with hematology."));
+  const doses = p.blocks.find(b => b.type === "table" && b.columns[1] === "Dose").rows;
+  assert.deepEqual(doses.map(r => r[0]), [
+    "4-factor prothrombin complex concentrate (warfarin, life-threatening bleeding)",
+    "Vitamin K (warfarin, life-threatening bleeding)",
+    "Idarucizumab (dabigatran, life-threatening bleeding)",
+    "Andexanet alfa or 4-factor prothrombin complex concentrate (apixaban or rivaroxaban, life-threatening bleeding)"]);
+  assert.ok(doses[0][1].endsWith("INR below 2: no label dose; discuss with hematology"));
+  assert.equal(doses[3][1], "Dose per product label or local protocol, with hematology");
+  // No DOAC dose is calculated.
+  assert.deepEqual(DOSES.filter(d => d.page === "em_antithrombotic").map(d => d.id), ["pcc_inr2", "pcc_inr4", "pcc_inr6"]);
+});
+
+test("N-acetylcysteine: dosing weight capped at 100 kg; 150 kg gives 15,000, 5,000 and 10,000 mg (decision 4)", () => {
+  assert.equal(doseLine("nac_150", 150), "N-acetylcysteine 150 mg/kg over 1 hour: 15000 mg (dosing weight capped at 100 kg)");
+  assert.equal(doseLine("nac_50", 150), "N-acetylcysteine 50 mg/kg over 4 hours: 5000 mg (dosing weight capped at 100 kg)");
+  assert.equal(doseLine("nac_100", 150), "N-acetylcysteine 100 mg/kg over 16 hours: 10000 mg (dosing weight capped at 100 kg)");
+  assert.equal(doseLine("nac_150", 100), "N-acetylcysteine 150 mg/kg over 1 hour: 15000 mg");
+  assert.equal(doseLine("nac_150", 100.1), "N-acetylcysteine 150 mg/kg over 1 hour: 15000 mg (dosing weight capped at 100 kg)");
+  assert.equal(doseLine("nac_150", 99.9), "N-acetylcysteine 150 mg/kg over 1 hour: 14985 mg");
+  for (const sid of ["F2", "F3"]) {
+    const s = steps(page("em_alf")).find(x => x.id === sid);
+    assert.ok(s.items.includes("Dosing weight capped at 100 kg (US label); follow local protocol."), sid);
+    assert.ok(!s.items.some(i => /100–110 kg/.test(i)), sid);
+  }
+});
+
+test("King's College: Yes-only suggestion, with the incomplete-data line (decision 5)", () => {
+  const d2 = steps(page("em_alf")).find(s => s.id === "D2");
+  assert.ok(d2.items.includes("Not met may mean incomplete data; reassess at least daily."));
+  assert.deepEqual(suggestedAnswers(page("em_alf"), "D2", { kings: { result: { met: false } } }), []);
+  assert.deepEqual(suggestedAnswers(page("em_alf"), "D2", { kings: { result: { met: true } } }), ["Yes"]);
+});
+
+test("caustic: grade 3b care, and a grade 4 (perforation) answer suggested by Zargar grade 4 (decision 6)", () => {
+  const p = page("em_caustic");
+  const d2 = steps(p).find(s => s.id === "D2");
+  assert.deepEqual(d2.options.map(o => o.value), ["0–2a", "2b–3a", "3b", "Grade 4 (perforation)"]);
+  assert.deepEqual(steps(p).find(s => s.id === "K6").items,
+    ["ICU, surgical evaluation.", "Monitor for perforation, enteral nutrition, stricture surveillance from about 3 weeks if no surgery."]);
+  assert.deepEqual(steps(p).find(s => s.id === "K7").items, ["Grade 4 (perforation): emergency surgery."]);
+  const row = findItem("zargar").table.rows.find(r => r[0] === "4");
+  assert.deepEqual(suggestedAnswers(p, "D2", { zargar: { result: { row } } }), ["Grade 4 (perforation)"]);
+});
+
+test("caustic cites Hirota, ASGE 2006, for esophageal cancer surveillance (decision 7)", () => {
+  const r = page("em_caustic").references.find(r => r.citation.startsWith("Hirota WK"));
+  assert.ok(r && r.citation.endsWith("PMID 16564854"));
+  assert.equal(r.url, "https://pubmed.ncbi.nlm.nih.gov/16564854/");
+  assert.ok(SPEC_B9().includes("(PMID 16564854)](https://pubmed.ncbi.nlm.nih.gov/16564854/)"));
+});
+
+test("toxic megacolon doses: methylprednisolone 60 mg IV every 24 hours; vancomycin never IV for C. difficile (decision 9)", () => {
+  const p = page("em_toxic_megacolon");
+  const rows = Object.fromEntries(p.blocks.find(b => b.type === "table" && b.columns[1] === "Dose").rows);
+  assert.equal(rows["Methylprednisolone (IBD, alternative)"], "60 mg IV every 24 hours");
+  assert.equal(rows["Vancomycin (C. difficile)"], "500 mg orally or by nasogastric tube 4 times daily (never IV for C. difficile); add rectal vancomycin if ileus");
+  assert.equal(rows["Metronidazole (C. difficile)"], "500 mg IV every 8 hours");
+  assert.ok(steps(p).find(s => s.id === "M2").items[0].includes("methylprednisolone 60 mg IV every 24 hours"));
+});
+
+test("alcohol-associated hepatitis uses MELD or MELD-Na, not MELD 3.0 (decision 10)", () => {
+  const p = page("em_aah");
+  assert.ok(steps(p).find(s => s.id === "D1").items.includes("Use MELD or MELD-Na (B3.2), not MELD 3.0. Thresholds (>20; 21–51) come from studies using MELD."));
+  assert.ok(steps(p).find(s => s.id === "H1").calcs.includes("meld_na"));
+  assert.ok(!p.blocks.some(b => (b.calcs || []).includes("meld3")));
+});
+
+test("foreign body red flags give the destination (decision 11)", () => {
+  assert.ok(page("em_foreign_body").blocks.find(b => b.type === "redflags").text.endsWith(
+    "battery in the esophagus: emergent endoscopy (within 2 h, at most 6 h). Airway compromise: secure the airway first (ICU or anesthesia). Perforation signs: CT and surgical review."));
 });

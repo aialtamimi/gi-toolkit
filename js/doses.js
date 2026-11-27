@@ -6,6 +6,7 @@ export const WEIGHT_MIN = 20;
 export const WEIGHT_MAX = 350;
 export const DOSE_ROUNDING = "Calculated values are shown to 1 decimal place (round half up), without a trailing \".0\"; mL of albumin is calculated from the unrounded grams (20% albumin: 1 g = 5 mL; 25% albumin: 1 g = 4 mL).";
 export const WEIGHT_RANGE_MESSAGE = "Enter weight between 20 and 350 kg";
+export const NAC_MAX_DOSING_WEIGHT = 100;
 
 // 1 decimal place, round half up, no trailing ".0".
 export function amount(x) {
@@ -53,7 +54,9 @@ export const DOSES = [
     value: w => (perKg * w > max ? `${max} units IV (maximum)` : `${amount(perKg * w)} units IV`) })),
   ...[[150, "over 1 hour"], [50, "over 4 hours"], [100, "over 16 hours"]].map(([perKg, over]) => ({
     id: `nac_${perKg}`, name: `N-acetylcysteine ${perKg} mg/kg`, page: "em_alf", row: "N-acetylcysteine, 21-hour IV regimen",
-    label: `N-acetylcysteine ${perKg} mg/kg ${over}`, value: w => `${amount(perKg * w)} mg` })),
+    label: `N-acetylcysteine ${perKg} mg/kg ${over}`,
+    // Dosing weight capped at 100 kg (US label; clinical owner decision).
+    value: w => `${amount(perKg * Math.min(w, NAC_MAX_DOSING_WEIGHT))} mg${w > NAC_MAX_DOSING_WEIGHT ? " (dosing weight capped at 100 kg)" : ""}` })),
   ...[["1", 1], ["1.5", 1.5]].map(([k, perKg]) => ({
     id: `albumin_challenge_${k.replace(".", "_")}`, name: `albumin challenge ${k} g/kg`, page: "em_hrs",
     row: "Albumin 20–25%, fluid challenge if volume status is unclear",

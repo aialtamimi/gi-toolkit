@@ -188,7 +188,7 @@ export default {
   ],
   "related": [],
   "references": [
-    ref("Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007. PMID 31791596", "https://doi.org/10.1016/j.gie.2019.09.007"),
+    ref("Naveed M et al. ASGE guideline on the role of endoscopy in the management of acute colonic pseudo-obstruction and colonic volvulus. Gastrointest Endosc 2020;91(2):228-235. doi:10.1016/j.gie.2019.09.007. PMID 31791596", "https://pubmed.ncbi.nlm.nih.gov/31791596/"),
     ref("Ponec RJ et al. Neostigmine for the treatment of acute colonic pseudo-obstruction. NEJM 1999. PMID 10403850", "https://pubmed.ncbi.nlm.nih.gov/10403850/"),
     ref("Sgouros SN et al. Effect of polyethylene glycol electrolyte balanced solution on patients with acute colonic pseudo obstruction after resolution of colonic dilation: a prospective, randomised, placebo controlled trial. Gut 2006. PMID 16306137", "https://pubmed.ncbi.nlm.nih.gov/16306137/")
   ]
