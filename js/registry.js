@@ -21,6 +21,7 @@ import aih_simplified from "./calculators/liver/aih_simplified.js";
 import leipzig from "./calculators/liver/leipzig.js";
 import west_haven from "./calculators/liver/west_haven.js";
 import aclf from "./calculators/liver/aclf.js";
+import clif_c_aclf from "./calculators/liver/clif_c_aclf.js";
 import kings from "./calculators/liver/kings.js";
 import baveno7 from "./calculators/liver/baveno7.js";
 import fibroscan from "./calculators/liver/fibroscan.js";
@@ -57,6 +58,7 @@ import em_antithrombotic from "../content/emergencies/em_antithrombotic.js";
 import em_asuc from "../content/emergencies/em_asuc.js";
 import em_toxic_megacolon from "../content/emergencies/em_toxic_megacolon.js";
 import em_alf from "../content/emergencies/em_alf.js";
+import em_aclf from "../content/emergencies/em_aclf.js";
 import em_aah from "../content/emergencies/em_aah.js";
 import em_sbp from "../content/emergencies/em_sbp.js";
 import em_hrs from "../content/emergencies/em_hrs.js";
@@ -82,7 +84,7 @@ export const CATEGORIES = [
 export const CALCULATORS = [
   gbs, aims65, rockall, oakland, forrest,
   child_pugh, meld_na, meld3, maddrey, lille, gahs, abic, fib4, apri, nfs, albi,
-  ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, kings, baveno7, fibroscan,
+  ascites, r_factor, aih_simplified, leipzig, west_haven, aclf, clif_c_aclf, kings, baveno7, fibroscan,
   bisap, ranson, glasgow_imrie, sirs, marshall, atlanta, mctsi, tg18_cholangitis, asge_cbd,
   truelove_witts, asuc_day3, mayo_uc, uceis, hbi, cdai, ses_cd, rutgeerts, montreal, jalan
 ];
@@ -92,7 +94,7 @@ export const CARDS = [bbps, la_grade, prague, paris, nice, zargar, bristol, lyon
 // Variceal bleeding (B7.2) is part of the upper GI bleeding page (B7.1): its search words open that page
 // at the variceal pathway (page.entryWords), and old em_variceal links redirect there (REDIRECTS).
 export const EMERGENCIES = [
-  em_ugib, em_lgib, em_antithrombotic, em_asuc, em_toxic_megacolon, em_alf, em_aah, em_sbp, em_hrs, em_he, em_pancreatitis, em_cholangitis, em_foreign_body, em_caustic, em_acpo, em_volvulus, em_perforation
+  em_ugib, em_lgib, em_antithrombotic, em_asuc, em_toxic_megacolon, em_alf, em_aclf, em_aah, em_sbp, em_hrs, em_he, em_pancreatitis, em_cholangitis, em_foreign_body, em_caustic, em_acpo, em_volvulus, em_perforation
 ];
 
 // Emergency page names and order from SPEC.md B7.19, used for the home index and for
@@ -100,7 +102,7 @@ export const EMERGENCIES = [
 export const EMERGENCY_INDEX = [
   ["em_ugib", "Upper GI bleeding"], ["em_lgib", "Lower GI bleeding"],
   ["em_antithrombotic", "Anticoagulants in GI bleeding"], ["em_asuc", "Acute severe UC"], ["em_toxic_megacolon", "Toxic megacolon"],
-  ["em_alf", "Acute liver failure"], ["em_aah", "Alcohol-associated hepatitis"], ["em_sbp", "SBP"], ["em_hrs", "HRS-AKI"],
+  ["em_alf", "Acute liver failure"], ["em_aclf", "Acute-on-chronic liver failure (ACLF)"], ["em_aah", "Alcohol-associated hepatitis"], ["em_sbp", "SBP"], ["em_hrs", "HRS-AKI"],
   ["em_he", "Hepatic encephalopathy"], ["em_pancreatitis", "Acute pancreatitis"], ["em_cholangitis", "Cholangitis"],
   ["em_foreign_body", "Foreign body"], ["em_caustic", "Caustic ingestion"], ["em_acpo", "Ogilvie syndrome"],
   ["em_volvulus", "Volvulus"], ["em_perforation", "Perforation"]

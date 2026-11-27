@@ -77,6 +77,10 @@ export const SUGGESTIONS = [
     rule: ({ result }) => ({ answers: [result.score >= 0.45 ? "Yes" : "No"] }) },
   { page: "em_he", decision: "D1", calc: "west_haven",
     rule: ({ result }) => ({ answers: [["3", "4"].includes(result.row.grade) ? "Yes" : "No"] }) },
+  // Clinical owner decision: suggest Yes when the unrounded CLIF-C ACLF is above 70 or there are 4 or more organ
+  // failures (EASL-CLIF definitions); the clinician still judges the days of support and the transplant option.
+  { page: "em_aclf", decision: "D2", calc: "clif_c_aclf",
+    rule: ({ result }) => ({ answers: (isFinite(result.raw) && result.raw > 70) || result.failures >= 4 ? ["Yes"] : [] }) },
   // Zargar is a B6 table card: its "result" is the tapped row, [grade, finding].
   { page: "em_caustic", decision: "D2", calc: "zargar",
     rule: ({ result }) => {

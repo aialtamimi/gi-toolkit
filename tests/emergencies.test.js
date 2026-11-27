@@ -8,26 +8,27 @@ import { SPEC_REFS, tokenize } from "../js/pages.js";
 import { DOSES } from "../js/doses.js";
 import { SPEC, CALC_NAMES, isAlgorithm, parseClassic, parseAlgorithm } from "./spec_b7.js";
 
-const NUMS = Array.from({ length: 18 }, (_, i) => `B7.${i + 1}`).filter(n => n !== "B7.2");
+const NUMS = [...Array.from({ length: 18 }, (_, i) => `B7.${i + 1}`).filter(n => n !== "B7.2"), "B7.20"];
 const ALGORITHM_NUMS = NUMS.filter(isAlgorithm);
 const CLASSIC = NUMS.filter(n => !isAlgorithm(n)).map(parseClassic);
 const ALGORITHMS = ALGORITHM_NUMS.map(parseAlgorithm);
 const ALL = [...CLASSIC, ...ALGORITHMS];
 
 test("every emergency page is a bedside algorithm (B7.0); no classic pages remain", () => {
-  assert.equal(ALGORITHM_NUMS.length, 17);
+  assert.equal(ALGORITHM_NUMS.length, 18);
   assert.deepEqual(CLASSIC, []);
-  assert.deepEqual(EMERGENCIES.filter(p => p.kind === "algorithm").map(p => p.spec), ALGORITHM_NUMS);
+  // Pages are in index order (B7.19), where B7.20 follows B7.7; SPEC sections are in number order.
+  assert.deepEqual(EMERGENCIES.filter(p => p.kind === "algorithm").map(p => p.spec).sort(), [...ALGORITHM_NUMS].sort());
   assert.equal(EMERGENCIES.length, ALGORITHM_NUMS.length);
 });
 
-test("17 index entries in the B7.19 order with the B7.19 names, one per page; no variceal entry", () => {
+test("18 index entries in the B7.19 order with the B7.19 names, one per page; no variceal entry", () => {
   const order = SPEC.match(/in this order: (.*)\.\n/)[1].split(",").map(s => s.trim());
-  assert.equal(EMERGENCY_INDEX.length, 17);
+  assert.equal(EMERGENCY_INDEX.length, 18);
   assert.ok(!order.includes("Variceal bleeding"));
   assert.deepEqual(EMERGENCY_INDEX.map(e => e.name), order);
   assert.deepEqual(EMERGENCY_INDEX.map(e => findItem(e.id).short), order);
-  assert.equal(EMERGENCIES.length, 17);
+  assert.equal(EMERGENCIES.length, 18);
   assert.deepEqual(EMERGENCIES.map(p => p.id), EMERGENCY_INDEX.map(e => e.id));
   assert.deepEqual([...EMERGENCIES.map(p => p.id)].sort(), ALL.map(p => p.id).sort());
 });

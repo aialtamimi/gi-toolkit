@@ -2,6 +2,23 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.8.0 (2026-11-27)
+
+- New emergency page B7.20 Acute-on-chronic liver failure (`em_aclf`), bedside algorithm design (B7.0), listed as "ACLF" after Acute liver failure in the emergency index (18 entries). Search "ACLF" or "acute-on-chronic liver failure" finds it.
+  - Red flags (ICU within 6 hours), Recognize, step 1 with the built-in ACLF grade and precipitant screen, ICU decision, precipitant treatment (links to B7.1, B7.8, B7.9), organ support by failing organ (links to B7.10, B7.11), early transplant referral, and the day 3–7 prognosis decision with the built-in CLIF-C ACLF score.
+  - Suggested "Yes" on the day 3–7 decision when the CLIF-C ACLF score shown is above 70 (clinical owner decision).
+  - Weight field: continuous renal replacement therapy 25–30 mL/kg/h, and energy, protein and IV glucose targets (labelled "Target, not a dose"). Hydrocortisone 50 mg IV every 6 hours (200 mg/day) as a fixed dose.
+  - Sources with exact PubMed links: EASL ACLF 2023, ACG ACLF 2022, CANONIC 2013, CLIF-C ACLF 2014, Gustot 2015, Artru 2017, GRAFT 2021, CONFIRM 2021.
+- New calculator B3.21 CLIF-C OF and CLIF-C ACLF score (`clif_c_aclf`, Liver; 45 calculators). Six organs scored 1–3, CLIF-C ACLF = 10 × (0.33 × OF + 0.04 × age + 0.63 × ln WBC − 2), shown as a whole number; band above 70 or 70 or less. Bilirubin and creatinine in SI are converted to mg/dL; converted values are compared after trimming floating-point noise so exact SI equivalents of a cutoff score correctly.
+- ACLF grade (B3.17): every result links to the new page; CANONIC citation now links to PubMed (PMID 23474284).
+- SPEC.md: B1.1, B3 intro, B3.17, new B3.21, B7 intro, B7.0 (dose and suggestion tables), B7.19, new B7.20, B8.3, B8.7, B8.8, B8.9 and B9. B7.19 now correctly says 18 pages.
+- Clinical owner decisions on the review (SPEC.md B3.17, B3.21, B7.0, B7.19, B7.20, B8.3, B8.7, B8.9 and B9 updated in the same change):
+  - CLIF-C ACLF counts organ failures from its inputs by the EASL-CLIF definitions and shows the count and organs. The day 3–7 decision suggests "Yes" when the score is above 70 or there are 4 or more organ failures; the transplant option stays with the clinician.
+  - The score is shown to 1 decimal place and the >70 cutoff uses the unrounded value (70.4 is above 70). No mortality bands; above 70 the result shows the Engelmann, Crit Care 2018 note (PMID 30305132), also added to the sources.
+  - "6 mL/kg predicted body weight" (text only) and "effluent dose 25–30 mL/kg/h" on the page, the doses table and the calculated line.
+  - Emergency index name: "Acute-on-chronic liver failure (ACLF)", after Acute liver failure.
+  - The ACLF grade calculator links to the page for ACLF grade 1–3 only.
+
 ## 0.7.0 (2026-11-27)
 
 The remaining twelve emergency pages are now bedside algorithms (SPEC.md B7.0): lower GI bleeding, anticoagulants and antiplatelets, toxic megacolon, acute liver failure, severe alcohol-associated hepatitis, HRS-AKI, overt hepatic encephalopathy, foreign body, caustic ingestion, Ogilvie syndrome, colonic volvulus and iatrogenic perforation. Every emergency page now uses the same design.

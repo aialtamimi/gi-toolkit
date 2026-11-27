@@ -9,10 +9,11 @@ export const NO_SOURCE_TEXT = "No source is listed in SPEC.md for this page yet.
 // SPEC section numbers used as cross-references in emergency page text, mapped to the item they name.
 export const SPEC_REFS = {
   "B2.1": "gbs", "B2.2": "aims65", "B2.4": "oakland", "B2.5": "forrest",
-  "B3.2": "meld_na", "B3.5": "lille", "B3.12": "ascites", "B3.16": "west_haven", "B3.17": "aclf", "B3.18": "kings",
+  "B3.2": "meld_na", "B3.5": "lille", "B3.21": "clif_c_aclf", "B3.12": "ascites", "B3.16": "west_haven", "B3.17": "aclf", "B3.18": "kings",
   "B4.5": "marshall", "B4.6": "atlanta", "B4.8": "tg18_cholangitis",
   "B5.1": "truelove_witts", "B5.2": "asuc_day3", "B5.10": "jalan",
-  "B6.6": "zargar", "B7.4": "em_antithrombotic", "B7.5": "em_asuc", "B7.6": "em_toxic_megacolon", "B7.13": "em_cholangitis"
+  "B6.6": "zargar", "B7.1": "em_ugib", "B7.4": "em_antithrombotic", "B7.5": "em_asuc", "B7.6": "em_toxic_megacolon", "B7.8": "em_aah", "B7.9": "em_sbp",
+  "B7.10": "em_hrs", "B7.11": "em_he", "B7.20": "em_aclf", "B7.13": "em_cholangitis"
 };
 
 // Splits text into plain strings, markdown links [label](https://...) and SPEC cross-references.

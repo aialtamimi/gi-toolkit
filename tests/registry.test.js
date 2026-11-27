@@ -5,7 +5,7 @@ import { CALCULATORS, search } from "../js/registry.js";
 
 const PHASE1 = ["gbs", "aims65", "rockall", "oakland", "forrest",
   "child_pugh", "meld_na", "meld3", "maddrey", "lille", "gahs", "abic", "fib4", "apri", "nfs", "albi",
-  "ascites", "r_factor", "aih_simplified", "leipzig", "west_haven", "aclf", "kings", "baveno7", "fibroscan"];
+  "ascites", "r_factor", "aih_simplified", "leipzig", "west_haven", "aclf", "clif_c_aclf", "kings", "baveno7", "fibroscan"];
 const PHASE2 = ["bisap", "ranson", "glasgow_imrie", "sirs", "marshall", "atlanta", "mctsi", "tg18_cholangitis", "asge_cbd",
   "truelove_witts", "asuc_day3", "mayo_uc", "uceis", "hbi", "cdai", "ses_cd", "rutgeerts", "montreal", "jalan"];
 
@@ -58,6 +58,6 @@ test("footer and About page show the designer credit", async () => {
 test("all pages reachable from search (B1.9 Phase 3): every calculator, card and emergency page", async () => {
   const { CARDS, EMERGENCIES } = await import("../js/registry.js");
   const all = [...CALCULATORS, ...CARDS, ...EMERGENCIES];
-  assert.equal(all.length, 44 + 8 + 17);
+  assert.equal(all.length, 45 + 8 + 18);
   for (const item of all) assert.ok(search(item.name).includes(item), item.name);
 });
