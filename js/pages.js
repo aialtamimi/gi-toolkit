@@ -1,7 +1,7 @@
 // Renders classification reference cards (SPEC.md B6) and emergency pages (SPEC.md B7).
 import { h, renderCalculator, linkTo, copyText, appendAll, resultText, levelClass } from "./engine.js";
 import { findItem, hrefFor } from "./registry.js";
-import { stepStates, isShown, isStep, entryAnswers, suggestedAnswers } from "./algorithm.js";
+import { stepStates, isShown, isStep, entryAnswers, suggestions } from "./algorithm.js";
 import { findDose, doseLine, parseWeight, DOSES, DOSE_ROUNDING } from "./doses.js";
 
 export const NO_SOURCE_TEXT = "No source is listed in SPEC.md for this page yet.";
@@ -10,7 +10,7 @@ export const NO_SOURCE_TEXT = "No source is listed in SPEC.md for this page yet.
 export const SPEC_REFS = {
   "B2.1": "gbs", "B2.2": "aims65", "B2.4": "oakland", "B2.5": "forrest",
   "B3.5": "lille", "B3.12": "ascites", "B3.16": "west_haven", "B3.18": "kings",
-  "B4.6": "atlanta", "B4.8": "tg18_cholangitis",
+  "B4.5": "marshall", "B4.6": "atlanta", "B4.8": "tg18_cholangitis",
   "B5.1": "truelove_witts", "B5.2": "asuc_day3",
   "B6.6": "zargar", "B7.4": "em_antithrombotic", "B7.6": "em_toxic_megacolon", "B7.13": "em_cholangitis"
 };
@@ -169,7 +169,8 @@ export function renderAlgorithm(root, page, opts = {}) {
   }
 
   // ----- built-in calculators -----
-  function embedCalc(id) {
+  // `where` is the step id (or "redflags"): it prefixes input ids, so a calculator can appear in two places.
+  function embedCalc(id, where) {
     const def = findItem(id);
     if (!def) return null;
     const status = h("span", { class: "embed-status muted" }, "Not calculated");
@@ -184,7 +185,7 @@ export function renderAlgorithm(root, page, opts = {}) {
     };
     const mount = () => {
       body.replaceChildren();
-      renderCalculator(body, def, { embedded: true, hideLinks: [page.id], onReset: mount, onResult });
+      renderCalculator(body, def, { embedded: true, idPrefix: `${page.id}-${where}`, hideLinks: [page.id], onReset: mount, onResult });
     };
     mount();
     return h("details", { class: "embed-calc" },
@@ -218,32 +219,36 @@ export function renderAlgorithm(root, page, opts = {}) {
       return b;
     }) : [];
     const hint = isDecision ? h("p", { class: "answer-hint muted" }, "Choose an answer to show the next steps.") : null;
+    const note = isDecision ? h("p", { class: "suggested-note", hidden: true, "aria-live": "polite" }) : null;
     const tag = pathTag(s);
     const card = h("li", { class: "algo-step" + (isDecision ? " decision" : ""), id: `step-${page.id}-${s.id}` },
       h("div", { class: "step-head" }, h("span", { class: "chip" }, s.chip), isDecision ? h("span", { class: "decision-label" }, "Decision") : null),
       h("h3", { class: "step-title" }, s.title),
       tag,
       s.items.length ? h("ul", { class: "step-items" }, s.items.map(t => h("li", {}, richText(t)))) : null,
-      s.calcs.map(embedCalc),
+      s.calcs.map(c => embedCalc(c, s.id)),
       s.doses.length ? h("ul", { class: "dose-list step-doses", "aria-live": "polite" }, s.doses.map(doseItem)) : null,
       isDecision ? h("div", { class: "answers", role: "group", "aria-label": s.title }, answerBtns) : null,
+      note,
       hint,
       whyLine(s.why));
-    stepEls[s.id] = { card, tag, answerBtns, hint };
+    stepEls[s.id] = { card, tag, answerBtns, hint, note };
     return card;
   }
 
   function update() {
     const st = stepStates(page, answers);
     for (const s of stepDefs) {
-      const { card, tag, answerBtns, hint } = stepEls[s.id];
+      const { card, tag, answerBtns, hint, note } = stepEls[s.id];
       const state = st[s.id];
       card.hidden = !full && !isShown(state);
       card.classList.toggle("on-path", state === "on");
       card.classList.toggle("off-path", state === "off");
       card.classList.toggle("pending-path", state === "pending");
       if (tag) tag.querySelector(".path-state").textContent = state === "off" ? " · off the chosen path" : state === "pending" ? " · not yet decided" : "";
-      const suggested = s.type === "decision" ? suggestedAnswers(page, s.id, outputs) : [];
+      const sugg = s.type === "decision" ? suggestions(page, s.id, outputs) : { answers: [], notes: [] };
+      const suggested = sugg.answers;
+      if (note) { note.textContent = sugg.notes.join(" "); note.hidden = !sugg.notes.length; }
       for (const b of answerBtns) {
         b.setAttribute("aria-pressed", String(answers[s.id] === b.dataset.value));
         const sug = suggested.includes(b.dataset.value);
@@ -284,7 +289,7 @@ export function renderAlgorithm(root, page, opts = {}) {
     }
     if (b.type === "redflags") {
       out.push(h("section", { class: "red-flags", "aria-label": "Red flags" },
-        h("h3", {}, "Red flags"), h("p", {}, richText(b.text)), (b.calcs || []).map(embedCalc)));
+        h("h3", {}, "Red flags"), h("p", {}, richText(b.text)), (b.calcs || []).map(c => embedCalc(c, "redflags"))));
       if (page.weight) out.push(weightPanel());
       continue;
     }

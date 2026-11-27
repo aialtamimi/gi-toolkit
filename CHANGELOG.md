@@ -2,6 +2,16 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.6.1 (2026-11-27)
+
+Clinical owner follow-up on the bedside algorithm pages (SPEC.md B7.0, B7.9, B7.12, B8.9 and B9 updated in the same change):
+- SBP, suspected secondary peritonitis step: "Start broad-spectrum antibiotics with anaerobic cover (for example ceftriaxone plus metronidazole, or piperacillin-tazobactam per local resistance) (EASL 2018)."
+- SBP suggestion: "Runyon criteria or polymicrobial culture" is suggested only with PMN ≥250/mm³ and 2 or more Runyon criteria, and then it is the only suggestion; PMN ≥250/mm³ with fewer than 2 criteria suggests "PMN 250/mm³ or more"; PMN <250/mm³ suggests nothing.
+- Upper GI bleeding, pre-emptive TIPS decision: Child-Pugh 14–15 suggests "No" and shows "Pre-emptive TIPS not recommended (Child-Pugh >13)". Child-Pugh 10–13 still suggests "Yes".
+- Acute pancreatitis: the modified Marshall calculator (B4.5) is also in step P2, under the line "Red flag: organ failure, modified Marshall score 2 or more (B4.5): HDU or ICU." It stays in the red flags box too; each copy has its own inputs. The request named B4.4, which is SIRS in SPEC.md; B4.5 (modified Marshall) was used.
+- SBP sources: EASL Clinical Practice Guidelines for decompensated cirrhosis, J Hepatol 2018 (PMID 29653741), and Biggins SW et al., AASLD guidance, Hepatology 2021 (PMID 33942342), with exact PubMed links.
+- Engine: embedded calculators take an input id prefix, so one calculator can appear twice on a page without duplicate ids.
+
 ## 0.6.0 (2026-11-26)
 
 Five emergency pages are now interactive bedside algorithms (SPEC.md B7.0): upper GI bleeding, acute severe ulcerative colitis, spontaneous bacterial peritonitis, acute pancreatitis and acute cholangitis. Every line, dose and source of the earlier pages is kept, reorganized into the new layout; a test checks each earlier line is still on its page.
