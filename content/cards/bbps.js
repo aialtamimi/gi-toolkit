@@ -20,6 +20,7 @@ export default {
   aliases: ["BBPS", "Boston Bowel Preparation Scale", "bowel preparation", "bowel prep", "colonoscopy preparation"],
   category: "endoscopy",
   use: "Score each segment (right, transverse, left) after cleaning. Total 0–9.",
+  notes: "Total 0–9. Adequate preparation: 2 or more in every segment (total 6 or more). Inadequate: repeat colonoscopy within 1 year.",
   inputs: SEGMENTS.map(([id, label]) => ({ id, label, type: "radio", style: "rows", options })),
   compute(v) {
     const breakdown = SEGMENTS.map(([id, label]) => ({ item: label, points: v[id] }));

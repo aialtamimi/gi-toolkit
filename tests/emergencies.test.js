@@ -67,6 +67,7 @@ for (const spec of ALGORITHMS) {
     assert.equal(page.kind, "algorithm");
     assert.equal(page.weight, spec.weight);
     assert.deepEqual(page.entries, spec.entries);
+    assert.deepEqual(page.entryFocus || {}, spec.entryFocus);
     assert.deepEqual(page.entryWords || {}, spec.entryWords);
     assert.deepEqual(sortKeys(withNames(page)), sortKeys(spec.blocks));
   });

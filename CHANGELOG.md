@@ -2,6 +2,25 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.10.0 (2026-11-27)
+
+Fourteen new classification cards (SPEC.md B6.9 to B6.22), three of them calculators. Each has search aliases, an exact PubMed link (PMID at the end of the citation) and tests. No diagrams yet.
+- Calculators: EREFS (B6.9; proximal and distal scored separately, each 0–9, total 0–18, minor features and "score before biopsies" notes); Spigelman, modified (B6.17; points, stage 0–IV, ACG 2015 surveillance interval, ampulla note); OLGA and OLGIM (B6.18; antrum and corpus matrix, stage III–IV "High risk" with MAPS III surveillance every 3 years, stage 0–II "Lower risk", individualize).
+- Table cards: Sydney deep mural injury after EMR (B6.10, links to the perforation page), JNET (B6.11, links to NICE and Kudo), Kudo pit pattern (B6.12), Haggitt and Kikuchi levels with the JSCCR 2019 curative criteria (B6.13), Sarin (B6.14, links to the variceal pathway of the upper GI bleeding page), Hill grade (B6.15, links to Lyon 2.0), Siewert (B6.16), Marsh-Oberhuber (B6.19), Goligher with ASCRS 2024 management (B6.20), Bismuth-Corlette (B6.21), Strasberg (B6.22).
+- Paris (B6.4): mixed types and the four laterally spreading tumor subtypes; note "LST-NG pseudodepressed and LST-G nodular mixed carry the highest risk of submucosal invasion: en bloc resection."
+- BBPS (B6.1): note on screen "Total 0–9. Adequate preparation: 2 or more in every segment (total 6 or more). Inadequate: repeat colonoscopy within 1 year."
+- Iatrogenic perforation (B7.18): P3 colon item "After colonic EMR: deep mural injury by the Sydney classification (B6.10)." and a Related link to the Sydney card. Upper GI bleeding (B7.1) D4: the OV/GOV/IGV line cites Sarin (B6.14) with a link.
+- Tests: B8.6 vectors for EREFS, Spigelman and every OLGA/OLGIM matrix cell; every new card's table, clinical use, notes, links and PubMed PMIDs against SPEC.md; every search alias.
+- Clinical owner decisions on the review (SPEC.md B6.3, B6.9 to B6.12, B6.14, B6.16, B6.18, B6.21, B7.0, B7.1, B8.8 and B9 updated in the same change):
+  - Sydney type II: "Clip closure (muscle injury cannot be excluded)".
+  - EREFS exudates: mild "10% or less of the surface", severe ">10% of the surface". New note: "No validated cut-off; higher scores mean more active disease. Use to compare over time; histology (15 or more eosinophils per high-power field) is still required."
+  - OLGA and OLGIM bands: "High risk (stage III–IV)" and "Lower risk (stage 0–II)".
+  - Bismuth-Corlette: second source Bismuth H et al. Ann Surg 1992 (PMID 1309988), types IIIa and IIIb.
+  - Siewert II: "Staged as esophageal cancer (AJCC 8th edition: epicenter within 2 cm of the gastroesophageal junction). Surgical approach decided by the multidisciplinary team." Siewert III: "Staged as gastric cancer".
+  - Sarin links straight to the "Bleeding source?" decision (D4) of the upper GI bleeding page with the variceal pathway chosen (new entry point `source`, "opens at D4").
+  - JNET type 1: "Diminutive (5 mm or less) rectosigmoid hyperplastic polyps can be left in place only with a high-confidence optical diagnosis; resect sessile serrated lesions." Kudo VI: "en bloc resection; high-grade VI may indicate deep invasion, so consider surgery".
+  - Prague heading marked as a calculator.
+
 ## 0.9.0 (2026-11-27)
 
 Update from Baveno VII to Baveno VIII (Baveno VIII Faculty. J Hepatol 2026;85:993-1018. PMID 42624290). "Baveno VII" is replaced by "Baveno VIII" in every name, text and reference in the app and SPEC.md; "Baveno VI criteria" is kept where cited as such. Earlier CHANGELOG entries are left as written.

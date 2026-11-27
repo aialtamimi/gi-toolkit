@@ -12,7 +12,7 @@ export const SPEC_REFS = {
   "B3.2": "meld_na", "B3.5": "lille", "B3.21": "clif_c_aclf", "B3.12": "ascites", "B3.16": "west_haven", "B3.17": "aclf", "B3.18": "kings",
   "B4.5": "marshall", "B4.6": "atlanta", "B4.8": "tg18_cholangitis",
   "B5.1": "truelove_witts", "B5.2": "asuc_day3", "B5.10": "jalan",
-  "B6.6": "zargar", "B7.1": "em_ugib", "B7.4": "em_antithrombotic", "B7.5": "em_asuc", "B7.6": "em_toxic_megacolon", "B7.8": "em_aah", "B7.9": "em_sbp",
+  "B6.6": "zargar", "B6.10": "sydney_dmi", "B6.14": "sarin", "B7.1": "em_ugib", "B7.4": "em_antithrombotic", "B7.5": "em_asuc", "B7.6": "em_toxic_megacolon", "B7.8": "em_aah", "B7.9": "em_sbp",
   "B7.10": "em_hrs", "B7.11": "em_he", "B7.20": "em_aclf", "B7.13": "em_cholangitis"
 };
 
@@ -88,7 +88,7 @@ export function renderCard(root, card, opts = {}) {
     h("p", { class: "card-use" }, card.use),
     ...(card.notes || []).map(n => h("p", { class: "note" }, n)),
     (card.links || []).filter(l => !(opts.hideLinks || []).includes(l.target)).length
-      ? h("div", { class: "links" }, card.links.filter(l => !(opts.hideLinks || []).includes(l.target)).map(l => linkTo(l.target, l.label))) : null,
+      ? h("div", { class: "links" }, card.links.filter(l => !(opts.hideLinks || []).includes(l.target)).map(l => linkTo(l.target, l.label, l.entry))) : null,
     h("h3", {}, "Source"),
     refList(card.references));
 }
@@ -312,7 +312,8 @@ export function renderAlgorithm(root, page, opts = {}) {
   updateDoses();
   update();
 
-  // Entry point: scroll to the first decision it answers (for example D1 for "variceal").
-  const first = opts.entry && Object.keys(answers)[0];
+  // Entry point: scroll to its "opens at" step (for example D4 for "source"), otherwise to the first
+  // decision it answers (for example D1 for "variceal").
+  const first = opts.entry && ((page.entryFocus || {})[opts.entry] || Object.keys(answers)[0]);
   if (first && stepEls[first]) requestAnimationFrame(() => stepEls[first].card.scrollIntoView({ block: "start" }));
 }

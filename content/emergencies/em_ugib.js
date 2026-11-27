@@ -22,7 +22,13 @@ export default {
   "entries": {
     "variceal": {
       "D1": "Yes"
+    },
+    "source": {
+      "D1": "Yes"
     }
+  },
+  "entryFocus": {
+    "source": "D4"
   },
   "entryWords": {
     "variceal": [
@@ -157,7 +163,7 @@ export default {
         ]
       ],
       "items": [
-        "OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices."
+        "OV: esophageal varices; GOV: gastroesophageal varices; IGV: isolated gastric varices (Sarin, B6.14)."
       ],
       "calcs": [],
       "doses": [],

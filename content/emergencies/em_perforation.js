@@ -101,7 +101,8 @@ export default {
       "items": [
         "Esophagus: clips or over-the-scope clip; covered stent or endoscopic vacuum therapy for larger defects.",
         "ERCP: duodenal wall (scope) perforation: endoscopic closure or surgery; periampullary: biliary and/or pancreatic stent; guidewire or retroperitoneal air only: conservative.",
-        "Colon: clips or over-the-scope clip."
+        "Colon: clips or over-the-scope clip.",
+        "After colonic EMR: deep mural injury by the Sydney classification (B6.10)."
       ],
       "calcs": [],
       "doses": [],
@@ -126,7 +127,9 @@ export default {
       "text": "delaying surgical review; air insufflation."
     }
   ],
-  "related": [],
+  "related": [
+    "sydney_dmi"
+  ],
   "references": [
     ref("Paspatis GA et al. Diagnosis and management of iatrogenic endoscopic perforations: ESGE Position Statement - Update 2020. Endoscopy 2020;52:792-810. doi:10.1055/a-1222-3191. PMID 32781470", "https://pubmed.ncbi.nlm.nih.gov/32781470/")
   ]
