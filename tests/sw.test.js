@@ -15,8 +15,8 @@ function walk(dir) {
   });
 }
 
-test("every app file under js/, css/, content/, icons/ and img/ is in the service worker precache", () => {
-  const files = ["js", "css", "content", "icons", "img"].flatMap(d => walk(join(ROOT, d)))
+test("every app file under js/, css/, content/ and icons/ is in the service worker precache", () => {
+  const files = ["js", "css", "content", "icons"].flatMap(d => walk(join(ROOT, d)))
     .map(p => relative(ROOT, p)).filter(p => !p.endsWith(".gitkeep"));
   for (const f of files) assert.ok(listed.has(f), `${f} missing from sw.js PRECACHE`);
   for (const f of ["index.html", "manifest.webmanifest", ""]) assert.ok(listed.has(f), `${f || "./"} missing`);

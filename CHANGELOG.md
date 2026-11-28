@@ -2,6 +2,13 @@
 
 All notable changes to GI Toolkit. Clinical content comes only from SPEC.md.
 
+## 0.12.1 (2026-11-28)
+
+Forrest illustrations pilot removed at the clinical owner's request (SPEC.md B1.3 and B2.5 returned to their 0.11.0 text).
+- Deleted the six SVG schematics (img/forrest/) and their service worker precache entries.
+- Removed the option thumbnails, the result image and caption, the engine and stylesheet code that drew them, and tests/forrest_images.test.js; the precache test no longer looks for an img/ folder.
+- Everything else is unchanged: the Forrest classes, risks, actions and notes are as in 0.11.0.
+
 ## 0.12.0 (2026-11-27)
 
 Pilot: original illustrations for the Forrest classification (SPEC.md B1.3 and B2.5 updated).
