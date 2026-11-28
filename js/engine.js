@@ -289,10 +289,7 @@ function renderInput(def, inp, idx, raw, units, update, prefix) {
       const oid = `${id}-${i}`;
       const input = h("input", { id: oid, type: "radio", name, value: String(i), checked: inp.default !== undefined && o.value === inp.default,
         onchange: () => { raw[inp.id] = o.value; update(); } });
-      // o.image: optional schematic thumbnail (SPEC.md B2.5 Forrest illustrations), always with alt text.
-      group.append(h("label", { for: oid, class: "radio-label" + (o.image ? " has-img" : "") }, input,
-        o.image ? h("img", { class: "opt-img", src: o.image.src, alt: o.image.alt, width: 56, height: 42, loading: "lazy", decoding: "async" }) : null,
-        h("span", { class: "radio-text" }, o.label),
+      group.append(h("label", { for: oid, class: "radio-label" }, input, h("span", { class: "radio-text" }, o.label),
         o.points !== undefined && inp.style !== "rows" && !/\([+−-]?\d+\)$/.test(o.label) ? h("span", { class: "pts" }, `${o.points > 0 ? "+" : ""}${o.points}`) : null));
     });
     return h("div", { class: "field field-radio" + (inp.optional ? " optional" : "") },
@@ -322,10 +319,6 @@ export function renderResult(card, def, r, it, opts = {}) {
   if (r.details && r.details.length) {
     card.append(h("dl", { class: "details" }, r.details.flatMap(d => [h("dt", {}, d.label), h("dd", {}, d.value)])));
   }
-  // it.figure: optional schematic for the selected result (SPEC.md B2.5), with alt text and caption.
-  if (it.figure) card.append(h("figure", { class: "result-figure" },
-    h("img", { src: it.figure.src, alt: it.figure.alt, width: 240, height: 180, decoding: "async" }),
-    h("figcaption", {}, it.figure.caption)));
   if (it.text) card.append(h("p", { class: "interp" }, it.text));
   if (it.action) card.append(h("div", { class: "action" }, h("div", { class: "action-tag" }, "Suggested action"), h("p", {}, it.action)));
   for (const s of it.sections || []) {

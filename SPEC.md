@@ -117,7 +117,6 @@ Build a static, offline-capable web app (PWA) named **GI Toolkit**, in plain HTM
 /js/registry.js           list of all calculators, cards and emergencies
 /content/cards/<id>.js    classification reference cards (B6)
 /content/emergencies/<id>.js         emergency pages (B7)
-/img/forrest/forrest-<class>.svg     Forrest schematics (B2.5)
 /icons/                   apple-touch-icon 180x180, 192, 512, maskable 512
 /tests/<id>.test.js
 /SPEC.md  /CLAUDE.md  /README.md  /CHANGELOG.md
@@ -294,17 +293,6 @@ Use: peptic ulcer stigmata at endoscopy. User taps a class; app shows rebleeding
 | III | Clean base | 5% | No endoscopic therapy; standard proton pump inhibitor (PPI); early feeding and discharge if otherwise stable |
 
 High-dose PPI after endoscopic hemostasis: continuous or intermittent high dose for 3 days, then twice daily to complete 2 weeks, then once daily (ACG 2021).
-
-Illustrations (pilot): one original schematic per class, drawn for this app as SVG (no photos; nothing copied from papers, atlases or websites). Same style for all six: top-down view of one round ulcer crater, same size and position, viewBox 160×120; pink gastric mucosa background, slightly raised reddish rim, pale yellow-white fibrin base; each SVG has its own light rounded background so it looks the same in light and dark mode; under 20 KB each, crisp at 64 px and 240 px. Findings drawn: Ia, a red arterial jet arcing up from one point in the base, with droplets; Ib, red blood trickling from the base over the rim, no jet; IIa, a raised red-purple dome (pigmented protuberance) in the base, no blood; IIb, an irregular dark red-maroon clot covering part of the base; IIc, flat brown-black spots on the base, nothing raised; III, fibrin base only. A thumbnail (about 56 px wide) is shown at the left of each class option; the selected class shows the image about 240 px wide with the caption "Forrest [class]: [finding]. Schematic, not to scale." (for example "Forrest Ia: Active spurting. Schematic, not to scale."). Every image has alt text. The files are precached by the service worker.
-
-| Class | File | Alt text |
-| --- | --- | --- |
-| Ia | img/forrest/forrest-ia.svg | Schematic of a round ulcer with a red arterial jet spurting from one point in the base, with droplets. |
-| Ib | img/forrest/forrest-ib.svg | Schematic of a round ulcer with red blood oozing from the base and trickling over the rim, without a jet. |
-| IIa | img/forrest/forrest-iia.svg | Schematic of a round ulcer with a raised red-purple dome (non-bleeding visible vessel) in the base, without blood. |
-| IIb | img/forrest/forrest-iib.svg | Schematic of a round ulcer with an irregular dark red-maroon clot covering part of the base. |
-| IIc | img/forrest/forrest-iic.svg | Schematic of a round ulcer with two flat brown-black spots on the base, nothing raised. |
-| III | img/forrest/forrest-iii.svg | Schematic of a round ulcer with a clean pale yellow-white fibrin base. |
 
 ## Part B3: Liver scores
 
